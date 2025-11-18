@@ -6,6 +6,11 @@ import LocationPinIcon from "./icons/LocationPinIcon";
 import SparklesIcon from "./icons/SparklesIcon";
 import QueueListIcon from "./icons/QueueListIcon";
 import MapIcon from "./icons/MapIcon";
+import ChatBubbleLeftRightIcon from "./icons/ChatBubbleLeftRightIcon";
+import CheckCircleIcon from "./icons/CheckCircleIcon";
+import ShareIcon from "./icons/ShareIcon";
+import StarIcon from "./icons/StarIcon";
+import ClockIcon from "./icons/ClockIcon";
 
 interface LandingPageProps {
   onCategorySelect: (category: CareCategory) => void;
@@ -61,12 +66,76 @@ const LandingPage: React.FC<LandingPageProps> = ({
     },
   ];
 
+
+
+  const securityFeatures = [
+    {
+      icon: ShieldCheckIcon,
+      title: "Verificación estricta",
+      description: "DNI, certificados y antecedentes verificados",
+    },
+    {
+      icon: StarIcon,
+      title: "Valoraciones reales",
+      description:
+        "Opiniones honestas de otros usuarios para ayudarte a decidir.",
+    },
+    {
+      icon: LocationPinIcon,
+      title: "Geolocalización",
+      description: "Encuentra profesionales en tu zona al instante",
+    },
+    {
+      icon: ClockIcon,
+      title: "Disponibilidad 24/7",
+      description: "Modo urgente para necesidades inmediatas",
+    },
+  ];
+
+
+
+
+
+
+
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query);
     }
   };
+
+
+
+
+  const handleShare = async () => {
+    const shareData = {
+      title: "Cuidamet",
+      text: "¡Encuentra cuidadores de confianza cerca de ti con Cuidamet! Te la recomiendo.",
+      url: window.location.origin,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback for desktop or unsupported browsers
+        await navigator.clipboard.writeText(shareData.url);
+        alert(
+          "¡Enlace de la app copiado al portapapeles! Compártelo con quien quieras."
+        );
+      }
+    } catch (err) {
+      console.error("Error al compartir:", err);
+      alert("No se pudo compartir la aplicación.");
+    }
+  };
+
+
+
+
+
+
 
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col p-4 pb-24">
@@ -198,7 +267,73 @@ const LandingPage: React.FC<LandingPageProps> = ({
             ))}
           </div>
 
-          <div className="mt-8 max-w-4xl mx-auto space-y-4">
+
+
+
+
+
+
+
+          <section className="mt-16 text-center">
+            <h2 className="text-3xl font-bold text-slate-800 mb-3">
+              ¿Cómo funciona Cuidamet?
+            </h2>
+            <p className="max-w-xl mx-auto text-slate-600 mb-12">
+              Tres pasos simples para encontrar tu cuidador ideal
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto">
+
+              <div className="flex flex-col items-center">
+                <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
+                  <SearchIcon className="w-10 h-10 text-teal-500" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">
+                  1. Busca
+                </h3>
+                <p className="text-slate-500 leading-relaxed">
+                  Filtra por ubicación, disponibilidad, tipo de servicio y
+                  valoraciones. Encuentra cuidadores cerca de ti.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
+                  <ChatBubbleLeftRightIcon className="w-10 h-10 text-teal-500" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">
+                  2. Conecta
+                </h3>
+                <p className="text-slate-500 leading-relaxed">
+                  Chatea directamente y programa videollamadas. Conoce a los
+                  candidatos antes de decidir.
+                </p>
+              </div>
+
+              <div className="flex flex-col items-center">
+                <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
+                  <CheckCircleIcon className="w-10 h-10 text-teal-500" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-800 mb-2">
+                  3. Contrata
+                </h3>
+                <p className="text-slate-500 leading-relaxed">
+                  Reserva con pago seguro incluido. Sistema de valoraciones para
+                  garantizar calidad.
+                </p>
+              </div>
+            </div>
+          </section>
+
+
+
+
+
+
+
+
+
+
+          <div className="mt-16 max-w-4xl mx-auto space-y-4">
             <button
               onClick={onShowAll}
               className="w-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5"
@@ -282,6 +417,62 @@ const LandingPage: React.FC<LandingPageProps> = ({
               ))}
             </div>
           </section>
+
+
+
+          <section className="mt-16 text-center">
+            <h3 className="text-xl font-semibold text-slate-700 mb-4">
+              ¿Te gusta Cuidamet?
+            </h3>
+            <p className="max-w-md mx-auto text-slate-500 mb-6">
+              Ayúdanos a crecer y a que más gente encuentre al cuidador
+              perfecto. ¡Comparte la aplicación con tus amigos y familiares!
+            </p>
+            <button
+              onClick={handleShare}
+              className="inline-flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-teal-500/50 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-1"
+            >
+              <ShareIcon className="w-6 h-6 mr-3" />
+              Compartir la aplicación
+            </button>
+          </section>
+
+
+
+
+
+          <section className="mt-20 py-16 bg-teal-50/70 rounded-3xl">
+            <div className="container mx-auto px-4 text-center">
+              <h2 className="text-3xl font-bold text-slate-800 mb-12">
+                Tu seguridad es nuestra prioridad
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
+                {securityFeatures.map((feature, index) => (
+                  <div
+                    key={index}
+                    className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-300"
+                  >
+                    <div className="text-teal-500 mb-3">
+                      <feature.icon className="w-8 h-8" />
+                    </div>
+                    <h3 className="text-sm font-semibold text-slate-800 mb-1">
+                      {feature.title}
+                    </h3>
+                    <p className="text-slate-500 text-xs leading-snug">
+                      {feature.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+
+
+
+
+
+
         </div>
       </main>
     </div>

@@ -14,6 +14,7 @@ import Inbox from './components/Inbox';
 import Chat from './components/Chat';
 import ProfilePage from './components/ProfilePage';
 import MapView from './components/MapView';
+import CookieConsent from './components/CookieConsent';
 
 const getDistanceInKm = (lat1: number, lon1: number, lat2: number, lon2: number) => {
   const R = 6371; // Radius of the Earth in kilometers
@@ -355,6 +356,7 @@ const App: React.FC = () => {
             unreadCount={unreadCount}
           />
       )}
+      <CookieConsent />
     </div>
   );
 };
