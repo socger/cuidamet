@@ -36,7 +36,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigateFavorites }) => {
             {/* User Info Header */}
             <div className="flex items-center space-x-4 py-4">
                 <img
-                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=400&auto=format&fit=crop"
+                src="/resources/images/profile_image.avif"
                 alt="User Avatar"
                 className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-sm"
                 />
