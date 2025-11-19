@@ -11,6 +11,12 @@ import CheckCircleIcon from "./icons/CheckCircleIcon";
 import ShareIcon from "./icons/ShareIcon";
 import StarIcon from "./icons/StarIcon";
 import ClockIcon from "./icons/ClockIcon";
+import { CATEGORIES } from "@/to_delete/constants";
+import SeniorsIcon from "./icons/SeniorsIcon";
+import KidsIcon from "./icons/KidsIcon";
+import PetsIcon from "./icons/PetsIcon";
+import BroomIcon from "./icons/BroomIcon";
+import CategoryIcon from "./icons/CategoryIcon";
 
 interface LandingPageProps {
   onCategorySelect: (category: CareCategory) => void;
@@ -19,6 +25,30 @@ interface LandingPageProps {
   onSearch: (query: string) => void;
 }
 
+const CategoryCard: React.FC<{
+  categoryKey: string;
+  category: { name: string };
+  icon: React.ReactNode;
+  imageUrl: string;
+}> = ({ categoryKey, category, icon, imageUrl }) => (
+  <div
+    key={categoryKey}
+    className="relative rounded-xl overflow-hidden group h-40 transform hover:scale-105 active:scale-100 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md"
+  >
+    <div
+      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+      style={{ backgroundImage: `url(${imageUrl})` }}
+    />
+    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm group-hover:bg-black/50 transition-colors duration-300" />
+    <div className="relative z-10 p-4 flex flex-col h-full justify-end items-start text-white">
+      {React.cloneElement(icon as React.ReactElement, {
+        className: "w-10 h-10 mb-2",
+      })}
+      <h3 className="text-2xl font-bold tracking-tight">{category.name}</h3>
+    </div>
+  </div>
+);
+
 const LandingPage: React.FC<LandingPageProps> = ({
   onCategorySelect,
   onShowAll,
@@ -26,6 +56,17 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onSearch,
 }) => {
   const [query, setQuery] = useState("");
+
+  const categoryImages = {
+    mayores:
+      "/resources/images/cuidado_de_mayores.jpg",
+    niños:
+      "/resources/images/cuidado_de_ninos.avif",
+    mascotas:
+      "/resources/images/cuidado_de_mascotas_002.avif",
+    limpieza:
+      "/resources/images/cuidado_de_limpieza.avif",
+  };
 
   const categories = [
     {
@@ -66,8 +107,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
     },
   ];
 
-
-
   const securityFeatures = [
     {
       icon: ShieldCheckIcon,
@@ -92,22 +131,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
     },
   ];
 
-
-
-
-
-
-
-
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (query.trim()) {
       onSearch(query);
     }
   };
-
-
-
 
   const handleShare = async () => {
     const shareData = {
@@ -130,12 +159,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
       alert("No se pudo compartir la aplicación.");
     }
   };
-
-
-
-
-
-
 
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col p-4 pb-24">
@@ -267,6 +290,91 @@ const LandingPage: React.FC<LandingPageProps> = ({
             ))}
           </div>
 
+          <br />
+          <br />
+          <br />
+
+          <section>
+            <div className="text-center">
+
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 text-center leading-tight">
+                Encuentra el{" "}
+                <span className="bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent">
+                  cuidado de confianza
+                </span>{" "}
+                <br />
+                que tu familia merece.
+              </h2>
+
+
+            </div>
+
+
+
+
+
+            <div className="grid grid-cols-2 gap-4">
+
+                  <button onClick={() => onCategorySelect(CareCategory.ELDERLY)}>
+                    <CategoryCard
+                      categoryKey="mayores"
+                      category={CATEGORIES.mayores}
+                      icon={<SeniorsIcon />}
+                      imageUrl={categoryImages.mayores}
+                    />
+                  </button>
+
+                  {/* <button onClick={() => onCategorySelect(CareCategory.CHILDREN)}>
+                    <CategoryCard
+                      categoryKey="niños"
+                      category={CATEGORIES.niños}
+                      icon={<KidsIcon />}
+                      imageUrl={categoryImages.niños}
+                    />
+                  </button> */}
+
+                  {/* <button onClick={() => onCategorySelect(CareCategory.PETS)}>
+                    <CategoryCard
+                      categoryKey="mascotas"
+                      category={CATEGORIES.mascotas}
+                      icon={<PetsIcon />}
+                      imageUrl={categoryImages.mascotas}
+                    />
+                  </button> */}
+                  
+                  {/* <button onClick={() => onCategorySelect(CareCategory.CLEANING)}>
+                    <CategoryCard
+                      categoryKey="limpieza"
+                      category={CATEGORIES.limpieza}
+                      icon={<BroomIcon />}
+                      imageUrl={categoryImages.limpieza}
+                    />
+                  </button> */}
+
+                  {/* <div className="col-span-2 my-4">
+                    <div className="grid grid-cols-2 gap-2">
+                      <Link
+                        to="/providers"
+                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
+                      >
+                        <CategoryIcon className="w-5 h-5" />
+                        <span>Todo</span>
+                      </Link>
+                      <Link
+                        to="/mapa-estatico"
+                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
+                      >
+                        <MapIcon className="w-5 h-5" />
+                        <span>Mapa</span>
+                      </Link>
+                    </div>
+                  </div> */}
+
+            </div>
+
+          </section>
+
+
 
 
 
@@ -282,7 +390,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
               Tres pasos simples para encontrar tu cuidador ideal
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto">
-
               <div className="flex flex-col items-center">
                 <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
                   <SearchIcon className="w-10 h-10 text-teal-500" />
@@ -324,15 +431,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </section>
 
-
-
-
-
-
-
-
-
-
           <div className="mt-16 max-w-4xl mx-auto space-y-4">
             <button
               onClick={onShowAll}
@@ -348,8 +446,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
               <div
                 className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
                 style={{
-                  backgroundImage:
-                    "url('/resources/images/tierra.jpeg')",
+                  backgroundImage: "url('/resources/images/tierra.jpeg')",
                 }}
                 aria-hidden="true"
               ></div>
@@ -418,8 +515,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </section>
 
-
-
           <section className="mt-16 text-center">
             <h3 className="text-xl font-semibold text-slate-700 mb-4">
               ¿Te gusta Cuidamet?
@@ -436,10 +531,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
               Compartir la aplicación
             </button>
           </section>
-
-
-
-
 
           <section className="mt-20 py-16 bg-teal-50/70 rounded-3xl">
             <div className="container mx-auto px-4 text-center">
@@ -466,13 +557,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </div>
           </section>
-
-
-
-
-
-
-
         </div>
       </main>
     </div>
