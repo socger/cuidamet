@@ -71,18 +71,23 @@ const LandingPage: React.FC<LandingPageProps> = ({
   const categories = [
     {
       id: CareCategory.ELDERLY,
-      name: "Cuidado de Mayores",
+      name: "Mayores",
       imageUrl: "/resources/images/cuidado_de_mayores.jpg",
     },
     {
       id: CareCategory.CHILDREN,
-      name: "Cuidado de Niños",
+      name: "Niños",
       imageUrl: "/resources/images/cuidado_de_ninos.avif",
     },
     {
       id: CareCategory.PETS,
-      name: "Cuidado de Mascotas",
+      name: "Mascotas",
       imageUrl: "/resources/images/cuidado_de_mascotas.avif",
+    },
+    {
+      id: CareCategory.CLEANING,
+      name: "Limpieza",
+      imageUrl: "/resources/images/cuidado_de_limpieza.avif",
     },
   ];
 
@@ -268,53 +273,51 @@ const LandingPage: React.FC<LandingPageProps> = ({
             ¿Qué tipo de servicio estás buscando?
           </h3>
 
-          <div className="grid grid-cols-3 gap-3 md:gap-4 max-w-4xl mx-auto">
-            {categories.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => onCategorySelect(cat.id)}
-                className="relative aspect-[3/4] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1"
-              >
-                <img
-                  src={cat.imageUrl}
-                  alt={cat.name}
-                  className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/70 transition-colors"></div>
-                <div className="absolute inset-0 flex items-end p-2 md:p-3">
-                  <h3 className="text-white text-sm sm:text-base font-bold leading-tight">
-                    {cat.name}
-                  </h3>
-                </div>
-              </button>
-            ))}
+          {/* cuidamet - START - Nuevos botones de categorías con imágenes y selección */}
+            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => onCategorySelect(cat.id)}
+                  className="relative aspect-[3/4] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1"
+                >
+                  <img
+                    src={cat.imageUrl}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/70 transition-colors"></div>
+                  <div className="absolute inset-0 flex items-end p-2 md:p-3">
+                    <h3 className="text-white text-sm sm:text-base font-bold leading-tight">
+                      {cat.name}
+                    </h3>
+                  </div>
+                </button>
+              ))}
+            </div>
+          {/* cuidamet - END - Nuevos botones de categorías con imágenes y selección */}
+
+          <br />
+          <br />
+          <br />
+
+          <div className="text-center">
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 text-center leading-tight">
+              Encuentra el{" "}
+              <span className="bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent">
+                cuidado de confianza
+              </span>{" "}
+              <br />
+              que tu familia merece.
+            </h2>
           </div>
 
           <br />
           <br />
-          <br />
 
-          <section>
-            <div className="text-center">
-
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 text-center leading-tight">
-                Encuentra el{" "}
-                <span className="bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent">
-                  cuidado de confianza
-                </span>{" "}
-                <br />
-                que tu familia merece.
-              </h2>
-
-
-            </div>
-
-
-
-
-
-            <div className="grid grid-cols-2 gap-4">
-
+          {/* cuidamet v.5 - START - Nuevos botones de categorías con imágenes y selección */}
+            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
+            {/* <div className="grid grid-cols-2 gap-4"> */}
                   <button onClick={() => onCategorySelect(CareCategory.ELDERLY)}>
                     <CategoryCard
                       categoryKey="mayores"
@@ -324,55 +327,34 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     />
                   </button>
 
-                  {/* <button onClick={() => onCategorySelect(CareCategory.CHILDREN)}>
+                  <button onClick={() => onCategorySelect(CareCategory.CHILDREN)}>
                     <CategoryCard
                       categoryKey="niños"
                       category={CATEGORIES.niños}
                       icon={<KidsIcon />}
                       imageUrl={categoryImages.niños}
                     />
-                  </button> */}
+                  </button>
 
-                  {/* <button onClick={() => onCategorySelect(CareCategory.PETS)}>
+                  <button onClick={() => onCategorySelect(CareCategory.PETS)}>
                     <CategoryCard
                       categoryKey="mascotas"
                       category={CATEGORIES.mascotas}
                       icon={<PetsIcon />}
                       imageUrl={categoryImages.mascotas}
                     />
-                  </button> */}
+                  </button>
                   
-                  {/* <button onClick={() => onCategorySelect(CareCategory.CLEANING)}>
+                  <button onClick={() => onCategorySelect(CareCategory.CLEANING)}>
                     <CategoryCard
                       categoryKey="limpieza"
                       category={CATEGORIES.limpieza}
                       icon={<BroomIcon />}
                       imageUrl={categoryImages.limpieza}
                     />
-                  </button> */}
-
-                  {/* <div className="col-span-2 my-4">
-                    <div className="grid grid-cols-2 gap-2">
-                      <Link
-                        to="/providers"
-                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
-                      >
-                        <CategoryIcon className="w-5 h-5" />
-                        <span>Todo</span>
-                      </Link>
-                      <Link
-                        to="/mapa-estatico"
-                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
-                      >
-                        <MapIcon className="w-5 h-5" />
-                        <span>Mapa</span>
-                      </Link>
-                    </div>
-                  </div> */}
-
+                  </button>
             </div>
-
-          </section>
+          {/* cuidamet v.5 - END - Nuevos botones de categorías con imágenes y selección */}
 
 
 
@@ -431,6 +413,14 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </section>
 
+
+
+
+
+
+
+
+
           <div className="mt-16 max-w-4xl mx-auto space-y-4">
             <button
               onClick={onShowAll}
@@ -460,7 +450,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
               </div>
             </button>
 
-            {/* <button
+          <br />
+          <br />
+          <br />
+
+
+            <button
               onClick={onShowAll}
               className="w-full flex items-center justify-center bg-slate-800 text-white px-6 py-4 rounded-xl font-semibold hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
             >
@@ -487,8 +482,51 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 <MapIcon className="w-6 h-6 mr-3" />
                 <span className="text-lg">Buscar en el mapa</span>
               </div>
-            </button> */}
+            </button>
           </div>
+
+
+          <br />
+          <br />
+          <br />
+
+
+            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
+
+                  <div className="col-span-2 my-4">
+                    <div className="grid grid-cols-2 gap-2">
+
+                      <button
+                        onClick={onShowAll}
+                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
+                      >
+                        <CategoryIcon className="w-5 h-5" />
+                        <span>Todo</span>
+                      </button>
+
+                      <button
+                        onClick={onNavigateMap}
+                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
+                      >
+                        <MapIcon className="w-5 h-5" />
+                        <span>Mapa</span>
+                      </button>
+
+                    </div>
+                  </div>
+
+            </div>
+
+
+
+
+
+
+
+
+
+
+
 
           <section className="mt-16 md:mt-24 text-center">
             <h2 className="text-3xl font-bold text-slate-800 mb-4">
