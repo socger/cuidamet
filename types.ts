@@ -3,6 +3,7 @@ export enum CareCategory {
   ELDERLY = 'Elderly Care',
   CHILDREN = 'Child Care',
   PETS = 'Pet Care',
+  CLEANING = 'Cleaning Services',
 }
 
 export interface ServiceDescription {
