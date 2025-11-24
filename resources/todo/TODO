@@ -4,6 +4,9 @@
   + Ahora estoy intentando igualar CategorySelector.tsx
 
 
+* Está cogiendo iconos del site http://www.w3.org ... hay que tenerlos en local
+
+
 * Tengo que revisar:
   - En App.tsx:
     + const renderContent = () => {
