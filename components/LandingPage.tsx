@@ -77,29 +77,33 @@ const LandingPage: React.FC<LandingPageProps> = ({
       id: CareCategory.ELDERLY,
       name: "Cuidado de Mayores",
       imageUrl: "/resources/images/cuidado_de_mayores.jpg",
-      colorClass: "from-green-600/90",
-      shadowClass: "hover:shadow-green-500/30",
+      // Estas dos propiedades las hemos quitado para que las imágenes de servicios no tengan degradados
+      // colorClass: "from-green-600/90",
+      // shadowClass: "hover:shadow-green-500/30",
     },
     {
       id: CareCategory.CHILDREN,
       name: "Cuidado de Niños",
       imageUrl: "/resources/images/cuidado_de_ninos.avif",
-      colorClass: "from-slate-600/90", // Gray
-      shadowClass: "hover:shadow-slate-500/30",
+      // Estas dos propiedades las hemos quitado para que las imágenes de servicios no tengan degradados
+      // colorClass: "from-slate-600/90", // Gray
+      // shadowClass: "hover:shadow-slate-500/30",
     },
     {
       id: CareCategory.PETS,
       name: "Cuidado de Mascotas",
       imageUrl: "/resources/images/cuidado_de_mascotas.avif",
-      colorClass: "from-orange-600/90",
-      shadowClass: "hover:shadow-orange-500/30",
+      // Estas dos propiedades las hemos quitado para que las imágenes de servicios no tengan degradados
+      // colorClass: "from-orange-600/90",
+      // shadowClass: "hover:shadow-orange-500/30",
     },
     {
       id: CareCategory.HOUSEKEEPING,
       name: "Limpieza de Hogar",
       imageUrl: "/resources/images/cuidado_de_limpieza.avif",
-      colorClass: "from-blue-600/90",
-      shadowClass: "hover:shadow-blue-500/30",
+      // Estas dos propiedades las hemos quitado para que las imágenes de servicios no tengan degradados
+      // colorClass: "from-blue-600/90",
+      // shadowClass: "hover:shadow-blue-500/30",
     },
   ];
 
@@ -231,13 +235,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
             ¿Qué tipo de servicio estás buscando?
           </h3>
 
-          {/* START - IMAGENES SERVICIOS - 001 */}
+          {/* START - IMAGENES principales SERVICIOS - 001 */}
             <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
               {categories.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => onCategorySelect(cat.id)}
-                  className={`relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${cat.shadowClass}`}
+                  // La propiedad cat.shadowClass las hemos quitado para que las imágenes de servicios no tengan degradados
+                  // className={`relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${cat.shadowClass}`}
+                  className={`relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1`}
                 >
                   <img
                     src={cat.imageUrl}
@@ -246,7 +252,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   />
                   {/* Colored overlay using specific tonality requested */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-t ${cat.colorClass} to-transparent transition-opacity duration-300`}
+                    // La propiedad cat.colorClass las hemos quitado para que las imágenes de servicios no tengan degradados
+                    // className={`absolute inset-0 bg-gradient-to-t ${cat.colorClass} to-transparent transition-opacity duration-300`}
+                    className={`absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-300`}
                   ></div>
 
                   <div className="absolute inset-0 flex items-end p-4">
@@ -257,82 +265,10 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 </button>
               ))}
             </div>
-          {/* END - IMAGENES SERVICIOS - 001 */}
+          {/* END - IMAGENES principales SERVICIOS - 001 */}
 
 
 
-          {/* START - IMAGENES SERVICIOS - 002 */}
-            <br />
-            <br />
-            <br />
-            <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
-            {/* <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto"> */}
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => onCategorySelect(cat.id)}
-                  className="relative aspect-[3/4] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-1"
-                >
-                  <img
-                    src={cat.imageUrl}
-                    alt={cat.name}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent group-hover:from-black/70 transition-colors"></div>
-                  <div className="absolute inset-0 flex items-end p-2 md:p-3">
-                    <h3 className="text-white text-sm sm:text-base font-bold leading-tight">
-                      {cat.name}
-                    </h3>
-                  </div>
-                </button>
-              ))}
-            </div>
-          {/* END - IMAGENES SERVICIOS - 002 */}
-
-
-
-          {/* START - IMAGENES SERVICIOS - 003 */}
-            <br />
-            <br />
-            <br />
-            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
-                  <button onClick={() => onCategorySelect(CareCategory.ELDERLY)}>
-                    <CategoryCard
-                      categoryKey="mayores"
-                      category={CATEGORIES.mayores}
-                      icon={<SeniorsIcon />}
-                      imageUrl={categoryImages.mayores}
-                    />
-                  </button>
-
-                  <button onClick={() => onCategorySelect(CareCategory.CHILDREN)}>
-                    <CategoryCard
-                      categoryKey="niños"
-                      category={CATEGORIES.niños}
-                      icon={<KidsIcon />}
-                      imageUrl={categoryImages.niños}
-                    />
-                  </button>
-
-                  <button onClick={() => onCategorySelect(CareCategory.PETS)}>
-                    <CategoryCard
-                      categoryKey="mascotas"
-                      category={CATEGORIES.mascotas}
-                      icon={<PetsIcon />}
-                      imageUrl={categoryImages.mascotas}
-                    />
-                  </button>
-                  
-                  <button onClick={() => onCategorySelect(CareCategory.HOUSEKEEPING)}>
-                    <CategoryCard
-                      categoryKey="limpieza"
-                      category={CATEGORIES.limpieza}
-                      icon={<BroomIcon />}
-                      imageUrl={categoryImages.limpieza}
-                    />
-                  </button>
-            </div>
-          {/* END - IMAGENES SERVICIOS - 003 */}
 
           {/* How it works Section */}
           <section className="mt-16 text-center">
@@ -389,89 +325,49 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </section>
 
-          <div className="mt-16 max-w-4xl mx-auto space-y-4">
-            {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 001 */}
-              <button
-                onClick={onShowAll}
-                className="w-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5"
-              >
-                <QueueListIcon className="w-6 h-6 mr-3" />
-                Ver todos los servicios
-              </button>
-
-              <button
-                onClick={onNavigateMap}
-                className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-              >
-                <div
-                  className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                  style={{
-                    backgroundImage: "url('/resources/images/tierra.jpeg')",
-                  }}
-                  aria-hidden="true"
-                ></div>
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
-                  aria-hidden="true"
-                ></div>
-                <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                  <MapIcon className="w-6 h-6 mr-3" />
-                  <span className="text-lg">Buscar en el mapa</span>
-                </div>
-              </button>
-            {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 001 */}
-
-
-
-            {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 002 */}
-              <br />
-              <br />
-              <button
-                onClick={onShowAll}
-                className="w-full flex items-center justify-center bg-slate-800 text-white px-6 py-4 rounded-xl font-semibold hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-              >
-                <QueueListIcon className="w-6 h-6 mr-3" />
-                Ver todos los servicios
-              </button>
-
-              <button
-                onClick={onNavigateMap}
-                className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-              >
-                <div
-                  className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                  style={{
-                    backgroundImage:
-                      "url('/resources/images/tierra.jpeg')",
-                  }}
-                  aria-hidden="true"
-                ></div>
-                <div
-                  className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent transition-colors duration-500"
-                  aria-hidden="true"
-                ></div>
-                <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                  <MapIcon className="w-6 h-6 mr-3" />
-                  <span className="text-lg">Buscar en el mapa</span>
-                </div>
-              </button>
-            {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 002 */}
-
-
-
-            {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 003 */}
-              <br />
-              <br />
+          {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA */}
+            <div className="mt-16 max-w-4xl mx-auto space-y-4">
               <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
                   <div className="col-span-2 my-4">
                     <div className="grid grid-cols-2 gap-2">
 
+                      {/* JEROFA los primeros botones */}
+                      <button
+                        onClick={onShowAll}
+                        className="w-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5"
+                      >
+                        <QueueListIcon className="w-6 h-6 mr-3" />
+                        Ver todos los servicios
+                      </button>
+
+                      <button
+                        onClick={onNavigateMap}
+                        className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+                      >
+                        <div
+                          className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
+                          style={{
+                            backgroundImage: "url('/resources/images/tierra.jpeg')",
+                          }}
+                          aria-hidden="true"
+                        ></div>
+                        <div
+                          className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
+                          aria-hidden="true"
+                        ></div>
+                        <div className="relative z-10 flex items-center justify-center drop-shadow-md">
+                          <MapIcon className="w-6 h-6 mr-3" />
+                          <span className="text-lg">Buscar en el mapa</span>
+                        </div>
+                      </button>
+
+                      {/* JEROFA los segundos botones */}
                       <button
                         onClick={onShowAll}
                         className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
                       >
-                        <CategoryIcon className="w-5 h-5" />
-                        <span>Todo</span>
+                        <QueueListIcon className="w-5 h-5" />
+                        <span>Ver todos los servicios</span>
                       </button>
 
                       <button
@@ -479,15 +375,14 @@ const LandingPage: React.FC<LandingPageProps> = ({
                         className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
                       >
                         <MapIcon className="w-5 h-5" />
-                        <span>Mapa</span>
+                        <span>Buscar en el mapa</span>
                       </button>
 
                     </div>
                   </div>
               </div>
-            {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 003 */}
-
-          </div>
+            </div>
+          {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA */}
 
           <section className="mt-16 md:mt-24 text-center">
             <h2 className="text-3xl font-bold text-slate-800 mb-4">
@@ -516,29 +411,6 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 ))}
               </div>
             {/* END - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 001 */}
-
-
-
-            {/* START - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 002 */}
-              <div className="grid grid-cols-3 gap-4 md:gap-6">
-                {features.map((feature, index) => {
-                  const IconComponent = feature.icon;
-                  return (
-                    <div key={index} className="flex flex-col items-center">
-                      <div className="bg-teal-100/70 rounded-full p-3 mb-2">
-                        <IconComponent className="w-6 h-6 text-teal-500" />
-                      </div>
-                      <h3 className="text-sm font-semibold text-slate-800 mb-1">
-                        {feature.title}
-                      </h3>
-                      <p className="text-slate-500 text-xs leading-snug">
-                        {feature.description}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            {/* END - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 002 */}
           </section>
 
           <section className="mt-16 text-center">
