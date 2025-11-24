@@ -82,6 +82,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
         searchQuery={searchQuery}
         onSearchQueryChange={onSearchQueryChange}
       />
+
       <CategorySelector
         selectedCategory={selectedCategory}
         onSelectCategory={handleCategorySelect}
@@ -97,6 +98,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
             <p>{locationError}</p>
           </div>
         )}
+
         {isLoading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500 mx-auto"></div>
@@ -106,6 +108,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
           <div className="grid grid-cols-2 gap-4">
             {filteredProviders.length > 0 ? (
               filteredProviders.map((provider) => (
+                // jerofa aqui están las card que presentan a los cuidadores
                 <ProviderCard
                   key={provider.id}
                   provider={provider}
