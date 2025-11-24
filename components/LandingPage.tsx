@@ -18,36 +18,38 @@ import PetsIcon from "./icons/PetsIcon";
 import BroomIcon from "./icons/BroomIcon";
 import CategoryIcon from "./icons/CategoryIcon";
 
+// START - NEW in cuidamet_5
+  const CategoryCard: React.FC<{
+    categoryKey: string;
+    category: { name: string };
+    icon: React.ReactNode;
+    imageUrl: string;
+  }> = ({ categoryKey, category, icon, imageUrl }) => (
+    <div
+      key={categoryKey}
+      className="relative rounded-xl overflow-hidden group h-40 transform hover:scale-105 active:scale-100 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md"
+    >
+      <div
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
+        style={{ backgroundImage: `url(${imageUrl})` }}
+      />
+      <div className="absolute inset-0 bg-black/40 backdrop-blur-sm group-hover:bg-black/50 transition-colors duration-300" />
+      <div className="relative z-10 p-4 flex flex-col h-full justify-end items-start text-white">
+        {React.cloneElement(icon as React.ReactElement, {
+          className: "w-10 h-10 mb-2",
+        })}
+        <h3 className="text-2xl font-bold tracking-tight">{category.name}</h3>
+      </div>
+    </div>
+  );
+// END - NEW in cuidamet_5
+
 interface LandingPageProps {
   onCategorySelect: (category: CareCategory) => void;
   onShowAll: () => void;
   onNavigateMap: () => void;
   onSearch: (query: string) => void;
 }
-
-const CategoryCard: React.FC<{
-  categoryKey: string;
-  category: { name: string };
-  icon: React.ReactNode;
-  imageUrl: string;
-}> = ({ categoryKey, category, icon, imageUrl }) => (
-  <div
-    key={categoryKey}
-    className="relative rounded-xl overflow-hidden group h-40 transform hover:scale-105 active:scale-100 transition-all duration-300 shadow-lg hover:shadow-xl active:shadow-md"
-  >
-    <div
-      className="absolute inset-0 bg-cover bg-center transition-transform duration-300 group-hover:scale-110"
-      style={{ backgroundImage: `url(${imageUrl})` }}
-    />
-    <div className="absolute inset-0 bg-black/40 backdrop-blur-sm group-hover:bg-black/50 transition-colors duration-300" />
-    <div className="relative z-10 p-4 flex flex-col h-full justify-end items-start text-white">
-      {React.cloneElement(icon as React.ReactElement, {
-        className: "w-10 h-10 mb-2",
-      })}
-      <h3 className="text-2xl font-bold tracking-tight">{category.name}</h3>
-    </div>
-  </div>
-);
 
 const LandingPage: React.FC<LandingPageProps> = ({
   onCategorySelect,
@@ -57,37 +59,47 @@ const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   const [query, setQuery] = useState("");
 
-  const categoryImages = {
-    mayores:
-      "/resources/images/cuidado_de_mayores.jpg",
-    niños:
-      "/resources/images/cuidado_de_ninos.avif",
-    mascotas:
-      "/resources/images/cuidado_de_mascotas_002.avif",
-    limpieza:
-      "/resources/images/cuidado_de_limpieza.avif",
-  };
+  // START  - NEW in cuidamet_5
+    const categoryImages = {
+      mayores:
+        "/resources/images/cuidado_de_mayores.jpg",
+      niños:
+        "/resources/images/cuidado_de_ninos.avif",
+      mascotas:
+        "/resources/images/cuidado_de_mascotas_002.avif",
+      limpieza:
+        "/resources/images/cuidado_de_limpieza.avif",
+    };
+  // END - NEW in cuidamet_5
 
   const categories = [
     {
       id: CareCategory.ELDERLY,
-      name: "Mayores",
+      name: "Cuidado de Mayores",
       imageUrl: "/resources/images/cuidado_de_mayores.jpg",
+      colorClass: "from-green-600/90",
+      shadowClass: "hover:shadow-green-500/30",
     },
     {
       id: CareCategory.CHILDREN,
-      name: "Niños",
+      name: "Cuidado de Niños",
       imageUrl: "/resources/images/cuidado_de_ninos.avif",
+      colorClass: "from-slate-600/90", // Gray
+      shadowClass: "hover:shadow-slate-500/30",
     },
     {
       id: CareCategory.PETS,
-      name: "Mascotas",
+      name: "Cuidado de Mascotas",
       imageUrl: "/resources/images/cuidado_de_mascotas.avif",
+      colorClass: "from-orange-600/90",
+      shadowClass: "hover:shadow-orange-500/30",
     },
     {
-      id: CareCategory.CLEANING,
-      name: "Limpieza",
+      id: CareCategory.HOUSEKEEPING,
+      name: "Limpieza de Hogar",
       imageUrl: "/resources/images/cuidado_de_limpieza.avif",
+      colorClass: "from-blue-600/90",
+      shadowClass: "hover:shadow-blue-500/30",
     },
   ];
 
@@ -102,7 +114,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
       icon: LocationPinIcon,
       title: "Cerca de Ti",
       description:
-        "Usa tu ubicación para encontrar a los mejores cuidadores en tu propio barrio, sin complicaciones.",
+        "Usa tu ubicación para encontrar a los mejores cuidadores en tu propio barrio.",
     },
     {
       icon: SparklesIcon,
@@ -159,9 +171,11 @@ const LandingPage: React.FC<LandingPageProps> = ({
           "¡Enlace de la app copiado al portapapeles! Compártelo con quien quieras."
         );
       }
-    } catch (err) {
-      console.error("Error al compartir:", err);
-      alert("No se pudo compartir la aplicación.");
+    } catch (err: any) {
+      if (err.name !== "AbortError") {
+        console.error("Error al compartir:", err);
+        alert("No se pudo compartir la aplicación.");
+      }
     }
   };
 
@@ -258,7 +272,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder="Nombre, servicio, ubicación..."
-                className="w-full bg-white border border-slate-300 rounded-full py-4 pl-12 pr-32 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition"
+                className="w-full bg-white border border-slate-300 rounded-full py-4 pl-12 pr-32 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition text-slate-800"
               />
               <button
                 type="submit"
@@ -273,8 +287,42 @@ const LandingPage: React.FC<LandingPageProps> = ({
             ¿Qué tipo de servicio estás buscando?
           </h3>
 
-          {/* cuidamet - START - Nuevos botones de categorías con imágenes y selección */}
-            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
+          {/* START - IMAGENES SERVICIOS - 001 */}
+            <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
+              {categories.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => onCategorySelect(cat.id)}
+                  className={`relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${cat.shadowClass}`}
+                >
+                  <img
+                    src={cat.imageUrl}
+                    alt={cat.name}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  {/* Colored overlay using specific tonality requested */}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t ${cat.colorClass} to-transparent transition-opacity duration-300`}
+                  ></div>
+
+                  <div className="absolute inset-0 flex items-end p-4">
+                    <h3 className="text-white text-lg sm:text-xl font-bold leading-tight drop-shadow-md text-left">
+                      {cat.name}
+                    </h3>
+                  </div>
+                </button>
+              ))}
+            </div>
+          {/* END - IMAGENES SERVICIOS - 001 */}
+
+
+
+          {/* START - IMAGENES SERVICIOS - 002 */}
+            <br />
+            <br />
+            <br />
+            <div className="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
+            {/* <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto"> */}
               {categories.map((cat) => (
                 <button
                   key={cat.id}
@@ -295,29 +343,15 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 </button>
               ))}
             </div>
-          {/* cuidamet - END - Nuevos botones de categorías con imágenes y selección */}
+          {/* END - IMAGENES SERVICIOS - 002 */}
 
-          <br />
-          <br />
-          <br />
 
-          <div className="text-center">
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-800 mb-6 text-center leading-tight">
-              Encuentra el{" "}
-              <span className="bg-gradient-to-r from-teal-500 to-teal-600 bg-clip-text text-transparent">
-                cuidado de confianza
-              </span>{" "}
-              <br />
-              que tu familia merece.
-            </h2>
-          </div>
 
-          <br />
-          <br />
-
-          {/* cuidamet v.5 - START - Nuevos botones de categorías con imágenes y selección */}
+          {/* START - IMAGENES SERVICIOS - 003 */}
+            <br />
+            <br />
+            <br />
             <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
-            {/* <div className="grid grid-cols-2 gap-4"> */}
                   <button onClick={() => onCategorySelect(CareCategory.ELDERLY)}>
                     <CategoryCard
                       categoryKey="mayores"
@@ -345,7 +379,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     />
                   </button>
                   
-                  <button onClick={() => onCategorySelect(CareCategory.CLEANING)}>
+                  <button onClick={() => onCategorySelect(CareCategory.HOUSEKEEPING)}>
                     <CategoryCard
                       categoryKey="limpieza"
                       category={CATEGORIES.limpieza}
@@ -354,24 +388,20 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     />
                   </button>
             </div>
-          {/* cuidamet v.5 - END - Nuevos botones de categorías con imágenes y selección */}
+          {/* END - IMAGENES SERVICIOS - 003 */}
 
-
-
-
-
-
-
-
-
+          {/* How it works Section */}
           <section className="mt-16 text-center">
             <h2 className="text-3xl font-bold text-slate-800 mb-3">
               ¿Cómo funciona Cuidamet?
             </h2>
+
             <p className="max-w-xl mx-auto text-slate-600 mb-12">
               Tres pasos simples para encontrar tu cuidador ideal
             </p>
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-4xl mx-auto">
+              {/* Step 1 */}
               <div className="flex flex-col items-center">
                 <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
                   <SearchIcon className="w-10 h-10 text-teal-500" />
@@ -385,6 +415,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 </p>
               </div>
 
+              {/* Step 2 */}
               <div className="flex flex-col items-center">
                 <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
                   <ChatBubbleLeftRightIcon className="w-10 h-10 text-teal-500" />
@@ -398,6 +429,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 </p>
               </div>
 
+              {/* Step 3 */}
               <div className="flex flex-col items-center">
                 <div className="bg-teal-100 rounded-full p-5 mb-4 inline-block">
                   <CheckCircleIcon className="w-10 h-10 text-teal-500" />
@@ -413,86 +445,80 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </section>
 
-
-
-
-
-
-
-
-
           <div className="mt-16 max-w-4xl mx-auto space-y-4">
-            <button
-              onClick={onShowAll}
-              className="w-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5"
-            >
-              <QueueListIcon className="w-6 h-6 mr-3" />
-              Ver todos los servicios
-            </button>
-            <button
-              onClick={onNavigateMap}
-              className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-            >
-              <div
-                className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                style={{
-                  backgroundImage: "url('/resources/images/tierra.jpeg')",
-                }}
-                aria-hidden="true"
-              ></div>
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
-                aria-hidden="true"
-              ></div>
-              <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                <MapIcon className="w-6 h-6 mr-3" />
-                <span className="text-lg">Buscar en el mapa</span>
-              </div>
-            </button>
+            {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 001 */}
+              <button
+                onClick={onShowAll}
+                className="w-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5"
+              >
+                <QueueListIcon className="w-6 h-6 mr-3" />
+                Ver todos los servicios
+              </button>
 
-          <br />
-          <br />
-          <br />
-
-
-            <button
-              onClick={onShowAll}
-              className="w-full flex items-center justify-center bg-slate-800 text-white px-6 py-4 rounded-xl font-semibold hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-            >
-              <QueueListIcon className="w-6 h-6 mr-3" />
-              Ver todos los servicios
-            </button>
-            <button
-              onClick={onNavigateMap}
-              className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-            >
-              <div
-                className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                style={{
-                  backgroundImage:
-                    "url('/resources/images/tierra.jpeg')",
-                }}
-                aria-hidden="true"
-              ></div>
-              <div
-                className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent transition-colors duration-500"
-                aria-hidden="true"
-              ></div>
-              <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                <MapIcon className="w-6 h-6 mr-3" />
-                <span className="text-lg">Buscar en el mapa</span>
-              </div>
-            </button>
-          </div>
+              <button
+                onClick={onNavigateMap}
+                className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
+                  style={{
+                    backgroundImage: "url('/resources/images/tierra.jpeg')",
+                  }}
+                  aria-hidden="true"
+                ></div>
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
+                  aria-hidden="true"
+                ></div>
+                <div className="relative z-10 flex items-center justify-center drop-shadow-md">
+                  <MapIcon className="w-6 h-6 mr-3" />
+                  <span className="text-lg">Buscar en el mapa</span>
+                </div>
+              </button>
+            {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 001 */}
 
 
-          <br />
-          <br />
-          <br />
+
+            {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 002 */}
+              <br />
+              <br />
+              <button
+                onClick={onShowAll}
+                className="w-full flex items-center justify-center bg-slate-800 text-white px-6 py-4 rounded-xl font-semibold hover:bg-slate-700 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+              >
+                <QueueListIcon className="w-6 h-6 mr-3" />
+                Ver todos los servicios
+              </button>
+
+              <button
+                onClick={onNavigateMap}
+                className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
+                  style={{
+                    backgroundImage:
+                      "url('/resources/images/tierra.jpeg')",
+                  }}
+                  aria-hidden="true"
+                ></div>
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent transition-colors duration-500"
+                  aria-hidden="true"
+                ></div>
+                <div className="relative z-10 flex items-center justify-center drop-shadow-md">
+                  <MapIcon className="w-6 h-6 mr-3" />
+                  <span className="text-lg">Buscar en el mapa</span>
+                </div>
+              </button>
+            {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 002 */}
 
 
-            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
 
+            {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 003 */}
+              <br />
+              <br />
+              <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
                   <div className="col-span-2 my-4">
                     <div className="grid grid-cols-2 gap-2">
 
@@ -514,53 +540,73 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
                     </div>
                   </div>
+              </div>
+            {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA - 003 */}
 
-            </div>
-
-
-
-
-
-
-
-
-
-
-
+          </div>
 
           <section className="mt-16 md:mt-24 text-center">
             <h2 className="text-3xl font-bold text-slate-800 mb-4">
               Tu tranquilidad, nuestra prioridad
             </h2>
+
             <p className="max-w-2xl mx-auto text-slate-600 mb-12">
               Te conectamos con los mejores profesionales para el cuidado de los
               que más quieres.
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-              {features.map((feature, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <div className="bg-teal-100/70 rounded-full p-4 mb-4">
-                    <feature.icon className="w-8 h-8 text-teal-500" />
+
+            {/* START - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 001 */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                {features.map((feature, index) => (
+                  <div key={index} className="flex flex-col items-center">
+                    <div className="bg-teal-100/70 rounded-full p-4 mb-4">
+                      <feature.icon className="w-8 h-8 text-teal-500" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-slate-800 mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-slate-500 text-sm leading-relaxed">
+                      {feature.description}
+                    </p>
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-800 mb-2">
-                    {feature.title}
-                  </h3>
-                  <p className="text-slate-500 text-sm leading-relaxed">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            {/* END - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 001 */}
+
+
+
+            {/* START - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 002 */}
+              <div className="grid grid-cols-3 gap-4 md:gap-6">
+                {features.map((feature, index) => {
+                  const IconComponent = feature.icon;
+                  return (
+                    <div key={index} className="flex flex-col items-center">
+                      <div className="bg-teal-100/70 rounded-full p-3 mb-2">
+                        <IconComponent className="w-6 h-6 text-teal-500" />
+                      </div>
+                      <h3 className="text-sm font-semibold text-slate-800 mb-1">
+                        {feature.title}
+                      </h3>
+                      <p className="text-slate-500 text-xs leading-snug">
+                        {feature.description}
+                      </p>
+                    </div>
+                  );
+                })}
+              </div>
+            {/* END - CARDS: CONFIANZA Y SEGURIDAD, CERCA DETI y FACIL Y RAPIDO - 002 */}
           </section>
 
           <section className="mt-16 text-center">
             <h3 className="text-xl font-semibold text-slate-700 mb-4">
               ¿Te gusta Cuidamet?
             </h3>
+
             <p className="max-w-md mx-auto text-slate-500 mb-6">
               Ayúdanos a crecer y a que más gente encuentre al cuidador
               perfecto. ¡Comparte la aplicación con tus amigos y familiares!
             </p>
+
             <button
               onClick={handleShare}
               className="inline-flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-teal-500/50 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-1"
@@ -570,31 +616,43 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </button>
           </section>
 
+{/* 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 */}
+
           <section className="mt-20 py-16 bg-teal-50/70 rounded-3xl">
             <div className="container mx-auto px-4 text-center">
               <h2 className="text-3xl font-bold text-slate-800 mb-12">
                 Tu seguridad es nuestra prioridad
               </h2>
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto">
-                {securityFeatures.map((feature, index) => (
-                  <div
-                    key={index}
-                    className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-300"
-                  >
-                    <div className="text-teal-500 mb-3">
-                      <feature.icon className="w-8 h-8" />
+                {securityFeatures.map((feature, index) => {
+                  const IconComponent = feature.icon;
+                  return (
+                    <div
+                      key={index}
+                      className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-lg border border-white/50 text-center flex flex-col items-center transform hover:-translate-y-1 transition-transform duration-300"
+                    >
+                      <div className="text-teal-500 mb-3">
+                        <IconComponent className="w-8 h-8" />
+                      </div>
+                      <h3 className="text-sm font-semibold text-slate-800 mb-1">
+                        {feature.title}
+                      </h3>
+                      <p className="text-slate-500 text-xs leading-snug">
+                        {feature.description}
+                      </p>
                     </div>
-                    <h3 className="text-sm font-semibold text-slate-800 mb-1">
-                      {feature.title}
-                    </h3>
-                    <p className="text-slate-500 text-xs leading-snug">
-                      {feature.description}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
+
+
             </div>
           </section>
+
+
+
+
         </div>
       </main>
     </div>
