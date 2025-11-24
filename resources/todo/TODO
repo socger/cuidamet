@@ -1,3 +1,8 @@
 * Ver el resto de páginas como Inicio, favoritos, buzon, registrarse, perfil ... la página principal tiene contenido nuevo en el footer (revisar el resto header, body, etc)
 * Ver que ahora hay una nueva opción de cuidado ... CuidaClean
 * A Daniel le gustan más los botones nuevos de la página principal.
+* En LandingPage.tsx ... ver como funciona el botón de Buscar (entender el código que ejecuta al filtrar por ejemplo por la palabra infantil)
+* Las imágenes de cuidado de mayores, cuidado de niños, etc ... no filtran bien cuando las pulsamos ... ver porqué
+* En la barra de botones de abajo, ver porqué el circulito de color rojo no aparece dentro del icono de buzón. En alguna de las versiones que hizo Daniel, creo que en la 5, si que lo hacía.
+* La barra de abajo de botones, no aparece en todas las pantallas que son llamadas desde otros sitios.
+
