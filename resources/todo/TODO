@@ -1,4 +1,5 @@
 * La vista de todos los servicios (cuidadores) sus cards son más vistosos(versión 6) que los de la primera versión.
+  Ya la he sacado a un componente nuevo llamado ProvidersList.tsx
 
 
 
