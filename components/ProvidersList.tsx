@@ -1,6 +1,6 @@
 import React from "react";
 import { CareCategory, Provider } from "../types";
-import Header from "./Header";
+import Header_ProviderList from "./Header_ProviderList";
 import CategorySelector from "./CategorySelector";
 import ProviderCard from "./ProviderCard";
 
@@ -78,7 +78,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
 
   return (
     <>
-      <Header
+      <Header_ProviderList
         searchQuery={searchQuery}
         onSearchQueryChange={onSearchQueryChange}
       />
