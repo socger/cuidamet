@@ -1,8 +1,33 @@
+* La vista de todos los servicios (cuidadores) sus cards son más vistosos(versión 6) que los de la primera versión.
+
+
+
 * Ver el resto de páginas como Inicio, favoritos, buzon, registrarse, perfil ... la página principal tiene contenido nuevo en el footer (revisar el resto header, body, etc)
 * Ver que ahora hay una nueva opción de cuidado ... CuidaClean
 * A Daniel le gustan más los botones nuevos de la página principal.
 * En LandingPage.tsx ... ver como funciona el botón de Buscar (entender el código que ejecuta al filtrar por ejemplo por la palabra infantil)
 * Las imágenes de cuidado de mayores, cuidado de niños, etc ... no filtran bien cuando las pulsamos ... ver porqué
+
 * En la barra de botones de abajo, ver porqué el circulito de color rojo no aparece dentro del icono de buzón. En alguna de las versiones que hizo Daniel, creo que en la 5, si que lo hacía.
 * La barra de abajo de botones, no aparece en todas las pantallas que son llamadas desde otros sitios.
+* El buscador de LandingPage.tsx no es el mismo buscador que el de la pantalla donde se presentan todos los servicios.
+  Por ejemplo si escribimos algo en el buscador de LandingPage.tsx, nos aparece una x que borraría todo lo escrito. Esta x no aparece en el buscador de la vista donde se presentan todos los servicios. Además los estilos son diferentes.
+
+* El icono de Cuidamet (header de LandingPage.tsx) ... ¿debería de aparecer en todas las vistas?
+* El icono de Cuidamet cambiarlo por los que me pasó Daniel.
+
+* El mapa que se ve en la versión 1 de cuidamet no es el mismo mapa que se llama ahora en la versión-6. Pero en la versión 1 teníamos la barra de botones abajo. Y ahora en la versión-6 no están los botones.  
+* En la versión 1 de cuidamet si le pulsamos ver el mapa, nos sale un previo para activar la geolocalización. En la versión-6 no aparece este previo.
+
+* El icono de Favoritos (barra de botones de abajo) cuando lo pulsamos nos lleva a una pantalla de autenticación (si no lo hemos hecho ya) para meter usuario y pwd. Si no hemos creado nunca el usuario Buscamos la opción de Registrarme y nos abre otra pantalla para hacerlo
+
+
+
+* Las cookies de privacidad duran mucho. Habría que hacer que fueran perecederas xxxx tiempo. Así podría volver a aparecer la pantalla de aceptar las cookies de vez en cuando.
+* Hay que crear la vista para "Política de Privacidad" de las Cookies (lo que nadie lee). Y hay que crear la vista de "configuración de las cookies"
+
+* De la botonera de abajo, no he visto nada de OFRECER, buzon y TU
+
+
+
 
