@@ -33,9 +33,11 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   onToggleFavorite,
   onViewProfile,
 }) => {
-  // Handler that clears search when selecting a category
+  // Handler that clears search only when selecting "all"
   const handleCategorySelect = (category: CareCategory | "all") => {
-    onSearchQueryChange(""); // Clear search input
+    if (category === "all") {
+      onSearchQueryChange(""); // Clear search input only for "Todos"
+    }
     onSelectCategory(category); // Select category
   };
 
