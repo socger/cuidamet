@@ -33,6 +33,12 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   onToggleFavorite,
   onViewProfile,
 }) => {
+  // Handler that clears search when selecting a category
+  const handleCategorySelect = (category: CareCategory | "all") => {
+    onSearchQueryChange(""); // Clear search input
+    onSelectCategory(category); // Select category
+  };
+
   // Filtering logic
   const baseProviders =
     view === "favorites"
@@ -76,7 +82,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
       />
       <CategorySelector
         selectedCategory={selectedCategory}
-        onSelectCategory={onSelectCategory}
+        onSelectCategory={handleCategorySelect}
       />
 
       <main className="container mx-auto px-4 py-6 pb-24">
