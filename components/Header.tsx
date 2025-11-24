@@ -17,11 +17,13 @@ const Header: React.FC<HeaderProps> = ({ searchQuery, onSearchQueryChange }) => 
               <CuidametLogo />
             </a>
           </div>
+
           <div className="flex-1 min-w-0">
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon className="h-5 w-5 text-slate-400" />
               </div>
+              
               <input
                 type="text"
                 value={searchQuery}
