@@ -364,6 +364,36 @@ const LandingPage: React.FC<LandingPageProps> = ({
                       {/* JEROFA los segundos botones */}
                       <button
                         onClick={onShowAll}
+                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 border-2 border-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                      >
+                        <QueueListIcon className="w-5 h-5" />
+                        <span>Ver todos los servicios</span>
+                      </button>
+
+                      <button
+                        onClick={onNavigateMap}
+                        className="relative w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group border-2 border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+                      >
+                        <div
+                          className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
+                          style={{
+                            backgroundImage: "url('/resources/images/tierra.jpeg')",
+                          }}
+                          aria-hidden="true"
+                        ></div>
+                        <div
+                          className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
+                          aria-hidden="true"
+                        ></div>
+                        <div className="relative z-10 flex items-center justify-center drop-shadow-md">
+                          <MapIcon className="w-5 h-5" />
+                          <span>Buscar en el mapa</span>
+                        </div>
+                      </button>
+
+                      {/* JEROFA los terceros botones */}
+                      <button
+                        onClick={onShowAll}
                         className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
                       >
                         <QueueListIcon className="w-5 h-5" />
