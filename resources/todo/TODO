@@ -1,5 +1,14 @@
 * La vista de todos los servicios (cuidadores) sus cards son más vistosos(versión 6) que los de la primera versión.
-  Ya la he sacado a un componente nuevo llamado ProvidersList.tsx
+  - Ya la he sacado a un componente nuevo llamado ProvidersList.tsx
+  - He modificado el componente Header_ProviderList (Header en cuidamet-6) y lo he hecho igual que en cuidamet-6
+  + Ahora estoy intentando igualar CategorySelector.tsx
+
+
+* Tengo que revisar:
+  - En App.tsx:
+    + const renderContent = () => {
+      Es diferente en cuidamet (se usan if) y en cuidamet-6 (se unsa un switch)
+
 
 
 
