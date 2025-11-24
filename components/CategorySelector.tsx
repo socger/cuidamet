@@ -6,11 +6,11 @@ interface CategorySelectorProps {
   onSelectCategory: (category: CareCategory | 'all') => void;
 }
 
-const categories: { id: CareCategory, name: string }[] = [
-  { id: CareCategory.ELDERLY, name: 'Mayores' },
-  { id: CareCategory.CHILDREN, name: 'Niños' },
-  { id: CareCategory.PETS, name: 'Mascotas' },
-  { id: CareCategory.HOUSEKEEPING, name: 'Limpieza' },
+const categories: { id: CareCategory, name: string, icon: string }[] = [
+  { id: CareCategory.ELDERLY, name: 'Mayores', icon: '/resources/icons/elderly-female-icon.svg' },
+  { id: CareCategory.CHILDREN, name: 'Niños', icon: '/resources/icons/baby-girl-icon.svg' },
+  { id: CareCategory.PETS, name: 'Mascotas', icon: '/resources/icons/dog-puppy-face-icon.svg' },
+  { id: CareCategory.HOUSEKEEPING, name: 'Limpieza', icon: '/resources/icons/housekeeping-icon.svg' },
 ];
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, onSelectCategory }) => {
@@ -27,18 +27,25 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
             >
                 Todos
             </button>
-            
+
             {categories.map((cat) => (
                 <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors flex-shrink-0
+                className={`p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
                     ${selectedCategory === cat.id
-                    ? 'bg-teal-500 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    ? 'bg-teal-500 shadow-lg shadow-teal-500/50'
+                    : 'bg-white hover:bg-slate-50 shadow-md'
                     }`}
+                title={cat.name}
                 >
-                {cat.name}
+                <img 
+                    src={cat.icon} 
+                    alt={cat.name}
+                    className={`w-8 h-8 transition-all duration-300
+                        ${selectedCategory === cat.id ? 'brightness-0 invert' : 'opacity-70'}
+                    `}
+                />
                 </button>
             ))}
         </div>
