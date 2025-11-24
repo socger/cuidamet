@@ -10,6 +10,7 @@ const categories: { id: CareCategory, name: string }[] = [
   { id: CareCategory.ELDERLY, name: 'Mayores' },
   { id: CareCategory.CHILDREN, name: 'Niños' },
   { id: CareCategory.PETS, name: 'Mascotas' },
+  { id: CareCategory.HOUSEKEEPING, name: 'Limpieza' },
 ];
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, onSelectCategory }) => {
@@ -20,19 +21,20 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
                 onClick={() => onSelectCategory('all')}
                 className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors flex-shrink-0
                 ${selectedCategory === 'all'
-                    ? 'bg-slate-800 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                 }`}
             >
-                Todo
+                Todos
             </button>
+            
             {categories.map((cat) => (
                 <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
                 className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors flex-shrink-0
                     ${selectedCategory === cat.id
-                    ? 'bg-slate-800 text-white'
+                    ? 'bg-teal-500 text-white'
                     : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
                 >
