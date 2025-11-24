@@ -19,13 +19,20 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
         <div className="container mx-auto px-4 flex items-center space-x-3 overflow-x-auto">
             <button
                 onClick={() => onSelectCategory('all')}
-                className={`px-4 py-1.5 text-sm font-medium rounded-full whitespace-nowrap transition-colors flex-shrink-0
-                ${selectedCategory === 'all'
-                    ? 'bg-teal-500 text-white'
-                    : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                }`}
+                className={`p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
+                    ${selectedCategory === 'all'
+                    ? 'bg-teal-500 shadow-lg shadow-teal-500/50'
+                    : 'bg-white hover:bg-slate-50 shadow-md'
+                    }`}
+                title="Todos"
             >
-                Todos
+                <img 
+                    src="/resources/icons/remove-filter-icon.svg" 
+                    alt="Todos"
+                    className={`w-8 h-8 transition-all duration-300
+                        ${selectedCategory === 'all' ? 'brightness-0 invert' : 'opacity-70'}
+                    `}
+                />
             </button>
 
             {categories.map((cat) => (
