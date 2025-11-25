@@ -325,94 +325,47 @@ const LandingPage: React.FC<LandingPageProps> = ({
             </div>
           </section>
 
-          {/* START - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA */}
-            <div className="mt-16 max-w-4xl mx-auto space-y-4">
-              <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
-                  <div className="col-span-2 my-4">
-                    <div className="grid grid-cols-2 gap-2">
+          {/* Buttons: "Ver todos los servicios" & "Buscar en el mapa" */}
+          <div className="mt-16 max-w-4xl mx-auto space-y-4">
+            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
+              <div className="col-span-2 my-4">
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={onShowAll}
+                    // Quitamos a los botones los bordes de color verde
+                    // className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 border-2 border-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                    className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                  >
+                    <QueueListIcon className="w-5 h-5" />
+                    <span>Ver todos los servicios</span>
+                  </button>
 
-                      {/* JEROFA los primeros botones */}
-                      <button
-                        onClick={onShowAll}
-                        className="w-full flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-6 py-4 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5"
-                      >
-                        <QueueListIcon className="w-6 h-6 mr-3" />
-                        Ver todos los servicios
-                      </button>
-
-                      <button
-                        onClick={onNavigateMap}
-                        className="relative w-full flex items-center justify-center px-6 py-4 rounded-2xl font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-                      >
-                        <div
-                          className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                          style={{
-                            backgroundImage: "url('/resources/images/tierra.jpeg')",
-                          }}
-                          aria-hidden="true"
-                        ></div>
-                        <div
-                          className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
-                          aria-hidden="true"
-                        ></div>
-                        <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                          <MapIcon className="w-6 h-6 mr-3" />
-                          <span className="text-lg">Buscar en el mapa</span>
-                        </div>
-                      </button>
-
-                      {/* JEROFA los segundos botones */}
-                      <button
-                        onClick={onShowAll}
-                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 border-2 border-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-                      >
-                        <QueueListIcon className="w-5 h-5" />
-                        <span>Ver todos los servicios</span>
-                      </button>
-
-                      <button
-                        onClick={onNavigateMap}
-                        className="relative w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group border-2 border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-                      >
-                        <div
-                          className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                          style={{
-                            backgroundImage: "url('/resources/images/tierra.jpeg')",
-                          }}
-                          aria-hidden="true"
-                        ></div>
-                        <div
-                          className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
-                          aria-hidden="true"
-                        ></div>
-                        <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                          <MapIcon className="w-5 h-5" />
-                          <span>Buscar en el mapa</span>
-                        </div>
-                      </button>
-
-                      {/* JEROFA los terceros botones */}
-                      <button
-                        onClick={onShowAll}
-                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
-                      >
-                        <QueueListIcon className="w-5 h-5" />
-                        <span>Ver todos los servicios</span>
-                      </button>
-
-                      <button
-                        onClick={onNavigateMap}
-                        className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-white text-teal-700 font-semibold shadow-sm border-2 border-teal-500 hover:bg-teal-50 hover:shadow-md"
-                      >
-                        <MapIcon className="w-5 h-5" />
-                        <span>Buscar en el mapa</span>
-                      </button>
-
+                  <button
+                    onClick={onNavigateMap}
+                    // Quitamos a los botones los bordes de color verde
+                    // className="relative w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group border-2 border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+                    className="relative w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+                  >
+                    <div
+                      className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
+                      style={{
+                        backgroundImage: "url('/resources/images/tierra.jpeg')",
+                      }}
+                      aria-hidden="true"
+                    ></div>
+                    <div
+                      className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
+                      aria-hidden="true"
+                    ></div>
+                    <div className="relative z-10 flex items-center justify-center drop-shadow-md">
+                      <MapIcon className="w-5 h-5" />
+                      <span>Buscar en el mapa</span>
                     </div>
-                  </div>
+                  </button>
+                </div>
               </div>
             </div>
-          {/* END - BOTONES: VER TODOS LOS SERVICIOS y BUSCAR EN EL MAPA */}
+          </div>
 
           <section className="mt-16 md:mt-24 text-center">
             <h2 className="text-3xl font-bold text-slate-800 mb-4">
@@ -455,14 +408,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
             <button
               onClick={handleShare}
-              className="inline-flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-teal-500/50 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-1"
+              className="inline-flex items-center justify-center bg-gradient-to-r from-teal-500 to-green-500 text-white px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-teal-500/50 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-1"
             >
               <ShareIcon className="w-6 h-6 mr-3" />
               Compartir la aplicación
             </button>
           </section>
-
-{/* 111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 */}
 
           <section className="mt-20 py-16 bg-teal-50/70 rounded-3xl">
             <div className="container mx-auto px-4 text-center">
