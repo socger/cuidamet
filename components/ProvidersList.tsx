@@ -1,6 +1,6 @@
 import React from "react";
 import { CareCategory, Provider } from "../types";
-import Header_ProviderList from "./Header_ProviderList";
+import HeroSearch from "./HeroSearch";
 import CategorySelector from "./CategorySelector";
 import ProviderCard from "./ProviderCard";
 
@@ -77,11 +77,10 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   );
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col p-4 pb-24">
-      <Header_ProviderList
-        searchQuery={searchQuery}
-        onSearchQueryChange={onSearchQueryChange}
-      />
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col pb-24">
+      <div className="px-4 pt-4">
+        <HeroSearch onSearch={onSearchQueryChange} />
+      </div>
 
       <CategorySelector
         selectedCategory={selectedCategory}
