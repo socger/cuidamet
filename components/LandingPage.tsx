@@ -184,92 +184,53 @@ const LandingPage: React.FC<LandingPageProps> = ({
   };
 
   return (
-    <div className="min-h-screen bg-white text-slate-800 flex flex-col p-4 pb-24">
-      <header className="py-4">
-        <div className="container mx-auto">
-          <img
-            src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
-            alt="Cuidamet: Cuidamos de lo que te importa"
-            className="h-12 w-auto"
-          />
-        </div>
-
-          <div className="text-center">
-            <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
-              Encuentra cuidadores
-              <br />
-              <span className="bg-gradient-to-r from-teal-400 to-green-500 text-transparent bg-clip-text">
-                de confianza{" "}
-              </span>
-              <br />
-              cerca de ti
-            </h2>
-
-            <form
-              onSubmit={handleFormSubmit}
-              className="relative max-w-lg mx-auto w-full mb-10"
-            >
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <SearchIcon className="h-5 w-5 text-slate-400" />
-              </div>
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Nombre, servicio, ubicación..."
-                className="w-full bg-white border border-slate-300 rounded-full py-4 pl-12 pr-32 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition text-slate-800"
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col pb-24">
+      <main className="container mx-auto px-4 flex-grow flex flex-col justify-center">
+        <div className="py-8">
+          <div className="max-w-4xl mx-auto mb-12">
+            <div className="flex items-start gap-8">
+              <img
+                src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
+                alt="Cuidamet: Cuidamos de lo que te importa"
+                className="h-10 w-auto flex-shrink-0 mt-2"
               />
-              <button
-                type="submit"
-                className="absolute inset-y-0 right-0 flex items-center bg-teal-500 text-white font-semibold px-6 rounded-full m-1.5 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-              >
-                Buscar
-              </button>
-            </form>
+              <div className="flex-1 text-center">
+                <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                  Encuentra cuidadores
+                  <br />
+                  <span className="bg-gradient-to-r from-teal-400 to-green-500 text-transparent bg-clip-text">
+                    de confianza
+                  </span>
+                  <br />
+                  cerca de ti
+                </h2>
+
+                <form
+                  onSubmit={handleFormSubmit}
+                  className="relative max-w-2xl mx-auto w-full"
+                >
+                  <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                    <SearchIcon className="h-5 w-5 text-slate-400" />
+                  </div>
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder="Nombre, servicio, ubicación..."
+                    className="w-full bg-white border-2 border-slate-200 rounded-full py-4 pl-14 pr-36 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition text-slate-700 placeholder:text-slate-400"
+                  />
+                  <button
+                    type="submit"
+                    className="absolute inset-y-0 right-0 flex items-center bg-teal-500 text-white font-semibold px-8 rounded-full m-1 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                  >
+                    Buscar
+                  </button>
+                </form>
+              </div>
+            </div>
           </div>
 
-
-
-      </header>
-
-      <main className="container mx-auto flex-grow flex flex-col justify-center">
-        <div className="py-10">
-          {/* jerofa */}
-          {/* <div className="text-center">
-            <h2 className="text-3xl md:text-5xl font-bold leading-tight mb-6">
-              Encuentra cuidadores
-              <br />
-              <span className="bg-gradient-to-r from-teal-400 to-green-500 text-transparent bg-clip-text">
-                de confianza{" "}
-              </span>
-              <br />
-              cerca de ti
-            </h2>
-
-            <form
-              onSubmit={handleFormSubmit}
-              className="relative max-w-lg mx-auto w-full mb-10"
-            >
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <SearchIcon className="h-5 w-5 text-slate-400" />
-              </div>
-              <input
-                type="search"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Nombre, servicio, ubicación..."
-                className="w-full bg-white border border-slate-300 rounded-full py-4 pl-12 pr-32 text-base focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition text-slate-800"
-              />
-              <button
-                type="submit"
-                className="absolute inset-y-0 right-0 flex items-center bg-teal-500 text-white font-semibold px-6 rounded-full m-1.5 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-              >
-                Buscar
-              </button>
-            </form>
-          </div> */}
-
-          <h3 className="text-center text-xl font-semibold text-teal-600 mb-6">
+          <h3 className="text-center text-xl font-semibold text-teal-600 mb-8 mt-12">
             ¿Qué tipo de servicio estás buscando?
           </h3>
 
