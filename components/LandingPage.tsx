@@ -241,7 +241,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                 <button
                   key={cat.id}
                   onClick={() => onCategorySelect(cat.id)}
-                  // La propiedad cat.shadowClass las hemos quitado para que las imágenes de servicios no tengan degradados
+                  // La propiedad cat.shadowClass la hemos quitado para que las imágenes de servicios no tengan degradados
                   // className={`relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 ${cat.shadowClass}`}
                   className={`relative aspect-[4/3] rounded-xl overflow-hidden group shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1`}
                 >
@@ -250,9 +250,9 @@ const LandingPage: React.FC<LandingPageProps> = ({
                     alt={cat.name}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                   />
-                  {/* Colored overlay using specific tonality requested */}
+
                   <div
-                    // La propiedad cat.colorClass las hemos quitado para que las imágenes de servicios no tengan degradados
+                    // La propiedad cat.colorClass la hemos quitado para que las imágenes de servicios no tengan degradados
                     // className={`absolute inset-0 bg-gradient-to-t ${cat.colorClass} to-transparent transition-opacity duration-300`}
                     className={`absolute inset-0 bg-gradient-to-t to-transparent transition-opacity duration-300`}
                   ></div>
