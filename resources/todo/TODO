@@ -3,6 +3,7 @@
   - He modificado el componente Header_ProviderList (Header en cuidamet-6) y lo he hecho igual que en cuidamet-6
   + Ahora estoy intentando igualar CategorySelector.tsx
 
+* El módulo "components/CuidametLogo.tsx" hay que borrarlo ... sólo lo estaba usando "components/Header_ProviderList.tsx"
 
 * Está cogiendo iconos del site http://www.w3.org ... hay que tenerlos en local
 
