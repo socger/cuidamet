@@ -5,6 +5,7 @@ import LocationPinIcon from './icons/LocationPinIcon';
 import StarIcon from './icons/StarIcon';
 import HeartIcon from './icons/HeartIcon';
 import SolidHeartIcon from './icons/SolidHeartIcon';
+import ShareIcon from './icons/ShareIcon';
 
 interface ProviderCardProps {
   provider: Provider;
@@ -14,6 +15,14 @@ interface ProviderCardProps {
   currentCategory: CareCategory | 'all';
 }
 
+const getBadgeColor = (badge: string) => {
+    if (badge.toLowerCase().includes('premium')) return 'bg-amber-100 text-amber-800 border border-amber-300';
+    if (badge.toLowerCase().includes('mejor valorado')) return 'bg-yellow-100 text-yellow-800';
+    if (badge.toLowerCase().includes('experto')) return 'bg-blue-100 text-blue-800';
+    if (badge.toLowerCase().includes('rápida')) return 'bg-green-100 text-green-800';
+    return 'bg-slate-100 text-slate-800';
+}
+
 const ProviderCard: React.FC<ProviderCardProps> = ({ provider, isFavorite, onToggleFavorite, onViewProfile, currentCategory }) => {
   
   const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -21,6 +30,12 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider, isFavorite, onTog
     e.preventDefault();
     onToggleFavorite(provider.id);
   }
+
+  const handleShareClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    alert(`¡Perfil de ${provider.name} copiado al portapapeles!`);
+  };
 
   const descriptionToShow =
     (currentCategory !== 'all' && provider.descriptions.find(d => d.category === currentCategory)?.text) ||
@@ -34,13 +49,31 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider, isFavorite, onTog
     >
       <div className="relative">
         <img className="w-full h-48 object-cover" src={provider.photoUrl} alt={provider.name} />
-        <button
-          onClick={handleFavoriteClick}
-          className="absolute top-2 left-2 bg-white/70 backdrop-blur-sm p-1.5 rounded-full text-slate-700 hover:text-red-500 hover:bg-white transition-all duration-200 z-10"
-          aria-label={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
-        >
-          {isFavorite ? <SolidHeartIcon className="w-5 h-5 text-red-500" /> : <HeartIcon className="w-5 h-5" />}
-        </button>
+        <div className="absolute top-2 w-full px-2 flex justify-between">
+          <button
+            onClick={handleFavoriteClick}
+            className="bg-white/70 backdrop-blur-sm p-1.5 rounded-full text-slate-700 hover:text-red-500 hover:bg-white transition-all duration-200 z-10"
+            aria-label={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+          >
+            {isFavorite ? <SolidHeartIcon className="w-5 h-5 text-red-500" /> : <HeartIcon className="w-5 h-5" />}
+          </button>
+          <button
+            onClick={handleShareClick}
+            className="bg-white/70 backdrop-blur-sm p-1.5 rounded-full text-slate-700 hover:text-teal-500 hover:bg-white transition-all duration-200 z-10"
+            aria-label="Compartir perfil"
+          >
+            <ShareIcon className="w-5 h-5" />
+          </button>
+        </div>
+        {provider.badges && provider.badges.length > 0 && (
+            <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                {provider.badges.map(badge => (
+                    <span key={badge} className={`text-xs font-bold px-2 py-0.5 rounded-full ${getBadgeColor(badge)}`}>
+                        {badge}
+                    </span>
+                ))}
+            </div>
+        )}
       </div>
       <div className="p-4">
         <div className="flex justify-between items-start">
