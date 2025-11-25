@@ -207,7 +207,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
                 <form
                   onSubmit={handleFormSubmit}
-                  className="relative max-w-2xl mx-auto w-full px-2 md:px-0"
+                  className="relative max-w-2xl mx-auto w-full md:px-0"
                 >
                   <div className="absolute inset-y-0 left-0 pl-4 md:pl-5 flex items-center pointer-events-none">
                     <SearchIcon className="h-4 w-4 md:h-5 md:w-5 text-slate-400" />
@@ -221,7 +221,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
                   />
                   <button
                     type="submit"
-                    className="absolute inset-y-0 right-0 flex items-center bg-teal-500 text-white font-semibold px-4 md:px-8 text-sm md:text-base rounded-full m-1 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+                    className="absolute inset-y-0 right-0 flex items-center bg-teal-500 text-white font-semibold px-3 md:px-8 text-xs md:text-base rounded-full m-1 hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
                   >
                     Buscar
                   </button>
@@ -326,43 +326,35 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
           {/* Buttons: "Ver todos los servicios" & "Buscar en el mapa" */}
           <div className="mt-16 max-w-4xl mx-auto space-y-4">
-            <div className="grid grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
-              <div className="col-span-2 my-4">
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={onShowAll}
-                    // Quitamos a los botones los bordes de color verde
-                    // className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 border-2 border-teal-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-                    className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
-                  >
-                    <QueueListIcon className="w-5 h-5" />
-                    <span>Ver todos los servicios</span>
-                  </button>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4 max-w-4xl mx-auto">
+              <button
+                onClick={onShowAll}
+                className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full transition-all duration-300 bg-gradient-to-r from-teal-500 to-green-500 text-white font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transform hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500"
+              >
+                <QueueListIcon className="w-5 h-5" />
+                <span>Ver todos los servicios</span>
+              </button>
 
-                  <button
-                    onClick={onNavigateMap}
-                    // Quitamos a los botones los bordes de color verde
-                    // className="relative w-full flex items-center justify-center gap-2 px-6 py-3 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group border-2 border-teal-600 focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-                    className="relative w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
-                  >
-                    <div
-                      className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
-                      style={{
-                        backgroundImage: "url('/resources/images/tierra.jpeg')",
-                      }}
-                      aria-hidden="true"
-                    ></div>
-                    <div
-                      className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
-                      aria-hidden="true"
-                    ></div>
-                    <div className="relative z-10 flex items-center justify-center drop-shadow-md">
-                      <MapIcon className="w-5 h-5" />
-                      <span>Buscar en el mapa</span>
-                    </div>
-                  </button>
+              <button
+                onClick={onNavigateMap}
+                className="relative w-full flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-white overflow-hidden shadow-lg hover:shadow-2xl hover:shadow-teal-500/40 transform hover:-translate-y-1 transition-all duration-500 group focus:outline-none focus:ring-4 focus:ring-teal-500/50"
+              >
+                <div
+                  className="absolute inset-0 bg-cover bg-center filter blur-md scale-110 transition-all duration-500 group-hover:blur-sm group-hover:scale-100"
+                  style={{
+                    backgroundImage: "url('/resources/images/tierra.jpeg')",
+                  }}
+                  aria-hidden="true"
+                ></div>
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-teal-600/80 via-teal-500/50 to-transparent transition-colors duration-500"
+                  aria-hidden="true"
+                ></div>
+                <div className="relative z-10 flex items-center justify-center drop-shadow-md">
+                  <MapIcon className="w-5 h-5" />
+                  <span>Buscar en el mapa</span>
                 </div>
-              </div>
+              </button>
             </div>
           </div>
 
