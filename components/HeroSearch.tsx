@@ -16,9 +16,8 @@ const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, initialValue = "" }) 
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (query.trim()) {
-      onSearch(query);
-    }
+    // Always call onSearch, even with empty string
+    onSearch(query.trim());
   };
 
   return (
