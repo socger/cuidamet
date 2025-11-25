@@ -77,7 +77,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   );
 
   return (
-    <>
+    <div className="min-h-screen bg-white text-slate-800 flex flex-col p-4 pb-24">
       <Header_ProviderList
         searchQuery={searchQuery}
         onSearchQueryChange={onSearchQueryChange}
@@ -144,7 +144,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
           </div>
         )}
       </main>
-    </>
+    </div>
   );
 };
 
