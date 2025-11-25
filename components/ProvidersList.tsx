@@ -79,7 +79,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col pb-24">
       <div className="px-4 pt-4">
-        <HeroSearch onSearch={onSearchQueryChange} />
+        <HeroSearch onSearch={onSearchQueryChange} initialValue={searchQuery} />
       </div>
 
       <CategorySelector

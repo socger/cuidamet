@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SearchIcon from "./icons/SearchIcon";
 
 interface HeroSearchProps {
   onSearch: (query: string) => void;
+  initialValue?: string;
 }
 
-const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch }) => {
-  const [query, setQuery] = useState("");
+const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, initialValue = "" }) => {
+  const [query, setQuery] = useState(initialValue);
+
+  // Update query when initialValue changes
+  useEffect(() => {
+    setQuery(initialValue);
+  }, [initialValue]);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
