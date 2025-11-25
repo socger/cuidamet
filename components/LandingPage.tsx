@@ -188,14 +188,14 @@ const LandingPage: React.FC<LandingPageProps> = ({
       <main className="container mx-auto px-4 flex-grow flex flex-col justify-center">
         <div className="py-8">
           <div className="max-w-4xl mx-auto mb-12">
-            <div className="flex items-start gap-8">
+            <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
               <img
                 src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
                 alt="Cuidamet: Cuidamos de lo que te importa"
-                className="h-10 w-auto flex-shrink-0 mt-2"
+                className="h-10 w-auto flex-shrink-0 md:mt-2"
               />
-              <div className="flex-1 text-center">
-                <h2 className="text-4xl md:text-5xl font-bold leading-tight mb-6">
+              <div className="flex-1 text-center w-full">
+                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-6">
                   Encuentra cuidadores
                   <br />
                   <span className="bg-gradient-to-r from-teal-400 to-green-500 text-transparent bg-clip-text">
