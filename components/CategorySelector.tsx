@@ -15,7 +15,7 @@ const categories: { id: CareCategory, name: string, icon: string }[] = [
 
 const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, onSelectCategory }) => {
   return (
-    <div className="bg-white/90 backdrop-blur-lg pt-2 pb-3 border-b border-slate-200 sticky top-[64px] z-30">
+    <div className="bg-transparent pt-2 pb-3 sticky top-[64px] z-30">
         <div className="container mx-auto px-4 flex items-center space-x-3 overflow-x-auto">
             <button
                 onClick={() => onSelectCategory('all')}
