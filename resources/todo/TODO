@@ -1,9 +1,7 @@
-* La vista de todos los servicios (cuidadores) sus cards son más vistosos(versión 6) que los de la primera versión.
-  - Ya la he sacado a un componente nuevo llamado ProvidersList.tsx
-  + Ahora estoy intentando igualar CategorySelector.tsx
-  + Esta vista de cuidadores, en pantallas grandes, todavía tengo que hacerle ajustes. Los cards que presentan a los cuidadores son demasiado grandes y los iconos de selección de tipos de cuidador, en pantallas móviles, deberían de ser más pequeños. Además los cards, en pantallas grandes, deberían de estar alineados con el principio/altura del logotipo.
+* La vista de todos los servicios (cuidadores) hay que ver si todavía hay alguna funcionalidad que no se la hemos implementado.
+  - Los card de los cuidadores tienen un botón arriba a la izquierda(corazón), pues todavía no le hemos implementado la parte de lógica que cuidamet-6 tiene (que creo que es primero comprobar si está logueado el usuario y luego ir a añadir el cuidador a los favoritos del usuario)
+  - Los card de los cuidadores tienen un botón arriba a la derecha (compartirzón), pues todavía no le hemos implementado la parte de lógica que cuidamet-6   
 
-* El módulo "components/CuidametLogo.tsx" hay que borrarlo ... sólo lo estaba usando "components/Header_ProviderList.tsx"
 
 * Está cogiendo iconos del site http://www.w3.org ... hay que tenerlos en local
 
