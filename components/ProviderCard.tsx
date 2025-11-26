@@ -1,35 +1,43 @@
-
-import React from 'react';
-import { Provider, CareCategory } from '../types';
-import LocationPinIcon from './icons/LocationPinIcon';
-import StarIcon from './icons/StarIcon';
-import HeartIcon from './icons/HeartIcon';
-import SolidHeartIcon from './icons/SolidHeartIcon';
-import ShareIcon from './icons/ShareIcon';
+import React from "react";
+import { Provider, CareCategory } from "../types";
+import LocationPinIcon from "./icons/LocationPinIcon";
+import StarIcon from "./icons/StarIcon";
+import HeartIcon from "./icons/HeartIcon";
+import SolidHeartIcon from "./icons/SolidHeartIcon";
+import ShareIcon from "./icons/ShareIcon";
 
 interface ProviderCardProps {
   provider: Provider;
   isFavorite: boolean;
   onToggleFavorite: (id: number) => void;
   onViewProfile: (id: number) => void;
-  currentCategory: CareCategory | 'all';
+  currentCategory: CareCategory | "all";
 }
 
 const getBadgeColor = (badge: string) => {
-    if (badge.toLowerCase().includes('premium')) return 'bg-amber-100 text-amber-800 border border-amber-300';
-    if (badge.toLowerCase().includes('mejor valorado')) return 'bg-yellow-100 text-yellow-800';
-    if (badge.toLowerCase().includes('experto')) return 'bg-blue-100 text-blue-800';
-    if (badge.toLowerCase().includes('rápida')) return 'bg-green-100 text-green-800';
-    return 'bg-slate-100 text-slate-800';
-}
+  if (badge.toLowerCase().includes("premium"))
+    return "bg-amber-100 text-amber-800 border border-amber-300";
+  if (badge.toLowerCase().includes("mejor valorado"))
+    return "bg-yellow-100 text-yellow-800";
+  if (badge.toLowerCase().includes("experto"))
+    return "bg-blue-100 text-blue-800";
+  if (badge.toLowerCase().includes("rápida"))
+    return "bg-green-100 text-green-800";
+  return "bg-slate-100 text-slate-800";
+};
 
-const ProviderCard: React.FC<ProviderCardProps> = ({ provider, isFavorite, onToggleFavorite, onViewProfile, currentCategory }) => {
-  
+const ProviderCard: React.FC<ProviderCardProps> = ({
+  provider,
+  isFavorite,
+  onToggleFavorite,
+  onViewProfile,
+  currentCategory,
+}) => {
   const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
     onToggleFavorite(provider.id);
-  }
+  };
 
   const handleShareClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -38,25 +46,38 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider, isFavorite, onTog
   };
 
   const descriptionToShow =
-    (currentCategory !== 'all' && provider.descriptions.find(d => d.category === currentCategory)?.text) ||
+    (currentCategory !== "all" &&
+      provider.descriptions.find((d) => d.category === currentCategory)
+        ?.text) ||
     provider.descriptions[0]?.text ||
-    '';
+    "";
 
   return (
-    <button 
+    <button
       onClick={() => onViewProfile(provider.id)}
       className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 cursor-pointer group border border-slate-200 text-left w-full"
     >
       <div className="relative">
-        <img className="w-full h-48 object-cover" src={provider.photoUrl} alt={provider.name} />
+        <img
+          className="w-full h-48 object-cover"
+          src={provider.photoUrl}
+          alt={provider.name}
+        />
         <div className="absolute top-2 w-full px-2 flex justify-between">
           <button
             onClick={handleFavoriteClick}
             className="bg-white/70 backdrop-blur-sm p-1.5 rounded-full text-slate-700 hover:text-red-500 hover:bg-white transition-all duration-200 z-10"
-            aria-label={isFavorite ? 'Quitar de favoritos' : 'Añadir a favoritos'}
+            aria-label={
+              isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"
+            }
           >
-            {isFavorite ? <SolidHeartIcon className="w-5 h-5 text-red-500" /> : <HeartIcon className="w-5 h-5" />}
+            {isFavorite ? (
+              <SolidHeartIcon className="w-5 h-5 text-red-500" />
+            ) : (
+              <HeartIcon className="w-5 h-5" />
+            )}
           </button>
+
           <button
             onClick={handleShareClick}
             className="bg-white/70 backdrop-blur-sm p-1.5 rounded-full text-slate-700 hover:text-teal-500 hover:bg-white transition-all duration-200 z-10"
@@ -65,28 +86,41 @@ const ProviderCard: React.FC<ProviderCardProps> = ({ provider, isFavorite, onTog
             <ShareIcon className="w-5 h-5" />
           </button>
         </div>
+        
         {provider.badges && provider.badges.length > 0 && (
-            <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
-                {provider.badges.map(badge => (
-                    <span key={badge} className={`text-xs font-bold px-2 py-0.5 rounded-full ${getBadgeColor(badge)}`}>
-                        {badge}
-                    </span>
-                ))}
-            </div>
+          <div className="absolute bottom-2 left-2 flex flex-wrap gap-1">
+            {provider.badges.map((badge) => (
+              <span
+                key={badge}
+                className={`text-xs font-bold px-2 py-0.5 rounded-full ${getBadgeColor(
+                  badge
+                )}`}
+              >
+                {badge}
+              </span>
+            ))}
+          </div>
         )}
       </div>
+
       <div className="p-4">
         <div className="flex justify-between items-start">
-          <h3 className="text-base font-semibold text-slate-800 truncate pr-2">{provider.name}</h3>
+          <h3 className="text-base font-semibold text-slate-800 truncate pr-2">
+            {provider.name}
+          </h3>
           <div className="flex items-center space-x-1 text-amber-500 shrink-0">
             <StarIcon className="w-4 h-4" />
-            <span className="font-bold text-sm text-slate-600">{provider.rating.toFixed(1)}</span>
+            <span className="font-bold text-sm text-slate-600">
+              {provider.rating.toFixed(1)}
+            </span>
           </div>
         </div>
         <div className="flex items-center text-slate-500 text-xs mt-1">
           <LocationPinIcon className="w-3 h-3 mr-1" />
           <span>
-            {provider.distance != null ? `${provider.distance.toFixed(1)} km • ` : ''}
+            {provider.distance != null
+              ? `${provider.distance.toFixed(1)} km • `
+              : ""}
             {provider.location}
           </span>
         </div>
