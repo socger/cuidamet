@@ -307,6 +307,7 @@ const App: React.FC = () => {
           onShowAll={handleShowAllProviders}
           onNavigateMap={handleNavigateMap}
           onSearch={handleSearch}
+          onNavigateHome={handleNavigateHome}
         />
       );
     }
@@ -330,6 +331,7 @@ const App: React.FC = () => {
         onSelectCategory={handleShowAll}
         onToggleFavorite={handleToggleFavorite}
         onViewProfile={handleViewProfile}
+        onNavigateHome={handleNavigateHome}
       />
     );
   };

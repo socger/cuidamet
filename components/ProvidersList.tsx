@@ -17,6 +17,7 @@ interface ProvidersListProps {
   onSelectCategory: (category: CareCategory | "all") => void;
   onToggleFavorite: (providerId: number) => void;
   onViewProfile: (providerId: number) => void;
+  onNavigateHome: () => void;
 }
 
 const ProvidersList: React.FC<ProvidersListProps> = ({
@@ -32,6 +33,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   onSelectCategory,
   onToggleFavorite,
   onViewProfile,
+  onNavigateHome,
 }) => {
   // Handler that clears search only when selecting "all"
   const handleCategorySelect = (category: CareCategory | "all") => {
@@ -79,7 +81,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   return (
     <div className="min-h-screen bg-white text-slate-800 flex flex-col pb-24">
       <div className="px-4 pt-4">
-        <HeroSearch onSearch={onSearchQueryChange} initialValue={searchQuery} />
+        <HeroSearch onSearch={onSearchQueryChange} initialValue={searchQuery} onNavigateHome={onNavigateHome} />
       </div>
 
       <CategorySelector
@@ -104,7 +106,8 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
             <p className="mt-4 text-slate-500">Buscando cuidadores...</p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4"> */}
             {filteredProviders.length > 0 ? (
               filteredProviders.map((provider) => (
                 // jerofa aqui están las card que presentan a los cuidadores

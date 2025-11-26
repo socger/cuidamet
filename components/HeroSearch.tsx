@@ -4,9 +4,10 @@ import SearchIcon from "./icons/SearchIcon";
 interface HeroSearchProps {
   onSearch: (query: string) => void;
   initialValue?: string;
+  onNavigateHome?: () => void;
 }
 
-const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, initialValue = "" }) => {
+const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, initialValue = "", onNavigateHome }) => {
   const [query, setQuery] = useState(initialValue);
 
   // Update query when initialValue changes
@@ -23,11 +24,17 @@ const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, initialValue = "" }) 
   return (
     <div className="max-w-4xl mx-auto mb-12">
       <div className="flex flex-col md:flex-row items-center md:items-start gap-6 md:gap-8">
-        <img
-          src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
-          alt="Cuidamet: Cuidamos de lo que te importa"
-          className="h-10 w-auto flex-shrink-0 md:mt-2"
-        />
+        <button
+          onClick={onNavigateHome}
+          className="focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-lg transition-transform hover:scale-105 active:scale-95"
+          aria-label="Ir a inicio"
+        >
+          <img
+            src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
+            alt="Cuidamet: Cuidamos de lo que te importa"
+            className="h-10 w-auto flex-shrink-0 md:mt-2"
+          />
+        </button>
         <div className="flex-1 text-center w-full">
           <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-4 md:mb-6">
             Encuentra cuidadores

@@ -50,6 +50,7 @@ interface LandingPageProps {
   onShowAll: () => void;
   onNavigateMap: () => void;
   onSearch: (query: string) => void;
+  onNavigateHome: () => void;
 }
 
 const LandingPage: React.FC<LandingPageProps> = ({
@@ -57,6 +58,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onShowAll,
   onNavigateMap,
   onSearch,
+  onNavigateHome,
 }) => {
   const categories = [
     {
@@ -166,7 +168,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
     <div className="min-h-screen bg-white text-slate-800 flex flex-col pb-24">
       <main className="container mx-auto px-4 flex-grow flex flex-col justify-center">
         <div className="py-8">
-          <HeroSearch onSearch={onSearch} />
+          <HeroSearch onSearch={onSearch} onNavigateHome={onNavigateHome} />
 
           <h3 className="text-center text-xl font-semibold text-teal-600 mb-8 mt-12">
             ¿Qué tipo de servicio estás buscando?
