@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CareCategory, Provider, ChatConversation, Message } from "./types";
+import { CareCategory, Provider, ChatConversation, Message, UserRole } from "./types";
 import { MOCK_PROVIDERS } from "./services/mockData";
 import { MOCK_CHATS } from "./services/mockChatData";
 import BottomNav from "./components/BottomNav";
@@ -12,6 +12,7 @@ import ProfilePage from "./components/ProfilePage";
 import MapView from "./components/MapView";
 import CookieConsent from "./components/CookieConsent";
 import ProvidersList from "./components/ProvidersList";
+import AuthPage from "./components/AuthPage";
 
 const getDistanceInKm = (
   lat1: number,
@@ -44,6 +45,7 @@ const App: React.FC = () => {
     | "chat"
     | "myProfile"
     | "map"
+    | "auth"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "favorites" | "map"
@@ -67,6 +69,10 @@ const App: React.FC = () => {
   const [isLocationLoading, setIsLocationLoading] = useState<boolean>(false);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Auth state
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [previousViewBeforeAuth, setPreviousViewBeforeAuth] = useState<typeof view>("landing");
 
   useEffect(() => {
     // Simulate fetching data
@@ -91,6 +97,11 @@ const App: React.FC = () => {
   }, 0);
 
   const handleToggleFavorite = (providerId: number) => {
+    if (!isAuthenticated) {
+      setPreviousViewBeforeAuth(view);
+      setView("auth");
+      return;
+    }
     setFavorites((prevFavorites) => {
       const newFavorites = new Set(prevFavorites);
       if (newFavorites.has(providerId)) {
@@ -237,6 +248,20 @@ const App: React.FC = () => {
     );
   };
 
+  const handleLoginSuccess = (role: UserRole) => {
+    setIsAuthenticated(true);
+    setView(previousViewBeforeAuth);
+  };
+
+  const handleSignupSuccess = (role: UserRole, email: string) => {
+    setIsAuthenticated(true);
+    setView(previousViewBeforeAuth);
+  };
+
+  const handleAuthBack = () => {
+    setView(previousViewBeforeAuth);
+  };
+
   const renderContent = () => {
     const providersWithDistance = userLocation
       ? providers.map((p) => ({
@@ -300,6 +325,18 @@ const App: React.FC = () => {
       }
     }
 
+    if (view === "auth") {
+      return (
+        <AuthPage
+          initialMode="login"
+          onLoginSuccess={handleLoginSuccess}
+          onSignupSuccess={handleSignupSuccess}
+          onBack={handleAuthBack}
+          pendingActionMessage="Inicia sesión para guardar favoritos"
+        />
+      );
+    }
+
     if (view === "landing") {
       return (
         <LandingPage
@@ -340,6 +377,7 @@ const App: React.FC = () => {
     view !== "profile" &&
     view !== "chat" &&
     view !== "offer" &&
+    view !== "auth" &&
     !isLocationLoading;
 
   return (
