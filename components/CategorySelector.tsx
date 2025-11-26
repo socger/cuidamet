@@ -19,7 +19,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
         <div className="container mx-auto px-4 flex items-center space-x-3 overflow-x-auto">
             <button
                 onClick={() => onSelectCategory('all')}
-                className={`p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
+                className={`p-2 md:p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
                     ${selectedCategory === 'all'
                     ? 'bg-teal-500 shadow-lg shadow-teal-500/50'
                     : 'bg-white hover:bg-slate-50 shadow-md'
@@ -29,7 +29,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
                 <img 
                     src="/resources/icons/remove-filter-icon.svg" 
                     alt="Todos"
-                    className={`w-8 h-8 transition-all duration-300
+                    className={`w-6 h-6 md:w-8 md:h-8 transition-all duration-300
                         ${selectedCategory === 'all' ? 'brightness-0 invert' : 'opacity-70'}
                     `}
                 />
@@ -39,7 +39,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
                 <button
                 key={cat.id}
                 onClick={() => onSelectCategory(cat.id)}
-                className={`p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
+                className={`p-2 md:p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
                     ${selectedCategory === cat.id
                     ? 'bg-teal-500 shadow-lg shadow-teal-500/50'
                     : 'bg-white hover:bg-slate-50 shadow-md'
@@ -49,7 +49,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
                 <img 
                     src={cat.icon} 
                     alt={cat.name}
-                    className={`w-8 h-8 transition-all duration-300
+                    className={`w-6 h-6 md:w-8 md:h-8 transition-all duration-300
                         ${selectedCategory === cat.id ? 'brightness-0 invert' : 'opacity-70'}
                     `}
                 />
