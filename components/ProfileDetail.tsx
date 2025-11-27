@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Provider, CareCategory, ServiceRates } from '../types';
 import ChevronLeftIcon from './icons/ChevronLeftIcon';
@@ -15,6 +16,7 @@ import ChildIcon from './icons/ChildIcon';
 import PetIcon from './icons/PetIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import AcademicCapIcon from './icons/AcademicCapIcon';
+import HeartIcon from './icons/HeartIcon';
 
 interface ProfileDetailProps {
   provider: Provider | null | undefined;
@@ -26,7 +28,7 @@ interface ProfileDetailProps {
 
 // Mapping tasks to categories to visually group them in the profile
 const CATEGORY_TASK_MAPPING: Record<CareCategory, string[]> = {
-    [CareCategory.ELDERLY]: ['Asistencia en movilidad', 'Control de medicación', 'Nutrición y alimentación', 'Paseos y ejercicio', 'Supervisión nocturna', 'Trámites médicos', 'Tareas domésticas ligeras', 'Higiene personal', 'Gestión de Medicamentos', 'Compañía'],
+    [CareCategory.ELDERLY]: ['Asistencia en movilidad', 'Control de medicación', 'Nutrición y alimentación', 'Paseos y ejercicio', 'Supervisión nocturna', 'Trámites médicos', 'Tareas domésticas ligeras', 'Higiene personal', 'Gestión de Medicamentos', 'Compañía', 'Acompañamiento Hospitalario'],
     [CareCategory.CHILDREN]: ['Cuidado en casa', 'Recogida del colegio', 'Ayuda con deberes', 'Acompañamiento en actividades', 'Atención especial', 'Juegos y estimulación', 'Preparación de comidas', 'Ayuda en higiene', 'Paseos', 'Actividades deportivas', 'Rutinas de sueño', 'Canguro', 'Tutorías', 'Juegos creativos'],
     [CareCategory.PETS]: ['Paseo', 'Alimentación', 'Administración de medicinas', 'Baño/Higiene', 'Guardería diurna', 'Guardería nocturna', 'Visitas veterinarias', 'Juegos', 'Paseo de Perros', 'Cuidado a Domicilio', 'Administración de Medicamentos'],
     [CareCategory.HOUSEKEEPING]: ['Limpieza general', 'Limpieza profunda', 'Limpieza de cristales', 'Limpieza de garajes', 'Limpieza de comunidades', 'Organización', 'Lavado y planchado', 'Limpieza post-obra', 'Mantenimiento', 'Desinfección', 'Compras', 'Tareas Domésticas Ligeras']
@@ -120,7 +122,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
                 <span>{provider.location}</span>
             </div>
             
-            {/* New: Languages & Availability Tags */}
+            {/* Languages & Availability Tags */}
             <div className="mt-3 flex flex-wrap justify-center gap-2">
                 {provider.languages?.map(lang => (
                     <span key={lang} className="px-2 py-1 bg-slate-50 text-slate-600 text-xs rounded-md border border-slate-200 font-medium flex items-center">
@@ -153,6 +155,27 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
 
         <div className="container mx-auto px-4 space-y-6">
           
+          {/* Medical Specialities Section - Modeled after Depencare */}
+          {provider.medicalSkills && provider.medicalSkills.length > 0 && (
+              <div className="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
+                  <div className="bg-red-50 p-3 flex items-center border-b border-red-100">
+                      <HeartIcon className="w-5 h-5 text-red-500 mr-2" />
+                      <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">Especialización Médica y Patologías</h3>
+                  </div>
+                  <div className="p-4">
+                      <p className="text-xs text-slate-500 mb-3">Experiencia verificada en el cuidado de:</p>
+                      <div className="flex flex-wrap gap-2">
+                          {provider.medicalSkills.map((skill, index) => (
+                              <span key={index} className="inline-flex items-center px-3 py-1.5 rounded-full bg-white border border-red-200 text-red-700 text-xs font-bold shadow-sm">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                  {skill}
+                              </span>
+                          ))}
+                      </div>
+                  </div>
+              </div>
+          )}
+
           {/* Unified Services Section */}
           <div>
               <h3 className="font-bold text-lg text-slate-800 mb-3 px-1">Servicios y Tarifas</h3>
@@ -164,7 +187,6 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
                       const training = provider.specificTraining?.[cat];
                       
                       // Filter services/tasks that belong to this category
-                      // Matches strings partially to catch variations like "Paseo" vs "Paseo de perros"
                       const includedTasks = provider.services.filter(s => 
                           CATEGORY_TASK_MAPPING[cat].some(mapping => s.toLowerCase().includes(mapping.toLowerCase()) || mapping.toLowerCase().includes(s.toLowerCase()))
                       );
