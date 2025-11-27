@@ -150,8 +150,14 @@ const AuthPage: React.FC<AuthPageProps> = ({ initialMode = 'login', preselectedR
   );
 
   return (
-    <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center animate-fade-in">
-        <div className="bg-slate-50 rounded-3xl shadow-2xl w-full max-w-md mx-4 max-h-[90vh] flex flex-col overflow-hidden">
+    <div 
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] flex items-center justify-center animate-fade-in"
+      onClick={onBack}
+    >
+        <div 
+          className="bg-slate-50 rounded-3xl shadow-2xl w-full max-w-md mx-4 max-h-[90vh] flex flex-col overflow-hidden"
+          onClick={(e) => e.stopPropagation()}
+        >
             <header className="flex-shrink-0 p-4 flex items-center justify-between bg-white/80 backdrop-blur-sm z-10 border-b border-slate-100 rounded-t-3xl">
                 <button onClick={handleInternalBack} className="text-slate-600 p-2 -ml-2 hover:bg-slate-100 rounded-full transition-colors">
                     <ChevronLeftIcon className="w-6 h-6" />
