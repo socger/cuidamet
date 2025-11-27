@@ -1,4 +1,5 @@
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado).
+* Esta vista perfil debería de tener el header y el footer que tiene la página LandingPage (común a varias vistas)
 
 
 
