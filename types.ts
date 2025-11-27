@@ -81,6 +81,7 @@ export interface Provider {
   availability?: string[];
   detailedRates?: Record<CareCategory, ServiceRates>;
   specificTraining?: Partial<Record<CareCategory, string>>;
+  medicalSkills?: string[];
   petAttributes?: PetAttributes;
   housekeepingAttributes?: HousekeepingAttributes;
   verifications: string[];

@@ -29,6 +29,7 @@ export const MOCK_PROVIDERS: Provider[] = [
     specificTraining: {
         [CareCategory.ELDERLY]: 'Máster en Geriatría, Curso de Alzheimer y Demencias.'
     },
+    medicalSkills: ['Alzheimer', 'Parkinson', 'Diabetes', 'Movilidad Reducida', 'Post-operatorio'],
     location: 'Centro, Madrid',
     verifications: ['DNI Verificado', 'Certificado de Primeros Auxilios', 'Referencias Comprobadas'],
     reviews: [
@@ -61,6 +62,7 @@ export const MOCK_PROVIDERS: Provider[] = [
         [CareCategory.PETS]: { hourly: 0 },
         [CareCategory.HOUSEKEEPING]: { hourly: 0 }
     },
+    medicalSkills: ['Primeros Auxilios Pediátricos', 'TDAH', 'Autismo Leve'],
     location: 'Chamberí, Madrid',
     verifications: ['DNI Verificado', 'Certificado de Antecedentes Penales'],
     reviews: [
@@ -123,6 +125,7 @@ export const MOCK_PROVIDERS: Provider[] = [
     ],
     services: ['Compras', 'Tareas Domésticas Ligeras', 'Compañía y Conversación', 'Limpieza general'],
     hourlyRate: 13,
+    medicalSkills: ['Acompañamiento', 'Gestión de Citas'],
     housekeepingAttributes: {
         products: 'flexible',
         equipment: false,
