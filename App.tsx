@@ -275,8 +275,13 @@ const App: React.FC = () => {
         }))
       : providers;
 
-    if (view === "map") {
-      return (
+    // Determine which view to render (excluding auth since it's an overlay)
+    const currentView = view === "auth" ? previousViewBeforeAuth : view;
+
+    let mainContent = null;
+
+    if (currentView === "map") {
+      mainContent = (
         <MapView
           providers={providersWithDistance}
           userLocation={userLocation}
@@ -289,16 +294,14 @@ const App: React.FC = () => {
       );
     }
 
-    if (view === "offer") {
-      return <OfferService onClose={handleNavigateHome} />;
-    }
-
-    if (view === "profile" && selectedProviderId) {
+    if (currentView === "offer") {
+      mainContent = <OfferService onClose={handleNavigateHome} />;
+    } else if (currentView === "profile" && selectedProviderId) {
       const provider = providersWithDistance.find(
         (p) => p.id === selectedProviderId
       );
       if (provider) {
-        return (
+        mainContent = (
           <ProfileDetail
             provider={provider}
             onBack={handleBackToList}
@@ -306,16 +309,12 @@ const App: React.FC = () => {
           />
         );
       }
-    }
-
-    if (view === "inbox") {
-      return <Inbox chats={chats} onViewChat={handleViewChat} />;
-    }
-
-    if (view === "chat" && currentChatId) {
+    } else if (currentView === "inbox") {
+      mainContent = <Inbox chats={chats} onViewChat={handleViewChat} />;
+    } else if (currentView === "chat" && currentChatId) {
       const chat = chats.find((c) => c.id === currentChatId);
       if (chat) {
-        return (
+        mainContent = (
           <Chat
             chat={chat}
             onBack={handleBackToInbox}
@@ -323,22 +322,8 @@ const App: React.FC = () => {
           />
         );
       }
-    }
-
-    if (view === "auth") {
-      return (
-        <AuthPage
-          initialMode="login"
-          onLoginSuccess={handleLoginSuccess}
-          onSignupSuccess={handleSignupSuccess}
-          onBack={handleAuthBack}
-          pendingActionMessage="Inicia sesión para guardar favoritos"
-        />
-      );
-    }
-
-    if (view === "landing") {
-      return (
+    } else if (currentView === "landing") {
+      mainContent = (
         <LandingPage
           onCategorySelect={handleCategorySelect}
           onShowAll={handleShowAllProviders}
@@ -347,29 +332,43 @@ const App: React.FC = () => {
           onNavigateHome={handleNavigateHome}
         />
       );
+    } else if (currentView === "myProfile") {
+      mainContent = <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
+    } else {
+      // Providers or Favorites view
+      mainContent = (
+        <ProvidersList
+          providers={providersWithDistance}
+          view={currentView as "providers" | "favorites"}
+          selectedCategory={selectedCategory}
+          searchQuery={searchQuery}
+          favorites={favorites}
+          isLoading={isLoading}
+          locationError={locationError}
+          userLocation={userLocation}
+          onSearchQueryChange={setSearchQuery}
+          onSelectCategory={handleShowAll}
+          onToggleFavorite={handleToggleFavorite}
+          onViewProfile={handleViewProfile}
+          onNavigateHome={handleNavigateHome}
+        />
+      );
     }
 
-    if (view === "myProfile") {
-      return <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
-    }
-
-    // Providers or Favorites view
+    // Render main content with auth overlay if needed
     return (
-      <ProvidersList
-        providers={providersWithDistance}
-        view={view as "providers" | "favorites"}
-        selectedCategory={selectedCategory}
-        searchQuery={searchQuery}
-        favorites={favorites}
-        isLoading={isLoading}
-        locationError={locationError}
-        userLocation={userLocation}
-        onSearchQueryChange={setSearchQuery}
-        onSelectCategory={handleShowAll}
-        onToggleFavorite={handleToggleFavorite}
-        onViewProfile={handleViewProfile}
-        onNavigateHome={handleNavigateHome}
-      />
+      <>
+        {mainContent}
+        {view === "auth" && (
+          <AuthPage
+            initialMode="login"
+            onLoginSuccess={handleLoginSuccess}
+            onSignupSuccess={handleSignupSuccess}
+            onBack={handleAuthBack}
+            pendingActionMessage="Inicia sesión para guardar favoritos"
+          />
+        )}
+      </>
     );
   };
 
