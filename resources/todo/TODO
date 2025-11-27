@@ -1,4 +1,4 @@
-+ Quiero cambiar la vista de autenticación para hacerla de tipo popup. Es decir para que se vea el fondo de lo que estés visitando mientras te estás registrando.
+* En la barra de botones de abajo, ver porqué el circulito de color rojo no aparece dentro del icono de buzón. En alguna de las versiones que hizo Daniel, creo que en la 5, si que lo hacía.
 
 * Está cogiendo iconos del site http://www.w3.org ... hay que tenerlos en local
 
@@ -17,7 +17,6 @@
 * En LandingPage.tsx ... ver como funciona el botón de Buscar (entender el código que ejecuta al filtrar por ejemplo por la palabra infantil)
 * Las imágenes de cuidado de mayores, cuidado de niños, etc ... no filtran bien cuando las pulsamos ... ver porqué
 
-* En la barra de botones de abajo, ver porqué el circulito de color rojo no aparece dentro del icono de buzón. En alguna de las versiones que hizo Daniel, creo que en la 5, si que lo hacía.
 * La barra de abajo de botones, no aparece en todas las pantallas que son llamadas desde otros sitios.
 * El buscador de LandingPage.tsx no es el mismo buscador que el de la pantalla donde se presentan todos los servicios.
   Por ejemplo si escribimos algo en el buscador de LandingPage.tsx, nos aparece una x que borraría todo lo escrito. Esta x no aparece en el buscador de la vista donde se presentan todos los servicios. Además los estilos son diferentes.
