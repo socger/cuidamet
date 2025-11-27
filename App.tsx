@@ -292,9 +292,7 @@ const App: React.FC = () => {
           onLocationError={setLocationError}
         />
       );
-    }
-
-    if (currentView === "offer") {
+    } else if (currentView === "offer") {
       mainContent = <OfferService onClose={handleNavigateHome} />;
     } else if (currentView === "profile" && selectedProviderId) {
       const provider = providersWithDistance.find(
