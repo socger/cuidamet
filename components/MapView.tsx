@@ -2,6 +2,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Provider, CareCategory } from '../types';
 import MapPinIcon from './icons/MapPinIcon';
+import ChevronLeftIcon from './icons/ChevronLeftIcon';
 
 declare var L: any; // Declare Leaflet global
 
@@ -15,16 +16,12 @@ interface MapViewProps {
   onLocationError: (error: string | null) => void;
 }
 
-const ChevronLeftIcon: React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-    </svg>
-);
-
 const categoryColors: Record<CareCategory, string> = {
   [CareCategory.ELDERLY]: '#3b82f6', // Tailwind blue-500
   [CareCategory.CHILDREN]: '#a855f7', // Tailwind purple-500
   [CareCategory.PETS]: '#f97316', // Tailwind orange-500
+  [CareCategory.HOUSEKEEPING]: '#10b981', // Tailwind emerald-500
+
 };
 const defaultColor = '#14b8a6'; // Tailwind teal-500
 
