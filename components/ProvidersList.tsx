@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { CareCategory, Provider } from "../types";
 import HeroSearch from "./HeroSearch";
 import CategorySelector from "./CategorySelector";
 import ProviderCard from "./ProviderCard";
+import ShareModal from "./ShareModal";
 
 interface ProvidersListProps {
   providers: Provider[];
@@ -35,6 +36,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   onViewProfile,
   onNavigateHome,
 }) => {
+  const [shareModalProvider, setShareModalProvider] = useState<Provider | null>(null);
   // Handler that clears search only when selecting "all"
   const handleCategorySelect = (category: CareCategory | "all") => {
     if (category === "all") {
@@ -117,6 +119,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
                   isFavorite={favorites.has(provider.id)}
                   onToggleFavorite={onToggleFavorite}
                   onViewProfile={onViewProfile}
+                  onShare={setShareModalProvider}
                   currentCategory={selectedCategory}
                 />
               ))
@@ -146,6 +149,14 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
           </div>
         )}
       </main>
+
+      {shareModalProvider && (
+        <ShareModal
+          isOpen={true}
+          onClose={() => setShareModalProvider(null)}
+          provider={shareModalProvider}
+        />
+      )}
     </div>
   );
 };

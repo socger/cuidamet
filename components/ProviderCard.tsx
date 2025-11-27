@@ -11,6 +11,7 @@ interface ProviderCardProps {
   isFavorite: boolean;
   onToggleFavorite: (id: number) => void;
   onViewProfile: (id: number) => void;
+  onShare: (provider: Provider) => void;
   currentCategory: CareCategory | "all";
 }
 
@@ -31,6 +32,7 @@ const ProviderCard: React.FC<ProviderCardProps> = ({
   isFavorite,
   onToggleFavorite,
   onViewProfile,
+  onShare,
   currentCategory,
 }) => {
   const handleFavoriteClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -42,7 +44,7 @@ const ProviderCard: React.FC<ProviderCardProps> = ({
   const handleShareClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
-    alert(`¡Perfil de ${provider.name} copiado al portapapeles!`);
+    onShare(provider);
   };
 
   const descriptionToShow =
