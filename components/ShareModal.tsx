@@ -67,7 +67,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, provider }) =>
 
   return (
     <div 
-      className="fixed inset-0 bg-black/60 z-[200] flex items-center justify-center animate-fade-in"
+      className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[200] flex items-center justify-center animate-fade-in"
       onClick={onClose}
     >
       <div 
