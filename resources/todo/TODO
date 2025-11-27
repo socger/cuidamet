@@ -1,14 +1,9 @@
-* En la barra de botones de abajo, ver porqué el circulito de color rojo no aparece dentro del icono de buzón. En alguna de las versiones que hizo Daniel, creo que en la 5, si que lo hacía.
-
 * Está cogiendo iconos del site http://www.w3.org ... hay que tenerlos en local
-
 
 * Tengo que revisar:
   - En App.tsx:
     + const renderContent = () => {
       Es diferente en cuidamet (se usan if) y en cuidamet-6 (se unsa un switch)
-
-
 
 
 * Ver el resto de páginas como Inicio, favoritos, buzon, registrarse, perfil ... la página principal tiene contenido nuevo en el footer (revisar el resto header, body, etc)
