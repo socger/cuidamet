@@ -72,15 +72,17 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                             className="relative flex flex-col items-center justify-center text-center py-2 w-1/5 group hover:bg-slate-50 transition-colors focus:outline-none"
                             aria-label={item.label}
                         >
-                            <item.icon className={`h-6 w-6 mb-1 transition-colors ${item.active ? 'text-teal-500' : 'text-slate-500 group-hover:text-teal-500'}`} />
+                            <div className="relative">
+                                <item.icon className={`h-6 w-6 mb-1 transition-colors ${item.active ? 'text-teal-500' : 'text-slate-500 group-hover:text-teal-500'}`} />
+                                {item.key === 'inbox' && unreadCount > 0 && (
+                                    <div className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
+                                        {unreadCount}
+                                    </div>
+                                )}
+                            </div>
                             <span className={`text-xs font-medium transition-colors ${item.active ? 'text-teal-500' : 'text-slate-600 group-hover:text-teal-500'}`}>
                                 {item.label}
                             </span>
-                             {item.key === 'inbox' && unreadCount > 0 && (
-                                <div className="absolute top-1 right-4 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
-                                    {unreadCount}
-                                </div>
-                            )}
                         </button>
                     ))}
                 </div>
