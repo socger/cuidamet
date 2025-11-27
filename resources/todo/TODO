@@ -1,6 +1,11 @@
 * La vista de todos los servicios (cuidadores) hay que ver si todavía hay alguna funcionalidad que no se la hemos implementado.
   - Los card de los cuidadores tienen un botón arriba a la izquierda(corazón), pues todavía no le hemos implementado la parte de lógica que cuidamet-6 tiene (que creo que es primero comprobar si está logueado el usuario y luego ir a añadir el cuidador a los favoritos del usuario)
-  - Los card de los cuidadores tienen un botón arriba a la derecha (compartirzón), pues todavía no le hemos implementado la parte de lógica que cuidamet-6   
+  - Los card de los cuidadores tienen un botón arriba a la derecha (compartir), pues todavía no le hemos implementado la parte de lógica que cuidamet-6   
+
+  + Ya he conseguido los dos puntos anteriores. Pero en cuanto al punto último quiero cambiar la vista de autenticación para hacerla de tipo popup. Es decir para que se vea el fondo de lo que estés visitando mientras te estás registrando. En el penúltimo punto todavía no he conseguido que se vea el fondo de modo opaco.
+
+
+
 
 
 * Está cogiendo iconos del site http://www.w3.org ... hay que tenerlos en local
