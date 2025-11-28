@@ -61,6 +61,7 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [chats, setChats] = useState<ChatConversation[]>([]);
   const [currentChatId, setCurrentChatId] = useState<number | null>(null);
+  const [previousViewBeforeChat, setPreviousViewBeforeChat] = useState<typeof view>("inbox");
 
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
@@ -182,12 +183,14 @@ const App: React.FC = () => {
     setSelectedProviderId(null);
   };
 
-  const handleBackToInbox = () => {
-    setView("inbox");
+  const handleBackFromChat = () => {
+    setView(previousViewBeforeChat);
     setCurrentChatId(null);
   };
 
   const handleViewChat = (chatId: number) => {
+    // Save current view before going to chat
+    setPreviousViewBeforeChat(view);
     // Mark messages as read
     setChats((prevChats) =>
       prevChats.map((chat) => {
@@ -205,6 +208,9 @@ const App: React.FC = () => {
   };
 
   const handleContactProvider = (providerId: number) => {
+    // Save current view before going to chat
+    setPreviousViewBeforeChat(view);
+    
     const existingChat = chats.find((chat) => chat.provider.id === providerId);
     if (existingChat) {
       handleViewChat(existingChat.id);
@@ -315,7 +321,7 @@ const App: React.FC = () => {
         mainContent = (
           <Chat
             chat={chat}
-            onBack={handleBackToInbox}
+            onBack={handleBackFromChat}
             onSendMessage={handleSendMessage}
           />
         );

@@ -1,6 +1,12 @@
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado).
 
-* La vista de chat, cuando es llamada desde el perfil de un cuidador, tiene arriba una barra con una flecha hacia la izquierda que debería de volver a la vista de perfil. Pero no lo hace. En la versión de Daniel, cuando pulsas ese icono flecha (hacia la izquierda) se va a la vista buzón.
+* Cuando estoy viendo el perfil del cuidador Carlos Rodriguez y pulso el botón de chat, en la consola del navegador de internet se produce un error. Y no podemos chatear con este cuidador.
+
+* En la botonera de la app (la de abajo), me gustaría poner en una esquina el icono de cuidamet pero en chiquitito. El motivo es porque hay vistas en las que no aparece el logotipo de cuidamet (como en peril, chat, mapa, etc)
+
+* El mapa hay que intentar conseguir el que ha creado Daniel en la última versión.
+
+* YA ESTA HECHO ... La vista de chat, cuando es llamada desde el perfil de un cuidador, tiene arriba una barra con una flecha hacia la izquierda que debería de volver a la vista de perfil. Pero no lo hace. En la versión de Daniel, cuando pulsas ese icono flecha (hacia la izquierda) se va a la vista buzón.
 
 
 * Tengo que revisar:
