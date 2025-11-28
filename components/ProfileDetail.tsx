@@ -70,7 +70,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
     
   if (isLoading) {
     return (
-      <div className="fixed inset-0 bg-white z-50 flex flex-col animate-fade-in">
+      <div className="bg-white min-h-screen flex flex-col animate-fade-in">
         <DetailHeader title="Cargando Perfil..." onBack={onBack} />
         <main className="flex-grow flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-teal-500"></div>
@@ -81,7 +81,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
 
   if (!provider) {
     return (
-       <div className="fixed inset-0 bg-white z-50 flex flex-col animate-fade-in">
+       <div className="bg-white min-h-screen flex flex-col animate-fade-in">
         <DetailHeader title="Error" onBack={onBack} />
         <main className="flex-grow flex flex-col items-center justify-center text-center px-4">
           <InformationCircleIcon className="w-16 h-16 text-slate-300 mb-4" />
@@ -96,7 +96,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
   }
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col animate-fade-in">
+    <div className="bg-white min-h-screen flex flex-col animate-fade-in">
       <DetailHeader title="Perfil" onBack={onBack} />
 
       <main className="flex-grow overflow-y-auto pb-28 bg-slate-50">
@@ -329,9 +329,9 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({ provider, isLoading, onBa
         </div>
       </main>
 
-       {/* Fixed Footer/Action Button */}
-       <footer className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-lg border-t border-slate-200 z-10 safe-area-bottom">
-        <div className="container mx-auto px-4 py-3 pb-6 flex items-center gap-3">
+       {/* Footer/Action Buttons */}
+       <footer className="bg-white border-t border-slate-200 mt-6 mb-20">
+        <div className="container mx-auto px-4 py-3 flex items-center gap-3">
           <button
             onClick={() => onContact(provider.id)}
             className="flex-1 bg-white border-2 border-slate-200 text-slate-700 px-4 py-3.5 rounded-xl font-bold hover:bg-slate-50 hover:border-slate-300 transition-colors flex items-center justify-center text-base"

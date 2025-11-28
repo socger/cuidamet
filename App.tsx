@@ -371,10 +371,10 @@ const App: React.FC = () => {
   };
 
   const showBottomNav =
-    view !== "profile" &&
     view !== "chat" &&
     view !== "offer" &&
     view !== "auth" &&
+    view !== "myProfile" &&
     !isLocationLoading;
 
   return (
