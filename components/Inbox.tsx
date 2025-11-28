@@ -21,6 +21,9 @@ const Inbox: React.FC<InboxProps> = ({ chats, onViewChat }) => {
         {chats.length > 0 ? (
           <ul className="divide-y divide-slate-200">
             {chats.map(chat => {
+              // Skip chats without provider data
+              if (!chat.provider) return null;
+              
               const lastMessage = chat.messages[chat.messages.length - 1];
               const unreadMessages = chat.messages.filter(m => m.sender === 'other' && !m.read).length > 0;
 
