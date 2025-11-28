@@ -295,340 +295,358 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
             {/* User Info */}
             <section className="bg-white pb-6 pt-6 text-center border-b border-slate-100 shadow-sm mb-6">
                 <div className="container mx-auto px-4">
-                <img
-                    src={provider.photoUrl}
-                    alt={provider.name}
-                    className="w-28 h-28 rounded-full mx-auto ring-4 ring-white shadow-lg object-cover"
-                />
-                <h2 className="text-2xl font-bold text-slate-800 mt-4">
-                    Perfil de: {provider.name}
-                </h2>
-                <div className="flex items-center justify-center space-x-2 mt-2">
-                    <div className="flex items-center text-amber-500">
-                    <StarIcon className="w-5 h-5" />
-                    <span className="ml-1 font-bold text-slate-700">
-                        {provider.rating.toFixed(1)}
-                    </span>
-                    </div>
-                    <span className="text-slate-300">|</span>
-                    <span className="text-slate-500">
-                    {provider.reviewsCount} valoraciones
-                    </span>
-                </div>
-                <div className="flex items-center justify-center text-slate-500 mt-1 text-sm">
-                    <LocationPinIcon className="w-4 h-4 mr-1" />
-                    <span>{provider.location}</span>
-                </div>
+                    <img
+                        src={provider.photoUrl}
+                        alt={provider.name}
+                        className="w-28 h-28 rounded-full mx-auto ring-4 ring-white shadow-lg object-cover"
+                    />
 
-                {/* Languages & Availability Tags */}
-                <div className="mt-3 flex flex-wrap justify-center gap-2">
-                    {provider.languages?.map((lang) => (
-                    <span
-                        key={lang}
-                        className="px-2 py-1 bg-slate-50 text-slate-600 text-xs rounded-md border border-slate-200 font-medium flex items-center"
-                    >
-                        <svg
-                        className="w-3 h-3 mr-1 opacity-50"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        >
-                        <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-                        />
-                        </svg>
-                        {lang}
-                    </span>
-                    ))}
-                    {provider.availability?.map((slot) => (
-                    <span
-                        key={slot}
-                        className="px-2 py-1 bg-teal-50 text-teal-700 text-xs rounded-md border border-teal-100 font-medium flex items-center"
-                    >
-                        <ClockIcon className="w-3 h-3 mr-1 opacity-70" /> {slot}
-                    </span>
-                    ))}
-                </div>
+                    <h2 className="text-2xl font-normal text-slate-800 mt-4">
+                        Perfil de: 
+                        <span className="text-2xl font-bold text-slate-800 mt-4 ml-2">
+                            {provider.name}
+                        </span>
+                    </h2>
 
-                {provider.badges && provider.badges.length > 0 && (
-                    <div className="mt-4 flex flex-wrap justify-center gap-2">
-                    {provider.badges.map((badge) => {
-                        const { icon, style } = getBadgeStyle(badge);
-                        return (
-                        <div
-                            key={badge}
-                            className={`flex items-center text-xs font-semibold px-3 py-1 rounded-full border ${style}`}
-                        >
-                            {icon}
-                            <span className="ml-1.5">{badge}</span>
+                    <div className="flex items-center justify-center space-x-2 mt-2">
+                        <div className="flex items-center text-amber-500">
+                        <StarIcon className="w-5 h-5" />
+                        <span className="ml-1 font-bold text-slate-700">
+                            {provider.rating.toFixed(1)}
+                        </span>
                         </div>
-                        );
-                    })}
+                        <span className="text-slate-300">|</span>
+                        <span className="text-slate-500">
+                        {provider.reviewsCount} valoraciones
+                        </span>
                     </div>
-                )}
+
+                    <div className="flex items-center justify-center text-slate-500 mt-1 text-sm">
+                        <LocationPinIcon className="w-4 h-4 mr-1" />
+                        <span>{provider.location}</span>
+                    </div>
+
+                    {/* Languages & Availability Tags */}
+                    <div className="mt-3 flex flex-wrap justify-center gap-2">
+                        {provider.languages?.map((lang) => (
+                            <span
+                                key={lang}
+                                className="px-2 py-1 bg-slate-50 text-slate-600 text-xs rounded-md border border-slate-200 font-medium flex items-center"
+                            >
+                                <svg
+                                className="w-3 h-3 mr-1 opacity-50"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                                >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                                />
+                                </svg>
+                                {lang}
+                            </span>
+                        ))}
+
+                        {provider.availability?.map((slot) => (
+                            <span
+                                key={slot}
+                                className="px-2 py-1 bg-teal-50 text-teal-700 text-xs rounded-md border border-teal-100 font-medium flex items-center"
+                            >
+                                <ClockIcon className="w-3 h-3 mr-1 opacity-70" /> {slot}
+                            </span>
+                        ))}
+                    </div>
+
+                    {provider.badges && provider.badges.length > 0 && (
+                        <div className="mt-4 flex flex-wrap justify-center gap-2">
+                            {provider.badges.map((badge) => {
+                                const { icon, style } = getBadgeStyle(badge);
+                                return (
+                                <div
+                                    key={badge}
+                                    className={`flex items-center text-xs font-semibold px-3 py-1 rounded-full border ${style}`}
+                                >
+                                    {icon}
+                                    <span className="ml-1.5">{badge}</span>
+                                </div>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
             </section>
 
             <div className="container mx-auto px-4 space-y-6">
                 {/* Medical Specialities Section - Modeled after Depencare */}
                 {provider.medicalSkills && provider.medicalSkills.length > 0 && (
-                <div className="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
-                    <div className="bg-red-50 p-3 flex items-center border-b border-red-100">
-                    <HeartIcon className="w-5 h-5 text-red-500 mr-2" />
-                    <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">
-                        Especialización Médica y Patologías
-                    </h3>
+                    <div className="bg-white rounded-2xl border border-red-100 shadow-sm overflow-hidden">
+                        <div className="bg-red-50 p-3 flex items-center border-b border-red-100">
+                            <HeartIcon className="w-5 h-5 text-red-500 mr-2" />
+                            <h3 className="font-bold text-slate-800 text-sm uppercase tracking-wide">
+                                Especialización Médica y Patologías
+                            </h3>
+                        </div>
+
+                        <div className="p-4">
+                            <p className="text-xs text-slate-500 mb-3">
+                                Experiencia verificada en el cuidado de:
+                            </p>
+
+                            <div className="flex flex-wrap gap-2">
+                                {provider.medicalSkills.map((skill, index) => (
+                                <span
+                                    key={index}
+                                    className="inline-flex items-center px-3 py-1.5 rounded-full bg-white border border-red-200 text-red-700 text-xs font-bold shadow-sm"
+                                >
+                                    <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
+                                    {skill}
+                                </span>
+                                ))}
+                            </div>
+                        </div>
                     </div>
-                    <div className="p-4">
-                    <p className="text-xs text-slate-500 mb-3">
-                        Experiencia verificada en el cuidado de:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                        {provider.medicalSkills.map((skill, index) => (
-                        <span
-                            key={index}
-                            className="inline-flex items-center px-3 py-1.5 rounded-full bg-white border border-red-200 text-red-700 text-xs font-bold shadow-sm"
-                        >
-                            <span className="w-1.5 h-1.5 rounded-full bg-red-500 mr-2"></span>
-                            {skill}
-                        </span>
-                        ))}
-                    </div>
-                    </div>
-                </div>
                 )}
 
                 {/* Unified Services Section */}
                 <div>
-                <h3 className="font-bold text-lg text-slate-800 mb-3 px-1">
-                    Servicios y Tarifas
-                </h3>
-                <div className="space-y-4">
-                    {provider.categories.map((cat) => {
-                    const theme = CATEGORY_STYLES[cat];
-                    const rates = provider.detailedRates?.[cat] || {
-                        hourly: provider.hourlyRate,
-                    };
-                    const description = provider.descriptions.find(
-                        (d) => d.category === cat
-                    )?.text;
-                    const training = provider.specificTraining?.[cat];
+                    <h3 className="font-bold text-lg text-slate-800 mb-3 px-1">
+                        Servicios y Tarifas
+                    </h3>
 
-                    // Filter services/tasks that belong to this category
-                    const includedTasks = provider.services.filter((s) =>
-                        CATEGORY_TASK_MAPPING[cat].some(
-                        (mapping) =>
-                            s.toLowerCase().includes(mapping.toLowerCase()) ||
-                            mapping.toLowerCase().includes(s.toLowerCase())
-                        )
-                    );
+                    <div className="space-y-4">
+                        {provider.categories.map((cat) => {
+                            const theme = CATEGORY_STYLES[cat];
+                            const rates = provider.detailedRates?.[cat] || {
+                                hourly: provider.hourlyRate,
+                            };
 
-                    return (
-                        <div
-                        key={cat}
-                        className={`rounded-2xl border ${theme.border} bg-white overflow-hidden shadow-sm`}
-                        >
-                        {/* Header */}
-                        <div
-                            className={`${theme.bg} p-4 flex justify-between items-start border-b ${theme.border}`}
-                        >
-                            <div className="flex items-center">
-                            <div
-                                className={`p-2 rounded-full ${theme.lightBg} mr-3`}
-                            >
-                                <theme.icon className={`w-6 h-6 ${theme.text}`} />
-                            </div>
-                            <div>
-                                <h4 className={`font-bold text-base ${theme.text}`}>
-                                {cat === CareCategory.ELDERLY
-                                    ? "Cuidado de Mayores"
-                                    : cat === CareCategory.CHILDREN
-                                    ? "Cuidado de Niños"
-                                    : cat === CareCategory.PETS
-                                    ? "Cuidado de Mascotas"
-                                    : "Limpieza y Hogar"}
-                                </h4>
-                                <div className="text-xs text-slate-500 mt-0.5">
-                                Servicio completo
-                                </div>
-                            </div>
-                            </div>
-                            <div className="text-right">
-                            <span className="block text-2xl font-bold text-slate-800 leading-none">
-                                {rates.hourly}€
-                            </span>
-                            <span className="text-xs text-slate-500">/ hora</span>
-                            </div>
-                        </div>
+                            const description = provider.descriptions.find(
+                                (d) => d.category === cat
+                            )?.text;
 
-                        {/* Content */}
-                        <div className="p-4 space-y-4">
-                            {/* Description */}
-                            {description && (
-                            <div>
-                                <p className="text-slate-600 text-sm leading-relaxed italic">
-                                "{description}"
-                                </p>
-                            </div>
-                            )}
+                            const training = provider.specificTraining?.[cat];
 
-                            {/* Included Tasks Pills */}
-                            {includedTasks.length > 0 && (
-                            <div>
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                                Incluye
-                                </p>
-                                <div className="flex flex-wrap gap-2">
-                                {includedTasks.map((task) => (
-                                    <span
-                                    key={task}
-                                    className="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200"
-                                    >
-                                    <CheckCircleIcon
-                                        className={`w-3.5 h-3.5 mr-1.5 ${theme.text}`}
-                                    />
-                                    {task}
-                                    </span>
-                                ))}
-                                </div>
-                            </div>
-                            )}
+                            // Filter services/tasks that belong to this category
+                            const includedTasks = provider.services.filter((s) =>
+                                CATEGORY_TASK_MAPPING[cat].some(
+                                (mapping) =>
+                                    s.toLowerCase().includes(mapping.toLowerCase()) ||
+                                    mapping.toLowerCase().includes(s.toLowerCase())
+                                )
+                            );
 
-                            {/* Specific Training Highlight */}
-                            {training && (
-                            <div
-                                className={`p-3 rounded-xl border border-dashed ${theme.border} ${theme.bg} flex items-start`}
-                            >
-                                <AcademicCapIcon
-                                className={`w-5 h-5 mr-2 mt-0.5 ${theme.text}`}
-                                />
-                                <div>
-                                <p
-                                    className={`text-xs font-bold ${theme.text} mb-0.5`}
+                            return (
+                                <div
+                                    key={cat}
+                                    className={`rounded-2xl border ${theme.border} bg-white overflow-hidden shadow-sm`}
                                 >
-                                    Formación Específica
-                                </p>
-                                <p className="text-xs text-slate-700">{training}</p>
-                                </div>
-                            </div>
-                            )}
-
-                            {/* Rate Details/Extras */}
-                            {(rates.shift ||
-                            rates.urgentSurcharge ||
-                            (rates.extras && rates.extras.length > 0)) && (
-                            <div className="pt-3 border-t border-slate-100">
-                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-                                Tarifas extra
-                                </p>
-                                <div className="grid grid-cols-2 gap-2">
-                                {rates.shift && (
-                                    <div className="flex justify-between items-center text-xs bg-slate-50 p-2 rounded">
-                                    <span className="text-slate-600">
-                                        Jornada/Servicio
-                                    </span>
-                                    <span className="font-semibold text-slate-800">
-                                        {rates.shift}€
-                                    </span>
-                                    </div>
-                                )}
-                                {rates.urgentSurcharge && (
-                                    <div className="flex justify-between items-center text-xs bg-amber-50 p-2 rounded">
-                                    <span className="text-amber-700">Urgencia</span>
-                                    <span className="font-semibold text-amber-800">
-                                        +{rates.urgentSurcharge}%
-                                    </span>
-                                    </div>
-                                )}
-                                {rates.extras?.map((extra, idx) => (
+                                    {/* Header */}
                                     <div
-                                    key={idx}
-                                    className="flex justify-between items-center text-xs bg-slate-50 p-2 rounded"
+                                        className={`${theme.bg} p-4 flex justify-between items-start border-b ${theme.border}`}
                                     >
-                                    <span
-                                        className="text-slate-600 truncate mr-2"
-                                        title={extra.name}
-                                    >
-                                        {extra.name}
-                                    </span>
-                                    <span className="font-semibold text-slate-800">
-                                        +{extra.price}€
-                                    </span>
+                                        <div className="flex items-center">
+                                            <div
+                                                className={`p-2 rounded-full ${theme.lightBg} mr-3`}
+                                            >
+                                                <theme.icon className={`w-6 h-6 ${theme.text}`} />
+                                            </div>
+                                            <div>
+                                                <h4 className={`font-bold text-base ${theme.text}`}>
+                                                {cat === CareCategory.ELDERLY
+                                                    ? "Cuidado de Mayores"
+                                                    : cat === CareCategory.CHILDREN
+                                                    ? "Cuidado de Niños"
+                                                    : cat === CareCategory.PETS
+                                                    ? "Cuidado de Mascotas"
+                                                    : "Limpieza y Hogar"}
+                                                </h4>
+                                                <div className="text-xs text-slate-500 mt-0.5">
+                                                Servicio completo
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="text-right">
+                                            <span className="block text-2xl font-bold text-slate-800 leading-none">
+                                                {rates.hourly}€
+                                            </span>
+                                            <span className="text-xs text-slate-500">/ hora</span>
+                                        </div>
                                     </div>
-                                ))}
+
+                                    {/* Content */}
+                                    <div className="p-4 space-y-4">
+                                        {/* Description */}
+                                        {description && (
+                                            <div>
+                                                <p className="text-slate-600 text-sm leading-relaxed italic">"{description}"</p>
+                                            </div>
+                                        )}
+
+                                        {/* Included Tasks Pills */}
+                                        {includedTasks.length > 0 && (
+                                            <div>
+                                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                                                    Incluye
+                                                </p>
+
+                                                <div className="flex flex-wrap gap-2">
+                                                    {includedTasks.map((task) => (
+                                                        <span
+                                                            key={task}
+                                                            className="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 text-xs font-medium border border-slate-200"
+                                                        >
+                                                            <CheckCircleIcon
+                                                                className={`w-3.5 h-3.5 mr-1.5 ${theme.text}`}
+                                                            />
+                                                            {task}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Specific Training Highlight */}
+                                        {training && (
+                                            <div
+                                                className={`p-3 rounded-xl border border-dashed ${theme.border} ${theme.bg} flex items-start`}
+                                            >
+                                                <AcademicCapIcon
+                                                    className={`w-5 h-5 mr-2 mt-0.5 ${theme.text}`}
+                                                />
+                                                <div>
+                                                    <p className={`text-xs font-bold ${theme.text} mb-0.5`}>Formación Específica</p>
+                                                    <p className="text-xs text-slate-700">{training}</p>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Rate Details/Extras */}
+                                        {(rates.shift || rates.urgentSurcharge || (rates.extras && rates.extras.length > 0)) && (
+                                            <div className="pt-3 border-t border-slate-100">
+                                                <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+                                                    Tarifas extra
+                                                </p>
+
+                                                <div className="grid grid-cols-2 gap-2">
+                                                    {rates.shift && (
+                                                        <div className="flex justify-between items-center text-xs bg-slate-50 p-2 rounded">
+                                                            <span className="text-slate-600">
+                                                                Jornada/Servicio
+                                                            </span>
+
+                                                            <span className="font-semibold text-slate-800">
+                                                                {rates.shift}€
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {rates.urgentSurcharge && (
+                                                        <div className="flex justify-between items-center text-xs bg-amber-50 p-2 rounded">
+                                                            <span className="text-amber-700">Urgencia</span>
+                                                            <span className="font-semibold text-amber-800">
+                                                                +{rates.urgentSurcharge}%
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {rates.extras?.map((extra, idx) => (
+                                                        <div
+                                                            key={idx}
+                                                            className="flex justify-between items-center text-xs bg-slate-50 p-2 rounded"
+                                                        >
+                                                            <span
+                                                                className="text-slate-600 truncate mr-2"
+                                                                title={extra.name}
+                                                            >
+                                                                {extra.name}
+                                                            </span>
+
+                                                            <span className="font-semibold text-slate-800">
+                                                                +{extra.price}€
+                                                            </span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                            )}
-                        </div>
-                        </div>
-                    );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
                 </div>
 
                 {/* Reviews Section */}
                 {provider.reviews && provider.reviews.length > 0 && (
-                <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm mt-6">
-                    <div className="flex justify-between items-center mb-4">
-                    <h3 className="font-bold text-lg text-slate-800">
-                        Valoraciones
-                    </h3>
-                    <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
-                        {provider.reviews.length} verificadas
-                    </span>
-                    </div>
-                    <ul className="space-y-6">
-                    {provider.reviews.map((review) => (
-                        <li
-                        key={review.id}
-                        className="flex items-start space-x-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0"
-                        >
-                        <img
-                            src={review.authorPhotoUrl}
-                            alt={review.authorName}
-                            className="w-10 h-10 rounded-full object-cover border border-slate-200"
-                        />
-                        <div className="flex-1">
-                            <div className="flex justify-between items-center mb-1">
-                            <p className="font-bold text-sm text-slate-800">
-                                {review.authorName}
-                            </p>
-                            <p className="text-xs text-slate-400">{review.date}</p>
-                            </div>
-                            <StarRating rating={review.rating} className="mb-2" />
-                            <p className="text-sm text-slate-600 leading-relaxed">
-                            {review.comment}
-                            </p>
+                    <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm mt-6">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="font-bold text-lg text-slate-800">
+                                Valoraciones
+                            </h3>
+
+                            <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
+                                {provider.reviews.length} verificadas
+                            </span>
                         </div>
-                        </li>
-                    ))}
-                    </ul>
-                </div>
+
+                        <ul className="space-y-6">
+                            {provider.reviews.map((review) => (
+                                <li
+                                    key={review.id}
+                                    className="flex items-start space-x-4 pb-6 border-b border-slate-100 last:border-0 last:pb-0"
+                                >
+                                    <img
+                                        src={review.authorPhotoUrl}
+                                        alt={review.authorName}
+                                        className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                                    />
+
+                                    <div className="flex-1">
+                                        <div className="flex justify-between items-center mb-1">
+                                            <p className="font-bold text-sm text-slate-800">
+                                                {review.authorName}
+                                            </p>
+                                            <p className="text-xs text-slate-400">{review.date}</p>
+                                        </div>
+
+                                        <StarRating rating={review.rating} className="mb-2" />
+
+                                        <p className="text-sm text-slate-600 leading-relaxed">
+                                            {review.comment}
+                                        </p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 )}
 
                 {/* Verifications Section */}
                 <div className="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm mt-6">
-                <h3 className="font-bold text-lg text-slate-800 mb-4">
-                    Verificaciones
-                </h3>
-                <div className="grid grid-cols-1 gap-3">
-                    {provider.verifications.map((verification) => (
-                    <div
-                        key={verification}
-                        className="flex items-center p-3 bg-slate-50 rounded-xl border border-slate-100"
-                    >
-                        <div className="bg-green-100 rounded-full p-1.5 mr-3">
-                        <ShieldCheckIcon className="w-5 h-5 text-green-600" />
-                        </div>
-                        <span className="text-slate-700 text-sm font-medium">
-                        {verification}
-                        </span>
+                    <h3 className="font-bold text-lg text-slate-800 mb-4">
+                        Verificaciones
+                    </h3>
+
+                    <div className="grid grid-cols-1 gap-3">
+                        {provider.verifications.map((verification) => (
+                            <div
+                                key={verification}
+                                className="flex items-center p-3 bg-slate-50 rounded-xl border border-slate-100"
+                            >
+                                <div className="bg-green-100 rounded-full p-1.5 mr-3">
+                                    <ShieldCheckIcon className="w-5 h-5 text-green-600" />
+                                </div>
+
+                                <span className="text-slate-700 text-sm font-medium">
+                                    {verification}
+                                </span>
+                            </div>
+                        ))}
                     </div>
-                    ))}
-                </div>
                 </div>
             </div>
         </main>
