@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { ChatConversation } from '../types';
-import ChevronLeftIcon from './icons/ChevronLeftIcon';
-import PaperAirplaneIcon from './icons/PaperAirplaneIcon';
+import React, { useState, useRef, useEffect } from "react";
+import { ChatConversation } from "../types";
+import ChevronLeftIcon from "./icons/ChevronLeftIcon";
+import PaperAirplaneIcon from "./icons/PaperAirplaneIcon";
 
 interface ChatProps {
   chat: ChatConversation;
@@ -10,7 +10,7 @@ interface ChatProps {
 }
 
 const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -25,7 +25,7 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
     e.preventDefault();
     if (newMessage.trim()) {
       onSendMessage(chat.id, newMessage.trim());
-      setNewMessage('');
+      setNewMessage("");
     }
   };
 
@@ -34,16 +34,24 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
       {/* Header */}
       <header className="flex-shrink-0 bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <button onClick={onBack} className="p-2 -ml-2 text-slate-600 hover:text-teal-500">
+          <button
+            onClick={onBack}
+            className="p-2 -ml-2 text-slate-600 hover:text-teal-500"
+          >
             <ChevronLeftIcon className="w-6 h-6" />
           </button>
+
           <div className="text-center">
-            <h1 className="text-lg font-semibold text-slate-800">{chat.provider.name}</h1>
+            <h1 className="text-lg font-normal text-slate-800">
+              Chat con: 
+              <span className="text-lg font-semibold text-slate-800"> {chat.provider.name}</span>
+            </h1>
             <p className="text-xs text-slate-500">En línea</p>
           </div>
-          <img 
-            src={chat.provider.photoUrl} 
-            alt={chat.provider.name} 
+
+          <img
+            src={chat.provider.photoUrl}
+            alt={chat.provider.name}
             className="w-10 h-10 rounded-full object-cover"
           />
         </div>
@@ -54,31 +62,45 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
         {chat.messages.map((message, index) => (
           <div
             key={message.id}
-            className={`flex items-end gap-2 ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}
+            className={`flex items-end gap-2 ${
+              message.sender === "me" ? "justify-end" : "justify-start"
+            }`}
           >
-            {message.sender === 'other' && (
-              <img src={chat.provider.photoUrl} className="w-6 h-6 rounded-full self-start" alt="Provider" />
+            {message.sender === "other" && (
+              <img
+                src={chat.provider.photoUrl}
+                className="w-6 h-6 rounded-full self-start"
+                alt="Provider"
+              />
             )}
+            
             <div
               className={`max-w-xs md:max-w-md p-3 rounded-2xl ${
-                message.sender === 'me'
-                  ? 'bg-teal-500 text-white rounded-br-lg'
-                  : 'bg-white text-slate-700 rounded-bl-lg border border-slate-200'
+                message.sender === "me"
+                  ? "bg-teal-500 text-white rounded-br-lg"
+                  : "bg-white text-slate-700 rounded-bl-lg border border-slate-200"
               }`}
             >
               <p className="text-sm">{message.text}</p>
-              <p className={`text-xs mt-1 ${message.sender === 'me' ? 'text-teal-100' : 'text-slate-400'} text-right`}>
-                  {message.timestamp}
+              <p
+                className={`text-xs mt-1 ${
+                  message.sender === "me" ? "text-teal-100" : "text-slate-400"
+                } text-right`}
+              >
+                {message.timestamp}
               </p>
             </div>
           </div>
         ))}
-         <div ref={messagesEndRef} />
+        <div ref={messagesEndRef} />
       </main>
 
       {/* Input Form */}
       <footer className="flex-shrink-0 bg-white border-t border-slate-200">
-        <form onSubmit={handleSend} className="container mx-auto p-2 flex items-center gap-2">
+        <form
+          onSubmit={handleSend}
+          className="container mx-auto p-2 flex items-center gap-2"
+        >
           <input
             type="text"
             value={newMessage}
