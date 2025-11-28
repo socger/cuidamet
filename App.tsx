@@ -371,7 +371,6 @@ const App: React.FC = () => {
   };
 
   const showBottomNav =
-    view !== "chat" &&
     view !== "offer" &&
     view !== "auth" &&
     view !== "myProfile" &&

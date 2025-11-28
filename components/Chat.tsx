@@ -30,7 +30,7 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
+    <div className="bg-slate-50 min-h-screen flex flex-col animate-fade-in">
       {/* Header */}
       <header className="flex-shrink-0 bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-10">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -58,7 +58,7 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
       </header>
 
       {/* Messages */}
-      <main className="flex-grow overflow-y-auto p-4 space-y-4">
+      <main className="flex-grow overflow-y-auto p-4 space-y-4 pb-40">
         {chat.messages.map((message, index) => (
           <div
             key={message.id}
@@ -73,7 +73,7 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
                 alt="Provider"
               />
             )}
-            
+
             <div
               className={`max-w-xs md:max-w-md p-3 rounded-2xl ${
                 message.sender === "me"
@@ -96,7 +96,7 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
       </main>
 
       {/* Input Form */}
-      <footer className="flex-shrink-0 bg-white border-t border-slate-200">
+      <footer className="fixed bottom-20 left-0 right-0 bg-white border-t border-slate-200 z-30">
         <form
           onSubmit={handleSend}
           className="container mx-auto p-2 flex items-center gap-2"
