@@ -269,7 +269,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
                 <p className="text-slate-500 mt-2">
                 Lo sentimos, no pudimos cargar los datos del cuidador.
                 </p>
-                
+
                 <button
                 onClick={onBack}
                 className="mt-6 bg-teal-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors"
@@ -301,7 +301,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
                     className="w-28 h-28 rounded-full mx-auto ring-4 ring-white shadow-lg object-cover"
                 />
                 <h2 className="text-2xl font-bold text-slate-800 mt-4">
-                    {provider.name}
+                    Perfil de: {provider.name}
                 </h2>
                 <div className="flex items-center justify-center space-x-2 mt-2">
                     <div className="flex items-center text-amber-500">
