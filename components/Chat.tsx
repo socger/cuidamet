@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChatConversation } from "../types";
-import ChevronLeftIcon from "./icons/ChevronLeftIcon";
+import ChatHeader from "./ChatHeader";
 import PaperAirplaneIcon from "./icons/PaperAirplaneIcon";
 
 interface ChatProps {
@@ -32,31 +32,11 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col animate-fade-in">
       {/* Header */}
-      <header className="flex-shrink-0 bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-40">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <button
-            onClick={onBack}
-            className="p-2 -ml-2 text-slate-600 hover:text-teal-500 cursor-pointer"
-            type="button"
-          >
-            <ChevronLeftIcon className="w-6 h-6" />
-          </button>
-
-          <div className="text-center">
-            <h1 className="text-lg font-normal text-slate-800">
-              Chat con: 
-              <span className="text-lg font-semibold text-slate-800"> {chat.provider.name}</span>
-            </h1>
-            <p className="text-xs text-slate-500">En línea</p>
-          </div>
-
-          <img
-            src={chat.provider.photoUrl}
-            alt={chat.provider.name}
-            className="w-10 h-10 rounded-full object-cover"
-          />
-        </div>
-      </header>
+      <ChatHeader 
+        providerName={chat.provider.name}
+        providerPhotoUrl={chat.provider.photoUrl}
+        onBack={onBack}
+      />
 
       {/* Messages */}
       <main className="flex-grow overflow-y-auto p-4 space-y-4 pb-40">
