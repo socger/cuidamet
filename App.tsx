@@ -463,7 +463,6 @@ const App: React.FC = () => {
     view !== "offer" &&
     view !== "auth" &&
     view !== "myProfile" &&
-    view !== "booking" &&
     !isLocationLoading;
 
   return (
