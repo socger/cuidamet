@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Provider, BookingDetails } from '../types';
-import PageHeader from './PageHeader';
+import PageHeader from './BookingPage_Header';
 import CalendarDaysIcon from './icons/CalendarDaysIcon';
 import ClockIcon from './icons/ClockIcon';
 import TicketIcon from './icons/TicketIcon';
