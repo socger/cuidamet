@@ -211,7 +211,7 @@ const App: React.FC = () => {
     // Save current view before going to chat
     setPreviousViewBeforeChat(view);
     
-    const existingChat = chats.find((chat) => chat.provider.id === providerId);
+    const existingChat = chats.find((chat) => chat.provider && chat.provider.id === providerId);
     if (existingChat) {
       handleViewChat(existingChat.id);
     } else {
