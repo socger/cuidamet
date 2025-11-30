@@ -101,9 +101,21 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
+    <div className="bg-white min-h-screen flex flex-col animate-fade-in">
       <PageHeader title="Reservar Servicio" onBack={onBack} />
-      <main className="flex-grow overflow-y-auto p-4">
+      
+      {/* Sticky Payment Button at Top */}
+      <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-lg border-b border-slate-200 p-3 shadow-sm">
+        <button
+            onClick={handleProceed}
+            disabled={!isValid}
+            className="w-full bg-teal-500 text-white px-4 py-3.5 rounded-xl font-semibold hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-400 disabled:cursor-not-allowed text-lg shadow-lg shadow-teal-500/20"
+        >
+            {isValid ? `Pagar ${totalCost.toFixed(2)}€` : 'Completa los datos'}
+        </button>
+      </div>
+
+      <main className="flex-grow overflow-y-auto p-4 pb-6 bg-slate-50">{/* Caregiver Info */}
         {/* Caregiver Info */}
         <section className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4 mb-6">
             <img src={provider.photoUrl} alt={provider.name} className="w-16 h-16 rounded-full object-cover" />
@@ -217,15 +229,6 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
             </section>
         )}
       </main>
-      <footer className="flex-shrink-0 bg-white/80 backdrop-blur-lg border-t border-slate-200 p-3">
-        <button
-            onClick={handleProceed}
-            disabled={!isValid}
-            className="w-full bg-teal-500 text-white px-4 py-3.5 rounded-xl font-semibold hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-400 disabled:cursor-not-allowed text-lg"
-        >
-            {isValid ? `Pagar ${totalCost.toFixed(2)}€` : 'Completa los datos'}
-        </button>
-      </footer>
     </div>
   );
 };
