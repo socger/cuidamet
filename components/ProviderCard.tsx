@@ -54,9 +54,17 @@ const ProviderCard: React.FC<ProviderCardProps> = ({
     provider.descriptions[0]?.text ||
     "";
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Only navigate if clicking on the card itself, not on buttons
+    const target = e.target as HTMLElement;
+    if (!target.closest('button')) {
+      onViewProfile(provider.id);
+    }
+  };
+
   return (
-    <button
-      onClick={() => onViewProfile(provider.id)}
+    <div
+      onClick={handleCardClick}
       className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 cursor-pointer group border border-slate-200 text-left w-full"
     >
       <div className="relative">
@@ -130,7 +138,7 @@ const ProviderCard: React.FC<ProviderCardProps> = ({
           {descriptionToShow}
         </p>
       </div>
-    </button>
+    </div>
   );
 };
 
