@@ -1,6 +1,11 @@
+* A la vista de reservar cuidador no le aparece la botonera de abajo de la app. También me gustaría que la foto del cuidador apareciera en la barra de navegación de arriba, como lo hace en la vista de chatear.
+
+
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
 * Cuando estoy viendo el perfil del cuidador Carlos Rodriguez y pulso el botón de chat, en la consola del navegador de internet se produce un error. Y no podemos chatear con este cuidador.
+
+* La autenticación del usuario tiene tres intentos sólo. Si no se autentica bien, se vuelve a la pantalla desde donde había sido llamada la autenticación. Habría que parametrizar esta cantidad de intentos (.env) y implementar el control de la autenticación desde el backend (un endpoint que devolviera si lo hizo bien o no el usuario)
 
 * En la botonera de la app (la de abajo), me gustaría poner en una esquina el icono de cuidamet pero en chiquitito. El motivo es porque hay vistas en las que no aparece el logotipo de cuidamet (como en peril, chat, mapa, etc)
 
