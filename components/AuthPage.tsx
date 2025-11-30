@@ -16,6 +16,9 @@ interface AuthPageProps {
   onSignupSuccess: (role: UserRole, email: string) => void;
   onBack: () => void;
   pendingActionMessage?: string;
+  onMaxAttemptsReached?: () => void;
+  authAttempts?: number;
+  onAttemptIncrement?: () => void;
 }
 
 const AuthPage: React.FC<AuthPageProps> = ({
@@ -25,6 +28,9 @@ const AuthPage: React.FC<AuthPageProps> = ({
   onSignupSuccess,
   onBack,
   pendingActionMessage,
+  onMaxAttemptsReached,
+  authAttempts = 0,
+  onAttemptIncrement,
 }) => {
   const [mode, setMode] = useState<AuthMode>(initialMode);
   const [role, setRole] = useState<UserRole | null>(preselectedRole || null);
@@ -69,6 +75,31 @@ const AuthPage: React.FC<AuthPageProps> = ({
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // In development mode, always allow login (bypass validation)
+    // In production, you would validate credentials against a backend
+    // Validación simple de ejemplo
+    const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
+    // const isValidLogin = true; // Bypass for demo
+    
+    if (!isValidLogin) {
+      // Increment attempt counter
+      if (onAttemptIncrement) {
+        onAttemptIncrement();
+      }
+      
+      // Check if max attempts reached
+      if (authAttempts >= 2) { // 3 attempts total (0, 1, 2)
+        if (onMaxAttemptsReached) {
+          onMaxAttemptsReached();
+        }
+        return;
+      }
+      
+      alert(`Credenciales inválidas. Intento ${authAttempts + 1} de 3.`);
+      return;
+    }
+    
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);

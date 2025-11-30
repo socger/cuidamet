@@ -236,7 +236,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
             <ActionButtons
                 title="Cargando Perfil..."
                 onBack={onBack}
-                providerId={provider.id}
+                providerId={0}
                 onContact={onContact}
                 onBookNow={onBookNow}
             />
@@ -254,7 +254,7 @@ const ProfileDetail: React.FC<ProfileDetailProps> = ({
             <ActionButtons
                 title="Error"
                 onBack={onBack}
-                providerId={provider.id}
+                providerId={0}
                 onContact={onContact}
                 onBookNow={onBookNow}
             />

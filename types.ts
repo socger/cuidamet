@@ -105,6 +105,18 @@ export interface ChatConversation {
   messages: Message[];
 }
 
+// Booking Types
+export interface BookingDetails {
+  providerId: number;
+  date: string;
+  startTime: string;
+  endTime: string;
+  hours: number;
+  totalCost: number;
+  discountAmount: number;
+  insuranceCost: number;
+}
+
 // Auth Types
 export type AuthMode = 'login' | 'signup' | 'forgotPassword' | 'verifyEmail';
 export type UserRole = 'client' | 'provider';

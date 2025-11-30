@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CareCategory, Provider, ChatConversation, Message, UserRole } from "./types";
+import { CareCategory, Provider, ChatConversation, Message, UserRole, BookingDetails } from "./types";
 import { MOCK_PROVIDERS } from "./services/mockData";
 import { MOCK_CHATS } from "./services/mockChatData";
 import BottomNav from "./components/BottomNav";
@@ -13,6 +13,7 @@ import MapView from "./components/MapView";
 import CookieConsent from "./components/CookieConsent";
 import ProvidersList from "./components/ProvidersList";
 import AuthPage from "./components/AuthPage";
+import BookingPage from "./components/BookingPage";
 
 const getDistanceInKm = (
   lat1: number,
@@ -46,6 +47,7 @@ const App: React.FC = () => {
     | "myProfile"
     | "map"
     | "auth"
+    | "booking"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "favorites" | "map"
@@ -74,6 +76,11 @@ const App: React.FC = () => {
   // Auth state
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [previousViewBeforeAuth, setPreviousViewBeforeAuth] = useState<typeof view>("landing");
+  const [authAttempts, setAuthAttempts] = useState<number>(0);
+  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | null>(null);
+  
+  // Booking state
+  const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
 
   useEffect(() => {
     // Simulate fetching data
@@ -100,6 +107,8 @@ const App: React.FC = () => {
   const handleToggleFavorite = (providerId: number) => {
     if (!isAuthenticated) {
       setPreviousViewBeforeAuth(view);
+      setPendingAction('favorite');
+      setAuthAttempts(0);
       setView("auth");
       return;
     }
@@ -256,16 +265,69 @@ const App: React.FC = () => {
 
   const handleLoginSuccess = (role: UserRole) => {
     setIsAuthenticated(true);
-    setView(previousViewBeforeAuth);
+    setAuthAttempts(0);
+    
+    // Execute pending action
+    if (pendingAction === 'booking' && bookingProviderId) {
+      setView('booking');
+    } else {
+      setView(previousViewBeforeAuth);
+    }
+    setPendingAction(null);
   };
 
   const handleSignupSuccess = (role: UserRole, email: string) => {
     setIsAuthenticated(true);
-    setView(previousViewBeforeAuth);
+    setAuthAttempts(0);
+    
+    // Execute pending action
+    if (pendingAction === 'booking' && bookingProviderId) {
+      setView('booking');
+    } else {
+      setView(previousViewBeforeAuth);
+    }
+    setPendingAction(null);
   };
 
   const handleAuthBack = () => {
     setView(previousViewBeforeAuth);
+    setPendingAction(null);
+    setBookingProviderId(null);
+    setAuthAttempts(0);
+  };
+  
+  const handleAuthMaxAttempts = () => {
+    setAuthAttempts(0);
+    setPendingAction(null);
+    setBookingProviderId(null);
+    setView(previousViewBeforeAuth);
+  };
+  
+  const handleBookNow = (providerId: number) => {
+    if (!isAuthenticated) {
+      setPreviousViewBeforeAuth(view);
+      setPendingAction('booking');
+      setBookingProviderId(providerId);
+      setAuthAttempts(0);
+      setView("auth");
+      return;
+    }
+    
+    setBookingProviderId(providerId);
+    setView('booking');
+  };
+  
+  const handleBookingBack = () => {
+    setView('profile');
+    setBookingProviderId(null);
+  };
+  
+  const handleBookingProceed = (details: BookingDetails) => {
+    // Here you would normally process the payment
+    console.log('Booking details:', details);
+    alert(`Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`);
+    setView('landing');
+    setBookingProviderId(null);
   };
 
   const renderContent = () => {
@@ -300,6 +362,19 @@ const App: React.FC = () => {
       );
     } else if (currentView === "offer") {
       mainContent = <OfferService onClose={handleNavigateHome} />;
+    } else if (currentView === "booking" && bookingProviderId) {
+      const provider = providersWithDistance.find(
+        (p) => p.id === bookingProviderId
+      );
+      if (provider) {
+        mainContent = (
+          <BookingPage
+            provider={provider}
+            onBack={handleBookingBack}
+            onProceed={handleBookingProceed}
+          />
+        );
+      }
     } else if (currentView === "profile" && selectedProviderId) {
       const provider = providersWithDistance.find(
         (p) => p.id === selectedProviderId
@@ -310,6 +385,7 @@ const App: React.FC = () => {
             provider={provider}
             onBack={handleBackToList}
             onContact={handleContactProvider}
+            onBookNow={handleBookNow}
           />
         );
       }
@@ -369,7 +445,14 @@ const App: React.FC = () => {
             onLoginSuccess={handleLoginSuccess}
             onSignupSuccess={handleSignupSuccess}
             onBack={handleAuthBack}
-            pendingActionMessage="Inicia sesión para guardar favoritos"
+            onMaxAttemptsReached={handleAuthMaxAttempts}
+            authAttempts={authAttempts}
+            onAttemptIncrement={() => setAuthAttempts(prev => prev + 1)}
+            pendingActionMessage={
+              pendingAction === 'booking' 
+                ? "Inicia sesión para realizar la reserva" 
+                : "Inicia sesión para guardar favoritos"
+            }
           />
         )}
       </>
@@ -380,6 +463,7 @@ const App: React.FC = () => {
     view !== "offer" &&
     view !== "auth" &&
     view !== "myProfile" &&
+    view !== "booking" &&
     !isLocationLoading;
 
   return (
