@@ -1,4 +1,4 @@
-* A la vista de reservar cuidador no le aparece la botonera de abajo de la app. También me gustaría que la foto del cuidador apareciera en la barra de navegación de arriba, como lo hace en la vista de chatear.
+* A la vista de reservar cuidador me gustaría que la foto del cuidador apareciera en la barra de navegación de arriba, como lo hace en la vista de chatear.
 
 * En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
 
@@ -45,6 +45,10 @@
 
 * De la botonera de abajo, no he visto nada de OFRECER, buzon y TU
 
+* Daniel me comenta que la vista de chat no tiene ningún control ético de lo que se escribe.
+  Hay que crear, con intenligencia artificial, algún control que decida si cierto comentario se publica o no por su contenido. 
+  No debemos de permitir que un comentario hecho por alguien, subidito de tono, se vea cuando otro usuario decida visitar ese chat.
+  El usuario que lo escribió verá que lo ha publicado, pero que tiene que pasar un control de contenido antes de que el otro usuario del chat pueda ver ese mensaje.
 
 
 
