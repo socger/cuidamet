@@ -1,5 +1,8 @@
 * A la vista de reservar cuidador no le aparece la botonera de abajo de la app. También me gustaría que la foto del cuidador apareciera en la barra de navegación de arriba, como lo hace en la vista de chatear.
 
+* En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
+
+* En la vista de reservar hay un Inicio de Servicio (fecha), pero no tiene una conclusión. Y a lo mejor necesitamos crear un final (fecha) por si son para varios días el mismo servicio. O algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
@@ -13,6 +16,7 @@
 
 * YA ESTA HECHO ... La vista de chat, cuando es llamada desde el perfil de un cuidador, tiene arriba una barra con una flecha hacia la izquierda que debería de volver a la vista de perfil. Pero no lo hace. En la versión de Daniel, cuando pulsas ese icono flecha (hacia la izquierda) se va a la vista buzón.
 
+* Cuando estás reservando un cuidador, hay un apartado para "Código de programación" que tengo que hablarlo con Daniel. No se de que va este tema. Y el checkBox de "Seguro Adicional" también tengo que hablarlo con Daniel. El caso es que si pulsas este checkBox, se aumenta el precio de la contratación.
 
 * Tengo que revisar:
   - En App.tsx:
