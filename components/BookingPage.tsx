@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Provider, BookingDetails } from '../types';
-import PageHeader from './BookingPage_Header';
+import BookingPage_Header from './BookingPage_Header';
 import CalendarDaysIcon from './icons/CalendarDaysIcon';
 import ClockIcon from './icons/ClockIcon';
 import TicketIcon from './icons/TicketIcon';
@@ -102,7 +102,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
 
   return (
     <div className="bg-white min-h-screen flex flex-col animate-fade-in">
-      <PageHeader title="Reservar Servicio" onBack={onBack} />
+      <BookingPage_Header provider={provider} title="Reservar con:" onBack={onBack} />
       
       {/* Sticky Payment Button at Top */}
       <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-lg border-b border-slate-200 p-3 shadow-sm">
@@ -116,16 +116,6 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
       </div>
 
       <main className="flex-grow overflow-y-auto p-4 pb-6 bg-slate-50">{/* Caregiver Info */}
-        {/* Caregiver Info */}
-        <section className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center space-x-4 mb-6">
-            <img src={provider.photoUrl} alt={provider.name} className="w-16 h-16 rounded-full object-cover" />
-            <div>
-                <p className="text-sm text-slate-500">Estás reservando con</p>
-                <h2 className="text-lg font-bold text-slate-800">{provider.name}</h2>
-                <p className="font-semibold text-teal-600">{provider.hourlyRate}€ / hora</p>
-            </div>
-        </section>
-
         {/* Hour Packs */}
         <section className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-6">
             <h3 className="font-bold text-lg text-slate-800">Packs de horas con descuento</h3>
