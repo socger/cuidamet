@@ -1,32 +1,18 @@
 * En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
 
-* En la vista de reservar hay un Inicio de Servicio (fecha) en el que seleccionas la fecha y el margen de horas. A partir de rellenar fecha y margen de horas se calcula el total de la reserva.
-Pero esto funciona sólo cuando la hora de incio es menor que la hora de fin. 
+* En la vista de reservar, en la zona de Elige fecha y hora, tenemos ahora dos apartados:
+  - INICIO DEL SERVICIO
+  - FIN DEL SERVICIO
 
-Por ejemplo:
-- Ejemplo 1º
-  Fecha Inicio: 05/12/2025
-  Hora Inicio: 19:01
-  Hora Fin: 23:10
-  Total horas: 4.15 horas.
+Cada uno de estos apartaedos tiene sus respectivos inputs para fecha y hora.
 
-- Ejemplo 2º
-  Fecha Inicio: 05/12/2025
-  Hora Inicio: 19:01
-  Hora Fin: 23:21
-  Total horas: 4.33 horas.
+En pantallas pequeñas estos dos apartados se ven correctamente. Es decir la fecha y hora se ven uno debajo del otro.
 
-- Ejemplo 3º
-  Fecha Inicio: 05/12/2025
-  Hora Inicio: 23:21
-  Hora Fin: 04:01
-  Total horas: No calcula totales
-               la hora fin es menor que la hora inicio
+Y en pantallas grandes también se ve así.
+Pero queremos que en pantallas grandes, en cada uno de estos apartados ("INICIO DEL SERVICIO" Y "FIN DEL SERVICIO"), pues que la hora se renderice a la derecha de la fecha.
 
-La solución podría estar en poner una Fecha de Inicio, con su margen de horas. Y una fecha de Fin, también con su margen de horas.
 
-El apartado de cálculo de horas y totales, debería de tener en cuenta esos márgenes de fechas y horas por cada fecha.
-
+* En la vista reservar no se ve el final de la vista porque lo tapa la barra de botones. Esto ocurre tanto si está visible la zona de totales, como si no lo está.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
