@@ -28,7 +28,7 @@ La solución podría estar en poner una Fecha de Inicio, con su margen de horas.
 El apartado de cálculo de horas y totales, debería de tener en cuenta esos márgenes de fechas y horas por cada fecha.
 
 
-, pero no tiene una conclusión. Y a lo mejor necesitamos crear un final (fecha) por si son para varios días el mismo servicio. O algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
+* Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 * No he visto ninguna opción en la App donde aparecieran las reservas realizadas de cuidadores. Esto sería un listado donde aparecieran las diferentes contrataciones que hubieras hecho y donde votarías por los servicios prestados.
 
