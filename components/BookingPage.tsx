@@ -90,12 +90,17 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
     }
   };
   
-  const handleSelectPack = (pack: typeof hourPacks[0] | null) => {
-    setSelectedPack(pack);
-    // Reset date/time if a pack is selected/deselected
-    setDate('');
-    setStartTime('');
-    setEndTime('');
+  const handleSelectPack = (pack: typeof hourPacks[0]) => {
+    // Toggle behavior: if clicking the same pack, deselect it
+    if (selectedPack === pack) {
+      setSelectedPack(null);
+    } else {
+      setSelectedPack(pack);
+      // Reset date/time when selecting a new pack
+      setDate('');
+      setStartTime('');
+      setEndTime('');
+    }
   };
 
   const today = new Date().toISOString().split('T')[0];
@@ -131,11 +136,6 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
                     </button>
                 ))}
             </div>
-            {selectedPack && (
-                <button onClick={() => handleSelectPack(null)} className="text-sm text-center w-full mt-3 text-slate-500 hover:text-slate-800">
-                    O selecciona horas manualmente
-                </button>
-            )}
         </section>
 
         {/* Date & Time Selection */}
