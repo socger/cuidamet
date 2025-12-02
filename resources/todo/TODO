@@ -1,18 +1,26 @@
 * En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
 
-* En la vista de reservar, en la zona de Elige fecha y hora, tenemos ahora dos apartados:
-  - INICIO DEL SERVICIO
-  - FIN DEL SERVICIO
-
-Cada uno de estos apartaedos tiene sus respectivos inputs para fecha y hora.
-
-En pantallas pequeñas estos dos apartados se ven correctamente. Es decir la fecha y hora se ven uno debajo del otro.
-
-Y en pantallas grandes también se ve así.
-Pero queremos que en pantallas grandes, en cada uno de estos apartados ("INICIO DEL SERVICIO" Y "FIN DEL SERVICIO"), pues que la hora se renderice a la derecha de la fecha.
-
-
 * En la vista reservar no se ve el final de la vista porque lo tapa la barra de botones. Esto ocurre tanto si está visible la zona de totales, como si no lo está.
+
+* En la vista reservar todavía no he conseguido enterarme de como hace el cálculo de horas cuando hay minutos por medio. Porque hace cálculos raros como 4.33h cuando la hora de incio sus minutos no son cero o los de la hora de fin tienen hora + minutos.
+
+- Ejemplo 1º
+  Fecha de inicio: 05/12/2025
+  Hora de inicio: 19:01
+
+  Fecha de fin: 05/12/2025
+  Hora de fin: 23:10
+
+  Total horas: 4.15 horas.
+
+- Ejemplo 2º
+  Fecha de inicio 05/12/2025
+  Hora de inicio: 19:01
+
+  Fecha de fin: 05/12/2025
+  Hora de fin: 23:21
+
+  Total horas: 4.33 horas.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
