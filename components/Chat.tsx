@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChatConversation } from "../types";
-import ChatHeader from "./ChatHeader";
+import Chat_Header from "./Chat_Header";
 import PaperAirplaneIcon from "./icons/PaperAirplaneIcon";
 
 interface ChatProps {
@@ -32,7 +32,7 @@ const Chat: React.FC<ChatProps> = ({ chat, onBack, onSendMessage }) => {
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col animate-fade-in">
       {/* Header */}
-      <ChatHeader 
+      <Chat_Header 
         providerName={chat.provider.name}
         providerPhotoUrl={chat.provider.photoUrl}
         onBack={onBack}
