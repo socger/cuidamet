@@ -20,8 +20,9 @@ const hourPacks = [
 ];
 
 const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }) => {
-  const [date, setDate] = useState('');
+  const [startDate, setStartDate] = useState('');
   const [startTime, setStartTime] = useState('');
+  const [endDate, setEndDate] = useState('');
   const [endTime, setEndTime] = useState('');
   const [addInsurance, setAddInsurance] = useState(false);
   const [promoCode, setPromoCode] = useState('');
@@ -35,10 +36,10 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
         calculatedHours = selectedPack.hours;
         packDiscount = selectedPack.discount;
     } else {
-        if (!date || !startTime || !endTime) return { isValid: false };
+        if (!startDate || !startTime || !endDate || !endTime) return { isValid: false };
         
-        const start = new Date(`${date}T${startTime}`);
-        const end = new Date(`${date}T${endTime}`);
+        const start = new Date(`${startDate}T${startTime}`);
+        const end = new Date(`${endDate}T${endTime}`);
 
         if (end <= start) return { isValid: false };
 
@@ -73,13 +74,13 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
       isValid: true,
       finalHourlyRate: parseFloat(effectiveHourlyRate.toFixed(2))
     };
-  }, [date, startTime, endTime, provider.hourlyRate, addInsurance, promoCode, selectedPack]);
+  }, [startDate, startTime, endDate, endTime, provider.hourlyRate, addInsurance, promoCode, selectedPack]);
   
   const handleProceed = () => {
     if (isValid) {
       onProceed({
         providerId: provider.id,
-        date,
+        date: startDate,
         startTime,
         endTime,
         hours,
@@ -97,8 +98,9 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
     } else {
       setSelectedPack(pack);
       // Reset date/time when selecting a new pack
-      setDate('');
+      setStartDate('');
       setStartTime('');
+      setEndDate('');
       setEndTime('');
     }
   };
@@ -141,26 +143,44 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
         {/* Date & Time Selection */}
         <section className={`bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-4 transition-opacity duration-300 ${selectedPack ? 'opacity-50 pointer-events-none' : 'opacity-100'}`}>
             <h3 className="font-bold text-lg text-slate-800">Elige fecha y hora</h3>
-            <div>
-                <label htmlFor="date" className="block text-sm font-medium text-slate-700 mb-1">Fecha del servicio</label>
-                <div className="relative">
-                    <input id="date" type="date" value={date} onChange={e => setDate(e.target.value)} min={today} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
-                    <CalendarDaysIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+            
+            {/* Fecha y hora de inicio */}
+            <div className="space-y-3">
+                <p className="text-sm font-semibold text-slate-600 uppercase tracking-wide">Inicio del servicio</p>
+                <div>
+                    <label htmlFor="startDate" className="block text-sm font-medium text-slate-700 mb-1">Fecha de inicio</label>
+                    <div className="relative">
+                        <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} min={today} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
+                        <CalendarDaysIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
                 </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label htmlFor="startTime" className="block text-sm font-medium text-slate-700 mb-1">Hora de inicio</label>
                     <div className="relative">
                         <input id="startTime" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
-                         <ClockIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                        <ClockIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
+                </div>
+            </div>
+
+            {/* Separador visual */}
+            <div className="border-t border-slate-200 my-4"></div>
+
+            {/* Fecha y hora de fin */}
+            <div className="space-y-3">
+                <p className="text-sm font-semibold text-slate-600 uppercase tracking-wide">Fin del servicio</p>
+                <div>
+                    <label htmlFor="endDate" className="block text-sm font-medium text-slate-700 mb-1">Fecha de fin</label>
+                    <div className="relative">
+                        <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} min={startDate || today} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
+                        <CalendarDaysIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                     </div>
                 </div>
                 <div>
                     <label htmlFor="endTime" className="block text-sm font-medium text-slate-700 mb-1">Hora de fin</label>
-                     <div className="relative">
+                    <div className="relative">
                         <input id="endTime" type="time" value={endTime} onChange={e => setEndTime(e.target.value)} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
-                         <ClockIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                        <ClockIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                     </div>
                 </div>
             </div>
