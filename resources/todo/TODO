@@ -1,12 +1,5 @@
 * En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
 
-* En la vista de reservar, tenemos dos apartados para seleccionar el tipo de reserva que vamos a realizar. 
-  Nos referimos a los bloques de selección:
-  - Pack de horas con descuento.
-  - Elige fecha y hora.
-  Pero si elegimos alguna de las opciones del bloque de selección "Pack de horas con descuento" (el de "10 horas" ó el de "20 horas") automáticamente el bloque de selección "Elige fecha y hora" pasa a estar desactivado para que no se rellene nada en él.
-  Este comportamiento está correcto, pero no tenemos la posibilidad de que la opción "10 horas" ó "20 horas" tuviera un comportamiento de tipo on/off. De tal manera de que si alguna de estas opciones fuera pulsada por primera vez (cuando renderizamos la vista Reservar) su comportamiento debería de ser el que ahora mismo tiene. Pero que si volviera a pulsar pues que ya no estuviera seleccionada la opción pulsada (cuando es pulsada se pone en color verde) y que se volviera a activar el bloque de selección "Elige fecha y hora"
-
 * En la vista de reservar hay un Inicio de Servicio (fecha), pero no tiene una conclusión. Y a lo mejor necesitamos crear un final (fecha) por si son para varios días el mismo servicio. O algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 * No he visto ninguna opción en la App donde aparecieran las reservas realizadas de cuidadores. Esto sería un listado donde aparecieran las diferentes contrataciones que hubieras hecho y donde votarías por los servicios prestados.
