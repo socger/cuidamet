@@ -31,7 +31,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
     const offerItem = navItems.find(item => item.key === 'offer');
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-40">
+        <nav className="fixed bottom-0 left-0 right-0 bg-teal-50/100 border-t border-slate-200 z-40">
             <div className="container mx-auto h-20">
                 <div className="flex justify-around items-center h-full">
                     {/* First two items */}
