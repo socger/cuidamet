@@ -1,25 +1,11 @@
-* En el listado de reservas, tiene un resumen de las reservas realizadas pero no aparece la fecha/hora de fin del servicio. 
-
-La vista que presenta las reservas (componente "/home/socger/trabajo/socger/cuidamet/components/BookingsList.tsx"), ahora presenta los bloques, ó líneas, inicio y fin de servicio.
-Cada uno de estos bloques tiene su campo fecha y hora.
-
-Necesitamos que ambos bloques estuvieran separados y uno a la derecha del otro en pantallas grandes.
-Y en pantallas pequeñas que el bloque de fin estuviera debajo del bloque de inicio.
-
-También necesitamos que el contenedor que envuelve estos bloques tuviera como título "Datos del servicio".
-
-
-Tampoco hemos comprobado si guarda las últimas reservas realizadas antes de que la app deje de funcionar. También debo de ir viendo como se ve esta vista en pantallas pequeñas.
-
-
-
-
 
 * Los alert de la app convertirlos en un popup.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 
+* El botón Ofrecer está ahora desplazado por no estar en el medio (se han creado nuevas opciones). Daniel comenta lo siguiente:
+Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco descompensado al estar desplazado
 
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
