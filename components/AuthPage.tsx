@@ -79,8 +79,9 @@ const AuthPage: React.FC<AuthPageProps> = ({
     // In development mode, always allow login (bypass validation)
     // In production, you would validate credentials against a backend
     // Validación simple de ejemplo
-    const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
-    // const isValidLogin = true; // Bypass for demo
+    // JEROFA tenn en cuenta que he cambiado a la línea de abajo para que no me de la vara de que introduzca la pwd correcta
+    // const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
+    const isValidLogin = true; // Bypass for demo
     
     if (!isValidLogin) {
       // Increment attempt counter

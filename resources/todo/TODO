@@ -1,6 +1,6 @@
-* En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
-
 * En la vista reservar no se ve el final de la vista porque lo tapa la barra de botones. Esto ocurre tanto si está visible la zona de totales, como si no lo está.
+
+* En la vista de reservar tiene un checkBox de Seguro Adicional y un Código de promoción que podrían estar en la misma columna si hablamos de pantallas grandes y que fuera responsive (uno debajo del otro) si se estuviera viendo en pantallas pequeñas.
 
 * En la vista reservar todavía no he conseguido enterarme de como hace el cálculo de horas cuando hay minutos por medio. Porque hace cálculos raros como 4.33h cuando la hora de incio sus minutos no son cero o los de la hora de fin tienen hora + minutos.
 
@@ -70,5 +70,5 @@
   No debemos de permitir que un comentario hecho por alguien, subidito de tono, se vea cuando otro usuario decida visitar ese chat.
   El usuario que lo escribió verá que lo ha publicado, pero que tiene que pasar un control de contenido antes de que el otro usuario del chat pueda ver ese mensaje.
 
-
+* HAY varios JEROFA en el código para tener en cuenta antes de entrar en producción o con la parte backend
 
