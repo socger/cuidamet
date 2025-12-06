@@ -67,23 +67,37 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
                   </div>
                 </div>
                 
-                <div className="space-y-2 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Inicio:</span>
-                    <div className="flex items-center gap-2">
-                      <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
-                      <span>{new Date(booking.startDate).toLocaleDateString()}</span>
-                      <ClockIcon className="w-4 h-4 ml-2 text-slate-400" />
-                      <span>{booking.startTime}</span>
+                <div className="bg-slate-50 p-3 rounded-lg">
+                  <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Datos del servicio</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    {/* Bloque de Inicio */}
+                    <div className="bg-white p-3 rounded-lg border border-slate-200">
+                      <p className="font-medium text-slate-700 mb-2">Inicio del servicio</p>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
+                          <span>{new Date(booking.startDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <ClockIcon className="w-4 h-4 text-slate-400" />
+                          <span>{booking.startTime}</span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center justify-between">
-                    <span className="font-medium text-slate-700">Fin:</span>
-                    <div className="flex items-center gap-2">
-                      <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
-                      <span>{new Date(booking.endDate).toLocaleDateString()}</span>
-                      <ClockIcon className="w-4 h-4 ml-2 text-slate-400" />
-                      <span>{booking.endTime}</span>
+                    
+                    {/* Bloque de Fin */}
+                    <div className="bg-white p-3 rounded-lg border border-slate-200">
+                      <p className="font-medium text-slate-700 mb-2">Fin del servicio</p>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
+                          <span>{new Date(booking.endDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-slate-600">
+                          <ClockIcon className="w-4 h-4 text-slate-400" />
+                          <span>{booking.endTime}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
