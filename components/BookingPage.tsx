@@ -80,8 +80,9 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
     if (isValid) {
       onProceed({
         providerId: provider.id,
-        date: startDate,
+        startDate,
         startTime,
+        endDate,
         endTime,
         hours,
         totalCost,

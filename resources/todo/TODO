@@ -1,6 +1,15 @@
-* La botonera ahora tiene el botón de reservas con un color diferente al de los otros iconos (incluso sus letras) ... corregirlo
+* En el listado de reservas, tiene un resumen de las reservas realizadas pero no aparece la fecha/hora de fin del servicio. 
 
-* En el listado de reservas, tiene un resumen de las reservas realizadas pero no aparece la fecha/hora de fin del servicio. Tampoco hemos comprobado si guarda las últimas reservas realizadas antes de que la app deje de funcionar. También debo de ir viendo como se ve esta vista en pantallas pequeñas.
+La vista que presenta las reservas (componente "/home/socger/trabajo/socger/cuidamet/components/BookingsList.tsx"), ahora presenta los bloques, ó líneas, inicio y fin de servicio.
+Cada uno de estos bloques tiene su campo fecha y hora.
+
+Necesitamos que ambos bloques estuvieran separados y uno a la derecha del otro en pantallas grandes.
+Y en pantallas pequeñas que el bloque de fin estuviera debajo del bloque de inicio.
+
+También necesitamos que el contenedor que envuelve estos bloques tuviera como título "Datos del servicio".
+
+
+Tampoco hemos comprobado si guarda las últimas reservas realizadas antes de que la app deje de funcionar. También debo de ir viendo como se ve esta vista en pantallas pequeñas.
 
 
 

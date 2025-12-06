@@ -67,14 +67,24 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
                   </div>
                 </div>
                 
-                <div className="grid grid-cols-2 gap-3 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
-                  <div className="flex items-center">
-                    <CalendarDaysIcon className="w-4 h-4 mr-2 text-slate-400" />
-                    <span>{new Date(booking.date).toLocaleDateString()}</span>
+                <div className="space-y-2 text-sm text-slate-600 bg-slate-50 p-3 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-slate-700">Inicio:</span>
+                    <div className="flex items-center gap-2">
+                      <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
+                      <span>{new Date(booking.startDate).toLocaleDateString()}</span>
+                      <ClockIcon className="w-4 h-4 ml-2 text-slate-400" />
+                      <span>{booking.startTime}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center">
-                    <ClockIcon className="w-4 h-4 mr-2 text-slate-400" />
-                    <span>{booking.startTime} - {booking.endTime}</span>
+                  <div className="flex items-center justify-between">
+                    <span className="font-medium text-slate-700">Fin:</span>
+                    <div className="flex items-center gap-2">
+                      <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
+                      <span>{new Date(booking.endDate).toLocaleDateString()}</span>
+                      <ClockIcon className="w-4 h-4 ml-2 text-slate-400" />
+                      <span>{booking.endTime}</span>
+                    </div>
                   </div>
                 </div>
               </div>

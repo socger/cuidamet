@@ -108,8 +108,9 @@ export interface ChatConversation {
 // Booking Types
 export interface BookingDetails {
   providerId: number;
-  date: string;
+  startDate: string;
   startTime: string;
+  endDate: string;
   endTime: string;
   hours: number;
   totalCost: number;
