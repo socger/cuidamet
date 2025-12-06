@@ -122,7 +122,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
         </button>
       </div>
 
-      <main className="flex-grow overflow-y-auto p-4 pb-6 bg-slate-50">{/* Caregiver Info */}
+      <main className="flex-grow overflow-y-auto p-4 pb-28 bg-slate-50">{/* Caregiver Info */}
         {/* Hour Packs */}
         <section className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm mb-6">
             <h3 className="font-bold text-lg text-slate-800">Packs de horas con descuento</h3>
