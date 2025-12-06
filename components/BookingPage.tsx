@@ -191,23 +191,30 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
         </section>
 
         {/* Add-ons and Promo */}
-        <section className="bg-white p-4 mt-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
-            <label className="flex items-center justify-between cursor-pointer">
-                <div>
-                    <p className="font-medium text-slate-800">Seguro Adicional</p>
-                    <p className="text-sm text-slate-500">Cobertura extra para mayor tranquilidad.</p>
+        <section className="bg-white p-4 mt-6 rounded-xl border border-slate-200 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Seguro Adicional */}
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <label className="flex flex-col cursor-pointer h-full">
+                        <div className="flex-grow">
+                            <p className="font-medium text-slate-800">Seguro Adicional</p>
+                            <p className="text-sm text-slate-500 mt-1">Cobertura extra para mayor tranquilidad.</p>
+                        </div>
+                        <div className="flex items-center justify-between mt-3">
+                            <span className="font-semibold text-teal-600">+{INSURANCE_COST.toFixed(2)}€</span>
+                            <input type="checkbox" checked={addInsurance} onChange={e => setAddInsurance(e.target.checked)} className="h-5 w-5 rounded border-slate-300 text-teal-500 focus:ring-teal-500"/>
+                        </div>
+                    </label>
                 </div>
-                <div className="flex items-center">
-                    <span className="font-semibold text-teal-600 mr-4">+{INSURANCE_COST.toFixed(2)}€</span>
-                    <input type="checkbox" checked={addInsurance} onChange={e => setAddInsurance(e.target.checked)} className="h-5 w-5 rounded border-slate-300 text-teal-500 focus:ring-teal-500"/>
+
+                {/* Código de promoción */}
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <label htmlFor="promo" className="block text-sm font-medium text-slate-700 mb-2">Código de promoción</label>
+                    <div className="relative">
+                        <input id="promo" type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Ej: BIENVENIDO10" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 uppercase placeholder:normal-case"/>
+                        <TicketIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
                 </div>
-            </label>
-            <div className="border-t border-slate-200 pt-4">
-                 <label htmlFor="promo" className="block text-sm font-medium text-slate-700 mb-1">Código de promoción</label>
-                 <div className="relative">
-                    <input id="promo" type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Ej: BIENVENIDO10" className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 uppercase placeholder:normal-case"/>
-                    <TicketIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
-                 </div>
             </div>
         </section>
 
