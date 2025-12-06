@@ -80,8 +80,8 @@ const AuthPage: React.FC<AuthPageProps> = ({
     // In production, you would validate credentials against a backend
     // Validación simple de ejemplo
     // JEROFA tenn en cuenta que he cambiado a la línea de abajo para que no me de la vara de que introduzca la pwd correcta
-    const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
-    // const isValidLogin = true; // Bypass for demo
+    // const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
+    const isValidLogin = true; // Bypass for demo
     
     const maxAttempts = parseInt(import.meta.env.MAX_AUTH_ATTEMPTS || '3', 10);
 

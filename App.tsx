@@ -14,6 +14,8 @@ import CookieConsent from "./components/CookieConsent";
 import ProvidersList from "./components/ProvidersList";
 import AuthPage from "./components/AuthPage";
 import BookingPage from "./components/BookingPage";
+import BookingsList from "./components/BookingsList";
+import { bookingService } from "./services/bookingService";
 
 const getDistanceInKm = (
   lat1: number,
@@ -48,6 +50,7 @@ const App: React.FC = () => {
     | "map"
     | "auth"
     | "booking"
+    | "bookings"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "favorites" | "map"
@@ -77,7 +80,7 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [previousViewBeforeAuth, setPreviousViewBeforeAuth] = useState<typeof view>("landing");
   const [authAttempts, setAuthAttempts] = useState<number>(0);
-  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | null>(null);
+  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | null>(null);
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -157,6 +160,19 @@ const App: React.FC = () => {
 
   const handleNavigateFavorites = () => {
     setView("favorites");
+    setSelectedProviderId(null);
+    setCurrentChatId(null);
+  };
+
+  const handleNavigateBookings = () => {
+    if (!isAuthenticated) {
+      setPreviousViewBeforeAuth(view);
+      setPendingAction('bookings');
+      setAuthAttempts(0);
+      setView("auth");
+      return;
+    }
+    setView("bookings");
     setSelectedProviderId(null);
     setCurrentChatId(null);
   };
@@ -270,6 +286,8 @@ const App: React.FC = () => {
     // Execute pending action
     if (pendingAction === 'booking' && bookingProviderId) {
       setView('booking');
+    } else if (pendingAction === 'bookings') {
+      setView('bookings');
     } else {
       setView(previousViewBeforeAuth);
     }
@@ -283,6 +301,8 @@ const App: React.FC = () => {
     // Execute pending action
     if (pendingAction === 'booking' && bookingProviderId) {
       setView('booking');
+    } else if (pendingAction === 'bookings') {
+      setView('bookings');
     } else {
       setView(previousViewBeforeAuth);
     }
@@ -325,8 +345,15 @@ const App: React.FC = () => {
   const handleBookingProceed = (details: BookingDetails) => {
     // Here you would normally process the payment
     console.log('Booking details:', details);
+    
+    // Save booking using the service
+    const provider = providers.find(p => p.id === details.providerId);
+    if (provider) {
+      bookingService.addBooking(details, provider.name, provider.photoUrl);
+    }
+    
     alert(`Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`);
-    setView('landing');
+    setView('bookings'); // Navigate to bookings list instead of landing
     setBookingProviderId(null);
   };
 
@@ -414,6 +441,8 @@ const App: React.FC = () => {
       );
     } else if (currentView === "myProfile") {
       mainContent = <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
+    } else if (currentView === "bookings") {
+      mainContent = <BookingsList onBack={handleNavigateHome} />;
     } else {
       // Providers or Favorites view
       mainContent = (
@@ -451,7 +480,9 @@ const App: React.FC = () => {
             pendingActionMessage={
               pendingAction === 'booking' 
                 ? "Inicia sesión para realizar la reserva" 
-                : "Inicia sesión para guardar favoritos"
+                : pendingAction === 'bookings'
+                  ? "Inicia sesión para ver tus reservas"
+                  : "Inicia sesión para guardar favoritos"
             }
           />
         )}
@@ -476,6 +507,7 @@ const App: React.FC = () => {
           onNavigateOffer={handleNavigateOffer}
           onNavigateInbox={handleNavigateInbox}
           onNavigateProfile={handleNavigateMyProfile}
+          onNavigateBookings={handleNavigateBookings}
           unreadCount={unreadCount}
         />
       )}

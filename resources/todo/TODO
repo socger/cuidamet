@@ -1,8 +1,16 @@
-* Debemos de implementar, en el backend, La autenticación del usuario (un endpoint que devolviera si lo hizo bien o no el usuario al autenticarse)
+* La botonera ahora tiene el botón de reservas con un color diferente al de los otros iconos (incluso sus letras) ... corregirlo
+
+* En el listado de reservas, tiene un resumen de las reservas realizadas pero no aparece la fecha/hora de fin del servicio. Tampoco hemos comprobado si guarda las últimas reservas realizadas antes de que la app deje de funcionar. También debo de ir viendo como se ve esta vista en pantallas pequeñas.
+
+
+
+
+
+* Los alert de la app convertirlos en un popup.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
-* No he visto ninguna opción en la App donde aparecieran las reservas realizadas de cuidadores. Esto sería un listado donde aparecieran las diferentes contrataciones que hubieras hecho y donde votarías por los servicios prestados.
+
 
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
@@ -41,12 +49,18 @@
 * Las cookies de privacidad duran mucho. Habría que hacer que fueran perecederas xxxx tiempo. Así podría volver a aparecer la pantalla de aceptar las cookies de vez en cuando.
 * Hay que crear la vista para "Política de Privacidad" de las Cookies (lo que nadie lee). Y hay que crear la vista de "configuración de las cookies"
 
+
 * De la botonera de abajo, no he visto nada de OFRECER, buzon y TU
+
+
+
+
+* HAY varios JEROFA en el código para tener en cuenta antes de entrar en producción o con la parte backend
+
+* Debemos de implementar, en el backend, La autenticación del usuario (un endpoint que devolviera si lo hizo bien o no el usuario al autenticarse)
 
 * Daniel me comenta que la vista de chat no tiene ningún control ético de lo que se escribe.
   Hay que crear, con intenligencia artificial, algún control que decida si cierto comentario se publica o no por su contenido. 
   No debemos de permitir que un comentario hecho por alguien, subidito de tono, se vea cuando otro usuario decida visitar ese chat.
   El usuario que lo escribió verá que lo ha publicado, pero que tiene que pasar un control de contenido antes de que el otro usuario del chat pueda ver ese mensaje.
-
-* HAY varios JEROFA en el código para tener en cuenta antes de entrar en producción o con la parte backend
 

@@ -4,22 +4,25 @@ import HeartIcon from './icons/HeartIcon';
 import PlusCircleIcon from './icons/PlusCircleIcon';
 import InboxIcon from './icons/InboxIcon';
 import UserIcon from './icons/UserIcon';
+import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
 
 interface BottomNavProps {
-    currentView: 'landing' | 'providers' | 'favorites' | 'offer' | 'inbox' | 'chat' | 'myProfile' | 'map';
+    currentView: 'landing' | 'providers' | 'favorites' | 'offer' | 'inbox' | 'chat' | 'myProfile' | 'map' | 'bookings';
     onNavigateHome: () => void;
     onNavigateFavorites: () => void;
     onNavigateOffer: () => void;
     onNavigateInbox: () => void;
     onNavigateProfile: () => void;
+    onNavigateBookings: () => void;
     unreadCount: number;
 }
 
-const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateFavorites, onNavigateOffer, onNavigateInbox, onNavigateProfile, unreadCount }) => {
+const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateFavorites, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount }) => {
     const navItems = [
         { key: 'home', icon: HomeIcon, label: 'Inicio', active: currentView === 'landing' || currentView === 'providers' || currentView === 'map', action: onNavigateHome },
         { key: 'favorites', icon: HeartIcon, label: 'Favoritos', active: currentView === 'favorites', action: onNavigateFavorites },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
+        { key: 'bookings', icon: ClipboardDocumentListIcon, label: 'Reservas', active: currentView === 'bookings', action: onNavigateBookings },
         { key: 'inbox', icon: InboxIcon, label: 'Buzón', active: currentView === 'inbox', action: onNavigateInbox },
         { key: 'profile', icon: UserIcon, label: 'Tú', active: currentView === 'myProfile', action: onNavigateProfile },
     ];
@@ -64,7 +67,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                         </div>
                     )}
                     
-                    {/* Last two items */}
+                    {/* Last items (now 3 items: bookings, inbox, profile) */}
                     {regularItems.slice(2).map((item) => (
                         <button
                             key={item.key}

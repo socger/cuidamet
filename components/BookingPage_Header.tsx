@@ -1,13 +1,13 @@
 import React from "react";
 import ChevronLeftIcon from "./icons/ChevronLeftIcon";
 
-interface PageHeaderProps {
+interface BookingPage_HeaderProps {
   title: string;
   onBack: () => void;
   rightAction?: React.ReactNode;
 }
 
-const BookingPage_Header: React.FC<PageHeaderProps> = ({
+const BookingPage_Header: React.FC<BookingPage_HeaderProps> = ({
   provider,
   title,
   onBack,

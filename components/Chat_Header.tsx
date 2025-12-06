@@ -1,13 +1,13 @@
 import React from "react";
 import ChevronLeftIcon from "./icons/ChevronLeftIcon";
 
-interface ChatHeaderProps {
+interface Chat_HeaderProps {
   providerName: string;
   providerPhotoUrl: string;
   onBack: () => void;
 }
 
-const Chat_Header: React.FC<ChatHeaderProps> = ({ providerName, providerPhotoUrl, onBack }) => {
+const Chat_Header: React.FC<Chat_HeaderProps> = ({ providerName, providerPhotoUrl, onBack }) => {
   return (
     <header className="flex-shrink-0 bg-white/80 backdrop-blur-lg border-b border-slate-200 sticky top-0 z-40">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
