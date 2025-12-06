@@ -73,12 +73,12 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
                     {/* Bloque de Inicio */}
                     <div className="bg-white p-3 rounded-lg border border-slate-200">
                       <p className="font-medium text-slate-700 mb-2">Inicio del servicio</p>
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2 text-slate-600">
+                      <div className="flex items-center justify-between text-slate-600">
+                        <div className="flex items-center gap-2">
                           <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
                           <span>{new Date(booking.startDate).toLocaleDateString()}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className="flex items-center gap-2">
                           <ClockIcon className="w-4 h-4 text-slate-400" />
                           <span>{booking.startTime}</span>
                         </div>
@@ -88,12 +88,12 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
                     {/* Bloque de Fin */}
                     <div className="bg-white p-3 rounded-lg border border-slate-200">
                       <p className="font-medium text-slate-700 mb-2">Fin del servicio</p>
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2 text-slate-600">
+                      <div className="flex items-center justify-between text-slate-600">
+                        <div className="flex items-center gap-2">
                           <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
                           <span>{new Date(booking.endDate).toLocaleDateString()}</span>
                         </div>
-                        <div className="flex items-center gap-2 text-slate-600">
+                        <div className="flex items-center gap-2">
                           <ClockIcon className="w-4 h-4 text-slate-400" />
                           <span>{booking.endTime}</span>
                         </div>
