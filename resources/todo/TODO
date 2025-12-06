@@ -1,23 +1,4 @@
-
-* En la vista reservar todavía no he conseguido enterarme de como hace el cálculo de horas cuando hay minutos por medio. Porque hace cálculos raros como 4.33h cuando la hora de incio sus minutos no son cero o los de la hora de fin tienen hora + minutos.
-
-- Ejemplo 1º
-  Fecha de inicio: 05/12/2025
-  Hora de inicio: 19:01
-
-  Fecha de fin: 05/12/2025
-  Hora de fin: 23:10
-
-  Total horas: 4.15 horas.
-
-- Ejemplo 2º
-  Fecha de inicio 05/12/2025
-  Hora de inicio: 19:01
-
-  Fecha de fin: 05/12/2025
-  Hora de fin: 23:21
-
-  Total horas: 4.33 horas.
+* Debemos de implementar, en el backend, La autenticación del usuario (un endpoint que devolviera si lo hizo bien o no el usuario al autenticarse)
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
@@ -27,7 +8,7 @@
 
 * Cuando estoy viendo el perfil del cuidador Carlos Rodriguez y pulso el botón de chat, en la consola del navegador de internet se produce un error. Y no podemos chatear con este cuidador.
 
-* La autenticación del usuario tiene tres intentos sólo. Si no se autentica bien, se vuelve a la pantalla desde donde había sido llamada la autenticación. Habría que parametrizar esta cantidad de intentos (.env) y implementar el control de la autenticación desde el backend (un endpoint que devolviera si lo hizo bien o no el usuario)
+
 
 * En la botonera de la app (la de abajo), me gustaría poner en una esquina el icono de cuidamet pero en chiquitito. El motivo es porque hay vistas en las que no aparece el logotipo de cuidamet (como en peril, chat, mapa, etc)
 
