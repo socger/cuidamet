@@ -442,7 +442,7 @@ const App: React.FC = () => {
     } else if (currentView === "myProfile") {
       mainContent = <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
     } else if (currentView === "bookings") {
-      mainContent = <BookingsList onBack={handleNavigateHome} />;
+      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
     } else {
       // Providers or Favorites view
       mainContent = (

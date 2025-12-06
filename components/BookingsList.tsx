@@ -4,12 +4,14 @@ import CalendarDaysIcon from './icons/CalendarDaysIcon';
 import ClockIcon from './icons/ClockIcon';
 import CurrencyEuroIcon from './icons/CurrencyEuroIcon';
 import PageHeader from './BookingList_Header';
+import PlusCircleIcon from './icons/PlusCircleIcon';
 
 interface BookingsListProps {
   onBack: () => void;
+  onNewBooking: () => void;
 }
 
-const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
+const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
@@ -36,7 +38,19 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col animate-fade-in pb-24">
-      <PageHeader title="Mis Reservas" onBack={onBack} />
+      <PageHeader 
+        title="Mis Reservas" 
+        onBack={onBack}
+        rightAction={
+          <button
+            onClick={onNewBooking}
+            className="bg-teal-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors text-sm flex items-center gap-2"
+          >
+            <PlusCircleIcon className="w-4 h-4" />
+            <span>Reservar</span>
+          </button>
+        }
+      />
       
       <main className="flex-grow p-4 space-y-4">
         {bookings.length === 0 ? (
@@ -67,7 +81,7 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack }) => {
                   </div>
                 </div>
                 
-                <div className="bg-slate-50 p-3 rounded-lg">
+                <div className="bg-teal-50/100 p-3 rounded-lg">
                   <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Datos del servicio</h4>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                     {/* Bloque de Inicio */}
