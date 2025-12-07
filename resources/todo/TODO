@@ -11,6 +11,7 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
 
 * Cuando estoy viendo el perfil del cuidador Carlos Rodriguez y pulso el botón de chat, en la consola del navegador de internet se produce un error. Y no podemos chatear con este cuidador.
 
+* Cuando una reserva se ha realizado, es decir el servicio se ha cumplido, viene el pago si lo hace desde la aplicación. Pero también viene el momento de calificar el servicio. Creo que no hay ninguna vista para realizar esta acción. Pero podríamos usar la vista que presenta "Mis Reservas" y allí que el usuario que contrató lo haga.
 
 
 * En la botonera de la app (la de abajo), me gustaría poner en una esquina el icono de cuidamet pero en chiquitito. El motivo es porque hay vistas en las que no aparece el logotipo de cuidamet (como en peril, chat, mapa, etc)
