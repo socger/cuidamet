@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import HeartIcon from './icons/HeartIcon';
 import UserCircleIcon from './icons/UserCircleIcon';
 import Cog6ToothIcon from './icons/Cog6ToothIcon';
 import QuestionMarkCircleIcon from './icons/QuestionMarkCircleIcon';
 import ArrowRightOnRectangleIcon from './icons/ArrowRightOnRectangleIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
+import AlertModal from './AlertModal';
 
 interface ProfilePageProps {
   onNavigateFavorites: () => void;
@@ -30,6 +31,8 @@ const ListItem: React.FC<ListItemProps> = ({ icon, label, onClick }) => (
 );
 
 const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigateFavorites }) => {
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
+  
   return (
     <div className="bg-slate-50 min-h-screen">
         <main className="container mx-auto px-4 py-6 pb-28">
@@ -60,12 +63,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigateFavorites }) => {
                     <ListItem
                         icon={<UserCircleIcon className="w-6 h-6" />}
                         label="Mi Perfil de Cuidador"
-                        onClick={() => alert('Navegando a tu perfil de cuidador...')}
+                        onClick={() => setAlertModal({ isOpen: true, message: 'Navegando a tu perfil de cuidador...' })}
                     />
                      <ListItem
                         icon={<Cog6ToothIcon className="w-6 h-6" />}
                         label="Configuración"
-                        onClick={() => alert('Navegando a configuración...')}
+                        onClick={() => setAlertModal({ isOpen: true, message: 'Navegando a configuración...' })}
                     />
                 </ul>
             </div>
@@ -79,7 +82,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigateFavorites }) => {
                     <ListItem
                         icon={<QuestionMarkCircleIcon className="w-6 h-6" />}
                         label="Centro de Ayuda"
-                        onClick={() => alert('Navegando al centro de ayuda...')}
+                        onClick={() => setAlertModal({ isOpen: true, message: 'Navegando al centro de ayuda...' })}
                     />
                 </ul>
             </div>
@@ -87,7 +90,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigateFavorites }) => {
              {/* Logout Button */}
             <div className="mt-10">
                 <button
-                onClick={() => alert('Cerrando sesión...')}
+                onClick={() => setAlertModal({ isOpen: true, message: 'Cerrando sesión...', title: 'Cerrar Sesión' })}
                 className="w-full flex items-center justify-center py-3 text-center text-red-500 font-medium hover:bg-red-50 rounded-lg transition-colors"
                 >
                 <ArrowRightOnRectangleIcon className="w-6 h-6 mr-2" />
@@ -96,6 +99,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ onNavigateFavorites }) => {
             </div>
 
         </main>
+        <AlertModal 
+          isOpen={alertModal.isOpen}
+          onClose={() => setAlertModal({ isOpen: false, message: '' })}
+          message={alertModal.message}
+          title={alertModal.title}
+        />
     </div>
   );
 };

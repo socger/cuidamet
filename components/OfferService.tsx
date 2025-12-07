@@ -12,6 +12,7 @@ import PhoneIcon from './icons/PhoneIcon';
 import IdentificationIcon from './icons/IdentificationIcon';
 import MailIcon from './icons/MailIcon';
 import MapPinIcon from './icons/MapPinIcon';
+import AlertModal from './AlertModal';
 
 
 interface OfferServiceProps {
@@ -44,6 +45,7 @@ const OfferService: React.FC<OfferServiceProps> = ({ onClose }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
   
   // Step 3 State
   const [fullName, setFullName] = useState('');
@@ -114,7 +116,7 @@ const OfferService: React.FC<OfferServiceProps> = ({ onClose }) => {
       }
     } catch (err) {
       console.error("Error accessing camera: ", err);
-      alert("No se pudo acceder a la cámara. Por favor, comprueba los permisos en tu navegador.");
+      setAlertModal({ isOpen: true, message: "No se pudo acceder a la cámara. Por favor, comprueba los permisos en tu navegador.", title: 'Error de cámara' });
     }
   };
 
@@ -163,7 +165,7 @@ const OfferService: React.FC<OfferServiceProps> = ({ onClose }) => {
       (error) => {
         console.error("Error getting location:", error);
         setLocationStatus('error');
-        alert('No se pudo obtener la ubicación. Por favor, habilita los permisos o introduce la dirección manualmente.');
+        setAlertModal({ isOpen: true, message: 'No se pudo obtener la ubicación. Por favor, habilita los permisos o introduce la dirección manualmente.', title: 'Error de ubicación' });
       }
     );
   };
@@ -445,6 +447,12 @@ const OfferService: React.FC<OfferServiceProps> = ({ onClose }) => {
       <main className="container mx-auto px-4 py-6 pb-28">
         {renderStepContent()}
       </main>
+      <AlertModal 
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: '' })}
+        message={alertModal.message}
+        title={alertModal.title}
+      />
     </div>
   );
 };

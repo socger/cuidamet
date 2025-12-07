@@ -16,6 +16,7 @@ import AuthPage from "./components/AuthPage";
 import BookingPage from "./components/BookingPage";
 import BookingsList from "./components/BookingsList";
 import { bookingService } from "./services/bookingService";
+import AlertModal from "./components/AlertModal";
 
 const getDistanceInKm = (
   lat1: number,
@@ -84,6 +85,9 @@ const App: React.FC = () => {
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
+  
+  // Alert Modal state
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
 
   useEffect(() => {
     // Simulate fetching data
@@ -352,7 +356,7 @@ const App: React.FC = () => {
       bookingService.addBooking(details, provider.name, provider.photoUrl);
     }
     
-    alert(`Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`);
+    setAlertModal({ isOpen: true, message: `Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`, title: 'Reserva Confirmada' });
     setView('bookings'); // Navigate to bookings list instead of landing
     setBookingProviderId(null);
   };
@@ -512,6 +516,12 @@ const App: React.FC = () => {
         />
       )}
       <CookieConsent />
+      <AlertModal 
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: '' })}
+        message={alertModal.message}
+        title={alertModal.title}
+      />
     </div>
   );
 };

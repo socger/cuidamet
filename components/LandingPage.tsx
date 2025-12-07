@@ -18,6 +18,7 @@ import PetsIcon from "./icons/PetsIcon";
 import BroomIcon from "./icons/BroomIcon";
 import CategoryIcon from "./icons/CategoryIcon";
 import HeroSearch from "./HeroSearch";
+import AlertModal from "./AlertModal";
 
 // START - NEW in cuidamet_5
   const CategoryCard: React.FC<{
@@ -60,6 +61,8 @@ const LandingPage: React.FC<LandingPageProps> = ({
   onSearch,
   onNavigateHome,
 }) => {
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
+
   const categories = [
     {
       id: CareCategory.ELDERLY,
@@ -152,14 +155,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
       } else {
         // Fallback for desktop or unsupported browsers
         await navigator.clipboard.writeText(shareData.url);
-        alert(
-          "¡Enlace de la app copiado al portapapeles! Compártelo con quien quieras."
-        );
+        setAlertModal({ isOpen: true, message: "¡Enlace de la app copiado al portapapeles! Compártelo con quien quieras.", title: '¡Copiado!' });
       }
     } catch (err: any) {
       if (err.name !== "AbortError") {
         console.error("Error al compartir:", err);
-        alert("No se pudo compartir la aplicación.");
+        setAlertModal({ isOpen: true, message: "No se pudo compartir la aplicación.", title: 'Error' });
       }
     }
   };
@@ -383,6 +384,12 @@ const LandingPage: React.FC<LandingPageProps> = ({
 
         </div>
       </main>
+      <AlertModal 
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: '' })}
+        message={alertModal.message}
+        title={alertModal.title}
+      />
     </div>
   );
 };

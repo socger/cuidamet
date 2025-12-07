@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import XMarkIcon from './icons/XMarkIcon';
 import StarIcon from './icons/StarIcon';
 import LocationPinIcon from './icons/LocationPinIcon';
 import { Provider } from '../types';
+import AlertModal from './AlertModal';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -11,6 +12,8 @@ interface ShareModalProps {
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, provider }) => {
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
+  
   if (!isOpen) return null;
 
   const profileUrl = `${window.location.origin}?provider=${provider.id}`;
@@ -32,11 +35,11 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, provider }) =>
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(profileUrl);
-      alert(`¡Enlace de ${provider.name} copiado al portapapeles!`);
+      setAlertModal({ isOpen: true, message: `¡Enlace de ${provider.name} copiado al portapapeles!`, title: '¡Copiado!' });
       onClose();
     } catch (err) {
       console.error('Error al copiar:', err);
-      alert('No se pudo copiar el enlace');
+      setAlertModal({ isOpen: true, message: 'No se pudo copiar el enlace', title: 'Error' });
     }
   };
 
@@ -54,13 +57,13 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, provider }) =>
       } else {
         // Fallback for desktop or unsupported browsers
         await navigator.clipboard.writeText(profileUrl);
-        alert(`¡Enlace del perfil de ${provider.name} copiado al portapapeles! Compártelo donde quieras.`);
+        setAlertModal({ isOpen: true, message: `¡Enlace del perfil de ${provider.name} copiado al portapapeles! Compártelo donde quieras.`, title: '¡Copiado!' });
         onClose();
       }
     } catch (err: any) {
       if (err.name !== 'AbortError') {
         console.error('Error al compartir:', err);
-        alert('No se pudo compartir el perfil.');
+        setAlertModal({ isOpen: true, message: 'No se pudo compartir el perfil.', title: 'Error' });
       }
     }
   };
@@ -156,6 +159,12 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, provider }) =>
           Más opciones...
         </button>
       </div>
+      <AlertModal 
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: '' })}
+        message={alertModal.message}
+        title={alertModal.title}
+      />
     </div>
   );
 };

@@ -8,6 +8,7 @@ import UserIcon from "./icons/UserIcon";
 import HandRaisedIcon from "./icons/HandRaisedIcon";
 import { UserRole, AuthMode } from "../types";
 import XMarkIcon from "./icons/XMarkIcon";
+import AlertModal from "./AlertModal";
 
 interface AuthPageProps {
   initialMode?: AuthMode;
@@ -40,6 +41,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
 
   useEffect(() => {
     if (preselectedRole) {
@@ -99,7 +101,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
         return;
       }
       
-      alert(`Credenciales inválidas. Intento ${authAttempts + 1} de ${maxAttempts}.`);
+      setAlertModal({ isOpen: true, message: `Credenciales inválidas. Intento ${authAttempts + 1} de ${maxAttempts}.`, title: 'Error de autenticación' });
       return;
     }
     
@@ -114,9 +116,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const handleSignupStep1 = (e: React.FormEvent) => {
     e.preventDefault();
     if (!role) {
-      alert(
-        "Por favor, selecciona si eres Familiar o Cuidador (necesario para la demo)."
-      );
+      setAlertModal({ isOpen: true, message: "Por favor, selecciona si eres Familiar o Cuidador (necesario para la demo)." });
       return;
     }
     setIsLoading(true);
@@ -142,7 +142,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
-      alert(`Hemos enviado un enlace de recuperación a ${email}`);
+      setAlertModal({ isOpen: true, message: `Hemos enviado un enlace de recuperación a ${email}`, title: 'Email enviado' });
       setMode("login");
     }, 1000);
   };
@@ -333,7 +333,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => alert("Código reenviado")}
+                  onClick={() => setAlertModal({ isOpen: true, message: "Código reenviado", title: 'Código enviado' })}
                   className="w-full text-teal-600 font-medium text-sm hover:text-teal-800"
                 >
                   ¿No recibiste el código? Reenviar
@@ -499,6 +499,12 @@ const AuthPage: React.FC<AuthPageProps> = ({
           </div>
         </main>
       </div>
+      <AlertModal 
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: '' })}
+        message={alertModal.message}
+        title={alertModal.title}
+      />
     </div>
   );
 };
