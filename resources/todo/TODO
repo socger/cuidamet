@@ -1,5 +1,21 @@
-* Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
+* Vista mapa:
+Cuando pulsas en uno de los cuidadores, abajo nos aparecen los datos del cuidador más importantes.
+También tenemos dos botones "Ver ruta" y "Ver Perfil". El de "Ver ruta" creo que podemos prescindir de él, porque no es práctico.
+También nos aparece a la derecha del cuidaro, al fondo a la derecha en la parte de arriba, la valoración del cuidador y una x para cerrar la ventana del cuidador.
+Todo esto se puede mejorar, pero primero ver como quedaría todo en un teléfono (pantallas pequeñas)
 
+Los iconos de la derecha, para los filtros, deberían de ser los que tenemos en la vista que presenta a todos los cuidadores.
+Y no se nos ve la botonera de la app sobre el mapa
+Igual la tapa el panel de abajo, en donde se nos presentan datos del cuidador y otras informaciones.
+Creo que es un panel de abajo demasiado grande.
+
+Además de vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
+Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
+
+Los iconos deberían de tener un mensajito diciendo lo que son o lo que hacen cuando ponemos el cursor sobre ellos.
+
+
+* Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 * El botón Ofrecer está ahora desplazado por no estar en el medio (se han creado nuevas opciones). Daniel comenta lo siguiente:
 Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco descompensado al estar desplazado
@@ -8,16 +24,13 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
 
 * Cuando una reserva se ha realizado, es decir el servicio se ha cumplido, viene el pago si lo hace desde la aplicación. Pero también viene el momento de calificar el servicio. Creo que no hay ninguna vista para realizar esta acción. Pero podríamos usar la vista que presenta "Mis Reservas" y allí que el usuario que contrató lo haga.
 
+* Comprobar que las reservas nuevas, las que creamos en la vista "Reservar", también aparecen también en la vista "Mis reservas"
 
 
 
 
 
 
-
-
-
-* El mapa hay que intentar conseguir el que ha creado Daniel en la última versión.
 
 * YA ESTA HECHO ... La vista de chat, cuando es llamada desde el perfil de un cuidador, tiene arriba una barra con una flecha hacia la izquierda que debería de volver a la vista de perfil. Pero no lo hace. En la versión de Daniel, cuando pulsas ese icono flecha (hacia la izquierda) se va a la vista buzón.
 
