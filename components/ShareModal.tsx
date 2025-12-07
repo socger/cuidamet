@@ -75,7 +75,7 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, provider }) =>
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-6">
-          <h3 className="text-xl font-bold text-slate-800">Compartir Perfil</h3>
+          <h3 className="text-xl font-bold text-slate-800">Compartir perfil</h3>
           <button
             onClick={onClose}
             className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
