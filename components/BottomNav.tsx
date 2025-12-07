@@ -1,5 +1,5 @@
 import React from 'react';
-import HomeIcon from './icons/HomeIcon';
+import CuidametLogoIconSvg from '../resources/logos/Logo CuidaMet_Icono.svg';
 import HeartIcon from './icons/HeartIcon';
 import PlusCircleIcon from './icons/PlusCircleIcon';
 import InboxIcon from './icons/InboxIcon';
@@ -19,7 +19,7 @@ interface BottomNavProps {
 
 const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateFavorites, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount }) => {
     const navItems = [
-        { key: 'home', icon: HomeIcon, label: 'Inicio', active: currentView === 'landing' || currentView === 'providers' || currentView === 'map', action: onNavigateHome },
+        { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing' || currentView === 'providers' || currentView === 'map', action: onNavigateHome },
         { key: 'favorites', icon: HeartIcon, label: 'Favoritos', active: currentView === 'favorites', action: onNavigateFavorites },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
         { key: 'bookings', icon: ClipboardDocumentListIcon, label: 'Reservas', active: currentView === 'bookings', action: onNavigateBookings },
@@ -42,7 +42,19 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                             className="flex flex-col items-center justify-center text-center py-2 w-1/5 group hover:bg-slate-50 transition-colors focus:outline-none"
                             aria-label={item.label}
                         >
-                            <item.icon className={`h-6 w-6 mb-1 transition-colors ${item.active ? 'text-teal-500' : 'text-slate-500 group-hover:text-teal-500'}`} />
+                            {item.key === 'home' ? (
+                                <img 
+                                    src={CuidametLogoIconSvg} 
+                                    alt="Inicio" 
+                                    className={`h-6 w-6 mb-1 transition-all ${
+                                        item.active 
+                                            ? '' 
+                                            : '[filter:grayscale(100%)_brightness(0.4)] group-hover:[filter:none]'
+                                    }`}
+                                />
+                            ) : (
+                                item.icon && <item.icon className={`h-6 w-6 mb-1 transition-colors ${item.active ? 'text-teal-500' : 'text-slate-500 group-hover:text-teal-500'}`} />
+                            )}
                             <span className={`text-xs font-medium transition-colors ${item.active ? 'text-teal-500' : 'text-slate-600 group-hover:text-teal-500'}`}>
                                 {item.label}
                             </span>

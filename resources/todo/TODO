@@ -1,5 +1,3 @@
-* En la botonera de la app (la de abajo), me gustaría poner en una esquina el icono de cuidamet pero en chiquitito. El motivo es porque hay vistas en las que no aparece el logotipo de cuidamet (como en peril, chat, mapa, etc)
-
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 
