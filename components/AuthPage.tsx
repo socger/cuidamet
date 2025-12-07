@@ -278,7 +278,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
             <div className="text-center mb-8">
               <div className="inline-block p-4 bg-white rounded-2xl shadow-md mb-4 border border-slate-100">
                 <img
-                  src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
+                  src="/resources/logos/Logo CuidaMet_Horizontal.svg"
                   alt="Cuidamet"
                   className="h-10 w-auto"
                 />

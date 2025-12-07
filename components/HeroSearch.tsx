@@ -30,7 +30,7 @@ const HeroSearch: React.FC<HeroSearchProps> = ({ onSearch, initialValue = "", on
           aria-label="Ir a inicio"
         >
           <img
-            src="/resources/docs/logos/Logo CuidaMet_Horizontal.svg"
+            src="/resources/logos/Logo CuidaMet_Horizontal.svg"
             alt="Cuidamet: Cuidamos de lo que te importa"
             className="h-10 w-auto flex-shrink-0 md:mt-2"
           />
