@@ -389,6 +389,7 @@ const App: React.FC = () => {
           onLocationUpdate={setUserLocation}
           onLocationLoading={setIsLocationLoading}
           onLocationError={setLocationError}
+          currentUserPhotoUrl={undefined}
         />
       );
     } else if (currentView === "offer") {
@@ -498,7 +499,24 @@ const App: React.FC = () => {
     view !== "offer" &&
     view !== "auth" &&
     view !== "myProfile" &&
+    view !== "map" &&
     !isLocationLoading;
+
+  // For map view, render without wrapper to allow full screen
+  if (view === "map") {
+    return (
+      <>
+        {renderContent()}
+        <CookieConsent />
+        <AlertModal 
+          isOpen={alertModal.isOpen}
+          onClose={() => setAlertModal({ isOpen: false, message: '' })}
+          message={alertModal.message}
+          title={alertModal.title}
+        />
+      </>
+    );
+  }
 
   return (
     <div className="bg-slate-50 text-slate-800 min-h-screen">
