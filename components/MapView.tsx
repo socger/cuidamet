@@ -554,7 +554,7 @@ const MapView: React.FC<MapViewProps> = ({
 
   {/* Mini Profile Sheet (Modal) - Replaces Bottom Sheet when provider selected */}
   const MiniProfileSheet = () => (
-    <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[2000] p-4 pb-8 animate-slide-up-fast pointer-events-auto">
+    <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[900] p-4 pb-8 animate-slide-up-fast pointer-events-auto">
       <div className="flex gap-4">
         <div className="relative">
           <img
@@ -588,35 +588,35 @@ const MapView: React.FC<MapViewProps> = ({
             </div>
           </div>
 
-          <p className="text-sm text-slate-500 truncate">
+          <p className="text-sm text-slate-500 break-words line-clamp-2">
             {selectedProvider.services.join(", ")}
           </p>
 
-          <div className="flex items-center mt-1">
-            <span className="font-bold text-teal-600 text-lg">
-              {selectedProvider.hourlyRate}€
-            </span>
-            <span className="text-xs text-slate-400 ml-1">/ hora</span>
+          <div className="flex items-center gap-3 mt-1">
+            <div className="flex items-center">
+              <span className="font-bold text-teal-600 text-lg">
+                {selectedProvider.hourlyRate}€
+              </span>
+              <span className="text-xs text-slate-400 ml-1">/ hora</span>
+            </div>
+
+            {/* <button
+              onClick={handleShowRoute}
+              className="flex items-center justify-center py-1.5 px-3 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors"
+            >
+              <DirectionsIcon className="w-4 h-4 mr-1.5" />
+              Ruta
+            </button> */}
+
+            <button
+              onClick={() => onViewProfile(selectedProvider.id)}
+              className="flex items-center justify-center py-1.5 ml-6 px-3 bg-teal-500 text-white rounded-lg text-sm font-semibold hover:bg-teal-600 transition-colors shadow-md shadow-teal-500/30"
+            >
+              Ver perfil
+            </button>
           </div>
 
         </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 mt-4">
-        <button
-          onClick={handleShowRoute}
-          className="flex items-center justify-center py-2.5 px-4 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-colors"
-        >
-          <DirectionsIcon className="w-5 h-5 mr-2" />
-          Ver Ruta
-        </button>
-
-        <button
-          onClick={() => onViewProfile(selectedProvider.id)}
-          className="py-2.5 px-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30"
-        >
-          Ver Perfil
-        </button>
       </div>
 
       <button
