@@ -1,12 +1,9 @@
 * Vista mapa:
 Cuando pulsas en uno de los cuidadores, abajo nos aparecen los datos del cuidador más importantes.
-
 También tenemos dos botones "Ver ruta" y "Ver Perfil". El de "Ver ruta" creo que podemos prescindir de él, porque no es práctico.
 
 También nos aparece a la derecha del cuidaro, al fondo a la derecha en la parte de arriba, la valoración del cuidador y una x para cerrar la ventana del cuidador.
 Todo esto se puede mejorar, pero primero ver como quedaría todo en un teléfono (pantallas pequeñas)
-
-Creo que es un panel de abajo demasiado grande.
 
 Además de vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
