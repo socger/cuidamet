@@ -608,12 +608,20 @@ const MapView: React.FC<MapViewProps> = ({
               className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
                 isActive
                   ? `${btn.bgActive} text-white ring-2 scale-110`
-                  : `bg-white ${btn.colorClass} hover:bg-slate-50`
+                  : `bg-slate-100 hover:bg-slate-200`
               }`}
               aria-label={btn.label}
               title={btn.label}
             >
-              <img src={btn.icon} alt={btn.label} className="w-5 h-5" />
+              <img 
+                src={btn.icon} 
+                alt={btn.label} 
+                className={`w-5 h-5 transition-all ${
+                  isActive 
+                    ? '[filter:brightness(0)_invert(1)]' 
+                    : '[filter:brightness(0)]'
+                }`}
+              />
             </button>
           );
         })}
