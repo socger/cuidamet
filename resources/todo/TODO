@@ -1,19 +1,8 @@
 * Vista mapa:
-Cuando pulsas en uno de los cuidadores, abajo nos aparecen los datos del cuidador más importantes.
-También tenemos dos botones "Ver ruta" y "Ver Perfil". El de "Ver ruta" creo que podemos prescindir de él, porque no es práctico.
-
-También nos aparece a la derecha del cuidaro, al fondo a la derecha en la parte de arriba, la valoración del cuidador y una x para cerrar la ventana del cuidador.
-Todo esto se puede mejorar, pero primero ver como quedaría todo en un teléfono (pantallas pequeñas)
-
-Además de vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
+De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
-* Vista mapa. En pantallas pequeñas, cuando pulsas sobre un cuidador y está activa la pantalla de ver la zona de anuncios (se activa con el icono Información de la izquierda arriba), entonces no se ve entero el círculo del botón Ofrecer de la botonera de la app. En pantallas grandes si que se ve.
 
-* Cuando entramos en mapas, en la botonera de abaojo sigue como activo el botón de Inico, cuando no debería de estar activo. Lo mismo ocurre cuando entramos en la zona de buscar cuidadores desde la pantalla de inicio.
-
-
-* Cuando pulsamos "Buscar en mapa" (página principal / inicio) entonces nos aparece el mapa. Pero en la botonera de abajo la opción Inicio sigue todavía como seleccionada (color verde). Queremos que no aparezca como seleccionada.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
