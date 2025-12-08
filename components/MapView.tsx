@@ -595,7 +595,7 @@ const MapView: React.FC<MapViewProps> = ({
       </div>
 
       {/* Right Side Floating Filters (4 Vertical Buttons) */}
-      <div className="absolute top-24 right-4 z-[1000] flex flex-col gap-3 pointer-events-auto">
+      <div className="absolute top-20 md:top-24 right-4 z-[1000] flex flex-col gap-2 md:gap-3 pointer-events-auto">
         {filterButtons.map((btn) => {
           const isActive = selectedCategory === btn.id;
           return (
