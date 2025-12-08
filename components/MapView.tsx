@@ -575,7 +575,7 @@ const MapView: React.FC<MapViewProps> = ({
         </div>
 
         <div className="flex-1">
-          <div className="flex justify-between items-start">
+          <div className="flex items-center gap-2 mb-1">
             <h3 className="font-bold text-lg text-slate-800">
               {selectedProvider.name}
             </h3>
