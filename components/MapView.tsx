@@ -514,7 +514,7 @@ const MapView: React.FC<MapViewProps> = ({
 
   // Header Content (Always Visible)
   const HeaderContent = () => (
-    <div className="w-full px-4 flex items-center justify-between mb-3 flex-shrink-0">
+    <div className="w-full px-4 flex items-center justify-between mb-1 flex-shrink-0">
       <span className="text-lg font-bold text-slate-800">
         Lo último en la zona
       </span>
@@ -538,13 +538,13 @@ const MapView: React.FC<MapViewProps> = ({
       }`}
     >
       {/* Handle Bar */}
-      <div className="w-12 h-1.5 bg-slate-300 rounded-full mb-3 mx-auto flex-shrink-0"></div>
+      {/* <div className="w-12 h-1.5 bg-slate-300 rounded-full mb-3 mx-auto flex-shrink-0"></div> */}
 
       {/* Header Content (Always Visible) */}
       <HeaderContent />
 
       {/* Scrollable Content Area */}
-      <div className="flex-1 overflow-y-auto px-4 pb-6 hide-scrollbar">
+      <div className="flex-1 overflow-y-auto px-4 pb-0 hide-scrollbar">
         <HorizontalPills />
         <BottomSheetExpandedContent />
       </div>
