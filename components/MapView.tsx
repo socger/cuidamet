@@ -141,6 +141,7 @@ const MapView: React.FC<MapViewProps> = ({
 
   // Bottom Sheet State
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(true);
 
   // Notifications
   const [notification, setNotification] = useState<{
@@ -518,14 +519,6 @@ const MapView: React.FC<MapViewProps> = ({
       <span className="text-lg font-bold text-slate-800">
         Lo último en la zona
       </span>
-      <div
-        className={`bg-slate-100 p-1 rounded-full transition-transform duration-300 ${
-          isSheetExpanded ? "rotate-180" : ""
-        }`}
-      >
-        {/* Simple visual indicator that toggles */}
-        <InformationCircleIcon className="w-5 h-5 text-slate-500" />
-      </div>
     </div>
   );
 
@@ -550,6 +543,14 @@ const MapView: React.FC<MapViewProps> = ({
       </div>
     </div>
   );
+
+  // Render Expandable Bottom Sheet or null
+  const renderBottomSheet = () => {
+    if (!selectedProvider && isBottomSheetVisible) {
+      return <ExpandableBottomSheetBar />;
+    }
+    return null;
+  };
 
   return (
     <div className="w-screen h-screen overflow-hidden relative bg-slate-200">
@@ -592,6 +593,22 @@ const MapView: React.FC<MapViewProps> = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Information Circle Icon - Floating Button */}
+      <div className="absolute top-20 md:top-24 left-4 z-[1000] pointer-events-auto">
+        <button
+          onClick={() => setIsBottomSheetVisible(!isBottomSheetVisible)}
+          className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
+            isBottomSheetVisible
+              ? "bg-teal-500 text-white ring-2 ring-teal-300 scale-110"
+              : "bg-white hover:bg-slate-50 text-slate-600"
+          }`}
+          aria-label="Mostrar/Ocultar novedades"
+          title="Mostrar/Ocultar novedades"
+        >
+          <InformationCircleIcon className="w-6 h-6" />
+        </button>
       </div>
 
       {/* Right Side Floating Filters (4 Vertical Buttons) */}
@@ -725,9 +742,7 @@ const MapView: React.FC<MapViewProps> = ({
       )}
 
       {/* Expandable Bottom "Sheet" Bar (Lo último en la zona) */}
-      {!selectedProvider && (
-        <ExpandableBottomSheetBar />
-      )}
+      {renderBottomSheet()}
 
       <style>{`
         @keyframes slideUpFast {
