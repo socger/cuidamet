@@ -19,7 +19,7 @@ interface BottomNavProps {
 
 const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateFavorites, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount }) => {
     const navItems = [
-        { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing' || currentView === 'providers' || currentView === 'map', action: onNavigateHome },
+        { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing' || currentView === 'providers', action: onNavigateHome },
         { key: 'favorites', icon: HeartIcon, label: 'Favoritos', active: currentView === 'favorites', action: onNavigateFavorites },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
         { key: 'bookings', icon: ClipboardDocumentListIcon, label: 'Reservas', active: currentView === 'bookings', action: onNavigateBookings },
