@@ -499,7 +499,6 @@ const App: React.FC = () => {
     view !== "offer" &&
     view !== "auth" &&
     view !== "myProfile" &&
-    view !== "map" &&
     !isLocationLoading;
 
   // For map view, render without wrapper to allow full screen
@@ -507,6 +506,16 @@ const App: React.FC = () => {
     return (
       <>
         {renderContent()}
+        <BottomNav
+          currentView={view}
+          onNavigateHome={handleNavigateHome}
+          onNavigateFavorites={handleNavigateFavorites}
+          onNavigateOffer={handleNavigateOffer}
+          onNavigateInbox={handleNavigateInbox}
+          onNavigateProfile={handleNavigateMyProfile}
+          onNavigateBookings={handleNavigateBookings}
+          unreadCount={unreadCount}
+        />
         <CookieConsent />
         <AlertModal 
           isOpen={alertModal.isOpen}

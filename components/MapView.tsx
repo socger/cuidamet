@@ -528,8 +528,8 @@ const MapView: React.FC<MapViewProps> = ({
   const ExpandableBottomSheetBar = () => (
     <div
       onClick={() => setIsSheetExpanded(!isSheetExpanded)}
-      className={`absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[900] transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col pointer-events-auto cursor-pointer ${
-        isSheetExpanded ? "h-[40vh] pt-3" : "h-auto pb-8 pt-3"
+      className={`absolute left-0 right-0 bg-white rounded-t-3xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[900] transition-all duration-500 cubic-bezier(0.32, 0.72, 0, 1) flex flex-col pointer-events-auto cursor-pointer ${
+        isSheetExpanded ? "bottom-16 h-[40vh] pt-3" : "bottom-16 h-auto pb-8 pt-3"
       }`}
     >
       {/* Handle Bar */}
@@ -625,7 +625,7 @@ const MapView: React.FC<MapViewProps> = ({
       {/* GPS Control (Anchored above bottom sheet) - Adjust position based on expansion */}
       <div
         className={`absolute right-4 z-[1000] pointer-events-auto transition-all duration-500 ease-out ${
-          isSheetExpanded ? "bottom-[42vh]" : "bottom-48"
+          isSheetExpanded ? "bottom-[42vh]" : "bottom-64"
         }`}
       >
         <button
@@ -639,7 +639,7 @@ const MapView: React.FC<MapViewProps> = ({
 
       {/* Mini Profile Sheet (Modal) - Replaces Bottom Sheet when provider selected */}
       {selectedProvider && (
-        <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[2000] p-4 pb-8 animate-slide-up-fast pointer-events-auto">
+        <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[2000] p-4 pb-8 animate-slide-up-fast pointer-events-auto">
           <div className="flex gap-4">
             <div className="relative">
               <img
