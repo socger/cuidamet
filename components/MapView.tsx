@@ -394,38 +394,43 @@ const MapView: React.FC<MapViewProps> = ({
   const filterButtons = [
     {
       id: CareCategory.ELDERLY,
-      icon: ElderlyIcon,
+      icon: '/resources/icons/elderly-female-icon.svg',
       label: "Mayores",
       colorClass: "text-green-500",
-      bgActive: "bg-green-500 ring-green-300",
+      // bgActive: "bg-green-500 ring-green-300",
+      bgActive: "bg-teal-500 ring-teal-300",
     },
     {
       id: CareCategory.CHILDREN,
-      icon: ChildIcon,
+      icon: '/resources/icons/baby-girl-icon.svg',
       label: "Niños",
       colorClass: "text-slate-500",
-      bgActive: "bg-slate-500 ring-slate-300",
+      // bgActive: "bg-slate-500 ring-slate-300",
+      bgActive: "bg-teal-500 ring-teal-300",
     },
     {
       id: CareCategory.PETS,
-      icon: PetIcon,
+      icon: '/resources/icons/dog-puppy-face-icon.svg',
       label: "Mascotas",
       colorClass: "text-orange-500",
-      bgActive: "bg-orange-500 ring-orange-300",
+      // bgActive: "bg-orange-500 ring-orange-300",
+      bgActive: "bg-teal-500 ring-teal-300",
     },
     {
       id: CareCategory.HOUSEKEEPING,
-      icon: CleaningIcon,
+      icon: '/resources/icons/housekeeping-icon.svg',
       label: "Limpieza",
       colorClass: "text-blue-500",
-      bgActive: "bg-blue-500 ring-blue-300",
+      // bgActive: "bg-blue-500 ring-blue-300",
+      bgActive: "bg-teal-500 ring-teal-300",
     },
     {
       id: "all",
-      icon: QueueListIcon,
+      icon: '/resources/icons/remove-filter-icon.svg',
       label: "Todos",
       colorClass: "text-slate-700",
-      bgActive: "bg-slate-800 ring-slate-300",
+      // bgActive: "bg-slate-800 ring-slate-300",
+      bgActive: "bg-teal-500 ring-teal-300",
     },
   ];
 
@@ -608,7 +613,7 @@ const MapView: React.FC<MapViewProps> = ({
               aria-label={btn.label}
               title={btn.label}
             >
-              <btn.icon className="w-5 h-5" />
+              <img src={btn.icon} alt={btn.label} className="w-5 h-5" />
             </button>
           );
         })}

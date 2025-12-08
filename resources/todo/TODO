@@ -1,19 +1,18 @@
 * Vista mapa:
 Cuando pulsas en uno de los cuidadores, abajo nos aparecen los datos del cuidador más importantes.
+
 También tenemos dos botones "Ver ruta" y "Ver Perfil". El de "Ver ruta" creo que podemos prescindir de él, porque no es práctico.
+
 También nos aparece a la derecha del cuidaro, al fondo a la derecha en la parte de arriba, la valoración del cuidador y una x para cerrar la ventana del cuidador.
 Todo esto se puede mejorar, pero primero ver como quedaría todo en un teléfono (pantallas pequeñas)
 
-Los iconos de la derecha, para los filtros, deberían de ser los que tenemos en la vista que presenta a todos los cuidadores.
-Y no se nos ve la botonera de la app sobre el mapa
-Igual la tapa el panel de abajo, en donde se nos presentan datos del cuidador y otras informaciones.
 Creo que es un panel de abajo demasiado grande.
 
 Además de vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
-Los iconos deberían de tener un mensajito diciendo lo que son o lo que hacen cuando ponemos el cursor sobre ellos.
 
+* Cuando pulsamos "Buscar en mapa" (página principal / inicio) entonces nos aparece el mapa. Pero en la botonera de abajo la opción Inicio sigue todavía como seleccionada (color verde). Queremos que no aparezca como seleccionada.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
