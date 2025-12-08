@@ -141,7 +141,7 @@ const MapView: React.FC<MapViewProps> = ({
 
   // Bottom Sheet State
   const [isSheetExpanded, setIsSheetExpanded] = useState(false);
-  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(true);
+  const [isBottomSheetVisible, setIsBottomSheetVisible] = useState(false);
 
   // Notifications
   const [notification, setNotification] = useState<{
@@ -602,7 +602,7 @@ const MapView: React.FC<MapViewProps> = ({
           className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
             isBottomSheetVisible
               ? "bg-teal-500 text-white ring-2 ring-teal-300 scale-110"
-              : "bg-white hover:bg-slate-50 text-slate-600"
+              : "bg-slate-200 hover:bg-slate-300 border border-red-500 text-slate-600"
           }`}
           aria-label="Mostrar/Ocultar novedades"
           title="Mostrar/Ocultar novedades"
