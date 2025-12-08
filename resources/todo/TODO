@@ -2,8 +2,6 @@
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
-
-
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
 * El botón Ofrecer está ahora desplazado por no estar en el medio (se han creado nuevas opciones). Daniel comenta lo siguiente:
