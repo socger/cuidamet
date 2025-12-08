@@ -608,7 +608,7 @@ const MapView: React.FC<MapViewProps> = ({
               className={`w-11 h-11 rounded-full shadow-md flex items-center justify-center transition-all duration-200 ${
                 isActive
                   ? `${btn.bgActive} text-white ring-2 scale-110`
-                  : `bg-slate-100 hover:bg-slate-200`
+                  : `bg-slate-200 hover:bg-slate-300 border border-teal-500`
               }`}
               aria-label={btn.label}
               title={btn.label}
