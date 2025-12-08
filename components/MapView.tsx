@@ -552,6 +552,88 @@ const MapView: React.FC<MapViewProps> = ({
     return null;
   };
 
+  {/* Mini Profile Sheet (Modal) - Replaces Bottom Sheet when provider selected */}
+  const MiniProfileSheet = () => (
+    <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[2000] p-4 pb-8 animate-slide-up-fast pointer-events-auto">
+      <div className="flex gap-4">
+        <div className="relative">
+          <img
+            src={selectedProvider.photoUrl}
+            alt={selectedProvider.name}
+            className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
+          />
+
+          <div
+            className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white ${
+              selectedProvider.status === "available"
+                ? "bg-green-500"
+                : selectedProvider.status === "busy"
+                ? "bg-red-500"
+                : "bg-slate-400"
+            }`}
+          ></div>
+        </div>
+
+        <div className="flex-1">
+          <div className="flex justify-between items-start">
+            <h3 className="font-bold text-lg text-slate-800">
+              {selectedProvider.name}
+            </h3>
+
+            <div className="flex items-center bg-amber-100 px-2 py-0.5 rounded-full">
+              <StarIcon className="w-3 h-3 text-amber-500 mr-1" />
+              <span className="text-xs font-bold text-amber-700">
+                {selectedProvider.rating}
+              </span>
+            </div>
+          </div>
+
+          <p className="text-sm text-slate-500 truncate">
+            {selectedProvider.services.join(", ")}
+          </p>
+
+          <div className="flex items-center mt-1">
+            <span className="font-bold text-teal-600 text-lg">
+              {selectedProvider.hourlyRate}€
+            </span>
+            <span className="text-xs text-slate-400 ml-1">/ hora</span>
+          </div>
+
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 mt-4">
+        <button
+          onClick={handleShowRoute}
+          className="flex items-center justify-center py-2.5 px-4 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-colors"
+        >
+          <DirectionsIcon className="w-5 h-5 mr-2" />
+          Ver Ruta
+        </button>
+
+        <button
+          onClick={() => onViewProfile(selectedProvider.id)}
+          className="py-2.5 px-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30"
+        >
+          Ver Perfil
+        </button>
+      </div>
+
+      <button
+        onClick={() => {
+          setSelectedProvider(null);
+          if (routeLayerRef.current) {
+            routeLayerRef.current.remove();
+            routeLayerRef.current = null;
+          }
+        }}
+        className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600"
+      >
+        ✕
+      </button>
+    </div>
+  );
+
   return (
     <div className="w-screen h-screen overflow-hidden relative bg-slate-200">
       <div ref={mapContainerRef} className="w-full h-full z-0" />
@@ -669,76 +751,7 @@ const MapView: React.FC<MapViewProps> = ({
 
       {/* Mini Profile Sheet (Modal) - Replaces Bottom Sheet when provider selected */}
       {selectedProvider && (
-        <div className="absolute bottom-16 left-0 right-0 bg-white rounded-t-2xl shadow-[0_-5px_20px_rgba(0,0,0,0.1)] z-[2000] p-4 pb-8 animate-slide-up-fast pointer-events-auto">
-          <div className="flex gap-4">
-            <div className="relative">
-              <img
-                src={selectedProvider.photoUrl}
-                alt={selectedProvider.name}
-                className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md"
-              />
-              <div
-                className={`absolute bottom-0 right-0 w-4 h-4 rounded-full border-2 border-white ${
-                  selectedProvider.status === "available"
-                    ? "bg-green-500"
-                    : selectedProvider.status === "busy"
-                    ? "bg-red-500"
-                    : "bg-slate-400"
-                }`}
-              ></div>
-            </div>
-            <div className="flex-1">
-              <div className="flex justify-between items-start">
-                <h3 className="font-bold text-lg text-slate-800">
-                  {selectedProvider.name}
-                </h3>
-                <div className="flex items-center bg-amber-100 px-2 py-0.5 rounded-full">
-                  <StarIcon className="w-3 h-3 text-amber-500 mr-1" />
-                  <span className="text-xs font-bold text-amber-700">
-                    {selectedProvider.rating}
-                  </span>
-                </div>
-              </div>
-              <p className="text-sm text-slate-500 truncate">
-                {selectedProvider.services.join(", ")}
-              </p>
-              <div className="flex items-center mt-1">
-                <span className="font-bold text-teal-600 text-lg">
-                  {selectedProvider.hourlyRate}€
-                </span>
-                <span className="text-xs text-slate-400 ml-1">/ hora</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 mt-4">
-            <button
-              onClick={handleShowRoute}
-              className="flex items-center justify-center py-2.5 px-4 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-colors"
-            >
-              <DirectionsIcon className="w-5 h-5 mr-2" />
-              Ver Ruta
-            </button>
-            <button
-              onClick={() => onViewProfile(selectedProvider.id)}
-              className="py-2.5 px-4 bg-teal-500 text-white rounded-xl font-semibold hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30"
-            >
-              Ver Perfil
-            </button>
-          </div>
-          <button
-            onClick={() => {
-              setSelectedProvider(null);
-              if (routeLayerRef.current) {
-                routeLayerRef.current.remove();
-                routeLayerRef.current = null;
-              }
-            }}
-            className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-600"
-          >
-            ✕
-          </button>
-        </div>
+        <MiniProfileSheet />
       )}
 
       {/* Expandable Bottom "Sheet" Bar (Lo último en la zona) */}
