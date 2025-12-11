@@ -58,3 +58,13 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
   No debemos de permitir que un comentario hecho por alguien, subidito de tono, se vea cuando otro usuario decida visitar ese chat.
   El usuario que lo escribió verá que lo ha publicado, pero que tiene que pasar un control de contenido antes de que el otro usuario del chat pueda ver ese mensaje.
 
+* En la vista de reservar tenemos tres apartados el de "Seguro adicional", "Código de promoción" y "Tasa de servicio".
+  - El "Código de promoción" es algo que podríamos dejar visible para futuras campañas. Aunque su programación todavía no esté terminada (de hecho no hace nada todavía). La idea es que si introducen un código de promoción aceptado, pues que aparezca este código como parte del "Resumen del coste".
+  - El "Seguro Adicional" es algo que de momento no podemos ofrecer. Por lo que lo vamos a ocultar, dejarlo invisible en la app. Pero con vistas a usarlo más adelante, porque la competencia parece que lo está usando.
+  - El tema de "Tasa de servicio" de momento es un 5% a piñón fijo. Es nutra monetización. Pero he quedado con Daniel para verlo en el futuro, junto con los otros dos apartados.
+  
+  * Los mapas en realidad presentan todos los cuidadores, no hace filtro por los cuidadores más cercanos a mi, ni tampoco por los favoritos que tengo elegidos. Este tema tengo que ver como lo puedo hacer más adelante. Tengo que preguntar a la IA cual es el criterio de filtro más claro por proximidad a mi latitud/longitud, o mejor a la dirección con la que me di de alta en mi perfil.
+
+  
+
+
