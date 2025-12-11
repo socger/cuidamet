@@ -13,13 +13,13 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
 
 * Comprobar que las reservas nuevas, las que creamos en la vista "Reservar", también aparecen también en la vista "Mis reservas"
 
+* El usuario, bien sea cuidador o quien busca cuidador, debe de tener un histórico de reservas apalabradas. 
+* No veo un acceso rápido a chat desde la creación de la reserva nueva. Tampoco veo un acceso rápido desde reservas, cuando editas una de ellas, a chat.
 
 
 
 
 
-
-* YA ESTA HECHO ... La vista de chat, cuando es llamada desde el perfil de un cuidador, tiene arriba una barra con una flecha hacia la izquierda que debería de volver a la vista de perfil. Pero no lo hace. En la versión de Daniel, cuando pulsas ese icono flecha (hacia la izquierda) se va a la vista buzón.
 
 * Cuando estás reservando un cuidador, hay un apartado para "Código de programación" que tengo que hablarlo con Daniel. No se de que va este tema. Y el checkBox de "Seguro Adicional" también tengo que hablarlo con Daniel. El caso es que si pulsas este checkBox, se aumenta el precio de la contratación.
 
@@ -27,6 +27,7 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
   - En App.tsx:
     + const renderContent = () => {
       Es diferente en cuidamet (se usan if) y en cuidamet-6 (se unsa un switch)
+  - También en la versión más moderna que creó la IA para Daniel usa Router para la paginación y debería también de implementarlo.
 
 
 * Ver el resto de páginas como Inicio, favoritos, buzon, registrarse, perfil ... la página principal tiene contenido nuevo en el footer (revisar el resto header, body, etc)
@@ -35,10 +36,6 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
 
 * La barra de abajo de botones, no aparece en todas las pantallas que son llamadas desde otros sitios.
 
-* El icono de Cuidamet (header de LandingPage.tsx) ... ¿debería de aparecer en todas las vistas?
-* El icono de Cuidamet cambiarlo por los que me pasó Daniel.
-
-* El mapa que se ve en la versión 1 de cuidamet no es el mismo mapa que se llama ahora en la versión-6. Pero en la versión 1 teníamos la barra de botones abajo. Y ahora en la versión-6 no están los botones.  
 * En la versión 1 de cuidamet si le pulsamos ver el mapa, nos sale un previo para activar la geolocalización. En la versión-6 no aparece este previo.
 
 * El icono de Favoritos (barra de botones de abajo) cuando lo pulsamos nos lleva a una pantalla de autenticación (si no lo hemos hecho ya) para meter usuario y pwd. Si no hemos creado nunca el usuario Buscamos la opción de Registrarme y nos abre otra pantalla para hacerlo
