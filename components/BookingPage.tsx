@@ -194,7 +194,17 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
         {/* Add-ons and Promo */}
         <section className="bg-white p-4 mt-6 rounded-xl border border-slate-200 shadow-sm">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Código de promoción */}
+                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                    <label htmlFor="promo" className="block text-sm font-medium text-slate-700 mb-2">Código de promoción</label>
+                    <div className="relative">
+                        <input id="promo" type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Ej: BIENVENIDO10" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 uppercase placeholder:normal-case"/>
+                        <TicketIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
+                    </div>
+                </div>
+
                 {/* Seguro Adicional */}
+                {/* Por el momento lo vamos a dejar desactivado. Pero con vistas al futuro volverlo a activar
                 <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
                     <label className="flex flex-col cursor-pointer h-full">
                         <div className="flex-grow">
@@ -206,16 +216,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
                             <input type="checkbox" checked={addInsurance} onChange={e => setAddInsurance(e.target.checked)} className="h-5 w-5 rounded border-slate-300 text-teal-500 focus:ring-teal-500"/>
                         </div>
                     </label>
-                </div>
-
-                {/* Código de promoción */}
-                <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
-                    <label htmlFor="promo" className="block text-sm font-medium text-slate-700 mb-2">Código de promoción</label>
-                    <div className="relative">
-                        <input id="promo" type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Ej: BIENVENIDO10" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 uppercase placeholder:normal-case"/>
-                        <TicketIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
-                    </div>
-                </div>
+                </div> */}
             </div>
         </section>
 
