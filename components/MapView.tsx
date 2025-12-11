@@ -8,11 +8,9 @@ import StarIcon from "./icons/StarIcon";
 import SearchIcon from "./icons/SearchIcon";
 import ElderlyIcon from "./icons/ElderlyIcon";
 import ChildIcon from "./icons/ChildIcon";
-import PetIcon from "./icons/PetIcon";
 import InformationCircleIcon from "./icons/InformationCircleIcon";
 import MapPinIcon from "./icons/MapPinIcon";
 import BellIcon from "./icons/BellIcon";
-import CleaningIcon from "./icons/CleaningIcon";
 
 // This is a global from the script tag in index.html
 declare var L: any;
