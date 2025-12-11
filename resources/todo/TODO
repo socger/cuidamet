@@ -1,3 +1,11 @@
+COMENTADO A DANIEL:
+Estoy intentando implementar todos los cambios que hiciste para la opción "Tu" (de la botonera de la última versión Cuidamet que me pasaste). Me está costando … por hoy lo dejo. Un abrazo, familia.
+
+Mirar último commit realizado por si tuviera que modificar algo de los cambios realizados. Sobre todo en los componentes nuevos que ha creado.
+Pero lo cierto es que el ProfilePage.tsx es renderizado después de darse de alta (cuando pulsa la opción TU). Y no es el último que creó Daniel.
+
+
+
 * Vista mapa:
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
@@ -65,6 +73,6 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
   
   * Los mapas en realidad presentan todos los cuidadores, no hace filtro por los cuidadores más cercanos a mi, ni tampoco por los favoritos que tengo elegidos. Este tema tengo que ver como lo puedo hacer más adelante. Tengo que preguntar a la IA cual es el criterio de filtro más claro por proximidad a mi latitud/longitud, o mejor a la dirección con la que me di de alta en mi perfil.
 
-  
+
 
 
