@@ -17,6 +17,7 @@ import BookingPage from "./components/BookingPage";
 import BookingsList from "./components/BookingsList";
 import { bookingService } from "./services/bookingService";
 import AlertModal from "./components/AlertModal";
+import ProfileLandingPage from "./components/ProfileLandingPage";
 
 const getDistanceInKm = (
   lat1: number,
@@ -445,7 +446,25 @@ const App: React.FC = () => {
         />
       );
     } else if (currentView === "myProfile") {
-      mainContent = <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
+      if (!isAuthenticated) {
+        mainContent = <ProfileLandingPage 
+          onStart={() => {
+            setPreviousViewBeforeAuth(view);
+            setPendingAction(null);
+            setAuthAttempts(0);
+            setView("auth");
+          }}
+          onLogin={() => {
+            setPreviousViewBeforeAuth(view);
+            setPendingAction(null);
+            setAuthAttempts(0);
+            setView("auth");
+          }}
+          onBack={handleNavigateHome}
+        />;
+      } else {
+        mainContent = <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
+      }
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
     } else {
