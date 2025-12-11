@@ -4,10 +4,8 @@ import { Provider, CareCategory, ProviderStatus } from "../types";
 // Icons
 import ChevronLeftIcon from "./icons/ChevronLeftIcon";
 import GpsFixedIcon from "./icons/GpsFixedIcon";
-import QueueListIcon from "./icons/QueueListIcon";
 import StarIcon from "./icons/StarIcon";
 import SearchIcon from "./icons/SearchIcon";
-import DirectionsIcon from "./icons/DirectionsIcon";
 import ElderlyIcon from "./icons/ElderlyIcon";
 import ChildIcon from "./icons/ChildIcon";
 import PetIcon from "./icons/PetIcon";
@@ -319,33 +317,6 @@ const MapView: React.FC<MapViewProps> = ({
     }
   }, []);
 
-  const handleShowRoute = () => {
-    if (!userLocation || !selectedProvider || !mapRef.current) return;
-
-    if (routeLayerRef.current) {
-      routeLayerRef.current.remove();
-    }
-
-    const latlngs = [
-      [userLocation.latitude, userLocation.longitude],
-      [
-        selectedProvider.coordinates.latitude,
-        selectedProvider.coordinates.longitude,
-      ],
-    ];
-
-    // Draw a simple dashed line
-    const polyline = L.polyline(latlngs, {
-      color: "#2DD4BF",
-      weight: 4,
-      dashArray: "10, 10",
-      opacity: 0.8,
-    }).addTo(mapRef.current);
-    routeLayerRef.current = polyline;
-
-    mapRef.current.fitBounds(polyline.getBounds(), { padding: [50, 50] });
-  };
-
   useEffect(() => {
     if (!isMapInitialized || !mapRef.current) return;
 
@@ -599,14 +570,6 @@ const MapView: React.FC<MapViewProps> = ({
               </span>
               <span className="text-xs text-slate-400 ml-1">/ hora</span>
             </div>
-
-            {/* <button
-              onClick={handleShowRoute}
-              className="flex items-center justify-center py-1.5 px-3 bg-slate-100 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-200 transition-colors"
-            >
-              <DirectionsIcon className="w-4 h-4 mr-1.5" />
-              Ruta
-            </button> */}
 
             <button
               onClick={() => onViewProfile(selectedProvider.id)}
