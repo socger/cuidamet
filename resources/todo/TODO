@@ -1,8 +1,8 @@
-Hemos conseguido que ProfilePage.tsx sea el de cuidamet_7.
+* Hemos conseguido que ProfilePage.tsx sea el de cuidamet_7.
 Pero tenemos que seguir añadiendo las opciones que tiene en cuidamet_7 cuando las pulsas.
 En general tenemos que comprobar también si los últimos cambios son los mismos que pedimos en el prompt último que lancemos.
 
-
+* La opción Favoritos podríamos ponerla en la pantalla que muestra todos los cuidadores. Esta opción de Favoritos también la tenemos en ProfilePage.tsx, por lo que ahora si que podríamos quitarla de la botonera de abajo "BottonNav.tsx"
 
 * Vista mapa:
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
