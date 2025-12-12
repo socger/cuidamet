@@ -18,6 +18,7 @@ import BookingsList from "./components/BookingsList";
 import { bookingService } from "./services/bookingService";
 import AlertModal from "./components/AlertModal";
 import ProfileLandingPage from "./components/ProfileLandingPage";
+import RoleSelection from "./components/RoleSelection";
 
 const getDistanceInKm = (
   lat1: number,
@@ -53,6 +54,7 @@ const App: React.FC = () => {
     | "auth"
     | "booking"
     | "bookings"
+    | "roleSelection"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "favorites" | "map"
@@ -449,10 +451,7 @@ const App: React.FC = () => {
       if (!isAuthenticated) {
         mainContent = <ProfileLandingPage 
           onStart={() => {
-            setPreviousViewBeforeAuth(view);
-            setPendingAction(null);
-            setAuthAttempts(0);
-            setView("auth");
+            setView("roleSelection");
           }}
           onLogin={() => {
             setPreviousViewBeforeAuth(view);
@@ -463,8 +462,42 @@ const App: React.FC = () => {
           onBack={handleNavigateHome}
         />;
       } else {
-        mainContent = <ProfilePage onNavigateFavorites={handleNavigateFavorites} />;
+        mainContent = <ProfilePage 
+          clientProfile={null}
+          onNavigateFavorites={handleNavigateFavorites}
+          onNavigateSettings={() => {
+            // TODO: Navigate to settings
+            setAlertModal({ isOpen: true, title: 'Configuración', message: 'Esta función estará disponible próximamente' });
+          }}
+          onNavigateSupport={() => {
+            // TODO: Navigate to support
+            setAlertModal({ isOpen: true, title: 'Ayuda', message: 'Esta función estará disponible próximamente' });
+          }}
+          onNavigateSupportChat={() => {
+            // TODO: Navigate to support chat
+            setAlertModal({ isOpen: true, title: 'Chat de soporte', message: 'Esta función estará disponible próximamente' });
+          }}
+          onSwitchToProvider={() => {
+            // TODO: Switch to provider mode
+            setAlertModal({ isOpen: true, title: 'Modo proveedor', message: 'Esta función estará disponible próximamente' });
+          }}
+          onBack={handleNavigateHome}
+        />;
       }
+    } else if (currentView === "roleSelection") {
+      mainContent = <RoleSelection 
+        onSelectProvider={() => {
+          // TODO: Navigate to provider registration
+          setAlertModal({ isOpen: true, title: 'Registro de proveedor', message: 'Esta función estará disponible próximamente' });
+        }}
+        onSelectSeeker={() => {
+          setPreviousViewBeforeAuth(view);
+          setPendingAction(null);
+          setAuthAttempts(0);
+          setView("auth");
+        }}
+        onBack={() => setView("myProfile")}
+      />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
     } else {

@@ -118,6 +118,14 @@ export interface BookingDetails {
   insuranceCost: number;
 }
 
+export interface ClientProfile {
+    name: string;
+    email: string;
+    photoUrl: string;
+    phone: string;
+    preferences: CareCategory[];
+}
+
 // Auth Types
 export type AuthMode = 'login' | 'signup' | 'forgotPassword' | 'verifyEmail';
 export type UserRole = 'client' | 'provider';
