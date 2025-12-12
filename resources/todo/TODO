@@ -1,8 +1,6 @@
-COMENTADO A DANIEL:
-Estoy intentando implementar todos los cambios que hiciste para la opción "Tu" (de la botonera de la última versión Cuidamet que me pasaste). Me está costando … por hoy lo dejo. Un abrazo, familia.
-
-Mirar último commit realizado por si tuviera que modificar algo de los cambios realizados. Sobre todo en los componentes nuevos que ha creado.
-Pero lo cierto es que el ProfilePage.tsx es renderizado después de darse de alta (cuando pulsa la opción TU). Y no es el último que creó Daniel.
+Hemos conseguido que ProfilePage.tsx sea el de cuidamet_7.
+Pero tenemos que seguir añadiendo las opciones que tiene en cuidamet_7 cuando las pulsas.
+En general tenemos que comprobar también si los últimos cambios son los mismos que pedimos en el prompt último que lancemos.
 
 
 
