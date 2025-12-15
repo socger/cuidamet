@@ -19,6 +19,7 @@ interface ProvidersListProps {
   onToggleFavorite: (providerId: number) => void;
   onViewProfile: (providerId: number) => void;
   onNavigateHome: () => void;
+  initialShowOnlyFavorites?: boolean;
 }
 
 const ProvidersList: React.FC<ProvidersListProps> = ({
@@ -35,9 +36,10 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   onToggleFavorite,
   onViewProfile,
   onNavigateHome,
+  initialShowOnlyFavorites = false,
 }) => {
   const [shareModalProvider, setShareModalProvider] = useState<Provider | null>(null);
-  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(initialShowOnlyFavorites);
   
   // Handler that clears search only when selecting "all"
   const handleCategorySelect = (category: CareCategory | "all") => {

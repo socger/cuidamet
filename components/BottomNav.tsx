@@ -1,15 +1,13 @@
 import React from 'react';
 import CuidametLogoIconSvg from '../resources/logos/Logo CuidaMet_Icono.svg';
-import HeartIcon from './icons/HeartIcon';
 import PlusCircleIcon from './icons/PlusCircleIcon';
 import InboxIcon from './icons/InboxIcon';
 import UserIcon from './icons/UserIcon';
 import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
 
 interface BottomNavProps {
-    currentView: 'landing' | 'providers' | 'favorites' | 'offer' | 'inbox' | 'chat' | 'myProfile' | 'map' | 'bookings';
+    currentView: 'landing' | 'providers' | 'offer' | 'inbox' | 'chat' | 'myProfile' | 'map' | 'bookings';
     onNavigateHome: () => void;
-    onNavigateFavorites: () => void;
     onNavigateOffer: () => void;
     onNavigateInbox: () => void;
     onNavigateProfile: () => void;
@@ -17,10 +15,9 @@ interface BottomNavProps {
     unreadCount: number;
 }
 
-const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateFavorites, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount }) => {
+const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount }) => {
     const navItems = [
         { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing', action: onNavigateHome },
-        { key: 'favorites', icon: HeartIcon, label: 'Favoritos', active: currentView === 'favorites', action: onNavigateFavorites },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
         { key: 'bookings', icon: ClipboardDocumentListIcon, label: 'Reservas', active: currentView === 'bookings', action: onNavigateBookings },
         { key: 'inbox', icon: InboxIcon, label: 'Buzón', active: currentView === 'inbox', action: onNavigateInbox },

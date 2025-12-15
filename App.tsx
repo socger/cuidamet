@@ -44,7 +44,6 @@ const App: React.FC = () => {
   const [view, setView] = useState<
     | "landing"
     | "providers"
-    | "favorites"
     | "profile"
     | "offer"
     | "inbox"
@@ -57,7 +56,7 @@ const App: React.FC = () => {
     | "roleSelection"
   >("landing");
   const [previousView, setPreviousView] = useState<
-    "providers" | "favorites" | "map"
+    "providers" | "map"
   >("providers");
   const [selectedProviderId, setSelectedProviderId] = useState<number | null>(
     null
@@ -91,6 +90,9 @@ const App: React.FC = () => {
   
   // Alert Modal state
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
+  
+  // Favorites filter state (when navigating from ProfilePage)
+  const [showFavoritesFromProfile, setShowFavoritesFromProfile] = useState<boolean>(false);
 
   useEffect(() => {
     // Simulate fetching data
@@ -106,6 +108,13 @@ const App: React.FC = () => {
       setLocationError("La geolocalización no es compatible con tu navegador.");
     }
   }, []);
+
+  // Reset favorites filter when leaving providers view
+  useEffect(() => {
+    if (view !== "providers") {
+      setShowFavoritesFromProfile(false);
+    }
+  }, [view]);
 
   const unreadCount = chats.reduce((count, chat) => {
     return (
@@ -166,7 +175,8 @@ const App: React.FC = () => {
   };
 
   const handleNavigateFavorites = () => {
-    setView("favorites");
+    setShowFavoritesFromProfile(true);
+    setView("providers");
     setSelectedProviderId(null);
     setCurrentChatId(null);
   };
@@ -203,7 +213,7 @@ const App: React.FC = () => {
   };
 
   const handleViewProfile = (providerId: number) => {
-    if (view === "providers" || view === "favorites" || view === "map") {
+    if (view === "providers" || view === "map") {
       setPreviousView(view);
     }
     setSelectedProviderId(providerId);
@@ -501,11 +511,11 @@ const App: React.FC = () => {
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
     } else {
-      // Providers or Favorites view
+      // Providers view
       mainContent = (
         <ProvidersList
           providers={providersWithDistance}
-          view={currentView as "providers" | "favorites"}
+          view="providers"
           selectedCategory={selectedCategory}
           searchQuery={searchQuery}
           favorites={favorites}
@@ -517,6 +527,7 @@ const App: React.FC = () => {
           onToggleFavorite={handleToggleFavorite}
           onViewProfile={handleViewProfile}
           onNavigateHome={handleNavigateHome}
+          initialShowOnlyFavorites={showFavoritesFromProfile}
         />
       );
     }
@@ -586,7 +597,6 @@ const App: React.FC = () => {
         <BottomNav
           currentView={view}
           onNavigateHome={handleNavigateHome}
-          onNavigateFavorites={handleNavigateFavorites}
           onNavigateOffer={handleNavigateOffer}
           onNavigateInbox={handleNavigateInbox}
           onNavigateProfile={handleNavigateMyProfile}
