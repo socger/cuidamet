@@ -2,7 +2,18 @@
 Pero tenemos que seguir añadiendo las opciones que tiene en cuidamet_7 cuando las pulsas.
 En general tenemos que comprobar también si los últimos cambios son los mismos que pedimos en el prompt último que lancemos.
 
-* La opción Favoritos podríamos ponerla en la pantalla que muestra todos los cuidadores (la que nos permite también hacer su búsqueda). Esta opción de Favoritos también la tenemos en ProfilePage.tsx, por lo que ahora si que podríamos quitarla de la botonera de abajo "BottonNav.tsx". Así conseguiríamos también que el botón Ofrecer, de la botonera, volviera a estar en el centro de la botonera.
+* En la vista que muestra los cuidadores más cercanos a nosotros, ahora junto a la botonera de filtros por categorías (un poquito más a la derecha del resto de botones) tenemos una nueva opción para ver los que son favoritos. 
+
+Esta nueva opción/botón es el mismo icono que teníamos antes en la botonera de abajo de la app (la botonera común) y digo teníamos porque esta opción Favoritos de la botonera de la app la hemos quitado, por tenerla ahora en la vista que nos presenta a todos los cuidadores que tenemos más cercanos.
+
+Este nuevo botón de "Favoritos" que tiene la vista que nos presenta a todos los cuidadores actúa como on/off. Cuando se presenta por primera vez esta vista, aparecerá esta opción de "Favoritos" como no pulsada, por lo que vamos a poder ver a todos los cuidadores. Pero si la pulsamos otra vez, esta opción "Favoritos" aparecerá como pulsada con un tono un poquito más verde que las opciones pulsadas de los filtros por categoría. 
+
+Desde la vista de nuestro perfil también tenemos la posibilidad de llamar a esta vista que nos presenta a los cuidadores más cercanos a nosotros. Pero cuando es llamado desde aquí se filtran a todos los cuidadores y por ver sólo a los "Favoritos"
+
+Corregido problema cuando nos poníamos sobre uno de los filtros/opciones (pulsado/círculo verde alrededor) de la vista que presenta a los cuidadores más cercanos. Nos ocurría que el círculo no se veía entero, cuando nos poníamos sobre el círculo/opción pulsada. Mientras que si no nos poníamos encima si que se veía el círculo porque era más pequeño.
+
+
+La opción Favoritos podríamos ponerla en la pantalla que muestra todos los cuidadores (la que nos permite también hacer su búsqueda). Esta opción de Favoritos también la tenemos en ProfilePage.tsx, por lo que ahora si que podríamos quitarla de la botonera de abajo "BottonNav.tsx". Así conseguiríamos también que el botón Ofrecer, de la botonera, volviera a estar en el centro de la botonera.
 
 * Vista mapa:
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
