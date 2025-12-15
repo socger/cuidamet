@@ -37,6 +37,8 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
   onNavigateHome,
 }) => {
   const [shareModalProvider, setShareModalProvider] = useState<Provider | null>(null);
+  const [showOnlyFavorites, setShowOnlyFavorites] = useState(false);
+  
   // Handler that clears search only when selecting "all"
   const handleCategorySelect = (category: CareCategory | "all") => {
     if (category === "all") {
@@ -47,7 +49,7 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
 
   // Filtering logic
   const baseProviders =
-    view === "favorites"
+    view === "favorites" || showOnlyFavorites
       ? providers.filter((p) => favorites.has(p.id))
       : providers;
 
@@ -89,6 +91,8 @@ const ProvidersList: React.FC<ProvidersListProps> = ({
       <CategorySelector
         selectedCategory={selectedCategory}
         onSelectCategory={handleCategorySelect}
+        showOnlyFavorites={showOnlyFavorites}
+        onToggleFavorites={() => setShowOnlyFavorites(!showOnlyFavorites)}
       />
 
       <main className="container mx-auto px-4 py-6 pb-24">
