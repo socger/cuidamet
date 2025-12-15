@@ -65,7 +65,7 @@ const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, o
                   onClick={onToggleFavorites}
                   className={`p-2 md:p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
                       ${showOnlyFavorites
-                      ? 'bg-teal-500 shadow-lg shadow-teal-500/50'
+                      ? 'bg-teal-700 shadow-lg shadow-teal-500/50'
                       : 'bg-white hover:bg-slate-50 shadow-md'
                       }`}
                   title="Favoritos"
