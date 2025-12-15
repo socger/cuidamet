@@ -2,6 +2,7 @@
 Pero tenemos que seguir añadiendo las opciones que tiene en cuidamet_7 cuando las pulsas.
 En general tenemos que comprobar también si los últimos cambios son los mismos que pedimos en el prompt último que lancemos.
 
+* La vista ProfilePage.tsx (perfil nuestro) no presenta la botonera común de la app
 
 * Vista mapa:
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
