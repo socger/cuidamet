@@ -19,7 +19,7 @@ const categories: { id: CareCategory, name: string, icon: string }[] = [
 const CategorySelector: React.FC<CategorySelectorProps> = ({ selectedCategory, onSelectCategory, showOnlyFavorites, onToggleFavorites }) => {
   return (
     <div className="bg-transparent pt-2 pb-3 sticky top-[64px] z-30">
-        <div className="container mx-auto px-4 flex items-center space-x-3 overflow-x-auto">
+        <div className="container mx-auto px-4 py-2 flex items-center space-x-3 overflow-x-auto">
             <button
                 onClick={() => onSelectCategory('all')}
                 className={`p-2 md:p-3 rounded-full transition-all duration-300 flex-shrink-0 transform hover:scale-110
