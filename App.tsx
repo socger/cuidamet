@@ -176,6 +176,8 @@ const App: React.FC = () => {
 
   const handleNavigateFavorites = () => {
     setShowFavoritesFromProfile(true);
+    setSelectedCategory("all");
+    setSearchQuery("");
     setView("providers");
     setSelectedProviderId(null);
     setCurrentChatId(null);
