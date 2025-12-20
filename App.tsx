@@ -83,7 +83,7 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [previousViewBeforeAuth, setPreviousViewBeforeAuth] = useState<typeof view>("landing");
   const [authAttempts, setAuthAttempts] = useState<number>(0);
-  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | null>(null);
+  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | 'chat' | null>(null);
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -252,12 +252,41 @@ const App: React.FC = () => {
   };
 
   const handleContactProvider = (providerId: number) => {
-    // Save current view before going to chat
-    setPreviousViewBeforeChat(view);
+    // Check authentication first
+    if (!isAuthenticated) {
+      setPreviousViewBeforeAuth(view);
+      setPendingAction('chat');
+      setBookingProviderId(providerId); // Reuse this state to store the provider ID
+      setAuthAttempts(0);
+      setView("auth");
+      return;
+    }
+
+    handleContactProviderAfterAuth(providerId);
+  };
+
+  const handleContactProviderAfterAuth = (providerId: number) => {
+    // Use the view before auth as the previous view for chat
+    const viewToReturn = previousViewBeforeAuth;
     
     const existingChat = chats.find((chat) => chat.provider && chat.provider.id === providerId);
     if (existingChat) {
-      handleViewChat(existingChat.id);
+      // Set the correct previous view before calling handleViewChat
+      setPreviousViewBeforeChat(viewToReturn);
+      // Mark messages as read and navigate to chat
+      setChats((prevChats) =>
+        prevChats.map((chat) => {
+          if (chat.id === existingChat.id) {
+            return {
+              ...chat,
+              messages: chat.messages.map((m) => ({ ...m, read: true })),
+            };
+          }
+          return chat;
+        })
+      );
+      setCurrentChatId(existingChat.id);
+      setView("chat");
     } else {
       const provider = providers.find((p) => p.id === providerId);
       if (provider) {
@@ -267,6 +296,7 @@ const App: React.FC = () => {
           messages: [],
         };
         setChats((prevChats) => [...prevChats, newChat]);
+        setPreviousViewBeforeChat(viewToReturn);
         setCurrentChatId(newChat.id);
         setView("chat");
       }
@@ -307,6 +337,9 @@ const App: React.FC = () => {
       setView('booking');
     } else if (pendingAction === 'bookings') {
       setView('bookings');
+    } else if (pendingAction === 'chat' && bookingProviderId) {
+      // Use bookingProviderId which stores the provider ID for chat
+      handleContactProviderAfterAuth(bookingProviderId);
     } else {
       setView(previousViewBeforeAuth);
     }
@@ -322,6 +355,9 @@ const App: React.FC = () => {
       setView('booking');
     } else if (pendingAction === 'bookings') {
       setView('bookings');
+    } else if (pendingAction === 'chat' && bookingProviderId) {
+      // Use bookingProviderId which stores the provider ID for chat
+      handleContactProviderAfterAuth(bookingProviderId);
     } else {
       setView(previousViewBeforeAuth);
     }
@@ -552,7 +588,9 @@ const App: React.FC = () => {
                 ? "Inicia sesión para realizar la reserva" 
                 : pendingAction === 'bookings'
                   ? "Inicia sesión para ver tus reservas"
-                  : "Inicia sesión para guardar favoritos"
+                  : pendingAction === 'chat'
+                    ? "Inicia sesión para chatear con el cuidador"
+                    : "Inicia sesión para guardar favoritos"
             }
           />
         )}

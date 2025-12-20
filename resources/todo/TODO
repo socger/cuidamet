@@ -10,9 +10,6 @@ Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
-* El botón Ofrecer está ahora desplazado por no estar en el medio (se han creado nuevas opciones). Daniel comenta lo siguiente:
-Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco descompensado al estar desplazado
-
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
 * Cuando una reserva se ha realizado, es decir el servicio se ha cumplido, viene el pago si lo hace desde la aplicación. Pero también viene el momento de calificar el servicio. Creo que no hay ninguna vista para realizar esta acción. Pero podríamos usar la vista que presenta "Mis Reservas" y allí que el usuario que contrató lo haga.
@@ -22,12 +19,14 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
 * El usuario, bien sea cuidador o quien busca cuidador, debe de tener un histórico de reservas apalabradas. 
 * No veo un acceso rápido a chat desde la creación de la reserva nueva. Tampoco veo un acceso rápido desde reservas, cuando editas una de ellas, a chat.
 
+* Un usuario que es cuidador, no el que contrata, también debe de poder ver las reservas que otros han hecho para él. Y debería de poder comunicarse con quien le contrató. Lo lógico es que fuera a conversaciones ya realizadas(chats en donde el contratador le llamó). ¿Pero y si quiere ponerse en contacto con un nuevo contratador?
 
 
 
 
 
-* Cuando estás reservando un cuidador, hay un apartado para "Código de programación" que tengo que hablarlo con Daniel. No se de que va este tema. Y el checkBox de "Seguro Adicional" también tengo que hablarlo con Daniel. El caso es que si pulsas este checkBox, se aumenta el precio de la contratación.
+
+* Cuando estás reservando un cuidador, había un apartado para "Código de programación" que tengo que hablarlo con Daniel. No se de que va este tema. Y el checkBox de "Seguro Adicional" me comentó Daniel que de momento estuviera invisible (más adelante veremos si lo activamos y usamos). El caso es que si pulsas este checkBox (el del seguro adicional), se aumenta el precio de la contratación.
 
 * Tengo que revisar:
   - En App.tsx:
@@ -42,9 +41,9 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
 
 * La barra de abajo de botones, no aparece en todas las pantallas que son llamadas desde otros sitios.
 
-* En la versión 1 de cuidamet si le pulsamos ver el mapa, nos sale un previo para activar la geolocalización. En la versión-6 no aparece este previo.
+* En la versión 1 de cuidamet si le pulsamos ver el mapa, nos sale un previo para activar la geolocalización. En la versión-7 no aparece este previo. ¿es necesario? ... creo que no.
 
-* El icono de Favoritos (barra de botones de abajo) cuando lo pulsamos nos lleva a una pantalla de autenticación (si no lo hemos hecho ya) para meter usuario y pwd. Si no hemos creado nunca el usuario Buscamos la opción de Registrarme y nos abre otra pantalla para hacerlo
+* Cuando el usuario le sale la pantalla de autenticación, si pulsamos en la opción de Registrarme tengo que ver que tipo de operación hace / lógica. Porque creo que todavía no está terminada (como la autenticación de 2 pasos vía correo electrónico, etc).
 
 * Las cookies de privacidad duran mucho. Habría que hacer que fueran perecederas xxxx tiempo. Así podría volver a aparecer la pantalla de aceptar las cookies de vez en cuando.
 * Hay que crear la vista para "Política de Privacidad" de las Cookies (lo que nadie lee). Y hay que crear la vista de "configuración de las cookies"
@@ -70,7 +69,6 @@ Quizá el botón de ofrecer se podría hacer más pequeño.. ahora queda un poco
   - El tema de "Tasa de servicio" de momento es un 5% a piñón fijo. Es nutra monetización. Pero he quedado con Daniel para verlo en el futuro, junto con los otros dos apartados.
   
   * Los mapas en realidad presentan todos los cuidadores, no hace filtro por los cuidadores más cercanos a mi, ni tampoco por los favoritos que tengo elegidos. Este tema tengo que ver como lo puedo hacer más adelante. Tengo que preguntar a la IA cual es el criterio de filtro más claro por proximidad a mi latitud/longitud, o mejor a la dirección con la que me di de alta en mi perfil.
-
 
 
 
