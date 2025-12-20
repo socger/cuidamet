@@ -83,7 +83,7 @@ const App: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [previousViewBeforeAuth, setPreviousViewBeforeAuth] = useState<typeof view>("landing");
   const [authAttempts, setAuthAttempts] = useState<number>(0);
-  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | 'chat' | null>(null);
+  const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | 'chat' | 'inbox' | null>(null);
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -197,6 +197,13 @@ const App: React.FC = () => {
   };
 
   const handleNavigateInbox = () => {
+    if (!isAuthenticated) {
+      setPreviousViewBeforeAuth(view);
+      setPendingAction('inbox');
+      setAuthAttempts(0);
+      setView("auth");
+      return;
+    }
     setView("inbox");
     setSelectedProviderId(null);
     setCurrentChatId(null);
@@ -337,6 +344,8 @@ const App: React.FC = () => {
       setView('booking');
     } else if (pendingAction === 'bookings') {
       setView('bookings');
+    } else if (pendingAction === 'inbox') {
+      setView('inbox');
     } else if (pendingAction === 'chat' && bookingProviderId) {
       // Use bookingProviderId which stores the provider ID for chat
       handleContactProviderAfterAuth(bookingProviderId);
@@ -355,6 +364,8 @@ const App: React.FC = () => {
       setView('booking');
     } else if (pendingAction === 'bookings') {
       setView('bookings');
+    } else if (pendingAction === 'inbox') {
+      setView('inbox');
     } else if (pendingAction === 'chat' && bookingProviderId) {
       // Use bookingProviderId which stores the provider ID for chat
       handleContactProviderAfterAuth(bookingProviderId);
@@ -588,9 +599,11 @@ const App: React.FC = () => {
                 ? "Inicia sesión para realizar la reserva" 
                 : pendingAction === 'bookings'
                   ? "Inicia sesión para ver tus reservas"
-                  : pendingAction === 'chat'
-                    ? "Inicia sesión para chatear con el cuidador"
-                    : "Inicia sesión para guardar favoritos"
+                  : pendingAction === 'inbox'
+                    ? "Inicia sesión para ver tus mensajes"
+                    : pendingAction === 'chat'
+                      ? "Inicia sesión para chatear con el cuidador"
+                      : "Inicia sesión para guardar favoritos"
             }
           />
         )}
