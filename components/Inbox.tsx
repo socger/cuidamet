@@ -2,6 +2,7 @@ import React from 'react';
 import { ChatConversation } from '../types';
 import InboxIcon from './icons/InboxIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
+import Inbox_Header from './Inbox_Header';
 
 interface InboxProps {
   chats: ChatConversation[];
@@ -11,11 +12,7 @@ interface InboxProps {
 const Inbox: React.FC<InboxProps> = ({ chats, onViewChat }) => {
   return (
     <div className="bg-white min-h-screen">
-      <header className="bg-white/90 backdrop-blur-lg sticky top-0 z-40 border-b border-slate-200">
-        <div className="container mx-auto px-4 h-16 flex items-center">
-          <h1 className="text-xl font-bold text-slate-800">Buzón</h1>
-        </div>
-      </header>
+      <Inbox_Header  />
 
       <main className="container mx-auto px-4 py-4 pb-24">
         {chats.length > 0 ? (

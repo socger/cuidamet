@@ -614,7 +614,6 @@ const App: React.FC = () => {
   const showBottomNav =
     view !== "offer" &&
     view !== "auth" &&
-    (view !== "myProfile" || !isAuthenticated) &&
     !isLocationLoading;
 
   // For map view, render without wrapper to allow full screen
