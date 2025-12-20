@@ -13,9 +13,10 @@ interface BottomNavProps {
     onNavigateProfile: () => void;
     onNavigateBookings: () => void;
     unreadCount: number;
+    isAuthenticated: boolean;
 }
 
-const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount }) => {
+const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount, isAuthenticated }) => {
     const navItems = [
         { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing', action: onNavigateHome },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
@@ -86,7 +87,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                         >
                             <div className="relative">
                                 <item.icon className={`h-6 w-6 mb-1 transition-colors ${item.active ? 'text-teal-500' : 'text-slate-500 group-hover:text-teal-500'}`} />
-                                {item.key === 'inbox' && unreadCount > 0 && (
+                                {item.key === 'inbox' && isAuthenticated && unreadCount > 0 && (
                                     <div className="absolute -top-1 -right-2 bg-red-500 text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center border-2 border-white">
                                         {unreadCount}
                                     </div>

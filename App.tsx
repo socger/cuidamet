@@ -631,6 +631,7 @@ const App: React.FC = () => {
           onNavigateProfile={handleNavigateMyProfile}
           onNavigateBookings={handleNavigateBookings}
           unreadCount={unreadCount}
+          isAuthenticated={isAuthenticated}
         />
         <CookieConsent />
         <AlertModal 
@@ -655,6 +656,7 @@ const App: React.FC = () => {
           onNavigateProfile={handleNavigateMyProfile}
           onNavigateBookings={handleNavigateBookings}
           unreadCount={unreadCount}
+          isAuthenticated={isAuthenticated}
         />
       )}
       <CookieConsent />
