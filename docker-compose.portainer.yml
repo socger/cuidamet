@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  cuidamet:
+    build:
+      context: /docker/cuidamet
+      dockerfile: Dockerfile
+    container_name: cuidamet_app
+    ports:
+      - "3000:5173"
+    volumes:
+      - /docker/cuidamet:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
