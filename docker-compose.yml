@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  cuidamet:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cuidamet-app
+    ports:
+      - "3000:5173"  # Mapea el puerto 3000 local al 5173 del contenedor
+    volumes:
+      - .:/app
+      - /app/node_modules  # Evita sobrescribir node_modules del contenedor
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host
+    stdin_open: true
+    tty: true
