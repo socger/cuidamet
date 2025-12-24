@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  cuidamet:
+    image: cuidamet:latest
+    # Nota: Construye la imagen primero con: docker build -t cuidamet:latest /docker/cuidamet
+    #       Pero mejor sigue estos pasos. En el servidor Debian 12, ejecuta:
+    #          cd /docker/cuidamet
+    #          docker build -t cuidamet:latest .
+    ports:
+      - "3000:5173"
+    volumes:
+      - /docker/cuidamet:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev -- --host
+    stdin_open: true
+    tty: true
+    networks:
+      - shared_backend
+      - traefik_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.services.cuidamet.loadbalancer.server.port=5173"
+        - "traefik.http.routers.cuidamet.rule=Host(`cuidamet.duckdns.org`)"
+        - "traefik.http.routers.cuidamet.entrypoints=websecure"
+        - "traefik.http.routers.cuidamet.priority=1"
+        - "traefik.http.routers.cuidamet.tls=true"
+        - "traefik.http.routers.cuidamet.tls.certresolver=le"
+        - "traefik.http.routers.cuidamet.service=cuidamet"
+
+networks:
+  shared_backend:
+    external: true
+    attachable: true
+  traefik_public:
+    external: true
+    attachable: true
