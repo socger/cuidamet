@@ -84,6 +84,8 @@ const App: React.FC = () => {
   const [previousViewBeforeAuth, setPreviousViewBeforeAuth] = useState<typeof view>("landing");
   const [authAttempts, setAuthAttempts] = useState<number>(0);
   const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | 'chat' | 'inbox' | null>(null);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [preselectedRole, setPreselectedRole] = useState<UserRole | undefined>(undefined);
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -128,6 +130,8 @@ const App: React.FC = () => {
       setPreviousViewBeforeAuth(view);
       setPendingAction('favorite');
       setAuthAttempts(0);
+      setAuthMode('login');
+      setPreselectedRole(undefined);
       setView("auth");
       return;
     }
@@ -188,6 +192,8 @@ const App: React.FC = () => {
       setPreviousViewBeforeAuth(view);
       setPendingAction('bookings');
       setAuthAttempts(0);
+      setAuthMode('login');
+      setPreselectedRole(undefined);
       setView("auth");
       return;
     }
@@ -201,6 +207,8 @@ const App: React.FC = () => {
       setPreviousViewBeforeAuth(view);
       setPendingAction('inbox');
       setAuthAttempts(0);
+      setAuthMode('login');
+      setPreselectedRole(undefined);
       setView("auth");
       return;
     }
@@ -265,6 +273,8 @@ const App: React.FC = () => {
       setPendingAction('chat');
       setBookingProviderId(providerId); // Reuse this state to store the provider ID
       setAuthAttempts(0);
+      setAuthMode('login');
+      setPreselectedRole(undefined);
       setView("auth");
       return;
     }
@@ -395,6 +405,8 @@ const App: React.FC = () => {
       setPendingAction('booking');
       setBookingProviderId(providerId);
       setAuthAttempts(0);
+      setAuthMode('login');
+      setPreselectedRole(undefined);
       setView("auth");
       return;
     }
@@ -516,6 +528,8 @@ const App: React.FC = () => {
             setPreviousViewBeforeAuth(view);
             setPendingAction(null);
             setAuthAttempts(0);
+            setAuthMode('login');
+            setPreselectedRole(undefined);
             setView("auth");
           }}
           onBack={handleNavigateHome}
@@ -546,13 +560,19 @@ const App: React.FC = () => {
     } else if (currentView === "roleSelection") {
       mainContent = <RoleSelection 
         onSelectProvider={() => {
-          // TODO: Navigate to provider registration
-          setAlertModal({ isOpen: true, title: 'Registro de proveedor', message: 'Esta función estará disponible próximamente' });
+          setPreviousViewBeforeAuth(view);
+          setPendingAction(null);
+          setAuthAttempts(0);
+          setAuthMode('signup');
+          setPreselectedRole('provider');
+          setView("auth");
         }}
         onSelectSeeker={() => {
           setPreviousViewBeforeAuth(view);
           setPendingAction(null);
           setAuthAttempts(0);
+          setAuthMode('signup');
+          setPreselectedRole('client');
           setView("auth");
         }}
         onBack={() => setView("myProfile")}
@@ -587,7 +607,8 @@ const App: React.FC = () => {
         {mainContent}
         {view === "auth" && (
           <AuthPage
-            initialMode="login"
+            initialMode={authMode}
+            preselectedRole={preselectedRole}
             onLoginSuccess={handleLoginSuccess}
             onSignupSuccess={handleSignupSuccess}
             onBack={handleAuthBack}
