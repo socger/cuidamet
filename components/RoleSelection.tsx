@@ -16,16 +16,17 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelec
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
       <PageHeader title="Selecciona tu perfil" onBack={onBack} />
       
-      <main className="flex-grow flex flex-col justify-center px-6 pb-24 space-y-8">
-        <div className="text-center mb-4">
+      <main className="flex-1 overflow-y-auto px-6 pt-8 pb-28">
+        <div className="text-center mb-8">
              <h2 className="text-2xl font-bold text-slate-800">¿Qué deseas hacer hoy?</h2>
              <p className="text-slate-600 mt-2">Elige cómo quieres usar Cuidamet.</p>
         </div>
 
+        <div className="space-y-6 max-w-2xl mx-auto">
         {/* Seeker Option */}
         <button 
             onClick={onSelectSeeker}
-            className="relative group overflow-hidden bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-left"
+            className="relative group overflow-hidden bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-left w-full"
         >
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                  <SearchIcon className="w-32 h-32 text-teal-600" />
@@ -47,7 +48,7 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelec
         {/* Provider Option */}
         <button 
             onClick={onSelectProvider}
-            className="relative group overflow-hidden bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-left"
+            className="relative group overflow-hidden bg-white rounded-3xl p-6 border border-slate-200 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 text-left w-full"
         >
              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                  <HandRaisedIcon className="w-32 h-32 text-blue-600" />
@@ -65,6 +66,7 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelec
                  </div>
              </div>
         </button>
+        </div>
       </main>
     </div>
   );
