@@ -445,8 +445,11 @@ const AuthPage: React.FC<AuthPageProps> = ({
 
                 <button
                   type="submit"
-                  disabled={isLoading}
-                  className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all disabled:bg-slate-400 disabled:shadow-none mt-6 flex items-center justify-center transform active:scale-95"
+                  disabled={
+                    isLoading ||
+                    (mode === "signup" && (!email || !password || !role))
+                  }
+                  className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all disabled:bg-slate-400 disabled:shadow-none disabled:cursor-not-allowed mt-6 flex items-center justify-center transform active:scale-95"
                 >
                   {isLoading ? (
                     <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
