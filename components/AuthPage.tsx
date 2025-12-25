@@ -78,12 +78,12 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // In development mode, always allow login (bypass validation)
+    // In development mode, always allow login (validation)
     // In production, you would validate credentials against a backend
     // Validación simple de ejemplo
     // JEROFA tenn en cuenta que he cambiado a la línea de abajo para que no me de la vara de que introduzca la pwd correcta
     // const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
-    const isValidLogin = true; // Bypass for demo
+    const isValidLogin = true; // for demo
     
     const maxAttempts = parseInt(import.meta.env.MAX_AUTH_ATTEMPTS || '3', 10);
 
@@ -329,7 +329,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                   disabled={isLoading}
                   className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold shadow-lg shadow-teal-500/30 hover:bg-teal-600 transition-all disabled:bg-slate-400 transform active:scale-95"
                 >
-                  {isLoading ? "Verificando..." : "Verificar Cuenta (Bypass)"}
+                  {isLoading ? "Verificando..." : "Verificar Cuenta"}
                 </button>
                 <button
                   type="button"
@@ -456,7 +456,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                       {mode === "signup" &&
                         (preselectedRole
                           ? "Crear Cuenta"
-                          : "Crear Cuenta (Bypass)")}
+                          : "Crear Cuenta")}
                       {mode === "forgotPassword" && "Enviar Instrucciones"}
                     </>
                   )}

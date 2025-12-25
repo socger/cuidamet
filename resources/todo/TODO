@@ -70,5 +70,5 @@ Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
   
   * Los mapas en realidad presentan todos los cuidadores, no hace filtro por los cuidadores más cercanos a mi, ni tampoco por los favoritos que tengo elegidos. Este tema tengo que ver como lo puedo hacer más adelante. Tengo que preguntar a la IA cual es el criterio de filtro más claro por proximidad a mi latitud/longitud, o mejor a la dirección con la que me di de alta en mi perfil.
 
-
+* Hay que crear en la autenticación, cuando se está registrando el usuario, los "Términos de Servicio" y la "Política de Privacidad"
 
