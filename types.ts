@@ -57,6 +57,31 @@ export interface HousekeepingAttributes {
     eco: boolean;
 }
 
+export interface ServiceConfig {
+    completed: boolean;
+    tasks: string[];
+    rates: ServiceRates;
+    experience: string; // Years range
+    availability?: string[]; // Specific availability for this service
+    training?: string; // Specific training text
+    description?: string;
+    certificates: Certificate[];
+    petAttributes?: PetAttributes; // Specific for pets
+    housekeepingAttributes?: HousekeepingAttributes; // Specific for housekeeping
+    medicalSkills?: string[]; // Specific for elderly/medical care
+}
+
+export interface ProviderProfile {
+    name: string;
+    photoUrl: string;
+    location: string;
+    languages: string[];
+    availability: string[]; // Aggregated availability for search filtering
+    services: Record<CareCategory, ServiceConfig>;
+}
+
+export type ProfileStatus = 'draft' | 'published' | 'suspended';
+
 
 
 

@@ -1,458 +1,685 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { CareCategory } from '../types';
-import HeartHandshakeIcon from './icons/HeartHandshakeIcon';
-import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
-import StarIcon from './icons/StarIcon';
-import CurrencyEuroIcon from './icons/CurrencyEuroIcon';
+import { CareCategory, Certificate, CertificateType, ServiceConfig, ProviderProfile, ProfileStatus, ServiceRates, PetAttributes, HousekeepingAttributes } from '../types';
 import CameraIcon from './icons/CameraIcon';
-import ShieldCheckIcon from './icons/ShieldCheckIcon';
-import UserIcon from './icons/UserIcon';
-import PhoneIcon from './icons/PhoneIcon';
-import IdentificationIcon from './icons/IdentificationIcon';
-import MailIcon from './icons/MailIcon';
+import PhotoIcon from './icons/PhotoIcon';
 import MapPinIcon from './icons/MapPinIcon';
-import AlertModal from './AlertModal';
-
+import CurrencyEuroIcon from './icons/CurrencyEuroIcon';
+import StarIcon from './icons/StarIcon';
+import IdentificationIcon from './icons/IdentificationIcon';
+import UserCircleIcon from './icons/UserCircleIcon';
+import CheckCircleIcon from './icons/CheckCircleIcon';
+import ChevronLeftIcon from './icons/ChevronLeftIcon';
+import ChevronRightIcon from './icons/ChevronRightIcon';
+import ElderlyIcon from './icons/ElderlyIcon';
+import ChildIcon from './icons/ChildIcon';
+import PetIcon from './icons/PetIcon';
+import CleaningIcon from './icons/CleaningIcon';
+import DocumentTextIcon from './icons/DocumentTextIcon';
+import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
+import TrashIcon from './icons/TrashIcon';
+import PaperClipIcon from './icons/PaperClipIcon';
+import LockClosedIcon from './icons/LockClosedIcon';
+import ExclamationTriangleIcon from './icons/ExclamationTriangleIcon';
+import XCircleIcon from './icons/XCircleIcon';
+import ChatBubbleLeftRightIcon from './icons/ChatBubbleLeftRightIcon';
+import PencilIcon from './icons/PencilIcon';
+import ClockIcon from './icons/ClockIcon';
+import PlusCircleIcon from './icons/PlusCircleIcon';
+import HeartHandshakeIcon from './icons/HeartHandshakeIcon';
+import HealthIcon from './icons/HealthIcon';
+import GpsFixedIcon from './icons/GpsFixedIcon';
 
 interface OfferServiceProps {
-  onClose: () => void;
+  onComplete: (profileData: ProviderProfile) => void;
 }
 
 const serviceCategories = [
-    { id: CareCategory.ELDERLY, label: 'Cuidado de Mayores' },
-    { id: CareCategory.CHILDREN, label: 'Cuidado de Niños' },
-    { id: CareCategory.PETS, label: 'Cuidado de Mascotas' }
+    { id: CareCategory.ELDERLY, label: 'Cuidado de Mayores', icon: ElderlyIcon, description: 'Asistencia, compañía y cuidados médicos', color: 'text-green-600', bg: 'bg-green-100', border: 'border-green-200' },
+    { id: CareCategory.CHILDREN, label: 'Cuidado de Niños', icon: ChildIcon, description: 'Canguro, ayuda escolar y rutinas', color: 'text-slate-600', bg: 'bg-slate-200', border: 'border-slate-300' },
+    { id: CareCategory.PETS, label: 'Mascotas', icon: PetIcon, description: 'Paseos, guardería y cuidados', color: 'text-orange-600', bg: 'bg-orange-100', border: 'border-orange-200' },
+    { id: CareCategory.HOUSEKEEPING, label: 'Limpieza y Mantenimiento', icon: CleaningIcon, description: 'Hogar, cristales y reparaciones', color: 'text-blue-600', bg: 'bg-blue-100', border: 'border-blue-200' }
 ];
 
-const experienceLevels = [
-  { id: 'beginner', name: 'Principiante (0-1 años)' },
-  { id: 'intermediate', name: 'Intermedio (2-5 años)' },
-  { id: 'expert', name: 'Experto (+5 años)' },
+const languagesList = ['Español', 'Inglés', 'Francés', 'Alemán', 'Italiano', 'Portugués', 'Chino', 'Árabe'];
+const availabilitySlots = ['Mañanas', 'Tardes', 'Noches', 'Fines de Semana', 'Interno/a'];
+
+const MEDICAL_SKILLS = [
+    'Alzheimer', 'Demencia Senil', 'Parkinson', 'Diabetes (Insulina)',
+    'Movilidad Reducida (Grúa)', 'Recuperación Ictus', 'Cuidados Paliativos',
+    'Post-operatorio', 'Sondaje / Curas', 'Diálisis', 'Ostomías'
 ];
 
-const OfferService: React.FC<OfferServiceProps> = ({ onClose }) => {
-  const [step, setStep] = useState(1);
+const PET_TYPES = ['Perros', 'Gatos', 'Pequeños animales', 'Otros'];
+const SERVICE_TASKS: Record<CareCategory, string[]> = {
+    [CareCategory.ELDERLY]: ['Acompañamiento', 'Control Medicación', 'Aseo Personal', 'Comidas', 'Paseos', 'Gestión Citas', 'Estimulación Cognitiva', 'Compras'],
+    [CareCategory.CHILDREN]: ['Llevar al colegio', 'Ayuda deberes', 'Juegos', 'Comidas', 'Baño', 'Noches', 'Idiomas', 'Necesidades Especiales'],
+    [CareCategory.PETS]: ['Paseos', 'Visitas a domicilio', 'Alojamiento en mi casa', 'Guardería de día', 'Baño', 'Administración medicinas', 'Adiestramiento básico'],
+    [CareCategory.HOUSEKEEPING]: ['Limpieza general', 'Planchado', 'Cocina', 'Cristales', 'Limpieza a fondo', 'Jardinería básica', 'Organización']
+};
+
+// Initial config for a new service
+const initialServiceConfig: ServiceConfig = {
+    completed: false,
+    tasks: [],
+    rates: { hourly: 10 },
+    experience: '',
+    certificates: [],
+    availability: [],
+    petAttributes: { acceptedPets: [], workZones: [], maxPets: 1 },
+    housekeepingAttributes: { products: 'flexible', equipment: false, waste: false, eco: false },
+    medicalSkills: []
+};
+
+const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
+  const [step, setStep] = useState(1); // 1: Profile, 2: Services Dashboard, 3: Summary
+  const [editingCategory, setEditingCategory] = useState<CareCategory | null>(null);
   
-  // Step 1 State
-  const [descriptions, setDescriptions] = useState<Record<string, string>>({});
-  const [categories, setCategories] = useState<CareCategory[]>([]);
-  const [experience, setExperience] = useState('');
-  const [hourlyRate, setHourlyRate] = useState('');
-  
-  // Step 2 State
-  const [photoDataUrl, setPhotoDataUrl] = useState<string | null>(null);
+  // General Profile Data
+  const [profileData, setProfileData] = useState({
+    name: '',
+    location: '',
+    languages: [] as string[],
+    photoUrl: '',
+  });
+
+  // Specific Data per Service - Initialize all categories
+  const [servicesData, setServicesData] = useState<Record<CareCategory, ServiceConfig>>(() => {
+      const initial = {} as Record<CareCategory, ServiceConfig>;
+      Object.values(CareCategory).forEach(cat => {
+          initial[cat] = { ...initialServiceConfig };
+      });
+      return initial;
+  });
+
+  // Photo logic
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const streamRef = useRef<MediaStream | null>(null);
-  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
-  
-  // Step 3 State
-  const [fullName, setFullName] = useState('');
-  const [phone, setPhone] = useState('');
-  const [email, setEmail] = useState('');
-  const [idDocument, setIdDocument] = useState<File | null>(null);
+  const cameraInputRef = useRef<HTMLInputElement>(null);
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
-  // Step 4 State
-  const [locationStatus, setLocationStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-  const [manualLocation, setManualLocation] = useState('');
-  const [showManualInput, setShowManualInput] = useState(false);
+  // Geolocation Logic
+  const [isLocating, setIsLocating] = useState(false);
 
-  const MAX_CHARS = 250;
-
-  const isFormComplete = 
-    categories.length > 0 &&
-    categories.every(cat => descriptions[cat]?.trim().length > 0) &&
-    experience &&
-    hourlyRate &&
-    parseFloat(hourlyRate) > 0;
-
-  const isVerificationComplete = fullName.trim().length > 0 && phone.trim().length > 0;
-  const isLocationComplete = locationStatus === 'success' || manualLocation.trim().length > 0;
-
+  // Cleanup stream
   useEffect(() => {
-    if (step === 2 && !photoDataUrl) {
-      startCamera();
-    } else {
-      stopCamera();
-    }
-    
     return () => {
-      stopCamera();
+        if (stream) stream.getTracks().forEach(track => track.stop());
     };
-  }, [step, photoDataUrl]);
+  }, [stream]);
 
-  const handleCategoryChange = (category: CareCategory) => {
-    setCategories(prev => {
-      const newCategories = prev.includes(category) 
-          ? prev.filter(c => c !== category) 
-          : [...prev, category];
+  // Attach stream to video
+  useEffect(() => {
+    if (isCameraActive && videoRef.current && stream) {
+        videoRef.current.srcObject = stream;
+    }
+  }, [isCameraActive, stream]);
 
-      if (!newCategories.includes(category)) {
-        setDescriptions(currentDescs => {
-          const newDescs = { ...currentDescs };
-          delete newDescs[category];
-          return newDescs;
-        });
-      }
-      
-      return newCategories;
-    });
+  const handleProfileChange = (field: string, value: any) => {
+    setProfileData(prev => ({ ...prev, [field]: value }));
   };
-  
-  const handleDescriptionChange = (category: CareCategory, text: string) => {
-    setDescriptions(prev => ({
+
+  const handleLanguageToggle = (lang: string) => {
+    setProfileData(prev => ({
       ...prev,
-      [category]: text,
+      languages: prev.languages.includes(lang) 
+        ? prev.languages.filter(l => l !== lang) 
+        : [...prev.languages, lang]
     }));
   };
 
-  const startCamera = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } });
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-    } catch (err) {
-      console.error("Error accessing camera: ", err);
-      setAlertModal({ isOpen: true, message: "No se pudo acceder a la cámara. Por favor, comprueba los permisos en tu navegador.", title: 'Error de cámara' });
-    }
+  // ---- Service Data Handlers ----
+
+  const handleServiceDataChange = (category: CareCategory, field: keyof ServiceConfig, value: any) => {
+      setServicesData(prev => ({
+          ...prev,
+          [category]: { ...prev[category], [field]: value }
+      }));
   };
 
-  const stopCamera = () => {
-    if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
-      streamRef.current = null;
-    }
+  const handleRateChange = (category: CareCategory, field: keyof ServiceRates, value: number) => {
+      setServicesData(prev => ({
+          ...prev,
+          [category]: { 
+              ...prev[category], 
+              rates: { ...prev[category].rates, [field]: value } 
+          }
+      }));
   };
 
-  const handleTakePhoto = () => {
-    if (videoRef.current && canvasRef.current) {
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const context = canvas.getContext('2d');
-      if (context) {
-        context.translate(video.videoWidth, 0);
-        context.scale(-1, 1);
-        context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
-      }
-      const dataUrl = canvas.toDataURL('image/jpeg');
-      setPhotoDataUrl(dataUrl);
-      stopCamera();
-    }
+  const handleTaskToggle = (category: CareCategory, task: string) => {
+      const currentTasks = servicesData[category].tasks;
+      const newTasks = currentTasks.includes(task) 
+        ? currentTasks.filter(t => t !== task) 
+        : [...currentTasks, task];
+      handleServiceDataChange(category, 'tasks', newTasks);
   };
 
-  const handleRetakePhoto = () => {
-    setPhotoDataUrl(null);
+  const handleAvailabilityToggle = (category: CareCategory, slot: string) => {
+      const currentAvailability = servicesData[category].availability || [];
+      const newAvailability = currentAvailability.includes(slot) 
+        ? currentAvailability.filter(s => s !== slot) 
+        : [...currentAvailability, slot];
+      handleServiceDataChange(category, 'availability', newAvailability);
   };
-  
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setIdDocument(e.target.files[0]);
+
+  const handleMedicalSkillToggle = (category: CareCategory, skill: string) => {
+      const currentSkills = servicesData[category].medicalSkills || [];
+      const newSkills = currentSkills.includes(skill)
+        ? currentSkills.filter(s => s !== skill)
+        : [...currentSkills, skill];
+      handleServiceDataChange(category, 'medicalSkills', newSkills);
+  };
+
+  // ---- Geolocation Logic ----
+  const handleDetectLocation = () => {
+    if (!navigator.geolocation) {
+        alert('La geolocalización no está soportada en este navegador.');
+        return;
     }
-  };
-  
-  const handleGetCurrentLocation = () => {
-    setLocationStatus('loading');
+
+    setIsLocating(true);
+
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        console.log("Location obtained:", position);
-        setLocationStatus('success');
-      },
-      (error) => {
-        console.error("Error getting location:", error);
-        setLocationStatus('error');
-        setAlertModal({ isOpen: true, message: 'No se pudo obtener la ubicación. Por favor, habilita los permisos o introduce la dirección manualmente.', title: 'Error de ubicación' });
-      }
+        async (position) => {
+            const { latitude, longitude } = position.coords;
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                );
+                const data = await response.json();
+                
+                const address = data.address;
+                const locationParts = [
+                    address.road,
+                    address.neighbourhood || address.suburb,
+                    address.city || address.town || address.village
+                ].filter(Boolean);
+                
+                const locationStr = locationParts.length > 0 
+                    ? locationParts.join(', ') 
+                    : `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`;
+
+                handleProfileChange('location', locationStr);
+            } catch (error) {
+                console.error('Error fetching address:', error);
+                handleProfileChange('location', `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`);
+            } finally {
+                setIsLocating(false);
+            }
+        },
+        (error) => {
+            console.error('Error getting location:', error);
+            alert('No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.');
+            setIsLocating(false);
+        }
     );
   };
 
-  const renderFormStep = () => (
-    <>
-      <div className="text-center mb-8">
-        <HeartHandshakeIcon className="h-24 w-24 mx-auto text-teal-500" />
-      </div>
-      <h1 className="text-3xl font-bold text-slate-800 mb-2">¡Crea tu perfil de cuidador!</h1>
-      <p className="text-slate-600 mb-8">Completa estos primeros pasos y te ayudaremos a crear un perfil atractivo que inspire confianza.</p>
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">Tipos de Servicio (puedes elegir varios)</label>
-          <div className="space-y-2">
-            {serviceCategories.map(cat => (
-              <label key={cat.id} className="flex items-center w-full bg-white p-3 border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 transition-colors">
-                <input
-                  type="checkbox"
-                  checked={categories.includes(cat.id)}
-                  onChange={() => handleCategoryChange(cat.id)}
-                  className="h-5 w-5 rounded border-slate-300 text-teal-500 focus:ring-teal-500"
-                />
-                <span className="ml-3 text-slate-700">{cat.label}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        {categories.length > 0 && (
-          <div className="space-y-4 pt-2 animate-fade-in">
-            <p className="text-sm font-medium text-slate-700">Ahora, describe cada servicio que ofreces:</p>
-            {categories.sort().map(category => {
-              const catInfo = serviceCategories.find(c => c.id === category);
-              return (
-                <div key={category}>
-                  <label htmlFor={`description-${category}`} className="block text-sm font-medium text-teal-600 mb-1">
-                    {catInfo?.label}
-                  </label>
-                  <div className="relative">
-                    <textarea
-                      id={`description-${category}`}
-                      value={descriptions[category] || ''}
-                      onChange={(e) => handleDescriptionChange(category, e.target.value)}
-                      maxLength={MAX_CHARS}
-                      placeholder={`Describe tu experiencia con ${catInfo?.label.toLowerCase()}...`}
-                      className="w-full h-28 p-3 border border-slate-300 rounded-xl resize-none focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
-                      aria-label={`Descripción para ${catInfo?.label}`}
-                    />
-                    <div className="absolute bottom-3 right-4 text-sm text-slate-400">
-                      {(descriptions[category] || '').length}/{MAX_CHARS}
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-          
-        <div>
-          <label htmlFor="experience" className="block text-sm font-medium text-slate-700 mb-1">Nivel de Experiencia</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <StarIcon className="h-5 w-5 text-slate-400" />
-            </div>
-            <select
-              id="experience"
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
-              className="w-full appearance-none bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
-            >
-              <option value="" disabled>Selecciona tu experiencia</option>
-              {experienceLevels.map(level => (
-                <option key={level.id} value={level.id}>{level.name}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="hourlyRate" className="block text-sm font-medium text-slate-700 mb-1">Tarifa por hora (€)</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <CurrencyEuroIcon className="h-5 w-5 text-slate-400" />
-            </div>
-            <input
-              id="hourlyRate"
-              type="number"
-              value={hourlyRate}
-              onChange={(e) => setHourlyRate(e.target.value)}
-              placeholder="Ej: 12"
-              className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition"
-              min="0"
-            />
-          </div>
-        </div>
-      </div>
-        
-      <div className="mt-8">
-        <button 
-          onClick={() => setStep(2)}
-          disabled={!isFormComplete}
-          className="w-full bg-teal-500 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-300 disabled:cursor-not-allowed transform disabled:scale-100 hover:scale-105"
-        >
-          Continuar
-        </button>
-      </div>
-    </>
-  );
-
-  const renderPhotoStep = () => (
-    <div className="text-center">
-      <h1 className="text-3xl font-bold text-slate-800 mb-2">¡Genial! Ahora, una buena foto de perfil</h1>
-      <p className="text-slate-600 mb-8">Asegúrate de que tu cara se vea bien. ¡Una sonrisa ayuda mucho!</p>
-      
-      <div className="flex flex-col items-center space-y-6">
-        <div className="w-64 h-64 rounded-full overflow-hidden bg-slate-200 shadow-lg flex items-center justify-center border-4 border-white">
-          {photoDataUrl ? (
-            <img src={photoDataUrl} alt="Vista previa del perfil" className="w-full h-full object-cover" />
-          ) : (
-            <video ref={videoRef} autoPlay playsInline className="w-full h-full object-cover scale-x-[-1]"></video>
-          )}
-        </div>
-        <canvas ref={canvasRef} className="hidden"></canvas>
-        
-        {photoDataUrl ? (
-          <div className="flex space-x-4">
-            <button onClick={handleRetakePhoto} className="px-6 py-2 bg-slate-200 text-slate-700 font-semibold rounded-lg hover:bg-slate-300 transition-colors">
-              Repetir foto
-            </button>
-            <button onClick={() => setStep(3)} className="px-6 py-2 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-colors">
-              Confirmar
-            </button>
-          </div>
-        ) : (
-          <button onClick={handleTakePhoto} className="bg-teal-500 text-white rounded-full p-4 shadow-lg hover:bg-teal-600 transition-colors transform hover:scale-110">
-            <CameraIcon className="w-8 h-8" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
-
-  const renderVerificationStep = () => (
-    <>
-      <div className="text-center mb-8">
-        <ShieldCheckIcon className="h-24 w-24 mx-auto text-teal-500" />
-      </div>
-      <h1 className="text-3xl font-bold text-slate-800 mb-2">Verificación de Identidad</h1>
-      <p className="text-slate-600 mb-8">Un último paso para garantizar la seguridad en la comunidad. Tus datos son confidenciales.</p>
-
-      <div className="space-y-4">
-        <div>
-          <label htmlFor="fullName" className="block text-sm font-medium text-slate-700 mb-1">Nombre Completo</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><UserIcon className="h-5 w-5 text-slate-400" /></div>
-            <input id="fullName" type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} placeholder="Ej: Ana García Pérez" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition" />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-slate-700 mb-1">Número de Teléfono</label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><PhoneIcon className="h-5 w-5 text-slate-400" /></div>
-            <input id="phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Ej: 600 123 456" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition" />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-1">
-            Correo Electrónico <span className="text-slate-500 font-normal">(Opcional)</span>
-          </label>
-          <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><MailIcon className="h-5 w-5 text-slate-400" /></div>
-            <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Ej: ana.garcia@email.com" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition" />
-          </div>
-        </div>
-        <div>
-          <label htmlFor="id-upload" className="block text-sm font-medium text-slate-700 mb-1">
-            Documento de Identidad <span className="text-slate-500 font-normal">(Opcional)</span>
-          </label>
-          <label htmlFor="id-upload" className="w-full flex items-center bg-white p-3 border border-slate-300 rounded-xl cursor-pointer hover:bg-slate-50 relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none"><IdentificationIcon className="h-5 w-5 text-slate-400" /></div>
-            <span className={`pl-7 truncate ${idDocument ? 'text-slate-800' : 'text-slate-400'}`}>{idDocument ? idDocument.name : 'Subir foto (DNI, Pasaporte...)'}</span>
-          </label>
-          <input id="id-upload" type="file" onChange={handleFileChange} className="hidden" accept="image/*,application/pdf" />
-        </div>
-      </div>
-      
-      <div className="mt-8">
-        <button 
-          onClick={() => setStep(4)}
-          disabled={!isVerificationComplete}
-          className="w-full bg-teal-500 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-300 disabled:cursor-not-allowed transform disabled:scale-100 hover:scale-105"
-        >
-          Indicar Ubicación
-        </button>
-      </div>
-    </>
-  );
+  // ---- Camera Logic ----
   
-  const renderLocationStep = () => (
-    <>
-      <div className="text-center mb-8">
-        <MapPinIcon className="h-24 w-24 mx-auto text-teal-500" />
-      </div>
-      <h1 className="text-3xl font-bold text-slate-800 mb-2">Indica tu zona de trabajo</h1>
-      <p className="text-slate-600 mb-8">Esto ayudará a que te encuentren personas cerca de ti. Puedes usar tu ubicación actual o introducir una dirección.</p>
-
-      <div className="space-y-4">
-        <button 
-          onClick={handleGetCurrentLocation}
-          disabled={locationStatus === 'loading'}
-          className="w-full flex items-center justify-center bg-white border-2 border-teal-500 text-teal-500 px-4 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:opacity-50 disabled:cursor-wait"
-        >
-          {locationStatus === 'loading' && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-teal-500 mr-3"></div>}
-          {locationStatus === 'loading' ? 'Buscando...' : 'Usar mi ubicación actual'}
-        </button>
-
-        {locationStatus === 'success' && <p className="text-center text-green-600 font-medium">¡Ubicación guardada con éxito!</p>}
-        {locationStatus === 'error' && <p className="text-center text-red-600 font-medium">Hubo un error al obtener la ubicación.</p>}
-
-        <div className="text-center">
-          <button onClick={() => setShowManualInput(!showManualInput)} className="text-sm text-slate-500 hover:text-teal-600 font-medium">
-            O, introduce una dirección manualmente
-          </button>
-        </div>
-
-        {showManualInput && (
-          <div className="animate-fade-in">
-            <label htmlFor="manualLocation" className="block text-sm font-medium text-slate-700 mb-1">Dirección o Barrio</label>
-            <div className="relative">
-              <input 
-                id="manualLocation" 
-                type="text" 
-                value={manualLocation} 
-                onChange={(e) => setManualLocation(e.target.value)} 
-                placeholder="Ej: Calle Mayor, 1, Madrid" 
-                className="w-full bg-white p-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition" 
-              />
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="mt-8">
-        <button 
-          onClick={onClose}
-          disabled={!isLocationComplete}
-          className="w-full bg-teal-500 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-300 disabled:cursor-not-allowed transform disabled:scale-100 hover:scale-105"
-        >
-          Finalizar y Guardar Perfil
-        </button>
-      </div>
-    </>
-  );
-
-
-  const renderStepContent = () => {
-    switch (step) {
-      case 1: return renderFormStep();
-      case 2: return renderPhotoStep();
-      case 3: return renderVerificationStep();
-      case 4: return renderLocationStep();
-      default: return renderFormStep();
+  const startCamera = async () => {
+    try {
+        // Try preferred settings
+        const mediaStream = await navigator.mediaDevices.getUserMedia({ 
+            video: { facingMode: 'user', width: { ideal: 1280 } } 
+        });
+        setStream(mediaStream);
+        setIsCameraActive(true);
+    } catch (err: any) {
+        console.warn("Preferred camera constraints failed, retrying with basic config...", err);
+        try {
+            // Fallback to basic video constraint
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            setStream(mediaStream);
+            setIsCameraActive(true);
+        } catch (fallbackErr) {
+            console.error("Error accessing camera:", fallbackErr);
+            alert("No se pudo iniciar la cámara. Por favor, sube una foto de la galería.");
+            // Fallback to file input
+            cameraInputRef.current?.click();
+        }
     }
   };
 
-  return (
-    <div className="bg-slate-50 min-h-screen animate-fade-in">
-      <header className="flex-shrink-0 bg-slate-50/80 backdrop-blur-lg sticky top-0 z-30">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-end">
-          <button 
-            onClick={() => step > 1 ? setStep(step - 1) : onClose()} 
-            className="text-slate-600 font-semibold hover:text-teal-500"
-          >
-            {step > 1 ? 'Atrás' : 'Salir'}
-          </button>
+  const capturePhoto = () => {
+    if (videoRef.current && canvasRef.current) {
+        const context = canvasRef.current.getContext('2d');
+        if (context) {
+            canvasRef.current.width = videoRef.current.videoWidth;
+            canvasRef.current.height = videoRef.current.videoHeight;
+            context.translate(canvasRef.current.width, 0);
+            context.scale(-1, 1);
+            context.drawImage(videoRef.current, 0, 0);
+            const dataUrl = canvasRef.current.toDataURL('image/jpeg');
+            handleProfileChange('photoUrl', dataUrl);
+            
+            if (stream) {
+                stream.getTracks().forEach(t => t.stop());
+                setStream(null);
+            }
+            setIsCameraActive(false);
+        }
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files?.[0]) {
+          const reader = new FileReader();
+          reader.onload = (ev) => handleProfileChange('photoUrl', ev.target?.result);
+          reader.readAsDataURL(e.target.files[0]);
+      }
+  };
+
+  // ---- Navigation & Submit ----
+
+  const handleSaveCategory = () => {
+      if (editingCategory) {
+          // Validate if needed
+          handleServiceDataChange(editingCategory, 'completed', true);
+          setEditingCategory(null);
+      }
+  };
+
+  const nextStep = () => {
+      if (step === 1) {
+          if (!profileData.name || !profileData.location) return alert("Completa los campos obligatorios.");
+          setStep(2);
+      } else if (step === 2) {
+          const hasCompleted = Object.values(servicesData).some((s: ServiceConfig) => s.completed);
+          if (!hasCompleted) return alert("Completa al menos un servicio para continuar.");
+          setStep(3);
+      } else {
+          confirmPublish();
+      }
+  };
+
+  const prevStep = () => {
+      if (editingCategory) {
+          setEditingCategory(null); // Close editor
+      } else {
+          setStep(prev => prev - 1);
+      }
+  };
+
+  const confirmPublish = () => {
+      // Aggregate global availability
+      const allAvailabilities = new Set<string>();
+      Object.values(servicesData).forEach((s: any) => s.availability?.forEach((a: string) => allAvailabilities.add(a)));
+
+      const finalProfile: ProviderProfile = {
+          ...profileData,
+          availability: Array.from(allAvailabilities),
+          services: servicesData // Use the full servicesData object which tracks completion
+      };
+      onComplete(finalProfile);
+  };
+
+  // ---- Renders ----
+
+  // Step 1: Personal Profile
+  const renderProfileForm = () => (
+      <div className="space-y-6 animate-fade-in">
+          <div className="text-center">
+              <h2 className="text-xl font-bold text-slate-800">Sobre ti</h2>
+              <p className="text-slate-500 text-sm">Crea un perfil de confianza.</p>
+          </div>
+
+          {/* Photo Upload */}
+          <div className="flex flex-col items-center">
+              <div className="relative w-32 h-32 mb-4">
+                  {isCameraActive ? (
+                      <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover rounded-full border-4 border-white shadow-lg transform scale-x-[-1]" />
+                  ) : (
+                      <img 
+                          src={profileData.photoUrl || 'https://via.placeholder.com/150?text=?'} 
+                          alt="Profile" 
+                          className="w-full h-full object-cover rounded-full border-4 border-white shadow-lg bg-slate-100"
+                      />
+                  )}
+                  {!isCameraActive && !profileData.photoUrl && (
+                      <div className="absolute inset-0 flex items-center justify-center text-slate-300">
+                          <UserCircleIcon className="w-20 h-20" />
+                      </div>
+                  )}
+              </div>
+              
+              <div className="flex gap-2">
+                  {isCameraActive ? (
+                      <button onClick={capturePhoto} className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">Capturar</button>
+                  ) : (
+                      <>
+                          <button onClick={startCamera} className="bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center"><CameraIcon className="w-4 h-4 mr-1"/> Cámara</button>
+                          <button onClick={() => galleryInputRef.current?.click()} className="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-full text-sm font-bold flex items-center"><PhotoIcon className="w-4 h-4 mr-1"/> Galería</button>
+                      </>
+                  )}
+              </div>
+              <input type="file" ref={cameraInputRef} onChange={handleFileChange} accept="image/*" capture="user" className="hidden" />
+              <input type="file" ref={galleryInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
+              <canvas ref={canvasRef} className="hidden" />
+          </div>
+
+          {/* Fields */}
+          <div className="space-y-4">
+              <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nombre y Apellidos</label>
+                  <input type="text" value={profileData.name} onChange={e => handleProfileChange('name', e.target.value)} className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Ej. Laura Martínez" />
+              </div>
+              <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Ubicación (Barrio/Ciudad)</label>
+                  <div className="relative">
+                      <input 
+                        type="text" 
+                        value={profileData.location} 
+                        onChange={e => handleProfileChange('location', e.target.value)} 
+                        className="w-full p-3 pl-10 pr-12 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" 
+                        placeholder="Ej. Chamberí, Madrid" 
+                      />
+                      <MapPinIcon className="absolute left-3 top-3.5 w-5 h-5 text-slate-400" />
+                      
+                      <button
+                        type="button"
+                        onClick={handleDetectLocation}
+                        className="absolute right-2 top-2 p-1.5 text-teal-500 hover:bg-teal-50 rounded-lg transition-colors"
+                        title="Detectar mi ubicación"
+                        disabled={isLocating}
+                      >
+                        {isLocating ? (
+                            <div className="w-5 h-5 border-2 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                            <GpsFixedIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                  </div>
+              </div>
+              
+              <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">Idiomas</label>
+                  <div className="flex flex-wrap gap-2">
+                      {languagesList.map(lang => (
+                          <button 
+                              key={lang} 
+                              onClick={() => handleLanguageToggle(lang)}
+                              className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${profileData.languages.includes(lang) ? 'bg-teal-50 border-teal-500 text-teal-700' : 'bg-white border-slate-200 text-slate-600'}`}
+                          >
+                              {lang}
+                          </button>
+                      ))}
+                  </div>
+              </div>
+          </div>
+      </div>
+  );
+
+  // Step 2: Services Dashboard
+  const renderServicesDashboard = () => (
+      <div className="space-y-6 animate-fade-in">
+          <div className="text-center">
+              <h2 className="text-xl font-bold text-slate-800">¿Qué servicios quieres ofrecer?</h2>
+              <p className="text-slate-500 text-sm mt-1">Configura uno o varios servicios.</p>
+          </div>
+          <div className="grid grid-cols-1 gap-4">
+              {serviceCategories.map(cat => {
+                  const isCompleted = servicesData[cat.id].completed;
+                  return (
+                      <button
+                          key={cat.id}
+                          onClick={() => setEditingCategory(cat.id)}
+                          className={`p-4 rounded-xl border-2 flex items-center text-left transition-all relative ${
+                              isCompleted 
+                              ? 'bg-white border-teal-500 shadow-sm' 
+                              : 'bg-white border-slate-100 hover:border-slate-300'
+                          }`}
+                      >
+                          <div className={`p-3 rounded-full mr-4 ${isCompleted ? 'bg-teal-50 text-teal-600' : 'bg-slate-50 text-slate-400'}`}>
+                              <cat.icon className="w-6 h-6" />
+                          </div>
+                          <div className="flex-grow">
+                              <h3 className={`font-bold ${isCompleted ? 'text-teal-900' : 'text-slate-700'}`}>{cat.label}</h3>
+                              <p className="text-xs text-slate-500 mt-0.5">{isCompleted ? 'Completado' : 'Toque para configurar'}</p>
+                          </div>
+                          <div className="ml-auto">
+                              {isCompleted ? (
+                                  <div className="bg-teal-500 text-white p-1 rounded-full">
+                                      <CheckCircleIcon className="w-5 h-5" />
+                                  </div>
+                              ) : (
+                                  <ChevronRightIcon className="w-5 h-5 text-slate-300" />
+                              )}
+                          </div>
+                      </button>
+                  );
+              })}
+          </div>
+      </div>
+  );
+
+  // Step 2 (Sub-View): Service Editor
+  const renderServiceEditor = (category: CareCategory) => {
+      const config = servicesData[category];
+      const catInfo = serviceCategories.find(c => c.id === category);
+
+      return (
+          <div className="space-y-6 animate-slide-up">
+              <div className={`flex items-center justify-between p-4 rounded-xl ${catInfo?.bg} border ${catInfo?.border} mb-6`}>
+                  <div className="flex items-center">
+                      <div className={`p-2 rounded-full bg-white/50 mr-3 ${catInfo?.color}`}>
+                          {catInfo && <catInfo.icon className="w-6 h-6" />}
+                      </div>
+                      <h3 className={`font-bold text-lg ${catInfo?.color?.replace('text', 'text-slate')}`}>Editando: {catInfo?.label}</h3>
+                  </div>
+              </div>
+
+              {/* Rates */}
+              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                  <div className="grid grid-cols-2 gap-4">
+                      <div>
+                          <label className="block text-sm font-bold text-slate-700 mb-1">Precio Hora</label>
+                          <div className="relative">
+                              <input 
+                                type="number" 
+                                value={config.rates.hourly || ''} 
+                                onChange={e => handleRateChange(category, 'hourly', e.target.value === '' ? 0 : parseFloat(e.target.value))} 
+                                className="w-full p-3 pl-8 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" 
+                              />
+                              <CurrencyEuroIcon className="absolute left-2.5 top-3.5 w-5 h-5 text-slate-400" />
+                          </div>
+                      </div>
+                      {category !== CareCategory.HOUSEKEEPING && (
+                          <div>
+                              <label className="block text-sm font-bold text-slate-700 mb-1">Precio Turno</label>
+                              <div className="relative">
+                                  <input 
+                                    type="number" 
+                                    value={config.rates.shift || ''} 
+                                    onChange={e => handleRateChange(category, 'shift', e.target.value === '' ? 0 : parseFloat(e.target.value))} 
+                                    placeholder="Opcional" 
+                                    className="w-full p-3 pl-8 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" 
+                                  />
+                                  <CurrencyEuroIcon className="absolute left-2.5 top-3.5 w-5 h-5 text-slate-400" />
+                              </div>
+                          </div>
+                      )}
+                  </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">Tu experiencia</label>
+                  <textarea 
+                      value={config.description || ''} 
+                      onChange={e => handleServiceDataChange(category, 'description', e.target.value)} 
+                      className="w-full p-3 bg-white border border-slate-300 rounded-xl h-32 focus:ring-2 focus:ring-teal-500 outline-none text-sm" 
+                      placeholder={`Describe tu experiencia cuidando ${catInfo?.label.toLowerCase()}...`}
+                  />
+              </div>
+
+              {/* Availability (Per Service) */}
+              <div>
+                  <label className="text-sm font-bold text-slate-700 mb-2 flex items-center">
+                      <ClockIcon className="w-4 h-4 mr-1 text-teal-600" /> Disponibilidad para este servicio
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                      {availabilitySlots.map(slot => (
+                          <button 
+                              key={slot} 
+                              onClick={() => handleAvailabilityToggle(category, slot)}
+                              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${config.availability?.includes(slot) ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-slate-200 text-slate-600'}`}
+                          >
+                              {slot}
+                          </button>
+                      ))}
+                  </div>
+              </div>
+
+              {/* Medical Skills (Elderly Only) */}
+              {category === CareCategory.ELDERLY && (
+                  <div className="bg-red-50 p-4 rounded-xl border border-red-100">
+                      <h4 className="font-bold text-red-800 text-sm mb-3 flex items-center"><HealthIcon className="w-4 h-4 mr-1"/> Especialización y Patologías</h4>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {MEDICAL_SKILLS.map(skill => (
+                              <label key={skill} className="flex items-center space-x-2 cursor-pointer bg-white p-2 rounded border border-red-100">
+                                  <input 
+                                      type="checkbox" 
+                                      checked={config.medicalSkills?.includes(skill)} 
+                                      onChange={() => handleMedicalSkillToggle(category, skill)} 
+                                      className="rounded text-red-600 focus:ring-red-500" 
+                                  />
+                                  <span className="text-xs font-medium text-slate-700">{skill}</span>
+                              </label>
+                          ))}
+                      </div>
+                  </div>
+              )}
+
+              {/* Tasks */}
+              <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-2">¿Qué incluyes?</label>
+                  <div className="flex flex-wrap gap-2">
+                      {SERVICE_TASKS[category].map(task => (
+                          <button 
+                              key={task} 
+                              onClick={() => handleTaskToggle(category, task)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${config.tasks.includes(task) ? 'bg-teal-50 border-teal-500 text-teal-700' : 'bg-white border-slate-200 text-slate-600'}`}
+                          >
+                              {task}
+                          </button>
+                      ))}
+                  </div>
+              </div>
+          </div>
+      );
+  };
+
+  // Step 3: Review
+  const renderReview = () => {
+      const completedServices = Object.keys(servicesData).filter(k => servicesData[k as CareCategory].completed) as CareCategory[];
+      
+      return (
+        <div className="space-y-6 animate-fade-in">
+            <div className="text-center">
+                <h2 className="text-xl font-bold text-slate-800">Revisa tu perfil</h2>
+                <p className="text-slate-500 text-sm">Así te verán los clientes.</p>
+            </div>
+
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="bg-teal-500 h-20 relative"></div>
+                <div className="px-4 pb-4 -mt-10 relative">
+                    <img src={profileData.photoUrl || 'https://via.placeholder.com/150'} className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover" alt="Me" />
+                    <div className="mt-2">
+                        <h3 className="font-bold text-lg text-slate-800">{profileData.name}</h3>
+                        <div className="flex items-center text-slate-500 text-sm">
+                            <MapPinIcon className="w-4 h-4 mr-1" /> {profileData.location}
+                        </div>
+                    </div>
+                </div>
+                
+                <div className="px-4 pb-4 space-y-4">
+                    {completedServices.map(cat => {
+                        const config = servicesData[cat];
+                        const catInfo = serviceCategories.find(c => c.id === cat);
+                        
+                        if (!catInfo) return null;
+
+                        return (
+                            <div key={cat} className="bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                <div className="flex justify-between items-center mb-2">
+                                    <div className="flex items-center">
+                                        <catInfo.icon className={`w-5 h-5 mr-2 ${catInfo.color}`} />
+                                        <span className="font-bold text-slate-700 text-sm">{catInfo.label}</span>
+                                    </div>
+                                    <span className="font-bold text-teal-600 text-sm">{config.rates.hourly}€/h</span>
+                                </div>
+                                {config.availability && config.availability.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 mt-2 mb-2">
+                                        {config.availability.map(slot => (
+                                            <span key={slot} className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{slot}</span>
+                                        ))}
+                                    </div>
+                                )}
+                                <div className="flex flex-wrap gap-1">
+                                    {config.tasks.slice(0, 3).map(t => (
+                                        <span key={t} className="text-[10px] bg-white border border-slate-200 text-slate-500 px-2 py-0.5 rounded-full">{t}</span>
+                                    ))}
+                                    {config.tasks.length > 3 && <span className="text-[10px] text-slate-400 px-1">+{config.tasks.length - 3} más</span>}
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
         </div>
-      </header>
-      <main className="container mx-auto px-4 py-6 pb-28">
-        {renderStepContent()}
+      );
+  };
+
+  return (
+    <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
+      {/* Stepper Header */}
+      <div className="bg-white border-b border-slate-200 p-4 pt-safe-top">
+          <div className="flex items-center justify-between mb-4">
+              <h1 className="text-lg font-bold text-slate-800">
+                  {step === 1 ? 'Perfil Personal' : step === 2 ? (editingCategory ? 'Configuración' : 'Mis Servicios') : 'Resumen'}
+              </h1>
+              <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+          </div>
+          <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+              <div 
+                  className="h-full bg-teal-500 transition-all duration-300 ease-out rounded-full"
+                  style={{ width: `${(step / 3) * 100}%` }}
+              ></div>
+          </div>
+      </div>
+
+      <main className="flex-grow overflow-y-auto p-4 pb-24">
+          {step === 1 && renderProfileForm()}
+          {step === 2 && (editingCategory ? renderServiceEditor(editingCategory) : renderServicesDashboard())}
+          {step === 3 && renderReview()}
       </main>
-      <AlertModal 
-        isOpen={alertModal.isOpen}
-        onClose={() => setAlertModal({ isOpen: false, message: '' })}
-        message={alertModal.message}
-        title={alertModal.title}
-      />
+
+      <footer className="bg-white border-t border-slate-200 p-4 safe-area-bottom flex justify-between items-center">
+          <button onClick={prevStep} className="px-6 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl transition-colors">
+              {editingCategory ? 'Cancelar' : (step > 1 ? 'Atrás' : '')}
+          </button>
+          
+          {editingCategory ? (
+              <button 
+                  onClick={handleSaveCategory}
+                  className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
+              >
+                  Guardar y Volver <CheckCircleIcon className="w-5 h-5 ml-2" />
+              </button>
+          ) : (
+              <button 
+                  onClick={step === 3 ? confirmPublish : nextStep}
+                  className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
+              >
+                  {step === 3 ? 'Publicar Perfil' : 'Siguiente'}
+                  {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
+              </button>
+          )}
+      </footer>
     </div>
   );
 };

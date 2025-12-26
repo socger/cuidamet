@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CareCategory, Provider, ChatConversation, Message, UserRole, BookingDetails, ClientProfile } from "./types";
+import { CareCategory, Provider, ChatConversation, Message, UserRole, BookingDetails, ClientProfile, ProviderProfile, ServiceDescription } from "./types";
 import { MOCK_PROVIDERS } from "./services/mockData";
 import { MOCK_CHATS } from "./services/mockChatData";
 import BottomNav from "./components/BottomNav";
@@ -89,6 +89,8 @@ const App: React.FC = () => {
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [preselectedRole, setPreselectedRole] = useState<UserRole | undefined>(undefined);
   const [clientProfile, setClientProfile] = useState<ClientProfile | null>(null);
+  const [providerProfile, setProviderProfile] = useState<ProviderProfile | null>(null);
+  const [activeRole, setActiveRole] = useState<'client' | 'provider'>('client');
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -224,6 +226,41 @@ const App: React.FC = () => {
     setView("offer");
     setSelectedProviderId(null);
     setCurrentChatId(null);
+  };
+
+  const handleProviderRegistrationComplete = (data: ProviderProfile) => {
+    setProviderProfile(data);
+    setActiveRole('provider');
+    setIsAuthenticated(true);
+    
+    // Create provider descriptions from service data
+    const activeServices = Object.entries(data.services)
+        .filter(([_, conf]) => conf.completed)
+        .map(([cat]) => cat as CareCategory);
+
+    const allTasks = Object.values(data.services).flatMap(s => s.tasks);
+    
+    const descriptions: ServiceDescription[] = [];
+    Object.entries(data.services).forEach(([cat, conf]) => {
+        if (conf.completed && conf.description) {
+            descriptions.push({
+                category: cat as CareCategory,
+                text: conf.description
+            });
+        }
+    });
+
+    // Show success alert
+    setAlertModal({ 
+      isOpen: true, 
+      message: '¡Tu perfil de cuidador se ha creado exitosamente! Ahora los clientes podrán encontrarte.', 
+      title: 'Perfil publicado' 
+    });
+    
+    // Navigate to myProfile view after a short delay
+    setTimeout(() => {
+      setView("myProfile");
+    }, 2000);
   };
 
   const handleNavigateMyProfile = () => {
@@ -378,6 +415,12 @@ const App: React.FC = () => {
       return;
     }
     
+    // If user is signing up as provider (cuidador), redirect to OfferService
+    if (role === 'provider' && !pendingAction) {
+      setView('offer');
+      return;
+    }
+    
     // Execute pending action
     if (pendingAction === 'booking' && bookingProviderId) {
       setView('booking');
@@ -476,7 +519,7 @@ const App: React.FC = () => {
         />
       );
     } else if (currentView === "offer") {
-      mainContent = <OfferService onClose={handleNavigateHome} />;
+      mainContent = <OfferService onComplete={handleProviderRegistrationComplete} />;
     } else if (currentView === "booking" && bookingProviderId) {
       const provider = providersWithDistance.find(
         (p) => p.id === bookingProviderId
