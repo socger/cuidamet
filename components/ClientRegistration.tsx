@@ -24,6 +24,7 @@ const serviceCategories = [
 const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onBack }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<CareCategory[]>([]);
@@ -126,15 +127,33 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
     );
   };
 
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPhone = (phone: string): boolean => {
+    // Valida teléfonos españoles: 9 dígitos, puede empezar con +34 o 0034, permite espacios y guiones
+    const phoneRegex = /^(\+34|0034)?\s?[6-9]\d{1}\s?\d{3}\s?\d{3}$|^(\+34|0034)?\s?[6-9]\d{8}$/;
+    return phoneRegex.test(phone.trim());
+  };
+
+  const isStepValid = (): boolean => {
+    if (step === 1) {
+      return name.trim() !== '' && email.trim() !== '' && isValidEmail(email) && phone.trim() !== '' && isValidPhone(phone);
+    }
+    return true;
+  };
+
   const handleNext = () => {
     if (step === 1) {
-        if (!name.trim()) return;
+        if (!isStepValid()) return;
         if (isCameraActive) stopCamera();
         setStep(2);
     } else if (step === 2) {
        const profile: ClientProfile = {
         name,
-        email: 'demo@client.com',
+        email,
         phone,
         photoUrl: photoUrl || 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200', // Fallback image
         preferences: selectedCategories
@@ -150,8 +169,8 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
         onBack={step === 1 ? () => { if(isCameraActive) stopCamera(); onBack(); } : () => setStep(1)} 
       />
       
-      <main className="flex-grow overflow-y-auto px-6 py-6">
-        <div className="container mx-auto max-w-md">
+      <main className="flex-grow overflow-y-auto px-6 py-6 pb-6">
+        <div className="container mx-auto max-w-md pb-24">
             {step === 1 && (
             <div className="space-y-6 animate-fade-in">
                 <div className="text-center">
@@ -227,6 +246,21 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                         />
                     </div>
                     <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                        <input 
+                            type="email" 
+                            value={email} 
+                            onChange={(e) => setEmail(e.target.value)} 
+                            placeholder="tu-email@ejemplo.com"
+                            className={`w-full bg-white p-3.5 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800 ${
+                              email && !isValidEmail(email) ? 'border-red-500' : 'border-slate-300'
+                            }`}
+                        />
+                        {email && !isValidEmail(email) && (
+                          <p className="text-red-500 text-sm mt-1">Por favor, introduce un email válido</p>
+                        )}
+                    </div>
+                    <div>
                         <label className="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
                         <div className="relative">
                             <input 
@@ -234,10 +268,15 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                                 value={phone} 
                                 onChange={(e) => setPhone(e.target.value)} 
                                 placeholder="600 000 000"
-                                className="w-full bg-white p-3.5 pl-12 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800"
+                                className={`w-full bg-white p-3.5 pl-12 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800 ${
+                                  phone && !isValidPhone(phone) ? 'border-red-500' : 'border-slate-300'
+                                }`}
                             />
                             <PhoneIcon className="absolute top-1/2 left-4 -translate-y-1/2 w-5 h-5 text-slate-400" />
                         </div>
+                        {phone && !isValidPhone(phone) && (
+                          <p className="text-red-500 text-sm mt-1">Por favor, introduce un teléfono válido (9 dígitos)</p>
+                        )}
                     </div>
                 </div>
             </div>
@@ -278,19 +317,20 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                 </div>
             </div>
             )}
+            
+            {/* Botón Siguiente - Parte del contenido scrolleable */}
+            <div className="mt-8">
+              <button 
+                onClick={handleNext}
+                disabled={!isStepValid()}
+                className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all disabled:bg-slate-300 disabled:shadow-none flex items-center justify-center"
+              >
+                {step === 1 ? 'Siguiente' : 'Finalizar Registro'} 
+                {step === 1 && <ChevronRightIcon className="w-5 h-5 ml-2 stroke-2" />}
+              </button>
+            </div>
         </div>
       </main>
-
-      <footer className="p-6 bg-white border-t border-slate-100 flex-shrink-0 safe-area-bottom">
-         <button 
-            onClick={handleNext}
-            disabled={step === 1 && !name.trim()}
-            className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all disabled:bg-slate-300 disabled:shadow-none flex items-center justify-center"
-         >
-            {step === 1 ? 'Siguiente' : 'Finalizar Registro'} 
-            {step === 1 && <ChevronRightIcon className="w-5 h-5 ml-2 stroke-2" />}
-         </button>
-      </footer>
     </div>
   );
 };
