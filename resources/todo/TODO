@@ -77,3 +77,12 @@ Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
 * Cuando el usuario esté autenticado ya debe de saber que categorías son las que va a trabajar.
 Por lo que cuando se entre en mapas, favoritos o en buscar cuidadores ... por defecto, debe de tener seleccionados estos iconos de sus preferencias. Aunque se debe de permitir poder cambiar estos filtros de necesidad en estas diferentes vistas que hemos comentado.
+
+
+
+
+Estas dos últimas vistas que he añadido deben de tener también la botonera de abajo ... no aparece ni en el registro ClientRegistration.tsx. 
+
+También hay que crear el registro de cuando es un cuidador ... perfil para buscar trabajo.
+
+Si el usuario no termina el registro, bien sea de cuidador o de búsqueda de cuidador, debe de presentar la vista desde la que fué llamado.
