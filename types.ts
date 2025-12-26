@@ -57,12 +57,24 @@ export interface HousekeepingAttributes {
     eco: boolean;
 }
 
+export interface ServiceVariation {
+    name: string;
+    price: number;
+    unit: string; // 'hora', 'noche', 'visita', 'paseo', 'servicio'
+    enabled: boolean;
+    description: string;
+    isCustom?: boolean; // Identifica variaciones creadas por el usuario
+}
+
 export interface ServiceConfig {
     completed: boolean;
     tasks: string[];
     rates: ServiceRates;
+    variations: ServiceVariation[]; // Nueva estructura detallada de precios
     experience: string; // Years range
-    availability?: string[]; // Specific availability for this service
+    availability?: string[]; // Specific availability for this service (Human readable tags)
+    schedule?: { startTime: string; endTime: string }; // Rango de tiempo específico
+    specificDates?: string[]; // Fechas específicas en formato ISO
     training?: string; // Specific training text
     description?: string;
     certificates: Certificate[];

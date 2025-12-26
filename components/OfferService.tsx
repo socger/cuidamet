@@ -1,12 +1,10 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { CareCategory, Certificate, CertificateType, ServiceConfig, ProviderProfile, ProfileStatus, ServiceRates, PetAttributes, HousekeepingAttributes } from '../types';
+import { CareCategory, ServiceConfig, ProviderProfile, ServiceRates, PetAttributes, HousekeepingAttributes, ServiceVariation, Certificate } from '../types';
 import CameraIcon from './icons/CameraIcon';
 import PhotoIcon from './icons/PhotoIcon';
 import MapPinIcon from './icons/MapPinIcon';
 import CurrencyEuroIcon from './icons/CurrencyEuroIcon';
-import StarIcon from './icons/StarIcon';
-import IdentificationIcon from './icons/IdentificationIcon';
 import UserCircleIcon from './icons/UserCircleIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import ChevronLeftIcon from './icons/ChevronLeftIcon';
@@ -15,23 +13,19 @@ import ElderlyIcon from './icons/ElderlyIcon';
 import ChildIcon from './icons/ChildIcon';
 import PetIcon from './icons/PetIcon';
 import CleaningIcon from './icons/CleaningIcon';
-import DocumentTextIcon from './icons/DocumentTextIcon';
-import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
-import TrashIcon from './icons/TrashIcon';
-import PaperClipIcon from './icons/PaperClipIcon';
-import LockClosedIcon from './icons/LockClosedIcon';
-import ExclamationTriangleIcon from './icons/ExclamationTriangleIcon';
-import XCircleIcon from './icons/XCircleIcon';
-import ChatBubbleLeftRightIcon from './icons/ChatBubbleLeftRightIcon';
-import PencilIcon from './icons/PencilIcon';
 import ClockIcon from './icons/ClockIcon';
-import PlusCircleIcon from './icons/PlusCircleIcon';
-import HeartHandshakeIcon from './icons/HeartHandshakeIcon';
 import HealthIcon from './icons/HealthIcon';
 import GpsFixedIcon from './icons/GpsFixedIcon';
+import CalendarDaysIcon from './icons/CalendarDaysIcon';
+import XMarkIcon from './icons/XMarkIcon';
+import TrashIcon from './icons/TrashIcon';
+import PlusCircleIcon from './icons/PlusCircleIcon';
+import DocumentTextIcon from './icons/DocumentTextIcon';
+import PaperClipIcon from './icons/PaperClipIcon';
 
 interface OfferServiceProps {
   onComplete: (profileData: ProviderProfile) => void;
+  initialData?: Partial<ProviderProfile>;
 }
 
 const serviceCategories = [
@@ -42,7 +36,6 @@ const serviceCategories = [
 ];
 
 const languagesList = ['Español', 'Inglés', 'Francés', 'Alemán', 'Italiano', 'Portugués', 'Chino', 'Árabe'];
-const availabilitySlots = ['Mañanas', 'Tardes', 'Noches', 'Fines de Semana', 'Interno/a'];
 
 const MEDICAL_SKILLS = [
     'Alzheimer', 'Demencia Senil', 'Parkinson', 'Diabetes (Insulina)',
@@ -51,43 +44,86 @@ const MEDICAL_SKILLS = [
 ];
 
 const PET_TYPES = ['Perros', 'Gatos', 'Pequeños animales', 'Otros'];
-const SERVICE_TASKS: Record<CareCategory, string[]> = {
-    [CareCategory.ELDERLY]: ['Acompañamiento', 'Control Medicación', 'Aseo Personal', 'Comidas', 'Paseos', 'Gestión Citas', 'Estimulación Cognitiva', 'Compras'],
-    [CareCategory.CHILDREN]: ['Llevar al colegio', 'Ayuda deberes', 'Juegos', 'Comidas', 'Baño', 'Noches', 'Idiomas', 'Necesidades Especiales'],
-    [CareCategory.PETS]: ['Paseos', 'Visitas a domicilio', 'Alojamiento en mi casa', 'Guardería de día', 'Baño', 'Administración medicinas', 'Adiestramiento básico'],
-    [CareCategory.HOUSEKEEPING]: ['Limpieza general', 'Planchado', 'Cocina', 'Cristales', 'Limpieza a fondo', 'Jardinería básica', 'Organización']
+const STANDARD_AVAILABILITY = ['Mañanas', 'Tardes', 'Noches', 'Fines de Semana', 'Interno/a'];
+
+const CUSTOM_SERVICE_SUGGESTIONS: Record<CareCategory, string[]> = {
+    [CareCategory.ELDERLY]: ['Peluquería', 'Podología', 'Manicura', 'Transporte', 'Fisioterapia'],
+    [CareCategory.CHILDREN]: ['Clases particulares', 'Idiomas', 'Cocina', 'Música', 'Logopedia'],
+    [CareCategory.PETS]: ['Adiestramiento', 'Baño', 'Corte de uñas', 'Transporte', 'Peluquería'],
+    [CareCategory.HOUSEKEEPING]: ['Jardinería', 'Cristales', 'Cocina', 'Organización', 'Pequeñas reparaciones']
+};
+
+const UNIT_OPTIONS = ['hora', 'servicio', 'noche', 'día', 'paseo', 'visita', 'mes'];
+
+// Default Service Variants with Prices
+const DEFAULT_SERVICE_VARIANTS: Record<CareCategory, ServiceVariation[]> = {
+    [CareCategory.ELDERLY]: [
+        { name: 'Acompañamiento', price: 12, unit: 'hora', enabled: false, description: 'Compañía en casa, paseos y conversación.' },
+        { name: 'Cuidado Personal', price: 15, unit: 'hora', enabled: false, description: 'Ayuda con aseo, vestido y movilidad.' },
+        { name: 'Cuidado Nocturno', price: 80, unit: 'noche', enabled: false, description: 'Vigilancia y asistencia durante la noche.' },
+        { name: 'Gestión Médica', price: 20, unit: 'visita', enabled: false, description: 'Control de medicación, curas o acompañamiento al médico.' },
+        { name: 'Interno/a', price: 1200, unit: 'mes', enabled: false, description: 'Cuidado permanente viviendo en el domicilio.' }
+    ],
+    [CareCategory.CHILDREN]: [
+        { name: 'Canguro / Niñera', price: 12, unit: 'hora', enabled: false, description: 'Cuidado puntual o recurrente en casa.' },
+        { name: 'Recogida Colegio', price: 10, unit: 'trayecto', enabled: false, description: 'Acompañamiento seguro desde el colegio a casa.' },
+        { name: 'Ayuda Deberes', price: 15, unit: 'hora', enabled: false, description: 'Apoyo escolar y tutoría.' },
+        { name: 'Cuidado Nocturno', price: 70, unit: 'noche', enabled: false, description: 'Cuidado de niños durante la noche.' }
+    ],
+    [CareCategory.PETS]: [
+        { name: 'Paseo de perros', price: 10, unit: 'paseo', enabled: false, description: 'Paseo de 1 hora por tu barrio o parque.' },
+        { name: 'Alojamiento', price: 25, unit: 'noche', enabled: false, description: 'Tu mascota duerme en mi casa.' },
+        { name: 'Visita a domicilio', price: 12, unit: 'visita', enabled: false, description: 'Alimentación, limpieza y juego en tu casa.' },
+        { name: 'Guardería de día', price: 20, unit: 'día', enabled: false, description: 'Cuidado diurno en mi casa.' }
+    ],
+    [CareCategory.HOUSEKEEPING]: [
+        { name: 'Limpieza General', price: 12, unit: 'hora', enabled: false, description: 'Mantenimiento semanal del hogar.' },
+        { name: 'Limpieza a Fondo', price: 50, unit: 'servicio', enabled: false, description: 'Limpieza profunda (cocina, baños, cristales).' },
+        { name: 'Planchado', price: 12, unit: 'hora', enabled: false, description: 'Servicio exclusivo de planchado.' },
+        { name: 'Cocina', price: 15, unit: 'hora', enabled: false, description: 'Preparación de menús semanales.' }
+    ]
 };
 
 // Initial config for a new service
 const initialServiceConfig: ServiceConfig = {
     completed: false,
     tasks: [],
+    variations: [], // Populated dynamically
     rates: { hourly: 10 },
     experience: '',
     certificates: [],
     availability: [],
+    schedule: { startTime: '', endTime: '' },
+    specificDates: [],
     petAttributes: { acceptedPets: [], workZones: [], maxPets: 1 },
     housekeepingAttributes: { products: 'flexible', equipment: false, waste: false, eco: false },
     medicalSkills: []
 };
 
-const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
+const OfferService: React.FC<OfferServiceProps> = ({ onComplete, initialData }) => {
   const [step, setStep] = useState(1); // 1: Profile, 2: Services Dashboard, 3: Summary
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(null);
   
+  // Custom Service Builder State
+  const [customServiceInput, setCustomServiceInput] = useState({ name: '', price: '', unit: 'servicio' });
+
   // General Profile Data
   const [profileData, setProfileData] = useState({
-    name: '',
-    location: '',
-    languages: [] as string[],
-    photoUrl: '',
+    name: initialData?.name || '',
+    location: initialData?.location || '',
+    languages: initialData?.languages || [] as string[],
+    photoUrl: initialData?.photoUrl || '',
+    coordinates: undefined as { latitude: number, longitude: number } | undefined,
   });
 
-  // Specific Data per Service - Initialize all categories
+  // Specific Data per Service - Initialize all categories with default variations
   const [servicesData, setServicesData] = useState<Record<CareCategory, ServiceConfig>>(() => {
       const initial = {} as Record<CareCategory, ServiceConfig>;
       Object.values(CareCategory).forEach(cat => {
-          initial[cat] = { ...initialServiceConfig };
+          initial[cat] = { 
+              ...initialServiceConfig,
+              variations: JSON.parse(JSON.stringify(DEFAULT_SERVICE_VARIANTS[cat])) // Deep copy to avoid reference issues
+          };
       });
       return initial;
   });
@@ -99,9 +135,17 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const galleryInputRef = useRef<HTMLInputElement>(null);
+  const certInputRef = useRef<HTMLInputElement>(null);
 
   // Geolocation Logic
   const [isLocating, setIsLocating] = useState(false);
+
+  // Modal States
+  const [showTimeModal, setShowTimeModal] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
+  const [tempTime, setTempTime] = useState({ start: '', end: '' });
+  const [calendarMonth, setCalendarMonth] = useState(new Date());
+  const [tempSelectedDates, setTempSelectedDates] = useState<string[]>([]);
 
   // Cleanup stream
   useEffect(() => {
@@ -139,29 +183,58 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
       }));
   };
 
-  const handleRateChange = (category: CareCategory, field: keyof ServiceRates, value: number) => {
-      setServicesData(prev => ({
-          ...prev,
-          [category]: { 
-              ...prev[category], 
-              rates: { ...prev[category].rates, [field]: value } 
-          }
-      }));
+  const handleVariationToggle = (category: CareCategory, index: number) => {
+      const currentVariations = [...servicesData[category].variations];
+      currentVariations[index].enabled = !currentVariations[index].enabled;
+      handleServiceDataChange(category, 'variations', currentVariations);
   };
 
-  const handleTaskToggle = (category: CareCategory, task: string) => {
-      const currentTasks = servicesData[category].tasks;
-      const newTasks = currentTasks.includes(task) 
-        ? currentTasks.filter(t => t !== task) 
-        : [...currentTasks, task];
-      handleServiceDataChange(category, 'tasks', newTasks);
+  const handleVariationPriceChange = (category: CareCategory, index: number, price: number) => {
+      const currentVariations = [...servicesData[category].variations];
+      currentVariations[index].price = price;
+      handleServiceDataChange(category, 'variations', currentVariations);
   };
 
-  const handleAvailabilityToggle = (category: CareCategory, slot: string) => {
-      const currentAvailability = servicesData[category].availability || [];
-      const newAvailability = currentAvailability.includes(slot) 
-        ? currentAvailability.filter(s => s !== slot) 
-        : [...currentAvailability, slot];
+  const handleAddCustomService = (category: CareCategory) => {
+      if (!customServiceInput.name.trim() || !customServiceInput.price) return;
+      
+      const newVariation: ServiceVariation = {
+          name: customServiceInput.name,
+          price: parseFloat(customServiceInput.price),
+          unit: customServiceInput.unit,
+          enabled: true,
+          description: 'Servicio personalizado',
+          isCustom: true
+      };
+
+      const currentVariations = [...servicesData[category].variations, newVariation];
+      handleServiceDataChange(category, 'variations', currentVariations);
+      setCustomServiceInput({ name: '', price: '', unit: 'servicio' });
+  };
+
+  const handleDeleteCustomService = (category: CareCategory, index: number) => {
+      const currentVariations = [...servicesData[category].variations];
+      currentVariations.splice(index, 1);
+      handleServiceDataChange(category, 'variations', currentVariations);
+  };
+
+  const handleAddAvailabilityTag = (category: CareCategory, tag: string) => {
+      const current = servicesData[category].availability || [];
+      if (!current.includes(tag)) {
+          handleServiceDataChange(category, 'availability', [...current, tag]);
+      }
+  };
+
+  const handleRemoveAvailabilityTag = (category: CareCategory, tag: string) => {
+      const current = servicesData[category].availability || [];
+      handleServiceDataChange(category, 'availability', current.filter(t => t !== tag));
+  };
+
+  const handleToggleAvailability = (category: CareCategory, tag: string) => {
+      const current = servicesData[category].availability || [];
+      const newAvailability = current.includes(tag)
+          ? current.filter(t => t !== tag)
+          : [...current, tag];
       handleServiceDataChange(category, 'availability', newAvailability);
   };
 
@@ -171,6 +244,84 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
         ? currentSkills.filter(s => s !== skill)
         : [...currentSkills, skill];
       handleServiceDataChange(category, 'medicalSkills', newSkills);
+  };
+
+  // ---- Certificate Handlers ----
+  const handleCertificateUpload = (category: CareCategory, e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files && e.target.files[0]) {
+          const file = e.target.files[0];
+          const newCert: Certificate = {
+              id: Date.now().toString(),
+              name: file.name.split('.')[0],
+              description: 'Documento subido',
+              type: 'other',
+              fileName: file.name,
+              fileUrl: URL.createObjectURL(file),
+              status: 'pending',
+              dateAdded: new Date().toISOString()
+          };
+          
+          const currentCerts = servicesData[category].certificates || [];
+          handleServiceDataChange(category, 'certificates', [...currentCerts, newCert]);
+      }
+  };
+
+  const handleRemoveCertificate = (category: CareCategory, certId: string) => {
+      const currentCerts = servicesData[category].certificates || [];
+      handleServiceDataChange(category, 'certificates', currentCerts.filter(c => c.id !== certId));
+  };
+
+  // ---- Modal Logic Handlers ----
+
+  const openTimeModal = () => {
+      setTempTime({ start: '', end: '' });
+      setShowTimeModal(true);
+  };
+
+  const saveTime = () => {
+      if (editingCategory && tempTime.start && tempTime.end) {
+          const timeString = `${tempTime.start} - ${tempTime.end}`;
+          handleAddAvailabilityTag(editingCategory, timeString);
+          handleServiceDataChange(editingCategory, 'schedule', tempTime);
+          setShowTimeModal(false);
+      }
+  };
+
+  const openCalendarModal = () => {
+      if (editingCategory) {
+          setTempSelectedDates(servicesData[editingCategory].specificDates || []);
+          setCalendarMonth(new Date());
+          setShowCalendarModal(true);
+      }
+  };
+
+  const toggleDateSelection = (dateStr: string) => {
+      setTempSelectedDates(prev => 
+          prev.includes(dateStr) ? prev.filter(d => d !== dateStr) : [...prev, dateStr]
+      );
+  };
+
+  const saveCalendar = () => {
+      if (editingCategory) {
+          const oldSpecificDates = servicesData[editingCategory].specificDates || [];
+          const oldFormattedDates = oldSpecificDates.map(d => new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }));
+          
+          handleServiceDataChange(editingCategory, 'specificDates', tempSelectedDates);
+          
+          const newFormattedDates = tempSelectedDates.map(d => {
+              const date = new Date(d);
+              return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
+          });
+          
+          const currentTags = servicesData[editingCategory].availability || [];
+          // Remove old dates that might have been deselected
+          const tagsWithoutOldDates = currentTags.filter(tag => !oldFormattedDates.includes(tag));
+          // Add new dates
+          const newTags = [...new Set([...tagsWithoutOldDates, ...newFormattedDates])];
+          
+          handleServiceDataChange(editingCategory, 'availability', newTags);
+          setShowCalendarModal(false);
+      }
   };
 
   // ---- Geolocation Logic ----
@@ -185,15 +336,32 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
     navigator.geolocation.getCurrentPosition(
         async (position) => {
             const { latitude, longitude } = position.coords;
+            // Save coordinates for the profile map
+            handleProfileChange('coordinates', { latitude, longitude });
+
             try {
                 const response = await fetch(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+                    {
+                        headers: {
+                            'Accept-Language': 'es-ES,es;q=0.9',
+                        }
+                    }
                 );
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
                 const data = await response.json();
                 
-                const address = data.address;
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                const address = data.address || {};
                 const locationParts = [
-                    address.road,
+                    address.road || address.pedestrian,
                     address.neighbourhood || address.suburb,
                     address.city || address.town || address.village
                 ].filter(Boolean);
@@ -204,17 +372,19 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
 
                 handleProfileChange('location', locationStr);
             } catch (error) {
-                console.error('Error fetching address:', error);
+                console.warn('Error fetching address:', error);
+                // Fallback to coordinates
                 handleProfileChange('location', `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`);
             } finally {
                 setIsLocating(false);
             }
         },
         (error) => {
-            console.error('Error getting location:', error);
+            console.error('Error getting location:', error.message);
             alert('No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.');
             setIsLocating(false);
-        }
+        },
+        { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
     );
   };
 
@@ -222,7 +392,6 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
   
   const startCamera = async () => {
     try {
-        // Try preferred settings
         const mediaStream = await navigator.mediaDevices.getUserMedia({ 
             video: { facingMode: 'user', width: { ideal: 1280 } } 
         });
@@ -231,14 +400,12 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
     } catch (err: any) {
         console.warn("Preferred camera constraints failed, retrying with basic config...", err);
         try {
-            // Fallback to basic video constraint
             const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
             setStream(mediaStream);
             setIsCameraActive(true);
         } catch (fallbackErr) {
             console.error("Error accessing camera:", fallbackErr);
             alert("No se pudo iniciar la cámara. Por favor, sube una foto de la galería.");
-            // Fallback to file input
             cameraInputRef.current?.click();
         }
     }
@@ -277,9 +444,18 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
 
   const handleSaveCategory = () => {
       if (editingCategory) {
-          // Validate if needed
           handleServiceDataChange(editingCategory, 'completed', true);
+          
+          // Update hourly rate based on the first enabled variation for legacy support/filtering
+          const activeVariations = servicesData[editingCategory].variations.filter(v => v.enabled);
+          if (activeVariations.length > 0) {
+              const minPrice = Math.min(...activeVariations.map(v => v.price));
+              handleServiceDataChange(editingCategory, 'rates', { ...servicesData[editingCategory].rates, hourly: minPrice });
+          }
+
           setEditingCategory(null);
+          // Reset custom input
+          setCustomServiceInput({ name: '', price: '', unit: 'servicio' });
       }
   };
 
@@ -288,7 +464,7 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
           if (!profileData.name || !profileData.location) return alert("Completa los campos obligatorios.");
           setStep(2);
       } else if (step === 2) {
-          const hasCompleted = Object.values(servicesData).some((s: ServiceConfig) => s.completed);
+          const hasCompleted = Object.values(servicesData).some((s: unknown) => (s as ServiceConfig).completed);
           if (!hasCompleted) return alert("Completa al menos un servicio para continuar.");
           setStep(3);
       } else {
@@ -305,16 +481,95 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
   };
 
   const confirmPublish = () => {
-      // Aggregate global availability
       const allAvailabilities = new Set<string>();
       Object.values(servicesData).forEach((s: any) => s.availability?.forEach((a: string) => allAvailabilities.add(a)));
 
       const finalProfile: ProviderProfile = {
           ...profileData,
           availability: Array.from(allAvailabilities),
-          services: servicesData // Use the full servicesData object which tracks completion
+          services: servicesData 
       };
       onComplete(finalProfile);
+  };
+
+  // ---- Helper Renders for Modals ----
+
+  const renderTimeModal = () => (
+      <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-white rounded-2xl w-full max-w-sm p-6 shadow-xl">
+              <h3 className="text-lg font-bold text-slate-800 mb-4 flex items-center">
+                  <ClockIcon className="w-5 h-5 mr-2 text-teal-500" /> Especificar Horas
+              </h3>
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                  <div>
+                      <label className="block text-sm font-medium text-slate-600 mb-1">Desde</label>
+                      <input type="time" value={tempTime.start} onChange={e => setTempTime({...tempTime, start: e.target.value})} className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none" />
+                  </div>
+                  <div>
+                      <label className="block text-sm font-medium text-slate-600 mb-1">Hasta</label>
+                      <input type="time" value={tempTime.end} onChange={e => setTempTime({...tempTime, end: e.target.value})} className="w-full p-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-teal-500 outline-none" />
+                  </div>
+              </div>
+              <div className="flex justify-end gap-2">
+                  <button onClick={() => setShowTimeModal(false)} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-50 rounded-lg">Cancelar</button>
+                  <button onClick={saveTime} className="px-4 py-2 bg-teal-500 text-white font-medium rounded-lg hover:bg-teal-600">Guardar</button>
+              </div>
+          </div>
+      </div>
+  );
+
+  const renderCalendarModal = () => {
+      const year = calendarMonth.getFullYear();
+      const month = calendarMonth.getMonth();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const firstDay = new Date(year, month, 1).getDay(); // 0 = Sun
+      const adjustedFirstDay = firstDay === 0 ? 6 : firstDay - 1; // Mon = 0
+
+      const days = [];
+      for (let i = 0; i < adjustedFirstDay; i++) days.push(null);
+      for (let i = 1; i <= daysInMonth; i++) days.push(i);
+
+      const changeMonth = (offset: number) => {
+          setCalendarMonth(new Date(year, month + offset, 1));
+      };
+
+      return (
+          <div className="fixed inset-0 bg-black/50 z-[60] flex items-center justify-center p-4 animate-fade-in">
+              <div className="bg-white rounded-2xl w-full max-w-sm p-4 shadow-xl">
+                  <div className="flex justify-between items-center mb-4">
+                      <button onClick={() => changeMonth(-1)} className="p-1 hover:bg-slate-100 rounded-full"><ChevronLeftIcon className="w-5 h-5 text-slate-500" /></button>
+                      <span className="font-bold text-slate-800 capitalize">{calendarMonth.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' })}</span>
+                      <button onClick={() => changeMonth(1)} className="p-1 hover:bg-slate-100 rounded-full"><ChevronRightIcon className="w-5 h-5 text-slate-500" /></button>
+                  </div>
+                  
+                  <div className="grid grid-cols-7 gap-1 text-center mb-2">
+                      {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(d => <span key={d} className="text-xs font-bold text-slate-400">{d}</span>)}
+                  </div>
+                  
+                  <div className="grid grid-cols-7 gap-1 mb-6">
+                      {days.map((day, idx) => {
+                          if (!day) return <div key={idx}></div>;
+                          const dateStr = new Date(year, month, day).toISOString().split('T')[0];
+                          const isSelected = tempSelectedDates.includes(dateStr);
+                          return (
+                              <button 
+                                  key={idx} 
+                                  onClick={() => toggleDateSelection(dateStr)}
+                                  className={`h-9 w-9 rounded-full text-sm flex items-center justify-center transition-colors ${isSelected ? 'bg-teal-500 text-white font-bold' : 'hover:bg-slate-100 text-slate-700'}`}
+                              >
+                                  {day}
+                              </button>
+                          );
+                      })}
+                  </div>
+
+                  <div className="flex justify-end gap-2">
+                      <button onClick={() => setShowCalendarModal(false)} className="px-4 py-2 text-slate-600 font-medium hover:bg-slate-50 rounded-lg">Cancelar</button>
+                      <button onClick={saveCalendar} className="px-4 py-2 bg-teal-500 text-white font-medium rounded-lg hover:bg-teal-600">Guardar Selección</button>
+                  </div>
+              </div>
+          </div>
+      );
   };
 
   // ---- Renders ----
@@ -378,7 +633,6 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
                         placeholder="Ej. Chamberí, Madrid" 
                       />
                       <MapPinIcon className="absolute left-3 top-3.5 w-5 h-5 text-slate-400" />
-                      
                       <button
                         type="button"
                         onClick={handleDetectLocation}
@@ -460,6 +714,10 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
   const renderServiceEditor = (category: CareCategory) => {
       const config = servicesData[category];
       const catInfo = serviceCategories.find(c => c.id === category);
+      const variations = config.variations || [];
+      
+      // Filter out custom schedule items for the "tags" display so we don't duplicate standard buttons
+      const specificTags = config.availability?.filter(tag => !STANDARD_AVAILABILITY.includes(tag)) || [];
 
       return (
           <div className="space-y-6 animate-slide-up">
@@ -472,36 +730,111 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
                   </div>
               </div>
 
-              {/* Rates */}
-              <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
-                  <div className="grid grid-cols-2 gap-4">
-                      <div>
-                          <label className="block text-sm font-bold text-slate-700 mb-1">Precio Hora</label>
-                          <div className="relative">
-                              <input 
-                                type="number" 
-                                value={config.rates.hourly || ''} 
-                                onChange={e => handleRateChange(category, 'hourly', e.target.value === '' ? 0 : parseFloat(e.target.value))} 
-                                className="w-full p-3 pl-8 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" 
-                              />
-                              <CurrencyEuroIcon className="absolute left-2.5 top-3.5 w-5 h-5 text-slate-400" />
-                          </div>
-                      </div>
-                      {category !== CareCategory.HOUSEKEEPING && (
-                          <div>
-                              <label className="block text-sm font-bold text-slate-700 mb-1">Precio Turno</label>
-                              <div className="relative">
-                                  <input 
-                                    type="number" 
-                                    value={config.rates.shift || ''} 
-                                    onChange={e => handleRateChange(category, 'shift', e.target.value === '' ? 0 : parseFloat(e.target.value))} 
-                                    placeholder="Opcional" 
-                                    className="w-full p-3 pl-8 bg-slate-50 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" 
-                                  />
-                                  <CurrencyEuroIcon className="absolute left-2.5 top-3.5 w-5 h-5 text-slate-400" />
+              {/* Specific Services & Pricing */}
+              <div>
+                  <h4 className="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wide">Servicios y Tarifas</h4>
+                  <div className="space-y-3">
+                      {variations.map((variant, index) => (
+                          <div key={index} className={`p-4 rounded-xl border-2 transition-all ${variant.enabled || variant.isCustom ? 'bg-white border-teal-500 shadow-sm' : 'bg-slate-50 border-slate-200'} ${variant.isCustom ? 'bg-teal-50/50' : ''}`}>
+                              <div className="flex items-start justify-between">
+                                  {/* Unified Toggle Section */}
+                                  <div className="flex items-start flex-1 cursor-pointer" onClick={() => handleVariationToggle(category, index)}>
+                                      <div className={`mt-1 mr-3 flex-shrink-0 w-5 h-5 rounded border flex items-center justify-center transition-colors ${variant.enabled ? 'bg-teal-500 border-teal-500' : 'bg-white border-slate-300'}`}>
+                                          {variant.enabled && <CheckCircleIcon className="w-4 h-4 text-white" />}
+                                      </div>
+                                      <div>
+                                          <div className="flex items-center gap-2">
+                                              <h5 className={`font-bold ${variant.enabled ? 'text-teal-900' : 'text-slate-600'}`}>{variant.name}</h5>
+                                              {variant.isCustom && (
+                                                  <button
+                                                      onClick={(e) => { e.stopPropagation(); handleDeleteCustomService(category, index); }}
+                                                      className="text-slate-400 hover:text-red-500 transition-colors p-0.5"
+                                                      title="Eliminar servicio personalizado"
+                                                  >
+                                                      <TrashIcon className="w-3 h-3" />
+                                                  </button>
+                                              )}
+                                          </div>
+                                          <p className="text-xs text-slate-500 mt-0.5 leading-snug pr-2">{variant.description}</p>
+                                      </div>
+                                  </div>
+                                  
+                                  {/* Price Section */}
+                                  {variant.enabled && (
+                                      <div className="flex flex-col items-end pl-2">
+                                          <div className="relative w-24">
+                                              <input 
+                                                  type="number" 
+                                                  value={variant.price || ''}
+                                                  onClick={(e) => e.stopPropagation()}
+                                                  onChange={(e) => handleVariationPriceChange(category, index, e.target.value === '' ? 0 : parseFloat(e.target.value))}
+                                                  className="w-full p-2 pl-3 pr-8 bg-white border border-slate-300 rounded-lg text-right font-bold text-slate-800 focus:ring-2 focus:ring-teal-500 outline-none text-sm"
+                                                  placeholder="0"
+                                              />
+                                              <span className="absolute right-3 top-2 text-slate-400 font-bold">€</span>
+                                          </div>
+                                          <span className="text-[10px] text-slate-500 mt-1 uppercase font-medium">{variant.unit}</span>
+                                      </div>
+                                  )}
                               </div>
                           </div>
-                      )}
+                      ))}
+                  </div>
+
+                  {/* Add Custom Service Section */}
+                  <div className="mt-4 p-4 bg-slate-50 rounded-xl border border-slate-200 border-dashed">
+                      <h5 className="font-bold text-slate-700 text-sm mb-3">Servicio Personalizado</h5>
+                      <p className="text-xs text-slate-500 mb-3">Añade un servicio específico que no esté en la lista anterior.</p>
+                      
+                      <div className="flex flex-col gap-3">
+                          <input 
+                              type="text" 
+                              placeholder="Nombre del servicio (ej. Clases de pintura)" 
+                              value={customServiceInput.name}
+                              onChange={(e) => setCustomServiceInput({ ...customServiceInput, name: e.target.value })}
+                              className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-sm"
+                          />
+                          <div className="flex gap-3">
+                              <div className="relative flex-1">
+                                  <input 
+                                      type="number" 
+                                      placeholder="Precio" 
+                                      value={customServiceInput.price}
+                                      onChange={(e) => setCustomServiceInput({ ...customServiceInput, price: e.target.value })}
+                                      className="w-full p-3 pl-3 pr-8 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-sm"
+                                  />
+                                  <span className="absolute right-3 top-3 text-slate-400 font-bold">€</span>
+                              </div>
+                              <select 
+                                  value={customServiceInput.unit}
+                                  onChange={(e) => setCustomServiceInput({ ...customServiceInput, unit: e.target.value })}
+                                  className="flex-1 p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none text-sm"
+                              >
+                                  {UNIT_OPTIONS.map(u => <option key={u} value={u}>/ {u}</option>)}
+                              </select>
+                          </div>
+                          
+                          {/* Suggestions Chips */}
+                          <div className="flex flex-wrap gap-2 mt-1">
+                              {CUSTOM_SERVICE_SUGGESTIONS[category].map(sug => (
+                                  <button 
+                                      key={sug}
+                                      onClick={() => setCustomServiceInput(prev => ({ ...prev, name: sug }))}
+                                      className="px-2 py-1 bg-white border border-slate-200 rounded-md text-xs text-slate-600 hover:bg-slate-100 transition-colors"
+                                  >
+                                      {sug}
+                                  </button>
+                              ))}
+                          </div>
+
+                          <button 
+                              onClick={() => handleAddCustomService(category)}
+                              disabled={!customServiceInput.name || !customServiceInput.price}
+                              className="mt-2 w-full bg-slate-800 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-slate-900 transition-colors disabled:bg-slate-300 disabled:cursor-not-allowed flex items-center justify-center"
+                          >
+                              <PlusCircleIcon className="w-4 h-4 mr-2" /> Añadir Servicio
+                          </button>
+                      </div>
                   </div>
               </div>
 
@@ -516,27 +849,114 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
                   />
               </div>
 
-              {/* Availability (Per Service) */}
+              {/* Availability (New Modals) */}
               <div>
                   <label className="text-sm font-bold text-slate-700 mb-2 flex items-center">
                       <ClockIcon className="w-4 h-4 mr-1 text-teal-600" /> Disponibilidad para este servicio
                   </label>
-                  <div className="flex flex-wrap gap-2">
-                      {availabilitySlots.map(slot => (
-                          <button 
-                              key={slot} 
-                              onClick={() => handleAvailabilityToggle(category, slot)}
-                              className={`px-3 py-1.5 rounded-full text-sm border transition-colors ${config.availability?.includes(slot) ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-slate-200 text-slate-600'}`}
+                  
+                  {/* Standard Options */}
+                  <div className="flex flex-wrap gap-2 mb-3">
+                      {STANDARD_AVAILABILITY.map(option => (
+                          <button
+                              key={option}
+                              onClick={() => handleToggleAvailability(category, option)}
+                              className={`px-3 py-1.5 rounded-lg text-sm font-medium border transition-colors ${
+                                  config.availability?.includes(option)
+                                  ? 'bg-teal-50 border-teal-500 text-teal-700'
+                                  : 'bg-white border-slate-200 text-slate-600'
+                              }`}
                           >
-                              {slot}
+                              {option}
                           </button>
                       ))}
+                  </div>
+                  
+                  <div className="flex gap-3 mb-3">
+                      <button 
+                          onClick={openTimeModal}
+                          className="flex-1 bg-white border border-slate-300 text-slate-700 py-2.5 rounded-xl font-medium text-sm flex items-center justify-center hover:bg-slate-50 transition-colors"
+                      >
+                          <ClockIcon className="w-4 h-4 mr-2 text-slate-500" /> Especificar Horas
+                      </button>
+                      <button 
+                          onClick={openCalendarModal}
+                          className="flex-1 bg-white border border-slate-300 text-slate-700 py-2.5 rounded-xl font-medium text-sm flex items-center justify-center hover:bg-slate-50 transition-colors"
+                      >
+                          <CalendarDaysIcon className="w-4 h-4 mr-2 text-slate-500" /> Especificar Días
+                      </button>
+                  </div>
+
+                  {/* Active Specific Availability Tags (Only custom ones) */}
+                  <div className="flex flex-wrap gap-2">
+                      {specificTags.length > 0 ? (
+                          specificTags.map((tag, idx) => (
+                              <span key={idx} className="flex items-center px-3 py-1.5 rounded-lg bg-teal-50 text-teal-700 text-sm font-medium border border-teal-100">
+                                  {tag}
+                                  <button onClick={() => handleRemoveAvailabilityTag(category, tag)} className="ml-2 hover:text-red-500">
+                                      <XMarkIcon className="w-4 h-4" />
+                                  </button>
+                              </span>
+                          ))
+                      ) : (
+                          // Only show fallback message if standard options aren't selected either
+                          (!config.availability || config.availability.length === 0) && (
+                              <p className="text-xs text-slate-400 italic">No has añadido disponibilidad específica.</p>
+                          )
+                      )}
+                  </div>
+              </div>
+
+              {/* Certificates Section */}
+              <div className="mt-4 pt-4 border-t border-slate-100">
+                  <label className="text-sm font-bold text-slate-700 mb-3 flex items-center">
+                      <DocumentTextIcon className="w-4 h-4 mr-2 text-teal-600" /> Certificados y Documentación
+                  </label>
+                  
+                  <div className="space-y-3">
+                      {config.certificates?.map((cert) => (
+                          <div key={cert.id} className="flex items-center justify-between p-3 bg-white border border-slate-200 rounded-xl">
+                              <div className="flex items-center overflow-hidden">
+                                  <div className="bg-slate-100 p-2 rounded-lg mr-3 flex-shrink-0">
+                                      <PaperClipIcon className="w-4 h-4 text-slate-500" />
+                                  </div>
+                                  <div className="truncate">
+                                      <p className="text-sm font-medium text-slate-700 truncate">{cert.fileName || cert.name}</p>
+                                      <p className="text-xs text-slate-400">Subido el {new Date(cert.dateAdded).toLocaleDateString()}</p>
+                                  </div>
+                              </div>
+                              <button 
+                                  onClick={() => handleRemoveCertificate(category, cert.id)}
+                                  className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                              >
+                                  <TrashIcon className="w-4 h-4" />
+                              </button>
+                          </div>
+                      ))}
+
+                      <div 
+                          onClick={() => certInputRef.current?.click()}
+                          className="border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-slate-50 hover:border-teal-400 transition-all group"
+                      >
+                          <div className="bg-slate-100 p-3 rounded-full mb-2 group-hover:bg-teal-50 transition-colors">
+                              <PaperClipIcon className="w-6 h-6 text-slate-400 group-hover:text-teal-500" />
+                          </div>
+                          <p className="text-sm font-medium text-slate-600 group-hover:text-teal-600">Sube tu CV o Certificados</p>
+                          <p className="text-xs text-slate-400 mt-1">PDF, JPG o PNG (Máx 5MB)</p>
+                      </div>
+                      <input 
+                          type="file" 
+                          ref={certInputRef}
+                          onChange={(e) => handleCertificateUpload(category, e)} 
+                          className="hidden" 
+                          accept=".pdf,.jpg,.jpeg,.png"
+                      />
                   </div>
               </div>
 
               {/* Medical Skills (Elderly Only) */}
               {category === CareCategory.ELDERLY && (
-                  <div className="bg-red-50 p-4 rounded-xl border border-red-100">
+                  <div className="bg-red-50 p-4 rounded-xl border border-red-100 mt-4">
                       <h4 className="font-bold text-red-800 text-sm mb-3 flex items-center"><HealthIcon className="w-4 h-4 mr-1"/> Especialización y Patologías</h4>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                           {MEDICAL_SKILLS.map(skill => (
@@ -553,22 +973,6 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
                       </div>
                   </div>
               )}
-
-              {/* Tasks */}
-              <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">¿Qué incluyes?</label>
-                  <div className="flex flex-wrap gap-2">
-                      {SERVICE_TASKS[category].map(task => (
-                          <button 
-                              key={task} 
-                              onClick={() => handleTaskToggle(category, task)}
-                              className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${config.tasks.includes(task) ? 'bg-teal-50 border-teal-500 text-teal-700' : 'bg-white border-slate-200 text-slate-600'}`}
-                          >
-                              {task}
-                          </button>
-                      ))}
-                  </div>
-              </div>
           </div>
       );
   };
@@ -600,6 +1004,7 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
                     {completedServices.map(cat => {
                         const config = servicesData[cat];
                         const catInfo = serviceCategories.find(c => c.id === cat);
+                        const activeVariations = config.variations.filter(v => v.enabled);
                         
                         if (!catInfo) return null;
 
@@ -610,20 +1015,23 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
                                         <catInfo.icon className={`w-5 h-5 mr-2 ${catInfo.color}`} />
                                         <span className="font-bold text-slate-700 text-sm">{catInfo.label}</span>
                                     </div>
-                                    <span className="font-bold text-teal-600 text-sm">{config.rates.hourly}€/h</span>
+                                    <span className="font-bold text-teal-600 text-sm">Desde {Math.min(...activeVariations.map(v => v.price) || [0])}€</span>
                                 </div>
                                 {config.availability && config.availability.length > 0 && (
                                     <div className="flex flex-wrap gap-1 mt-2 mb-2">
-                                        {config.availability.map(slot => (
-                                            <span key={slot} className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{slot}</span>
+                                        {config.availability.map((slot, idx) => (
+                                            <span key={idx} className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{slot}</span>
                                         ))}
                                     </div>
                                 )}
-                                <div className="flex flex-wrap gap-1">
-                                    {config.tasks.slice(0, 3).map(t => (
-                                        <span key={t} className="text-[10px] bg-white border border-slate-200 text-slate-500 px-2 py-0.5 rounded-full">{t}</span>
+                                <div className="space-y-1">
+                                    {activeVariations.slice(0, 3).map(v => (
+                                        <div key={v.name} className="flex justify-between items-center text-[10px] bg-white border border-slate-200 px-2 py-1 rounded">
+                                            <span className="text-slate-600 font-medium">{v.name}</span>
+                                            <span className="text-slate-800 font-bold">{v.price}€ / {v.unit}</span>
+                                        </div>
                                     ))}
-                                    {config.tasks.length > 3 && <span className="text-[10px] text-slate-400 px-1">+{config.tasks.length - 3} más</span>}
+                                    {activeVariations.length > 3 && <div className="text-[10px] text-center text-slate-400 italic">+{activeVariations.length - 3} más</div>}
                                 </div>
                             </div>
                         );
@@ -680,6 +1088,9 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete }) => {
               </button>
           )}
       </footer>
+
+      {showTimeModal && renderTimeModal()}
+      {showCalendarModal && renderCalendarModal()}
     </div>
   );
 };
