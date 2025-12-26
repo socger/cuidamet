@@ -8,10 +8,6 @@ import CheckCircleIcon from './icons/CheckCircleIcon';
 import PhoneIcon from './icons/PhoneIcon';
 import PageHeader from './PageHeader';
 import { CareCategory, ClientProfile } from '../types';
-import ElderlyIcon from './icons/ElderlyIcon';
-import ChildIcon from './icons/ChildIcon';
-import PetIcon from './icons/PetIcon';
-import CleaningIcon from './icons/CleaningIcon';
 
 interface ClientRegistrationProps {
   onComplete: (profileData: ClientProfile) => void;
@@ -19,10 +15,10 @@ interface ClientRegistrationProps {
 }
 
 const serviceCategories = [
-    { id: CareCategory.ELDERLY, label: 'Mayores', icon: ElderlyIcon, color: 'text-green-600', bg: 'bg-green-100', border: 'border-green-200' },
-    { id: CareCategory.CHILDREN, label: 'Niños', icon: ChildIcon, color: 'text-slate-600', bg: 'bg-slate-200', border: 'border-slate-300' },
-    { id: CareCategory.PETS, label: 'Mascotas', icon: PetIcon, color: 'text-orange-600', bg: 'bg-orange-100', border: 'border-orange-200' },
-    { id: CareCategory.HOUSEKEEPING, label: 'Limpieza', icon: CleaningIcon, color: 'text-blue-600', bg: 'bg-blue-100', border: 'border-blue-200' }
+    { id: CareCategory.ELDERLY, label: 'Mayores', icon: '/resources/icons/elderly-female-icon.svg', color: 'text-green-600', bg: 'bg-green-100', border: 'border-green-200' },
+    { id: CareCategory.CHILDREN, label: 'Niños', icon: '/resources/icons/baby-girl-icon.svg', color: 'text-slate-600', bg: 'bg-slate-200', border: 'border-slate-300' },
+    { id: CareCategory.PETS, label: 'Mascotas', icon: '/resources/icons/dog-puppy-face-icon.svg', color: 'text-orange-600', bg: 'bg-orange-100', border: 'border-orange-200' },
+    { id: CareCategory.HOUSEKEEPING, label: 'Limpieza', icon: '/resources/icons/housekeeping-icon.svg', color: 'text-blue-600', bg: 'bg-blue-100', border: 'border-blue-200' }
 ];
 
 const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onBack }) => {
@@ -273,7 +269,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                                     </div>
                                 )}
                                 <div className={`p-3 rounded-full mb-3 ${isSelected ? 'bg-white/50' : 'bg-slate-50'} ${cat.color}`}>
-                                    <cat.icon className="w-8 h-8" />
+                                    <img src={cat.icon} alt={cat.label} className="w-8 h-8 opacity-70" />
                                 </div>
                                 <span className={`font-bold ${isSelected ? 'text-slate-800' : 'text-slate-600'}`}>{cat.label}</span>
                             </button>
