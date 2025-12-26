@@ -98,3 +98,4 @@ Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado des
 El componente "components/ClientRegistration.tsx" tiene arriba una barra con una flecha a la izquierda. Pues si en la primera pantalla de ese componente se pulsa hacia la izquierda la app se cree que el perfil de la persona que busca un cuidador se ha registrado por completo. Cuando todavía no lo ha hecho ... esto es un fallo. 
 Copiar la idea del otro componente que en la parte de abajo tiene un componente cancelar y hacer algo parecido. El otro componente es "components/OfferService.tsx" y este sirve para crear el perfil de un cuidador.
 
+Resulta que en cuidamet_8 cuando el usuario se registra como cuidador. Ahora presenta un ProfileDetail.tsx diferente. Es decir la ficha de Tu es diferente. POr lo que pude ver es que renderiza otro componente diferente.
