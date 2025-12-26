@@ -59,7 +59,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       preferences: []
   };
 
-  const getCategoryIcon = (cat: CareCategory) => {
+  const getCategoryIcon = (cat: CareCategory): string => {
       const iconMap: Record<CareCategory, string> = {
           [CareCategory.ELDERLY]: '/resources/icons/elderly-female-icon.svg',
           [CareCategory.CHILDREN]: '/resources/icons/baby-girl-icon.svg',
@@ -67,8 +67,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
           [CareCategory.HOUSEKEEPING]: '/resources/icons/housekeeping-icon.svg'
       };
       
-      const iconSrc = iconMap[cat];
-      return iconSrc ? <img src={iconSrc} alt={cat} className="w-7 h-7 opacity-70" /> : null;
+      return iconMap[cat] || '';
   };
 
   const getCategoryName = (cat: CareCategory): string => {
@@ -80,6 +79,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       };
       return nameMap[cat] || cat;
   };
+
+  const allCategories = [
+      CareCategory.ELDERLY,
+      CareCategory.CHILDREN,
+      CareCategory.PETS,
+      CareCategory.HOUSEKEEPING
+  ];
 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
@@ -103,18 +109,33 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
             </div>
 
             {/* Preferences / Needs Section */}
-            {displayProfile.preferences.length > 0 && (
-                <div className="mb-6 px-2">
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mis necesidades</h3>
-                    <div className="flex space-x-2">
-                        {displayProfile.preferences.map(pref => (
-                            <div key={pref} className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-500 shadow-sm border border-slate-200" title={getCategoryName(pref)}>
-                                {getCategoryIcon(pref)}
+            <div className="mb-6 px-2">
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mis necesidades</h3>
+                <div className="flex space-x-2">
+                    {allCategories.map(cat => {
+                        const isSelected = displayProfile.preferences.includes(cat);
+                        return (
+                            <div 
+                                key={cat} 
+                                className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
+                                    isSelected 
+                                        ? 'bg-teal-500 shadow-lg shadow-teal-500/50' 
+                                        : 'bg-white border border-slate-200'
+                                }`}
+                                title={getCategoryName(cat)}
+                            >
+                                <img 
+                                    src={getCategoryIcon(cat)} 
+                                    alt={getCategoryName(cat)}
+                                    className={`w-7 h-7 transition-all duration-300 ${
+                                        isSelected ? 'brightness-0 invert' : 'opacity-70'
+                                    }`}
+                                />
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
-            )}
+            </div>
 
             {/* CUENTA Section */}
             <div className="mt-2">
