@@ -72,3 +72,5 @@ Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
 * Hay que crear en la autenticación, cuando se está registrando el usuario, los "Términos de Servicio" y la "Política de Privacidad"
 
+* El proceso de verificar la cuenta de correo electrónico, cuando estás creando un perfil, hay que ver tambien de que funcione. Sobre todo cuando empiece a trabajar con la parte backend.
+* El usuario que se esté dando de alta (registrándose) debe de marcar la casilla, he leido y acepto los términos de servicio, etc
