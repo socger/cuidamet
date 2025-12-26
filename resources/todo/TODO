@@ -81,8 +81,16 @@ Por lo que cuando se entre en mapas, favoritos o en buscar cuidadores ... por de
 
 
 
-Estas dos últimas vistas que he añadido deben de tener también la botonera de abajo ... no aparece ni en el registro ClientRegistration.tsx. 
 
 También hay que crear el registro de cuando es un cuidador ... perfil para buscar trabajo.
 
 Si el usuario no termina el registro, bien sea de cuidador o de búsqueda de cuidador, debe de presentar la vista desde la que fué llamado.
+
+Cambiar todos los alert por el componente popup común para mensajes.
+
+Cuando te registras como cuidador en cuidamet_7. El perfil que queda después no es el mismo que en cuidamet
+Ver que ocurre
+Cuando se renderice OfferService.tsx que se renderice también la botonera de la app abajo.
+
+
+Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado desde por ejemplo la opción "Reservas", el registro no termina. Es decir que no pasa a registrar los datos del usuario (tanto si es cuidador o familiar). Si no que se va directamente a la vista de Reservas, sin llegar a darse de alta nunca el usuario. Lo mismo ocurre desde Buzón, etc. El usuario tiene que terminar los datos de su registro antes de pasar al componente que necesitamos (reservas, favoritos, buzón, etc.)
