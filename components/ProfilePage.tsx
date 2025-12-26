@@ -7,10 +7,6 @@ import ChevronRightIcon from './icons/ChevronRightIcon';
 import ChatBubbleLeftRightIcon from './icons/ChatBubbleLeftRightIcon';
 import InformationCircleIcon from './icons/InformationCircleIcon';
 import { ClientProfile, CareCategory } from '../types';
-import ElderlyIcon from './icons/ElderlyIcon';
-import ChildIcon from './icons/ChildIcon';
-import PetIcon from './icons/PetIcon';
-import CleaningIcon from './icons/CleaningIcon';
 import BriefcaseIcon from './icons/BriefcaseIcon';
 import PageHeader from './PageHeader';
 
@@ -64,13 +60,25 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   };
 
   const getCategoryIcon = (cat: CareCategory) => {
-      switch(cat) {
-          case CareCategory.ELDERLY: return <ElderlyIcon className="w-5 h-5" />;
-          case CareCategory.CHILDREN: return <ChildIcon className="w-5 h-5" />;
-          case CareCategory.PETS: return <PetIcon className="w-5 h-5" />;
-          case CareCategory.HOUSEKEEPING: return <CleaningIcon className="w-5 h-5" />;
-          default: return null;
-      }
+      const iconMap: Record<CareCategory, string> = {
+          [CareCategory.ELDERLY]: '/resources/icons/elderly-female-icon.svg',
+          [CareCategory.CHILDREN]: '/resources/icons/baby-girl-icon.svg',
+          [CareCategory.PETS]: '/resources/icons/dog-puppy-face-icon.svg',
+          [CareCategory.HOUSEKEEPING]: '/resources/icons/housekeeping-icon.svg'
+      };
+      
+      const iconSrc = iconMap[cat];
+      return iconSrc ? <img src={iconSrc} alt={cat} className="w-7 h-7 opacity-70" /> : null;
+  };
+
+  const getCategoryName = (cat: CareCategory): string => {
+      const nameMap: Record<CareCategory, string> = {
+          [CareCategory.ELDERLY]: 'Mayores',
+          [CareCategory.CHILDREN]: 'Niños',
+          [CareCategory.PETS]: 'Mascotas',
+          [CareCategory.HOUSEKEEPING]: 'Limpieza'
+      };
+      return nameMap[cat] || cat;
   };
 
   return (
@@ -100,7 +108,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mis necesidades</h3>
                     <div className="flex space-x-2">
                         {displayProfile.preferences.map(pref => (
-                            <div key={pref} className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-500 shadow-sm border border-slate-200" title={pref}>
+                            <div key={pref} className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-slate-500 shadow-sm border border-slate-200" title={getCategoryName(pref)}>
                                 {getCategoryIcon(pref)}
                             </div>
                         ))}
