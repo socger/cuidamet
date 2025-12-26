@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CareCategory, Provider, ChatConversation, Message, UserRole, BookingDetails } from "./types";
+import { CareCategory, Provider, ChatConversation, Message, UserRole, BookingDetails, ClientProfile } from "./types";
 import { MOCK_PROVIDERS } from "./services/mockData";
 import { MOCK_CHATS } from "./services/mockChatData";
 import BottomNav from "./components/BottomNav";
@@ -19,6 +19,7 @@ import { bookingService } from "./services/bookingService";
 import AlertModal from "./components/AlertModal";
 import ProfileLandingPage from "./components/ProfileLandingPage";
 import RoleSelection from "./components/RoleSelection";
+import ClientRegistration from "./components/ClientRegistration";
 
 const getDistanceInKm = (
   lat1: number,
@@ -54,6 +55,7 @@ const App: React.FC = () => {
     | "booking"
     | "bookings"
     | "roleSelection"
+    | "clientRegistration"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "map"
@@ -86,6 +88,7 @@ const App: React.FC = () => {
   const [pendingAction, setPendingAction] = useState<'booking' | 'favorite' | 'bookings' | 'chat' | 'inbox' | null>(null);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [preselectedRole, setPreselectedRole] = useState<UserRole | undefined>(undefined);
+  const [clientProfile, setClientProfile] = useState<ClientProfile | null>(null);
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -369,6 +372,12 @@ const App: React.FC = () => {
     setIsAuthenticated(true);
     setAuthAttempts(0);
     
+    // If user is signing up as client (familiar), redirect to ClientRegistration
+    if (role === 'client' && !pendingAction) {
+      setView('clientRegistration');
+      return;
+    }
+    
     // Execute pending action
     if (pendingAction === 'booking' && bookingProviderId) {
       setView('booking');
@@ -536,7 +545,7 @@ const App: React.FC = () => {
         />;
       } else {
         mainContent = <ProfilePage 
-          clientProfile={null}
+          clientProfile={clientProfile}
           onNavigateFavorites={handleNavigateFavorites}
           onNavigateSettings={() => {
             // TODO: Navigate to settings
@@ -576,6 +585,14 @@ const App: React.FC = () => {
           setView("auth");
         }}
         onBack={() => setView("myProfile")}
+      />;
+    } else if (currentView === "clientRegistration") {
+      mainContent = <ClientRegistration 
+        onComplete={(profileData) => {
+          setClientProfile(profileData);
+          setView("myProfile");
+        }}
+        onBack={handleNavigateHome}
       />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
@@ -635,6 +652,7 @@ const App: React.FC = () => {
   const showBottomNav =
     view !== "offer" &&
     view !== "auth" &&
+    view !== "clientRegistration" &&
     !isLocationLoading;
 
   // For map view, render without wrapper to allow full screen
