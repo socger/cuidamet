@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import ChevronRightIcon from './icons/ChevronRightIcon';
+import ChevronLeftIcon from './icons/ChevronLeftIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import PhoneIcon from './icons/PhoneIcon';
-import PageHeader from './PageHeader';
 import PhotoCapture from './PhotoCapture';
 import { CareCategory, ClientProfile } from '../types';
 
@@ -69,10 +69,42 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
 
   return (
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
-      <PageHeader 
-        title={step === 1 ? "Crea tu Perfil" : "Preferencias"} 
-        onBack={step === 1 ? onBack : () => setStep(1)} 
-      />
+      {/* Stepper Header */}
+      <div className="bg-white border-b border-slate-200 p-4 pt-safe-top">
+        <div className="flex items-center justify-between mb-4">
+          {step > 1 && (
+            <button
+              onClick={() => setStep(1)}
+              className="p-1.5 -ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Atrás"
+            >
+              <ChevronLeftIcon className="w-5 h-5" />
+            </button>
+          )}
+          <h1 className="text-lg font-bold text-slate-800 flex-1 text-center">
+            {step === 1 ? "Crea tu Perfil" : "Preferencias"}
+          </h1>
+          {step === 1 && (
+            <button
+              onClick={onBack}
+              className="p-1.5 -mr-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Cerrar"
+            >
+              <span className="text-sm font-medium">×</span>
+            </button>
+          )}
+          {step > 1 && <div className="w-8"></div>}
+        </div>
+        <div className="flex items-center justify-center gap-2 mb-3">
+          <span className="text-sm font-medium text-teal-600">{step} de 2</span>
+        </div>
+        <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-teal-500 transition-all duration-300 ease-out rounded-full"
+            style={{ width: `${(step / 2) * 100}%` }}
+          ></div>
+        </div>
+      </div>
       
       <main className="flex-grow overflow-y-auto px-6 py-6 pb-6">
         <div className="container mx-auto max-w-md pb-24">
