@@ -184,14 +184,14 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
             )}
             
             {/* Botón Siguiente - Sticky al final del contenido visible */}
-            <div className="mt-8 bg-white border-t border-slate-200 p-4 rounded-xl shadow-sm sticky bottom-20">
+            <div className="mt-8 bg-white border-t border-slate-200 p-4 rounded-xl shadow-sm flex justify-end items-center sticky bottom-20">
               <button 
                 onClick={handleNext}
                 disabled={!isStepValid()}
-                className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all disabled:bg-slate-300 disabled:shadow-none flex items-center justify-center"
+                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center disabled:bg-slate-300 disabled:shadow-none"
               >
                 {step === 1 ? 'Siguiente' : 'Finalizar Registro'} 
-                {step === 1 && <ChevronRightIcon className="w-5 h-5 ml-2 stroke-2" />}
+                {step === 1 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
               </button>
             </div>
         </div>
