@@ -982,7 +982,8 @@ const OfferService: React.FC<OfferServiceProps> = ({
           </div>
       </div>
 
-      <main className="flex-grow overflow-y-auto p-4 pb-24">
+      <main className="flex-grow overflow-y-auto px-6 py-6 pb-24">
+        <div className="container mx-auto max-w-md pb-24">
           {step === 1 && renderProfileForm()}
           {step === 2 && (editingCategory ? renderServiceEditor(editingCategory) : renderServicesDashboard())}
           {step === 3 && renderReview()}
@@ -1010,6 +1011,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
                   </button>
               )}
           </div>
+        </div>
       </main>
 
       <BottomNav
