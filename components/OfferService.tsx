@@ -1520,15 +1520,26 @@ const OfferService: React.FC<OfferServiceProps> = ({
       {/* Stepper Header */}
       <div className="bg-white border-b border-slate-200 p-4 pt-safe-top">
         <div className="flex items-center justify-between mb-4">
-          <h1 className="text-lg font-bold text-slate-800">
-            {step === 1
-              ? "Perfil Personal"
-              : step === 2
-              ? editingCategory
-                ? "Configuración"
-                : "Mis Servicios"
-              : "Resumen"}
-          </h1>
+          <div className="flex items-center gap-3">
+            {(step > 1 || editingCategory) && (
+              <button
+                onClick={prevStep}
+                className="p-1.5 -ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+                aria-label="Atrás"
+              >
+                <ChevronLeftIcon className="w-5 h-5" />
+              </button>
+            )}
+            <h1 className="text-lg font-bold text-slate-800">
+              {step === 1
+                ? "Perfil Personal"
+                : step === 2
+                ? editingCategory
+                  ? "Configuración"
+                  : "Mis Servicios"
+                : "Resumen"}
+            </h1>
+          </div>
           <span className="text-sm font-medium text-teal-600">{step} de 3</span>
         </div>
         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
