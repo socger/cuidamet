@@ -1560,14 +1560,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
           {step === 3 && renderReview()}
 
           {/* Navigation Buttons - Now part of scrollable content */}
-          <div className="bg-white border-t border-slate-200 p-4 mt-6 rounded-xl shadow-sm flex justify-between items-center sticky bottom-0">
-            <button
-              onClick={prevStep}
-              className="px-6 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl transition-colors"
-            >
-              {editingCategory ? "Cancelar" : step > 1 ? "Atrás" : ""}
-            </button>
-
+          <div className="bg-white border-t border-slate-200 p-4 mt-6 rounded-xl shadow-sm flex justify-end items-center sticky bottom-0">
             {editingCategory ? (
               <button
                 onClick={handleSaveCategory}
