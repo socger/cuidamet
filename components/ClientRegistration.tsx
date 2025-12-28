@@ -318,8 +318,8 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
             </div>
             )}
             
-            {/* Botón Siguiente - Parte del contenido scrolleable */}
-            <div className="mt-8">
+            {/* Botón Siguiente - Sticky al final del contenido visible */}
+            <div className="mt-8 bg-white border-t border-slate-200 p-4 rounded-xl shadow-sm sticky bottom-20">
               <button 
                 onClick={handleNext}
                 disabled={!isStepValid()}
