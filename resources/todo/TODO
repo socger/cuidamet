@@ -92,5 +92,10 @@ Ver que ocurre
 
 Intentar ver si "components/ClientRegistration.tsx" se podría fundir en "components/OfferService.tsx". Es decir ver que sólo se usara uno de los dos componentes pero no permitiendo ver ciertos campos según se hubiera llamado para registrar un cuidador o un familiar.
 
+Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este componente llama a los componentes "components/PhotoUploadModal.tsx" y "components/PremiumSubscriptionModal.tsx" ... pero no se que hacen (investigarlos).
+
+Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También resulta que el header de ambos componentes es diferente (parte en la que se presenta la foto) hay que hacerlo lo más parecido en ambos componentes
+
+
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
