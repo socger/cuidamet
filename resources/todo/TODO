@@ -96,6 +96,7 @@ Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este compon
 
 Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También resulta que el header de ambos componentes es diferente (parte en la que se presenta la foto) hay que hacerlo lo más parecido en ambos componentes
 
+Cuando creas un perfil como "cuidador", presenta un popup (ver imagen que hay en la galería de imagenes de mi equipo) diciendo que "perfil publicado". Hacer algo parecido para cuando creas un perfil como "Familiar"
 
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
