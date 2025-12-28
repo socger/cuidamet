@@ -56,6 +56,8 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
         if (!isStepValid()) return;
         setStep(2);
     } else if (step === 2) {
+        setStep(3);
+    } else if (step === 3) {
        const profile: ClientProfile = {
         name,
         email,
@@ -75,7 +77,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
           <div className="flex items-center gap-3">
             {step > 1 && (
               <button
-                onClick={() => setStep(1)}
+                onClick={() => setStep(step - 1)}
                 className="p-1.5 -ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
                 aria-label="Atrás"
               >
@@ -83,15 +85,15 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
               </button>
             )}
             <h1 className="text-lg font-bold text-slate-800">
-              {step === 1 ? "Crea tu Perfil" : "Preferencias"}
+              {step === 1 ? "Crea tu Perfil" : step === 2 ? "Preferencias" : "Revisa tu Perfil"}
             </h1>
           </div>
-          <span className="text-sm font-medium text-teal-600">{step} de 2</span>
+          <span className="text-sm font-medium text-teal-600">{step} de 3</span>
         </div>
         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div
             className="h-full bg-teal-500 transition-all duration-300 ease-out rounded-full"
-            style={{ width: `${(step / 2) * 100}%` }}
+            style={{ width: `${(step / 3) * 100}%` }}
           ></div>
         </div>
       </div>
@@ -194,6 +196,56 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
             </div>
             )}
             
+            {step === 3 && (
+            <div className="space-y-6 animate-fade-in">
+                <div className="text-center">
+                    <h2 className="text-2xl font-bold text-slate-800">Revisa tu perfil</h2>
+                    <p className="text-slate-600 mt-2">Verifica que todo esté correcto antes de continuar.</p>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div className="bg-teal-500 h-20 relative"></div>
+                    <div className="px-4 pb-4 -mt-10 relative">
+                        <img
+                            src={photoUrl || 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200'}
+                            className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover"
+                            alt="Perfil"
+                        />
+                        <div className="mt-3">
+                            <h3 className="font-bold text-lg text-slate-800">{name}</h3>
+                            <div className="flex flex-col gap-1 mt-2">
+                                <div className="flex items-center text-slate-600 text-sm">
+                                    <PhoneIcon className="w-4 h-4 mr-2" />
+                                    {phone}
+                                </div>
+                                <div className="text-slate-600 text-sm">
+                                    {email}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {selectedCategories.length > 0 && (
+                        <div className="px-4 pb-4 border-t border-slate-100 pt-4">
+                            <h4 className="text-sm font-bold text-slate-700 mb-3">Servicios de interés</h4>
+                            <div className="grid grid-cols-2 gap-2">
+                                {selectedCategories.map(catId => {
+                                    const cat = serviceCategories.find(c => c.id === catId);
+                                    if (!cat) return null;
+                                    return (
+                                        <div key={catId} className={`${cat.bg} ${cat.border} border-2 rounded-lg p-3 flex items-center gap-2`}>
+                                            <img src={cat.icon} alt={cat.label} className="w-6 h-6 opacity-70" />
+                                            <span className="font-medium text-sm text-slate-700">{cat.label}</span>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+            )}
+            
             {/* Navigation Buttons - Sticky al final del contenido visible */}
             <div className="mt-8 bg-white border-t border-slate-200 p-4 rounded-xl shadow-sm flex justify-end items-center sticky bottom-20">
               <button 
@@ -201,8 +253,8 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                 disabled={!isStepValid()}
                 className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center disabled:bg-slate-300 disabled:shadow-none"
               >
-                {step === 1 ? 'Siguiente' : 'Finalizar Registro'} 
-                {step === 1 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
+                {step === 1 ? 'Siguiente' : step === 2 ? 'Siguiente' : 'Finalizar Registro'} 
+                {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
               </button>
             </div>
         </div>
