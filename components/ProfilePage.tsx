@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import HeartIcon from './icons/HeartIcon';
 import Cog6ToothIcon from './icons/Cog6ToothIcon';
 import ArrowRightOnRectangleIcon from './icons/ArrowRightOnRectangleIcon';
+import AlertModal from './AlertModal';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import ChatBubbleLeftRightIcon from './icons/ChatBubbleLeftRightIcon';
 import InformationCircleIcon from './icons/InformationCircleIcon';
@@ -49,6 +50,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   onSwitchToProvider,
   onBack
 }) => {
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
   
   // Default guest data if no client profile exists
   const displayProfile = clientProfile || {
@@ -183,7 +185,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
              {/* Logout Button */}
             <div className="mt-10 px-2">
                 <button
-                onClick={() => alert('Cerrando sesión...')}
+                onClick={() => setAlertModal({ isOpen: true, message: 'Cerrando sesión...', title: 'Cerrar sesión' })}
                 className="w-full flex items-center justify-center py-3 text-center text-red-500 font-medium hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100"
                 >
                 <ArrowRightOnRectangleIcon className="w-6 h-6 mr-2" />
@@ -192,6 +194,13 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
             </div>
 
         </main>
+        
+        <AlertModal
+          isOpen={alertModal.isOpen}
+          onClose={() => setAlertModal({ isOpen: false, message: '' })}
+          message={alertModal.message}
+          title={alertModal.title}
+        />
     </div>
   );
 };

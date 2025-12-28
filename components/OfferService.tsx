@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { CareCategory, ServiceConfig, ProviderProfile, ServiceRates, PetAttributes, HousekeepingAttributes, ServiceVariation, Certificate } from '../types';
 import BottomNav from './BottomNav';
 import PhotoCapture from './PhotoCapture';
+import AlertModal from './AlertModal';
 import MapPinIcon from './icons/MapPinIcon';
 import CurrencyEuroIcon from './icons/CurrencyEuroIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
@@ -159,6 +160,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
   const [tempTime, setTempTime] = useState({ start: '', end: '' });
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [tempSelectedDates, setTempSelectedDates] = useState<string[]>([]);
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
 
   const handleProfileChange = (field: string, value: any) => {
     setProfileData(prev => ({ ...prev, [field]: value }));
@@ -326,7 +328,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
   // ---- Geolocation Logic ----
   const handleDetectLocation = () => {
     if (!navigator.geolocation) {
-        alert('La geolocalización no está soportada en este navegador.');
+        setAlertModal({ isOpen: true, message: 'La geolocalización no está soportada en este navegador.', title: 'Error' });
         return;
     }
 
@@ -380,7 +382,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
         },
         (error) => {
             console.error('Error getting location:', error.message);
-            alert('No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.');
+            setAlertModal({ isOpen: true, message: 'No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.', title: 'Error de ubicación' });
             setIsLocating(false);
         },
         { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
@@ -408,11 +410,17 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
   const nextStep = () => {
       if (step === 1) {
-          if (!profileData.name || !profileData.location) return alert("Completa los campos obligatorios.");
+          if (!profileData.name || !profileData.location) {
+              setAlertModal({ isOpen: true, message: 'Completa los campos obligatorios.', title: 'Campos requeridos' });
+              return;
+          }
           setStep(2);
       } else if (step === 2) {
           const hasCompleted = Object.values(servicesData).some((s: unknown) => (s as ServiceConfig).completed);
-          if (!hasCompleted) return alert("Completa al menos un servicio para continuar.");
+          if (!hasCompleted) {
+              setAlertModal({ isOpen: true, message: 'Completa al menos un servicio para continuar.', title: 'Servicios requeridos' });
+              return;
+          }
           setStep(3);
       } else {
           confirmPublish();
@@ -1028,6 +1036,13 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
       {showTimeModal && renderTimeModal()}
       {showCalendarModal && renderCalendarModal()}
+      
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: '' })}
+        message={alertModal.message}
+        title={alertModal.title}
+      />
     </div>
   );
 };

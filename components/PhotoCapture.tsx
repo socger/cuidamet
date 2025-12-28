@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import CameraIcon from './icons/CameraIcon';
 import PhotoIcon from './icons/PhotoIcon';
 import UserCircleIcon from './icons/UserCircleIcon';
+import AlertModal from './AlertModal';
 
 interface PhotoCaptureProps {
   photoUrl: string;
@@ -20,6 +21,7 @@ const PhotoCapture: React.FC<PhotoCaptureProps> = ({
 }) => {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const [stream, setStream] = useState<MediaStream | null>(null);
+  const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
@@ -63,7 +65,7 @@ const PhotoCapture: React.FC<PhotoCaptureProps> = ({
         setIsCameraActive(true);
       } catch (fallbackErr) {
         console.error("Error accessing camera:", fallbackErr);
-        alert("No se pudo iniciar la cámara. Por favor, sube una foto de la galería.");
+        setAlertModal({ isOpen: true, message: 'No se pudo iniciar la cámara. Por favor, sube una foto de la galería.', title: 'Error de cámara' });
         cameraInputRef.current?.click();
       }
     }
@@ -101,7 +103,7 @@ const PhotoCapture: React.FC<PhotoCaptureProps> = ({
       const file = e.target.files[0];
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!validTypes.includes(file.type) || file.size > 5 * 1024 * 1024) {
-        alert('El archivo debe ser JPG o PNG y menor de 5MB.');
+        setAlertModal({ isOpen: true, message: 'El archivo debe ser JPG o PNG y menor de 5MB.', title: 'Archivo inválido' });
         return;
       }
 
