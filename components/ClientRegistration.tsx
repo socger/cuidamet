@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import ChevronLeftIcon from './icons/ChevronLeftIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
+import XMarkIcon from './icons/XMarkIcon';
 import PhoneIcon from './icons/PhoneIcon';
 import PhotoCapture from './PhotoCapture';
 import { CareCategory, ClientProfile } from '../types';
@@ -88,7 +89,17 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
               {step === 1 ? "Crea tu Perfil" : step === 2 ? "Preferencias" : "Revisa tu Perfil"}
             </h1>
           </div>
-          <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+            <button
+              onClick={onBack}
+              className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              aria-label="Cancelar"
+              title="Cancelar registro"
+            >
+              <XMarkIcon className="w-5 h-5" />
+            </button>
+          </div>
         </div>
         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div

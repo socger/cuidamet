@@ -33,6 +33,7 @@ import PaperClipIcon from "./icons/PaperClipIcon";
 
 interface OfferServiceProps {
   onComplete: (profileData: ProviderProfile) => void;
+  onCancel?: () => void;
   initialData?: Partial<ProviderProfile>;
   currentView?: string;
   onNavigateHome?: () => void;
@@ -313,6 +314,7 @@ const initialServiceConfig: ServiceConfig = {
 
 const OfferService: React.FC<OfferServiceProps> = ({
   onComplete,
+  onCancel,
   initialData,
   currentView = "offer",
   onNavigateHome = () => {},
@@ -1540,7 +1542,19 @@ const OfferService: React.FC<OfferServiceProps> = ({
                 : "Resumen"}
             </h1>
           </div>
-          <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+            {onCancel && (
+              <button
+                onClick={onCancel}
+                className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                aria-label="Cancelar"
+                title="Cancelar registro"
+              >
+                <XMarkIcon className="w-5 h-5" />
+              </button>
+            )}
+          </div>
         </div>
         <div className="h-1.5 bg-slate-100 rounded-full overflow-hidden">
           <div

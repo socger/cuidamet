@@ -451,6 +451,22 @@ const App: React.FC = () => {
     setView(previousViewBeforeAuth);
   };
   
+  const handleCancelClientRegistration = () => {
+    // Revert authentication state since registration was cancelled
+    setIsAuthenticated(false);
+    setClientProfile(null);
+    // Return to role selection view
+    setView('roleSelection');
+  };
+  
+  const handleCancelOfferService = () => {
+    // Revert authentication state since registration was cancelled
+    setIsAuthenticated(false);
+    setProviderProfile(null);
+    // Return to role selection view
+    setView('roleSelection');
+  };
+  
   const handleBookNow = (providerId: number) => {
     if (!isAuthenticated) {
       setPreviousViewBeforeAuth(view);
@@ -520,7 +536,8 @@ const App: React.FC = () => {
       );
     } else if (currentView === "offer") {
       mainContent = <OfferService 
-        onComplete={handleProviderRegistrationComplete} 
+        onComplete={handleProviderRegistrationComplete}
+        onCancel={handleCancelOfferService}
         currentView={view}
         onNavigateHome={handleNavigateHome}
         onNavigateFavorites={handleNavigateFavorites}
@@ -646,7 +663,7 @@ const App: React.FC = () => {
           setClientProfile(profileData);
           setView("myProfile");
         }}
-        onBack={handleNavigateHome}
+        onBack={handleCancelClientRegistration}
       />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
