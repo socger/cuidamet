@@ -1,12 +1,10 @@
 
-import React, { useState, useRef, useEffect } from 'react';
-import CameraIcon from './icons/CameraIcon';
-import PhotoIcon from './icons/PhotoIcon';
-import UserCircleIcon from './icons/UserCircleIcon';
+import React, { useState } from 'react';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import PhoneIcon from './icons/PhoneIcon';
 import PageHeader from './PageHeader';
+import PhotoCapture from './PhotoCapture';
 import { CareCategory, ClientProfile } from '../types';
 
 interface ClientRegistrationProps {
@@ -28,98 +26,6 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
   const [phone, setPhone] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<CareCategory[]>([]);
-  
-  // Camera & Photo Logic State
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
-
-  // Cleanup stream on unmount
-  useEffect(() => {
-    return () => {
-        if (stream) stream.getTracks().forEach(track => track.stop());
-    };
-  }, [stream]);
-
-  // Attach stream to video element
-  useEffect(() => {
-    if (isCameraActive && videoRef.current && stream) {
-        videoRef.current.srcObject = stream;
-    }
-  }, [isCameraActive, stream]);
-
-  const startCamera = async () => {
-    try {
-        // Try preferred settings
-        const mediaStream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'user', width: { ideal: 1280 } } 
-        });
-        setStream(mediaStream);
-        setIsCameraActive(true);
-    } catch (err: any) {
-        console.warn("Preferred camera constraints failed, retrying with basic config...", err);
-        try {
-            // Fallback to basic video constraint
-            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            setStream(mediaStream);
-            setIsCameraActive(true);
-        } catch (fallbackErr) {
-            console.error("Error accessing camera:", fallbackErr);
-            alert("No se pudo iniciar la cámara. Por favor, sube una foto de la galería.");
-            // Fallback to file input
-            cameraInputRef.current?.click();
-        }
-    }
-  };
-
-  const stopCamera = () => {
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        setStream(null);
-    }
-    setIsCameraActive(false);
-  };
-
-  const capturePhoto = () => {
-    if (videoRef.current && canvasRef.current) {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const context = canvas.getContext('2d');
-        if (context) {
-            // Mirror effect
-            context.translate(canvas.width, 0);
-            context.scale(-1, 1);
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/png');
-            setPhotoUrl(dataUrl);
-            stopCamera();
-        }
-    }
-  };
-
-  const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-        const file = e.target.files[0];
-        const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        if (!validTypes.includes(file.type) || file.size > 5 * 1024 * 1024) {
-            alert('El archivo debe ser JPG o PNG y menor de 5MB.');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (event) => {
-            if (event.target?.result) {
-                setPhotoUrl(event.target.result as string);
-            }
-        };
-        reader.readAsDataURL(e.target.files[0]);
-    }
-  };
 
   const toggleCategory = (id: CareCategory) => {
     setSelectedCategories(prev => 
@@ -148,7 +54,6 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
   const handleNext = () => {
     if (step === 1) {
         if (!isStepValid()) return;
-        if (isCameraActive) stopCamera();
         setStep(2);
     } else if (step === 2) {
        const profile: ClientProfile = {
@@ -166,77 +71,26 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
       <PageHeader 
         title={step === 1 ? "Crea tu Perfil" : "Preferencias"} 
-        onBack={step === 1 ? () => { if(isCameraActive) stopCamera(); onBack(); } : () => setStep(1)} 
+        onBack={step === 1 ? onBack : () => setStep(1)} 
       />
       
       <main className="flex-grow overflow-y-auto px-6 py-6 pb-6">
         <div className="container mx-auto max-w-md pb-24">
             {step === 1 && (
             <div className="space-y-6 animate-fade-in">
-                <div className="text-center">
-                    <h2 className="text-xl font-bold text-slate-800">Añade tu foto de perfil</h2>
-                    <p className="text-slate-600 text-sm mt-1">Una buena foto genera confianza. Asegúrate de que se vea bien tu rostro.</p>
-                </div>
-
                 {/* Camera / Photo Section */}
-                <div className="flex flex-col items-center">
-                    <div className="relative w-48 h-48 mb-6">
-                        <div className="w-full h-full rounded-full border-[5px] border-white shadow-xl overflow-hidden bg-slate-100 flex items-center justify-center relative z-10 ring-1 ring-slate-200">
-                            {isCameraActive ? (
-                                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover transform scale-x-[-1]" />
-                            ) : photoUrl ? (
-                                <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
-                            ) : (
-                                <UserCircleIcon className="w-32 h-32 text-slate-300" />
-                            )}
-                        </div>
-                    </div>
-
-                    {/* Hidden Inputs and Canvas */}
-                    <input type="file" ref={cameraInputRef} onChange={handlePhotoChange} className="hidden" accept="image/*" capture="user" />
-                    <input type="file" ref={galleryInputRef} onChange={handlePhotoChange} className="hidden" accept="image/*" />
-                    <canvas ref={canvasRef} className="hidden" />
-
-                    {/* Buttons */}
-                    <div className="w-full space-y-3">
-                        {!isCameraActive ? (
-                            <>
-                                <button 
-                                    onClick={startCamera} 
-                                    className="w-full bg-teal-500 text-white py-3 rounded-xl font-semibold flex items-center justify-center hover:bg-teal-600 transition-colors shadow-md"
-                                >
-                                    <CameraIcon className="w-5 h-5 mr-2" /> Usar Cámara
-                                </button>
-                                <button 
-                                    onClick={() => galleryInputRef.current?.click()} 
-                                    className="w-full bg-white border-2 border-teal-500 text-teal-600 py-3 rounded-xl font-semibold flex items-center justify-center hover:bg-teal-50 transition-colors"
-                                >
-                                    <PhotoIcon className="w-5 h-5 mr-2" /> Elegir de la Galería
-                                </button>
-                            </>
-                        ) : (
-                            <div className="flex gap-3 w-full">
-                                <button 
-                                    onClick={stopCamera} 
-                                    className="flex-1 bg-slate-200 text-slate-700 py-3 rounded-xl font-semibold hover:bg-slate-300 transition-colors"
-                                >
-                                    Cancelar
-                                </button>
-                                <button 
-                                    onClick={capturePhoto} 
-                                    className="flex-1 bg-teal-500 text-white py-3 rounded-xl font-semibold hover:bg-teal-600 transition-colors shadow-md"
-                                >
-                                    Capturar
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
+                <PhotoCapture 
+                  photoUrl={photoUrl}
+                  onPhotoChange={setPhotoUrl}
+                  title="Añade tu foto de perfil"
+                  subtitle="Una buena foto genera confianza. Asegúrate de que se vea bien tu rostro."
+                  size="large"
+                />
 
                 {/* Form Fields */}
                 <div className="space-y-4 pt-2">
                     <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Nombre Completo</label>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Nombre y apellidos</label>
                         <input 
                             type="text" 
                             value={name} 
