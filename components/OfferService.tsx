@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { CareCategory, ServiceConfig, ProviderProfile, ServiceRates, PetAttributes, HousekeepingAttributes, ServiceVariation, Certificate } from '../types';
+import BottomNav from './BottomNav';
 import CameraIcon from './icons/CameraIcon';
 import PhotoIcon from './icons/PhotoIcon';
 import MapPinIcon from './icons/MapPinIcon';
@@ -26,6 +27,15 @@ import PaperClipIcon from './icons/PaperClipIcon';
 interface OfferServiceProps {
   onComplete: (profileData: ProviderProfile) => void;
   initialData?: Partial<ProviderProfile>;
+  currentView?: string;
+  onNavigateHome?: () => void;
+  onNavigateFavorites?: () => void;
+  onNavigateOffer?: () => void;
+  onNavigateInbox?: () => void;
+  onNavigateProfile?: () => void;
+  onNavigateBookings?: () => void;
+  unreadCount?: number;
+  isAuthenticated?: boolean;
 }
 
 const serviceCategories = [
@@ -100,7 +110,19 @@ const initialServiceConfig: ServiceConfig = {
     medicalSkills: []
 };
 
-const OfferService: React.FC<OfferServiceProps> = ({ onComplete, initialData }) => {
+const OfferService: React.FC<OfferServiceProps> = ({ 
+  onComplete, 
+  initialData,
+  currentView = 'offer',
+  onNavigateHome = () => {},
+  onNavigateFavorites = () => {},
+  onNavigateOffer = () => {},
+  onNavigateInbox = () => {},
+  onNavigateProfile = () => {},
+  onNavigateBookings = () => {},
+  unreadCount = 0,
+  isAuthenticated = true
+}) => {
   const [step, setStep] = useState(1); // 1: Profile, 2: Services Dashboard, 3: Summary
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(null);
   
@@ -1064,30 +1086,43 @@ const OfferService: React.FC<OfferServiceProps> = ({ onComplete, initialData }) 
           {step === 1 && renderProfileForm()}
           {step === 2 && (editingCategory ? renderServiceEditor(editingCategory) : renderServicesDashboard())}
           {step === 3 && renderReview()}
+          
+          {/* Navigation Buttons - Now part of scrollable content */}
+          <div className="bg-white border-t border-slate-200 p-4 mt-6 rounded-xl shadow-sm flex justify-between items-center sticky bottom-0">
+              <button onClick={prevStep} className="px-6 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl transition-colors">
+                  {editingCategory ? 'Cancelar' : (step > 1 ? 'Atrás' : '')}
+              </button>
+              
+              {editingCategory ? (
+                  <button 
+                      onClick={handleSaveCategory}
+                      className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
+                  >
+                      Guardar y Volver <CheckCircleIcon className="w-5 h-5 ml-2" />
+                  </button>
+              ) : (
+                  <button 
+                      onClick={step === 3 ? confirmPublish : nextStep}
+                      className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
+                  >
+                      {step === 3 ? 'Publicar Perfil' : 'Siguiente'}
+                      {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
+                  </button>
+              )}
+          </div>
       </main>
 
-      <footer className="bg-white border-t border-slate-200 p-4 safe-area-bottom flex justify-between items-center">
-          <button onClick={prevStep} className="px-6 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl transition-colors">
-              {editingCategory ? 'Cancelar' : (step > 1 ? 'Atrás' : '')}
-          </button>
-          
-          {editingCategory ? (
-              <button 
-                  onClick={handleSaveCategory}
-                  className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
-              >
-                  Guardar y Volver <CheckCircleIcon className="w-5 h-5 ml-2" />
-              </button>
-          ) : (
-              <button 
-                  onClick={step === 3 ? confirmPublish : nextStep}
-                  className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
-              >
-                  {step === 3 ? 'Publicar Perfil' : 'Siguiente'}
-                  {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
-              </button>
-          )}
-      </footer>
+      <BottomNav
+        currentView={currentView}
+        onNavigateHome={onNavigateHome}
+        onNavigateFavorites={onNavigateFavorites}
+        onNavigateOffer={onNavigateOffer}
+        onNavigateInbox={onNavigateInbox}
+        onNavigateProfile={onNavigateProfile}
+        onNavigateBookings={onNavigateBookings}
+        unreadCount={unreadCount}
+        isAuthenticated={isAuthenticated}
+      />
 
       {showTimeModal && renderTimeModal()}
       {showCalendarModal && renderCalendarModal()}

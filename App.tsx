@@ -519,7 +519,18 @@ const App: React.FC = () => {
         />
       );
     } else if (currentView === "offer") {
-      mainContent = <OfferService onComplete={handleProviderRegistrationComplete} />;
+      mainContent = <OfferService 
+        onComplete={handleProviderRegistrationComplete} 
+        currentView={view}
+        onNavigateHome={handleNavigateHome}
+        onNavigateFavorites={handleNavigateFavorites}
+        onNavigateOffer={handleNavigateOffer}
+        onNavigateInbox={handleNavigateInbox}
+        onNavigateProfile={handleNavigateMyProfile}
+        onNavigateBookings={handleNavigateBookings}
+        unreadCount={unreadCount}
+        isAuthenticated={isAuthenticated}
+      />;
     } else if (currentView === "booking" && bookingProviderId) {
       const provider = providersWithDistance.find(
         (p) => p.id === bookingProviderId
