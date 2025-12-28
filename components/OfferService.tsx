@@ -2,11 +2,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { CareCategory, ServiceConfig, ProviderProfile, ServiceRates, PetAttributes, HousekeepingAttributes, ServiceVariation, Certificate } from '../types';
 import BottomNav from './BottomNav';
-import CameraIcon from './icons/CameraIcon';
-import PhotoIcon from './icons/PhotoIcon';
+import PhotoCapture from './PhotoCapture';
 import MapPinIcon from './icons/MapPinIcon';
 import CurrencyEuroIcon from './icons/CurrencyEuroIcon';
-import UserCircleIcon from './icons/UserCircleIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import ChevronLeftIcon from './icons/ChevronLeftIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
@@ -150,13 +148,6 @@ const OfferService: React.FC<OfferServiceProps> = ({
       return initial;
   });
 
-  // Photo logic
-  const [isCameraActive, setIsCameraActive] = useState(false);
-  const [stream, setStream] = useState<MediaStream | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
-  const galleryInputRef = useRef<HTMLInputElement>(null);
   const certInputRef = useRef<HTMLInputElement>(null);
 
   // Geolocation Logic
@@ -168,20 +159,6 @@ const OfferService: React.FC<OfferServiceProps> = ({
   const [tempTime, setTempTime] = useState({ start: '', end: '' });
   const [calendarMonth, setCalendarMonth] = useState(new Date());
   const [tempSelectedDates, setTempSelectedDates] = useState<string[]>([]);
-
-  // Cleanup stream
-  useEffect(() => {
-    return () => {
-        if (stream) stream.getTracks().forEach(track => track.stop());
-    };
-  }, [stream]);
-
-  // Attach stream to video
-  useEffect(() => {
-    if (isCameraActive && videoRef.current && stream) {
-        videoRef.current.srcObject = stream;
-    }
-  }, [isCameraActive, stream]);
 
   const handleProfileChange = (field: string, value: any) => {
     setProfileData(prev => ({ ...prev, [field]: value }));
@@ -410,58 +387,6 @@ const OfferService: React.FC<OfferServiceProps> = ({
     );
   };
 
-  // ---- Camera Logic ----
-  
-  const startCamera = async () => {
-    try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({ 
-            video: { facingMode: 'user', width: { ideal: 1280 } } 
-        });
-        setStream(mediaStream);
-        setIsCameraActive(true);
-    } catch (err: any) {
-        console.warn("Preferred camera constraints failed, retrying with basic config...", err);
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            setStream(mediaStream);
-            setIsCameraActive(true);
-        } catch (fallbackErr) {
-            console.error("Error accessing camera:", fallbackErr);
-            alert("No se pudo iniciar la cámara. Por favor, sube una foto de la galería.");
-            cameraInputRef.current?.click();
-        }
-    }
-  };
-
-  const capturePhoto = () => {
-    if (videoRef.current && canvasRef.current) {
-        const context = canvasRef.current.getContext('2d');
-        if (context) {
-            canvasRef.current.width = videoRef.current.videoWidth;
-            canvasRef.current.height = videoRef.current.videoHeight;
-            context.translate(canvasRef.current.width, 0);
-            context.scale(-1, 1);
-            context.drawImage(videoRef.current, 0, 0);
-            const dataUrl = canvasRef.current.toDataURL('image/jpeg');
-            handleProfileChange('photoUrl', dataUrl);
-            
-            if (stream) {
-                stream.getTracks().forEach(t => t.stop());
-                setStream(null);
-            }
-            setIsCameraActive(false);
-        }
-    }
-  };
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (e.target.files?.[0]) {
-          const reader = new FileReader();
-          reader.onload = (ev) => handleProfileChange('photoUrl', ev.target?.result);
-          reader.readAsDataURL(e.target.files[0]);
-      }
-  };
-
   // ---- Navigation & Submit ----
 
   const handleSaveCategory = () => {
@@ -599,49 +524,24 @@ const OfferService: React.FC<OfferServiceProps> = ({
   // Step 1: Personal Profile
   const renderProfileForm = () => (
       <div className="space-y-6 animate-fade-in">
-          <div className="text-center">
+          {/* <div className="text-center">
               <h2 className="text-xl font-bold text-slate-800">Sobre ti</h2>
               <p className="text-slate-500 text-sm">Crea un perfil de confianza.</p>
-          </div>
+          </div> */}
 
           {/* Photo Upload */}
-          <div className="flex flex-col items-center">
-              <div className="relative w-32 h-32 mb-4">
-                  {isCameraActive ? (
-                      <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover rounded-full border-4 border-white shadow-lg transform scale-x-[-1]" />
-                  ) : (
-                      <img 
-                          src={profileData.photoUrl || 'https://via.placeholder.com/150?text=?'} 
-                          alt="Profile" 
-                          className="w-full h-full object-cover rounded-full border-4 border-white shadow-lg bg-slate-100"
-                      />
-                  )}
-                  {!isCameraActive && !profileData.photoUrl && (
-                      <div className="absolute inset-0 flex items-center justify-center text-slate-300">
-                          <UserCircleIcon className="w-20 h-20" />
-                      </div>
-                  )}
-              </div>
-              
-              <div className="flex gap-2">
-                  {isCameraActive ? (
-                      <button onClick={capturePhoto} className="bg-red-500 text-white px-4 py-2 rounded-full text-sm font-bold">Capturar</button>
-                  ) : (
-                      <>
-                          <button onClick={startCamera} className="bg-teal-500 text-white px-4 py-2 rounded-full text-sm font-bold flex items-center"><CameraIcon className="w-4 h-4 mr-1"/> Cámara</button>
-                          <button onClick={() => galleryInputRef.current?.click()} className="bg-white border border-slate-300 text-slate-700 px-4 py-2 rounded-full text-sm font-bold flex items-center"><PhotoIcon className="w-4 h-4 mr-1"/> Galería</button>
-                      </>
-                  )}
-              </div>
-              <input type="file" ref={cameraInputRef} onChange={handleFileChange} accept="image/*" capture="user" className="hidden" />
-              <input type="file" ref={galleryInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
-              <canvas ref={canvasRef} className="hidden" />
-          </div>
+          <PhotoCapture 
+            photoUrl={profileData.photoUrl} 
+            onPhotoChange={(url) => handleProfileChange('photoUrl', url)}
+            title="Añade tu foto de perfil"
+            subtitle="Una foto profesional genera más confianza en los clientes."
+            size="medium"
+          />
 
           {/* Fields */}
           <div className="space-y-4">
               <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Nombre y Apellidos</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Nombre y apellidos</label>
                   <input type="text" value={profileData.name} onChange={e => handleProfileChange('name', e.target.value)} className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none" placeholder="Ej. Laura Martínez" />
               </div>
               <div>
