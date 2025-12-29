@@ -86,13 +86,15 @@ Por lo que cuando se entre en mapas, favoritos o en buscar cuidadores ... por de
 
 Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado desde por ejemplo la opción "Reservas", el registro no termina. Es decir que no pasa a registrar los datos del usuario (tanto si es cuidador o familiar). Si no que se va directamente a la vista de Reservas, sin llegar a darse de alta nunca el usuario. Lo mismo ocurre desde Buzón, etc. El usuario tiene que terminar los datos de su registro antes de pasar al componente que necesitamos (reservas, favoritos, buzón, etc.)
 
-Intentar ver si "components/ClientRegistration.tsx" se podría fundir en "components/OfferService.tsx". Es decir ver que sólo se usara uno de los dos componentes pero no permitiendo ver ciertos campos según se hubiera llamado para registrar un cuidador o un familiar.
+Intentar ver si "components/CreateProfile_ClientRegistration.tsx" se podría fundir en "components/CreateProfile_OfferService.tsx". Es decir ver que sólo se usara uno de los dos componentes pero no permitiendo ver ciertos campos según se hubiera llamado para registrar un cuidador o un familiar.
 
 Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este componente llama a los componentes "components/PhotoUploadModal.tsx" y "components/PremiumSubscriptionModal.tsx" ... pero no se que hacen (investigarlos).
 
 Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También resulta que el header de ambos componentes es diferente (parte en la que se presenta la foto) hay que hacerlo lo más parecido en ambos componentes
 
 Cuando estás creando un perfil familiar, en el primer step, se nos pide la dirección de correo electrónico. Pero cuando estamos creando el perfil de cuidador, en el primer step, falta preguntar por el email.
+
+Cuando el usuario se crea como un cuidador, este debería de poder verse a si mismo cuando hace búsquedas de cuidadores. Ahora mismo no lo hace.
 
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
