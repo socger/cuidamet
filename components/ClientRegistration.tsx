@@ -264,7 +264,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                 disabled={!isStepValid()}
                 className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center disabled:bg-slate-300 disabled:shadow-none"
               >
-                {step === 1 ? 'Siguiente' : step === 2 ? 'Siguiente' : 'Finalizar Registro'} 
+                {step === 1 ? 'Siguiente' : step === 2 ? 'Siguiente' : 'Finalizar registro'} 
                 {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
               </button>
             </div>

@@ -1587,7 +1587,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
                 onClick={step === 3 ? confirmPublish : nextStep}
                 className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
               >
-                {step === 3 ? "Publicar Perfil" : "Siguiente"}
+                {step === 3 ? "Finalizar registro" : "Siguiente"}
                 {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
               </button>
             )}
