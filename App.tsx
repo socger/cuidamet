@@ -721,44 +721,29 @@ const App: React.FC = () => {
         </div>
       );
     } else if (currentView === "securitySettings") {
-      mainContent = (
-        <div className="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-6">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">Seguridad y Contraseña</h2>
-          <p className="text-slate-600 mb-6">Esta sección estará disponible próximamente.</p>
-          <button
-            onClick={() => setView("myProfile")}
-            className="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600"
-          >
-            Volver a Mi Perfil
-          </button>
-        </div>
-      );
+      setAlertModal({ 
+        isOpen: true, 
+        message: 'Esta sección estará disponible próximamente.', 
+        title: 'Seguridad y Contraseña' 
+      });
+      setView("myProfile");
+      mainContent = null;
     } else if (currentView === "notifications") {
-      mainContent = (
-        <div className="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-6">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">Notificaciones</h2>
-          <p className="text-slate-600 mb-6">Esta sección estará disponible próximamente.</p>
-          <button
-            onClick={() => setView("myProfile")}
-            className="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600"
-          >
-            Volver a Mi Perfil
-          </button>
-        </div>
-      );
+      setAlertModal({ 
+        isOpen: true, 
+        message: 'Esta sección estará disponible próximamente.', 
+        title: 'Notificaciones' 
+      });
+      setView("myProfile");
+      mainContent = null;
     } else if (currentView === "legalInfo") {
-      mainContent = (
-        <div className="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-6">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">Legal y Privacidad</h2>
-          <p className="text-slate-600 mb-6">Esta sección estará disponible próximamente.</p>
-          <button
-            onClick={() => setView("myProfile")}
-            className="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600"
-          >
-            Volver a Mi Perfil
-          </button>
-        </div>
-      );
+      setAlertModal({ 
+        isOpen: true, 
+        message: 'Esta sección estará disponible próximamente.', 
+        title: 'Legal y Privacidad' 
+      });
+      setView("myProfile");
+      mainContent = null;
     } else {
       // Providers view
       mainContent = (
