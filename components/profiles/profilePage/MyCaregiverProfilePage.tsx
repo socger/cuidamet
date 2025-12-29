@@ -4,6 +4,7 @@ import { CareCategory, ProviderProfile, ServiceConfig } from "../../../types";
 import MapPinIcon from "../../icons/MapPinIcon";
 import StarIcon from "../../icons/StarIcon";
 import PencilIcon from "../../icons/PencilIcon";
+import AlertModal from "../../AlertModal";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import PremiumSubscriptionModal from "../../PremiumSubscriptionModal";
 import UserCircleIcon from "../../icons/UserCircleIcon";
@@ -14,6 +15,7 @@ import DocumentTextIcon from "../../icons/DocumentTextIcon";
 import ArrowRightOnRectangleIcon from "../../icons/ArrowRightOnRectangleIcon";
 import CameraIcon from "../../icons/CameraIcon";
 import PhotoUploadModal from "../../PhotoUploadModal";
+import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -106,6 +108,12 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   onSwitchToClient,
   profile,
 }) => {
+  const [alertModal, setAlertModal] = useState<{
+    isOpen: boolean;
+    message: string;
+    title?: string;
+  }>({ isOpen: false, message: "" });
+
   const [isPremium, setIsPremium] = useState(false);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -140,11 +148,18 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
       <PageHeader
-        title="Mi Perfil Profesional"
+        title="Mi perfil profesional"
         onBack={onBack}
         rightAction={
           <button
-            onClick={() => onNavigateEditProfile(null)}
+            onClick={() => 
+              // onNavigateEditProfile(null)
+              setAlertModal({
+                isOpen: true,
+                message: "Sección disponible próximamente.",
+                title: "Editar perfil",
+              })
+            }
             className="text-teal-600 font-semibold text-sm"
           >
             Editar
@@ -155,8 +170,18 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
       <main className="container mx-auto px-4 py-6 pb-28 flex-grow overflow-y-auto">
         {/* BLOCK 1: Identity & General Info */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+
+          <Resumen_PersonalInfo
+            photoUrl={displayProfile.photoUrl || "https://via.placeholder.com/150"}
+            name={displayProfile.name}
+            phone={displayProfile.phone}
+            email={displayProfile.email}
+            location={displayProfile.location}
+            languages={displayProfile.languages}
+          />
+
           {/* Cover / Header - Unified Layout */}
-          <div className="bg-gradient-to-r from-teal-500 to-teal-600 pt-8 pb-6 px-6 relative flex flex-col items-center text-center">
+          {/* <div className="bg-gradient-to-r from-teal-500 to-teal-600 pt-8 pb-6 px-6 relative flex flex-col items-center text-center">
             <button
               onClick={onSwitchToClient}
               className="absolute top-4 right-4 bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-white/30 transition-colors flex items-center border border-white/30 shadow-sm"
@@ -165,7 +190,6 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               Modo Familiar
             </button>
 
-            {/* Photo inside Green Strip */}
             <div className="relative group mb-3">
               <img
                 src={displayProfile.photoUrl}
@@ -180,7 +204,6 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               </button>
             </div>
 
-            {/* Name and Location inside Green Strip for high visibility */}
             <h2 className="text-2xl font-bold text-white">
               {displayProfile.name}
             </h2>
@@ -195,10 +218,10 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
             >
               <PencilIcon className="w-3 h-3 mr-1.5" /> Editar Perfil
             </button>
-          </div>
+          </div> */}
 
           {/* Details Section */}
-          <div className="px-5 py-5">
+          {/* <div className="px-5 py-5">
             <div className="flex justify-between items-center mb-3">
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
                 Mis Detalles
@@ -227,6 +250,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                   )}
                 </div>
               </div>
+
               {displayProfile.email && (
                 <div>
                   <p className="text-xs text-slate-500 mb-1.5 font-medium">
@@ -235,6 +259,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                   <p className="text-sm text-slate-700">{displayProfile.email}</p>
                 </div>
               )}
+              
               {displayProfile.phone && (
                 <div>
                   <p className="text-xs text-slate-500 mb-1.5 font-medium">
@@ -244,7 +269,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* BLOCK 2: Metrics */}
@@ -456,6 +481,13 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
           setIsPhotoModalOpen(false);
           onNavigateEditProfile(null);
         }}
+      />
+
+      <AlertModal
+        isOpen={alertModal.isOpen}
+        onClose={() => setAlertModal({ isOpen: false, message: "" })}
+        message={alertModal.message}
+        title={alertModal.title}
       />
     </div>
   );

@@ -33,28 +33,32 @@ const Resumen_PersonalInfo: React.FC<ResumenPersonalInfoProps> = ({
           <h3 className="font-bold text-lg text-slate-800">{name}</h3>
           <div className="flex flex-col gap-1 mt-2">
             <div className="flex items-center text-slate-600 text-sm">
-              <PhoneIcon className="w-4 h-4 mr-2" />
+              <PhoneIcon className="w-4 h-4 mr-2 text-teal-500" />
               {phone}
             </div>
             <div className="flex items-center text-slate-600 text-sm">
-              <MailIcon className="w-4 h-4 mr-2" />
+              <MailIcon className="w-4 h-4 mr-2 text-teal-500" />
               {email}
             </div>{" "}
             {location && (
               <div className="flex items-center text-slate-500 text-sm mt-2">
-                <MapPinIcon className="w-5 h-5 mr-2" /> {location}
+                <MapPinIcon className="w-5 h-5 mr-2 text-teal-500" /> {location}
               </div>
             )}
             {languages.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-2">
-                {languages.map((lang) => (
-                  <span
-                    key={lang}
-                    className="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium"
-                  >
-                    {lang}
-                  </span>
-                ))}
+              <div>
+                <p className="text-xs text-slate-500 mb-2 font-medium mt-4">Idiomas</p>
+                <div className="flex flex-wrap gap-1 mt-2">
+                    {languages.map((lang) => (
+                    <span
+                        key={lang}
+                        // className="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium mb-2"
+                        className="px-2.5 py-1 bg-teal-100 text-teal-700 text-xs rounded-lg border border-teal-100 font-medium"
+                    >
+                        {lang}
+                    </span>
+                    ))}
+                </div>
               </div>
             )}{" "}
           </div>
