@@ -85,6 +85,8 @@ export interface ServiceConfig {
 
 export interface ProviderProfile {
     name: string;
+    email: string;
+    phone: string;
     photoUrl: string;
     location: string;
     languages: string[];

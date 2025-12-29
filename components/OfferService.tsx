@@ -341,6 +341,8 @@ const OfferService: React.FC<OfferServiceProps> = ({
   // General Profile Data
   const [profileData, setProfileData] = useState({
     name: initialData?.name || "",
+    email: "",
+    phone: "",
     location: initialData?.location || "",
     languages: initialData?.languages || ([] as string[]),
     photoUrl: initialData?.photoUrl || "",
@@ -917,6 +919,30 @@ const OfferService: React.FC<OfferServiceProps> = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
+            Email
+          </label>
+          <input
+            type="email"
+            value={profileData.email}
+            onChange={(e) => handleProfileChange("email", e.target.value)}
+            className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
+            placeholder="tu-email@ejemplo.com"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Teléfono
+          </label>
+          <input
+            type="tel"
+            value={profileData.phone}
+            onChange={(e) => handleProfileChange("phone", e.target.value)}
+            className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
+            placeholder="Ej. 612 345 678"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Ubicación (Barrio/Ciudad)
           </label>
           <div className="relative">
@@ -1441,6 +1467,16 @@ const OfferService: React.FC<OfferServiceProps> = ({
               <div className="flex items-center text-slate-500 text-sm">
                 <MapPinIcon className="w-4 h-4 mr-1" /> {profileData.location}
               </div>
+              {profileData.email && (
+                <div className="text-slate-600 text-sm mt-1">
+                  📧 {profileData.email}
+                </div>
+              )}
+              {profileData.phone && (
+                <div className="text-slate-600 text-sm mt-1">
+                  📞 {profileData.phone}
+                </div>
+              )}
             </div>
           </div>
 

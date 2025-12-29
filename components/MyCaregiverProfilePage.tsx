@@ -32,6 +32,8 @@ const defaultDashboardData = {
   name: 'Tu Nombre',
   photoUrl: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop',
   location: 'Tu Ubicación',
+  email: '',
+  phone: '',
   languages: [] as string[],
   earningsMonth: 0,
   profileViews: 0,
@@ -97,6 +99,8 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
       name: profile.name || 'Usuario Nuevo',
       photoUrl: profile.photoUrl || defaultDashboardData.photoUrl,
       location: profile.location || 'Ubicación no definida',
+      email: profile.email || '',
+      phone: profile.phone || '',
       languages: profile.languages || [],
       activeServices: (Object.entries(profile.services) as [string, ServiceConfig][])
         .filter(([_, conf]) => conf.completed)
@@ -180,6 +184,18 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                             )) : <span className="text-xs text-slate-400 italic">Sin especificar</span>}
                         </div>
                     </div>
+                    {displayData.email && (
+                        <div>
+                            <p className="text-xs text-slate-500 mb-1.5 font-medium">Email</p>
+                            <p className="text-sm text-slate-700">{displayData.email}</p>
+                        </div>
+                    )}
+                    {displayData.phone && (
+                        <div>
+                            <p className="text-xs text-slate-500 mb-1.5 font-medium">Teléfono</p>
+                            <p className="text-sm text-slate-700">{displayData.phone}</p>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
