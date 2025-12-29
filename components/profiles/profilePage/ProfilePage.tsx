@@ -134,16 +134,18 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       />
 
       <main className="container mx-auto px-4 py-6 pb-36 flex-grow">
-        <Resumen_PersonalInfo
-          photoUrl={
-            displayProfile.photoUrl || "https://via.placeholder.com/150"
-          }
-          name={displayProfile.name}
-          phone={displayProfile.phone}
-          email={displayProfile.email}
-          location={displayProfile.location}
-          languages={displayProfile.languages}
-        />
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+          <Resumen_PersonalInfo
+            photoUrl={
+              displayProfile.photoUrl || "https://via.placeholder.com/150"
+            }
+            name={displayProfile.name}
+            phone={displayProfile.phone}
+            email={displayProfile.email}
+            location={displayProfile.location}
+            languages={displayProfile.languages}
+          />
+        </div>
 
         {/* User Info Header */}
         {/* <div className="flex items-center space-x-4 py-6 px-2">
