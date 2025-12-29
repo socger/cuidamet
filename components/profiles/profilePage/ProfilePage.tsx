@@ -165,33 +165,35 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
             </div> */}
 
         {/* Preferences / Needs Section */}
-        <div className="mb-6 px-2">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
+        <div className="mb-6">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
             Mis necesidades
           </h3>
-          <div className="flex space-x-2">
-            {allCategories.map((cat) => {
-              const isSelected = displayProfile.preferences.includes(cat);
-              return (
-                <div
-                  key={cat}
-                  className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
-                    isSelected
-                      ? "bg-teal-500 shadow-lg shadow-teal-500/50"
-                      : "bg-white border border-slate-200"
-                  }`}
-                  title={getCategoryName(cat)}
-                >
-                  <img
-                    src={getCategoryIcon(cat)}
-                    alt={getCategoryName(cat)}
-                    className={`w-7 h-7 transition-all duration-300 ${
-                      isSelected ? "brightness-0 invert" : "opacity-70"
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+            <div className="flex space-x-2">
+              {allCategories.map((cat) => {
+                const isSelected = displayProfile.preferences.includes(cat);
+                return (
+                  <div
+                    key={cat}
+                    className={`w-12 h-12 rounded-full flex items-center justify-center shadow-sm transition-all duration-300 ${
+                      isSelected
+                        ? "bg-teal-500 shadow-lg shadow-teal-500/50"
+                        : "bg-white border border-slate-200"
                     }`}
-                  />
-                </div>
-              );
-            })}
+                    title={getCategoryName(cat)}
+                  >
+                    <img
+                      src={getCategoryIcon(cat)}
+                      alt={getCategoryName(cat)}
+                      className={`w-7 h-7 transition-all duration-300 ${
+                        isSelected ? "brightness-0 invert" : "opacity-70"
+                      }`}
+                    />
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
