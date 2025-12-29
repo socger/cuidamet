@@ -13,6 +13,7 @@ import BottomNav from "../../BottomNav";
 import PhotoCapture from "../../PhotoCapture";
 import AlertModal from "../../AlertModal";
 import PersonalInfo from "./PersonalInfo";
+import Resumen_Revisa from "./Resumen_Revisa";
 import MapPinIcon from "../../icons/MapPinIcon";
 import CurrencyEuroIcon from "../../icons/CurrencyEuroIcon";
 import CheckCircleIcon from "../../icons/CheckCircleIcon";
@@ -1376,10 +1377,10 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
     return (
       <div className="space-y-6 animate-fade-in">
-        <div className="text-center">
-          <h2 className="text-xl font-bold text-slate-800">Revisa tu perfil</h2>
-          <p className="text-slate-500 text-sm">Así te verán los clientes.</p>
-        </div>
+        <Resumen_Revisa
+          title="Revisa tu perfil"
+          subtitle="Verifica que todo esté correcto antes de continuar."
+        />
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <div className="bg-teal-500 h-20 relative"></div>

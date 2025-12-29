@@ -9,6 +9,7 @@ import GpsFixedIcon from "../../icons/GpsFixedIcon";
 import PhotoCapture from "../../PhotoCapture";
 import PersonalInfo from "./PersonalInfo";
 import AlertModal from "../../AlertModal";
+import Resumen_Revisa from "./Resumen_Revisa";
 import { CareCategory, ClientProfile } from "../../../types";
 
 interface ClientRegistrationProps {
@@ -376,14 +377,10 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
 
           {step === 3 && (
             <div className="space-y-6 animate-fade-in">
-              <div className="text-center">
-                <h2 className="text-2xl font-bold text-slate-800">
-                  Revisa tu perfil
-                </h2>
-                <p className="text-slate-600 mt-2">
-                  Verifica que todo esté correcto antes de continuar.
-                </p>
-              </div>
+              <Resumen_Revisa
+                title="Revisa tu perfil"
+                subtitle="Verifica que todo esté correcto antes de continuar."
+              />
 
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
                 <div className="bg-teal-500 h-20 relative"></div>
