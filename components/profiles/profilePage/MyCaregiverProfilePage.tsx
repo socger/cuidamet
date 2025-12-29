@@ -115,7 +115,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   };
 
   // Merge props profile with default data
-  const displayData = profile
+  const displayProfile = profile
     ? {
         ...defaultDashboardData,
         name: profile.name || "Usuario Nuevo",
@@ -168,7 +168,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
             {/* Photo inside Green Strip */}
             <div className="relative group mb-3">
               <img
-                src={displayData.photoUrl}
+                src={displayProfile.photoUrl}
                 alt="Profile"
                 className="w-24 h-24 rounded-full object-cover border-4 border-white/30 shadow-lg bg-white/10"
               />
@@ -182,11 +182,11 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
 
             {/* Name and Location inside Green Strip for high visibility */}
             <h2 className="text-2xl font-bold text-white">
-              {displayData.name}
+              {displayProfile.name}
             </h2>
             <div className="flex items-center text-sm text-teal-50 mt-1 mb-3">
               <MapPinIcon className="w-4 h-4 mr-1 opacity-80" />{" "}
-              {displayData.location}
+              {displayProfile.location}
             </div>
 
             <button
@@ -211,8 +211,8 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                   Idiomas
                 </p>
                 <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
-                  {displayData.languages.length > 0 ? (
-                    displayData.languages.map((lang) => (
+                  {displayProfile.languages.length > 0 ? (
+                    displayProfile.languages.map((lang) => (
                       <span
                         key={lang}
                         className="px-2.5 py-1 bg-slate-100 text-slate-600 text-xs rounded-lg border border-slate-200 font-medium"
@@ -227,20 +227,20 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                   )}
                 </div>
               </div>
-              {displayData.email && (
+              {displayProfile.email && (
                 <div>
                   <p className="text-xs text-slate-500 mb-1.5 font-medium">
                     Email
                   </p>
-                  <p className="text-sm text-slate-700">{displayData.email}</p>
+                  <p className="text-sm text-slate-700">{displayProfile.email}</p>
                 </div>
               )}
-              {displayData.phone && (
+              {displayProfile.phone && (
                 <div>
                   <p className="text-xs text-slate-500 mb-1.5 font-medium">
                     Teléfono
                   </p>
-                  <p className="text-sm text-slate-700">{displayData.phone}</p>
+                  <p className="text-sm text-slate-700">{displayProfile.phone}</p>
                 </div>
               )}
             </div>
@@ -257,7 +257,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               Ingresos Mes
             </p>
             <p className="text-2xl font-bold text-slate-800 mt-1">
-              {displayData.earningsMonth}€
+              {displayProfile.earningsMonth}€
             </p>
           </div>
           <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
@@ -266,7 +266,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
             </p>
             <div className="flex items-center mt-1">
               <span className="text-2xl font-bold text-slate-800 mr-2">
-                {displayData.rating.toFixed(1)}
+                {displayProfile.rating.toFixed(1)}
               </span>
               <div className="flex">
                 <StarIcon className="w-4 h-4 text-amber-400" />
@@ -345,7 +345,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
             </button>
           </div>
           <div className="space-y-3">
-            {displayData.activeServices.map((service) => (
+            {displayProfile.activeServices.map((service) => (
               <div
                 key={service.id}
                 className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative group hover:border-teal-300 transition-colors"
@@ -387,7 +387,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                 </div>
               </div>
             ))}
-            {displayData.activeServices.length === 0 && (
+            {displayProfile.activeServices.length === 0 && (
               <div className="text-center py-8 bg-white rounded-xl border-2 border-dashed border-slate-200">
                 <p className="text-slate-500 text-sm mb-3">
                   No tienes servicios activos.
