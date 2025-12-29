@@ -42,7 +42,7 @@ const Resumen_PersonalInfo: React.FC<ResumenPersonalInfoProps> = ({
             </div>{" "}
             {location && (
               <div className="flex items-center text-slate-500 text-sm mt-2">
-                <MapPinIcon className="w-4 h-4 mr-1" /> {location}
+                <MapPinIcon className="w-5 h-5 mr-2" /> {location}
               </div>
             )}
             {languages.length > 0 && (

@@ -1390,6 +1390,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
             phone={profileData.phone}
             email={profileData.email}
             location={profileData.location}
+            languages={profileData.languages}
           />
 
           <div className="px-4 pb-4 space-y-4">
@@ -1482,11 +1483,11 @@ const OfferService: React.FC<OfferServiceProps> = ({
             )}
             <h1 className="text-lg font-bold text-slate-800">
               {step === 1
-                ? "Perfil Personal"
+                ? "Perfil profesional"
                 : step === 2
                 ? editingCategory
                   ? "Configuración"
-                  : "Mis Servicios"
+                  : "Mis servicios"
                 : "Resumen"}
             </h1>
           </div>

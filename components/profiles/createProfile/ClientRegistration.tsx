@@ -247,10 +247,10 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
             )}
             <h1 className="text-lg font-bold text-slate-800">
               {step === 1
-                ? "Crea tu Perfil"
+                ? "Perfil familiar"
                 : step === 2
                 ? "Preferencias"
-                : "Revisa tu Perfil"}
+                : "Resumen"}
             </h1>
           </div>
           <div className="flex items-center gap-3">
