@@ -689,7 +689,19 @@ const App: React.FC = () => {
       mainContent = <ClientRegistration 
         onComplete={(profileData) => {
           setClientProfile(profileData);
-          setView("myProfile");
+          setActiveRole('client');
+          
+          // Show success alert
+          setAlertModal({ 
+            isOpen: true, 
+            message: '¡Tu perfil familiar se ha creado exitosamente! Ya puedes buscar cuidadores.', 
+            title: 'Perfil publicado'
+          });
+          
+          // Navigate to myProfile view after a short delay
+          setTimeout(() => {
+            setView("myProfile");
+          }, 2000);
         }}
         onBack={handleCancelClientRegistration}
       />;
