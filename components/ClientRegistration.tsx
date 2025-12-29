@@ -7,6 +7,7 @@ import XMarkIcon from './icons/XMarkIcon';
 import PhoneIcon from './icons/PhoneIcon';
 import MapPinIcon from './icons/MapPinIcon';
 import PhotoCapture from './PhotoCapture';
+import PersonalInfoForm from './PersonalInfoForm';
 import { CareCategory, ClientProfile } from '../types';
 
 interface ClientRegistrationProps {
@@ -145,82 +146,26 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                 />
 
                 {/* Form Fields */}
-                <div className="space-y-4 pt-2">
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Nombre y apellidos</label>
-                        <input 
-                            type="text" 
-                            value={name} 
-                            onChange={(e) => setName(e.target.value)} 
-                            placeholder="Ej. María García"
-                            className="w-full bg-white p-3.5 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Email</label>
-                        <input 
-                            type="email" 
-                            value={email} 
-                            onChange={(e) => setEmail(e.target.value)} 
-                            placeholder="tu-email@ejemplo.com"
-                            className={`w-full bg-white p-3.5 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800 ${
-                              email && !isValidEmail(email) ? 'border-red-500' : 'border-slate-300'
-                            }`}
-                        />
-                        {email && !isValidEmail(email) && (
-                          <p className="text-red-500 text-sm mt-1">Por favor, introduce un email válido</p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Teléfono</label>
-                        <div className="relative">
-                            <input 
-                                type="tel" 
-                                value={phone} 
-                                onChange={(e) => setPhone(e.target.value)} 
-                                placeholder="600 000 000"
-                                className={`w-full bg-white p-3.5 pl-12 border rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800 ${
-                                  phone && !isValidPhone(phone) ? 'border-red-500' : 'border-slate-300'
-                                }`}
-                            />
-                            <PhoneIcon className="absolute top-1/2 left-4 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                        </div>
-                        {phone && !isValidPhone(phone) && (
-                          <p className="text-red-500 text-sm mt-1">Por favor, introduce un teléfono válido (9 dígitos)</p>
-                        )}
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-1">Ubicación (barrio/ciudad)</label>
-                        <div className="relative">
-                            <input 
-                                type="text" 
-                                value={location} 
-                                onChange={(e) => setLocation(e.target.value)} 
-                                placeholder="Ej. Chamberí, Madrid"
-                                className="w-full bg-white p-3.5 pl-12 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800"
-                            />
-                            <MapPinIcon className="absolute top-1/2 left-4 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                        </div>
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-slate-700 mb-2">Idiomas</label>
-                        <div className="flex flex-wrap gap-2">
-                            {languagesList.map((lang) => (
-                                <button
-                                    key={lang}
-                                    type="button"
-                                    onClick={() => toggleLanguage(lang)}
-                                    className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
-                                        languages.includes(lang)
-                                            ? 'bg-teal-50 border-teal-500 text-teal-700'
-                                            : 'bg-white border-slate-200 text-slate-600'
-                                    }`}
-                                >
-                                    {lang}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                <div className="pt-2">
+                    <PersonalInfoForm
+                        name={name}
+                        email={email}
+                        phone={phone}
+                        location={location}
+                        languages={languages}
+                        languagesList={languagesList}
+                        onNameChange={setName}
+                        onEmailChange={setEmail}
+                        onPhoneChange={setPhone}
+                        onLocationChange={setLocation}
+                        onLanguageToggle={toggleLanguage}
+                    />
+                    {email && !isValidEmail(email) && (
+                        <p className="text-red-500 text-sm mt-1">Por favor, introduce un email válido</p>
+                    )}
+                    {phone && !isValidPhone(phone) && (
+                        <p className="text-red-500 text-sm mt-1">Por favor, introduce un teléfono válido (9 dígitos)</p>
+                    )}
                 </div>
             </div>
             )}
