@@ -5,7 +5,7 @@ import { MOCK_CHATS } from "./services/mockChatData";
 import BottomNav from "./components/BottomNav";
 import LandingPage from "./components/LandingPage";
 import ProfileDetail from "./components/ProfileDetail";
-import OfferService from "./components/OfferService";
+import CreateProfile_OfferService from "./components/createProfile/CreateProfile_OfferService";
 import Inbox from "./components/Inbox";
 import Chat from "./components/Chat";
 import ProfilePage from "./components/ProfilePage";
@@ -19,7 +19,7 @@ import { bookingService } from "./services/bookingService";
 import AlertModal from "./components/AlertModal";
 import ProfileLandingPage from "./components/ProfileLandingPage";
 import RoleSelection from "./components/RoleSelection";
-import ClientRegistration from "./components/ClientRegistration";
+import CreateProfile_ClientRegistration from "./components/createProfile/CreateProfile_ClientRegistration";
 import MyCaregiverProfilePage from "./components/MyCaregiverProfilePage";
 
 const getDistanceInKm = (
@@ -56,7 +56,7 @@ const App: React.FC = () => {
     | "booking"
     | "bookings"
     | "roleSelection"
-    | "clientRegistration"
+    | "CreateProfile_ClientRegistration"
     | "editProfile"
     | "securitySettings"
     | "notifications"
@@ -103,7 +103,7 @@ const App: React.FC = () => {
   // Alert Modal state
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
   
-  // Editing category state for OfferService/EditProfile
+  // Editing category state for CreateProfile_OfferService/EditProfile
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(null);
   
   // Favorites filter state (when navigating from ProfilePage)
@@ -417,13 +417,13 @@ const App: React.FC = () => {
     setIsAuthenticated(true);
     setAuthAttempts(0);
     
-    // If user is signing up as client (familiar), redirect to ClientRegistration
+    // If user is signing up as client (familiar), redirect to CreateProfile_ClientRegistration
     if (role === 'client' && !pendingAction) {
-      setView('clientRegistration');
+      setView('CreateProfile_ClientRegistration');
       return;
     }
     
-    // If user is signing up as provider (cuidador), redirect to OfferService
+    // If user is signing up as provider (cuidador), redirect to CreateProfile_OfferService
     if (role === 'provider' && !pendingAction) {
       setView('offer');
       return;
@@ -459,7 +459,7 @@ const App: React.FC = () => {
     setView(previousViewBeforeAuth);
   };
   
-  const handleCancelClientRegistration = () => {
+  const handleCancelCreateProfile_ClientRegistration = () => {
     // Revert authentication state since registration was cancelled
     setIsAuthenticated(false);
     setClientProfile(null);
@@ -467,7 +467,7 @@ const App: React.FC = () => {
     setView('roleSelection');
   };
   
-  const handleCancelOfferService = () => {
+  const handleCancelCreateProfile_OfferService = () => {
     // Revert authentication state since registration was cancelled
     setIsAuthenticated(false);
     setProviderProfile(null);
@@ -543,9 +543,9 @@ const App: React.FC = () => {
         />
       );
     } else if (currentView === "offer") {
-      mainContent = <OfferService 
+      mainContent = <CreateProfile_OfferService 
         onComplete={handleProviderRegistrationComplete}
-        onCancel={handleCancelOfferService}
+        onCancel={handleCancelCreateProfile_OfferService}
         currentView={view}
         onNavigateHome={handleNavigateHome}
         onNavigateFavorites={handleNavigateFavorites}
@@ -685,8 +685,8 @@ const App: React.FC = () => {
         }}
         onBack={() => setView("myProfile")}
       />;
-    } else if (currentView === "clientRegistration") {
-      mainContent = <ClientRegistration 
+    } else if (currentView === "CreateProfile_ClientRegistration") {
+      mainContent = <CreateProfile_ClientRegistration 
         onComplete={(profileData) => {
           setClientProfile(profileData);
           setActiveRole('client');
@@ -703,7 +703,7 @@ const App: React.FC = () => {
             setView("myProfile");
           }, 2000);
         }}
-        onBack={handleCancelClientRegistration}
+        onBack={handleCancelCreateProfile_ClientRegistration}
       />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
