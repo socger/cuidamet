@@ -943,7 +943,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
         </div>
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Ubicación (Barrio/Ciudad)
+            Ubicación (barrio/ciudad)
           </label>
           <div className="relative">
             <input
