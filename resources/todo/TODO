@@ -82,10 +82,13 @@ Intentar ver si "components/ClientRegistration.tsx" se podría fundir en "compon
 
 Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este componente llama a los componentes "components/PhotoUploadModal.tsx" y "components/PremiumSubscriptionModal.tsx" ... pero no se que hacen (investigarlos).
 
-Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También hay que ver que hay opciones en ambos componentes que todavía no se han terminado, como la edición.
-* A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
-
 Cuando el usuario se crea como un cuidador, este debería de poder verse a si mismo cuando hace búsquedas de cuidadores. Ahora mismo no lo hace.
 
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
+
+
+
+Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También hay que ver que hay opciones en ambos componentes que todavía no se han terminado, como la edición.
+* A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
+
