@@ -13,7 +13,8 @@ import BottomNav from "../../BottomNav";
 import PhotoCapture from "../../PhotoCapture";
 import AlertModal from "../../AlertModal";
 import PersonalInfo from "./PersonalInfo";
-import Resumen_Revisa from "./Resumen_Revisa";
+import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
+import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import MapPinIcon from "../../icons/MapPinIcon";
 import CurrencyEuroIcon from "../../icons/CurrencyEuroIcon";
 import CheckCircleIcon from "../../icons/CheckCircleIcon";
@@ -1383,32 +1384,13 @@ const OfferService: React.FC<OfferServiceProps> = ({
         />
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-          <div className="bg-teal-500 h-20 relative"></div>
-          <div className="px-4 pb-4 -mt-10 relative">
-            <img
-              src={profileData.photoUrl || "https://via.placeholder.com/150"}
-              className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover"
-              alt="Me"
-            />
-            <div className="mt-2">
-              <h3 className="font-bold text-lg text-slate-800">
-                {profileData.name}
-              </h3>
-              <div className="flex items-center text-slate-500 text-sm">
-                <MapPinIcon className="w-4 h-4 mr-1" /> {profileData.location}
-              </div>
-              {profileData.email && (
-                <div className="text-slate-600 text-sm mt-1">
-                  📧 {profileData.email}
-                </div>
-              )}
-              {profileData.phone && (
-                <div className="text-slate-600 text-sm mt-1">
-                  📞 {profileData.phone}
-                </div>
-              )}
-            </div>
-          </div>
+          <Resumen_PersonalInfo
+            photoUrl={profileData.photoUrl || "https://via.placeholder.com/150"}
+            name={profileData.name}
+            phone={profileData.phone}
+            email={profileData.email}
+            location={profileData.location}
+          />
 
           <div className="px-4 pb-4 space-y-4">
             {completedServices.map((cat) => {

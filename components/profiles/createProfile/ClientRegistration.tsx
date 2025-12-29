@@ -9,7 +9,8 @@ import GpsFixedIcon from "../../icons/GpsFixedIcon";
 import PhotoCapture from "../../PhotoCapture";
 import PersonalInfo from "./PersonalInfo";
 import AlertModal from "../../AlertModal";
-import Resumen_Revisa from "./Resumen_Revisa";
+import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
+import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import { CareCategory, ClientProfile } from "../../../types";
 
 interface ClientRegistrationProps {
@@ -383,49 +384,17 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
               />
 
               <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <div className="bg-teal-500 h-20 relative"></div>
-                <div className="px-4 pb-4 -mt-10 relative">
-                  <img
-                    src={
-                      profileData.photoUrl ||
-                      "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200"
-                    }
-                    className="w-20 h-20 rounded-full border-4 border-white shadow-md object-cover"
-                    alt="Perfil"
-                  />
-                  <div className="mt-3">
-                    <h3 className="font-bold text-lg text-slate-800">
-                      {profileData.name}
-                    </h3>
-                    <div className="flex flex-col gap-1 mt-2">
-                      <div className="flex items-center text-slate-600 text-sm">
-                        <PhoneIcon className="w-4 h-4 mr-2" />
-                        {profileData.phone}
-                      </div>
-                      <div className="text-slate-600 text-sm">
-                        {profileData.email}
-                      </div>{" "}
-                      {profileData.location && (
-                        <div className="flex items-center text-slate-500 text-sm mt-2">
-                          <MapPinIcon className="w-4 h-4 mr-1" />{" "}
-                          {profileData.location}
-                        </div>
-                      )}
-                      {profileData.languages.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mt-2">
-                          {profileData.languages.map((lang) => (
-                            <span
-                              key={lang}
-                              className="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium"
-                            >
-                              {lang}
-                            </span>
-                          ))}
-                        </div>
-                      )}{" "}
-                    </div>
-                  </div>
-                </div>
+                <Resumen_PersonalInfo
+                  photoUrl={
+                    profileData.photoUrl ||
+                    "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200"
+                  }
+                  name={profileData.name}
+                  phone={profileData.phone}
+                  email={profileData.email}
+                  location={profileData.location}
+                  languages={profileData.languages}
+                />
 
                 {selectedCategories.length > 0 && (
                   <div className="px-4 pb-4 border-t border-slate-100 pt-4">
