@@ -429,7 +429,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         </section>
 
         {/* BLOCK 5: Account & Settings */}
-        <section>
+        <section className="mb-6">
           <h3 className="font-bold text-slate-800 mb-3 px-1">
             Cuenta y Seguridad
           </h3>
@@ -450,6 +450,12 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               label="Legal y Privacidad"
               onClick={onNavigateLegal}
             />
+          </div>
+        </section>
+
+        {/* BLOCK 6: Logout */}
+        <section>
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <SettingsItem
               icon={<ArrowRightOnRectangleIcon className="w-6 h-6" />}
               label="Cerrar Sesión"

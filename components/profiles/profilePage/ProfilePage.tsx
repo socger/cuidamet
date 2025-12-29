@@ -39,20 +39,22 @@ const ListItem: React.FC<ListItemProps> = ({
     <button
       onClick={onClick}
       className={`w-full flex items-center py-4 text-left hover:bg-slate-100 px-4 transition-colors ${
-        highlight ? "bg-amber-50/50" : ""
+        highlight ? "hover:bg-red-50" : ""
       }`}
     >
-      <div className={highlight ? "text-amber-500" : "text-slate-600"}>
+      <div className={highlight ? "text-red-500" : "text-slate-600"}>
         {icon}
       </div>
       <span
         className={`ml-4 flex-grow font-medium ${
-          highlight ? "text-amber-800" : "text-slate-700"
+          highlight ? "text-red-600" : "text-slate-700"
         }`}
       >
         {label}
       </span>
-      <ChevronRightIcon className="w-5 h-5 text-slate-400" />
+      <ChevronRightIcon className={`w-5 h-5 ${
+        highlight ? "text-red-400" : "text-slate-400"
+      }`} />
     </button>
   </li>
 );
@@ -274,22 +276,27 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
           </ul>
         </div>
 
-        {/* Logout Button */}
-        <div className="mt-10 px-2">
-          <button
-            onClick={() =>
-              setAlertModal({
-                isOpen: true,
-                message: "Cerrando sesión...",
-                title: "Cerrar sesión",
-              })
-            }
-            className="w-full flex items-center justify-center py-3 text-center text-red-500 font-medium hover:bg-red-50 rounded-xl transition-colors border border-transparent hover:border-red-100"
-          >
-            <ArrowRightOnRectangleIcon className="w-6 h-6 mr-2" />
-            Cerrar Sesión
-          </button>
+        {/* Logout Section */}
+        <div className="mt-8">
+          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
+            SESIÓN
+          </h3>
+          <ul className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <ListItem
+              icon={<ArrowRightOnRectangleIcon className="w-6 h-6" />}
+              label="Cerrar Sesión"
+              onClick={() =>
+                setAlertModal({
+                  isOpen: true,
+                  message: "Cerrando sesión...",
+                  title: "Cerrar sesión",
+                })
+              }
+              highlight
+            />
+          </ul>
         </div>
+        
       </main>
 
       <AlertModal
