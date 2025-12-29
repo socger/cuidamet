@@ -39,10 +39,10 @@ const Resumen_PersonalInfo: React.FC<ResumenPersonalInfoProps> = ({
             <div className="flex items-center text-slate-600 text-sm">
               <MailIcon className="w-4 h-4 mr-2 text-teal-500" />
               {email}
-            </div>{" "}
+            </div>
             {location && (
-              <div className="flex items-center text-slate-500 text-sm mt-2">
-                <MapPinIcon className="w-5 h-5 mr-2 text-teal-500" /> {location}
+              <div className="flex items-center text-slate-500 text-sm">
+                <MapPinIcon className="w-4 h-4 mr-2 text-teal-500" /> {location}
               </div>
             )}
             {languages.length > 0 && (
