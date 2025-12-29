@@ -1,22 +1,14 @@
-* Hemos conseguido que ProfilePage.tsx sea el de cuidamet_7.
-Pero tenemos que seguir añadiendo las opciones que tiene en cuidamet_7 cuando las pulsas.
-En general tenemos que comprobar también si los últimos cambios son los mismos que pedimos en el prompt último que lancemos.
-
-* La vista ProfilePage.tsx (perfil nuestro) no presenta la botonera común de la app
-
 * Vista mapa:
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
-* A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
-
 * Cuando una reserva se ha realizado, es decir el servicio se ha cumplido, viene el pago si lo hace desde la aplicación. Pero también viene el momento de calificar el servicio. Creo que no hay ninguna vista para realizar esta acción. Pero podríamos usar la vista que presenta "Mis Reservas" y allí que el usuario que contrató lo haga.
 
 * Comprobar que las reservas nuevas, las que creamos en la vista "Reservar", también aparecen también en la vista "Mis reservas"
 
-* El usuario, bien sea cuidador o quien busca cuidador, debe de tener un histórico de reservas apalabradas. 
+* El usuario, bien sea cuidador o familiar(quien busca cuidador), debe de tener un histórico de reservas apalabradas. 
 * No veo un acceso rápido a chat desde la creación de la reserva nueva. Tampoco veo un acceso rápido desde reservas, cuando editas una de ellas, a chat.
 
 * Un usuario que es cuidador, no el que contrata, también debe de poder ver las reservas que otros han hecho para él. Y debería de poder comunicarse con quien le contrató. Lo lógico es que fuera a conversaciones ya realizadas(chats en donde el contratador le llamó). ¿Pero y si quiere ponerse en contacto con un nuevo contratador?
@@ -90,9 +82,8 @@ Intentar ver si "components/ClientRegistration.tsx" se podría fundir en "compon
 
 Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este componente llama a los componentes "components/PhotoUploadModal.tsx" y "components/PremiumSubscriptionModal.tsx" ... pero no se que hacen (investigarlos).
 
-Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También resulta que el header de ambos componentes es diferente (parte en la que se presenta la foto) hay que hacerlo lo más parecido en ambos componentes
-
-Cuando estás creando un perfil familiar, en el primer step, se nos pide la dirección de correo electrónico. Pero cuando estamos creando el perfil de cuidador, en el primer step, falta preguntar por el email.
+Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También hay que ver que hay opciones en ambos componentes que todavía no se han terminado, como la edición.
+* A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
 Cuando el usuario se crea como un cuidador, este debería de poder verse a si mismo cuando hace búsquedas de cuidadores. Ahora mismo no lo hace.
 
