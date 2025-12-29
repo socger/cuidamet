@@ -12,6 +12,7 @@ import {
 import BottomNav from "./BottomNav";
 import PhotoCapture from "./PhotoCapture";
 import AlertModal from "./AlertModal";
+import PersonalInfoForm from "./PersonalInfoForm";
 import MapPinIcon from "./icons/MapPinIcon";
 import CurrencyEuroIcon from "./icons/CurrencyEuroIcon";
 import CheckCircleIcon from "./icons/CheckCircleIcon";
@@ -904,93 +905,21 @@ const OfferService: React.FC<OfferServiceProps> = ({
       />
 
       {/* Fields */}
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Nombre y apellidos
-          </label>
-          <input
-            type="text"
-            value={profileData.name}
-            onChange={(e) => handleProfileChange("name", e.target.value)}
-            className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
-            placeholder="Ej. Laura Martínez"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Email
-          </label>
-          <input
-            type="email"
-            value={profileData.email}
-            onChange={(e) => handleProfileChange("email", e.target.value)}
-            className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
-            placeholder="tu-email@ejemplo.com"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Teléfono
-          </label>
-          <input
-            type="tel"
-            value={profileData.phone}
-            onChange={(e) => handleProfileChange("phone", e.target.value)}
-            className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
-            placeholder="Ej. 612 345 678"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-1">
-            Ubicación (barrio/ciudad)
-          </label>
-          <div className="relative">
-            <input
-              type="text"
-              value={profileData.location}
-              onChange={(e) => handleProfileChange("location", e.target.value)}
-              className="w-full p-3 pl-10 pr-12 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
-              placeholder="Ej. Chamberí, Madrid"
-            />
-            <MapPinIcon className="absolute left-3 top-3.5 w-5 h-5 text-slate-400" />
-            <button
-              type="button"
-              onClick={handleDetectLocation}
-              className="absolute right-2 top-2 p-1.5 text-teal-500 hover:bg-teal-50 rounded-lg transition-colors"
-              title="Detectar mi ubicación"
-              disabled={isLocating}
-            >
-              {isLocating ? (
-                <div className="w-5 h-5 border-2 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <GpsFixedIcon className="w-5 h-5" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-slate-700 mb-2">
-            Idiomas
-          </label>
-          <div className="flex flex-wrap gap-2">
-            {languagesList.map((lang) => (
-              <button
-                key={lang}
-                onClick={() => handleLanguageToggle(lang)}
-                className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
-                  profileData.languages.includes(lang)
-                    ? "bg-teal-50 border-teal-500 text-teal-700"
-                    : "bg-white border-slate-200 text-slate-600"
-                }`}
-              >
-                {lang}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
+      <PersonalInfoForm
+        name={profileData.name}
+        email={profileData.email}
+        phone={profileData.phone}
+        location={profileData.location}
+        languages={profileData.languages}
+        languagesList={languagesList}
+        isLocating={isLocating}
+        onNameChange={(value) => handleProfileChange("name", value)}
+        onEmailChange={(value) => handleProfileChange("email", value)}
+        onPhoneChange={(value) => handleProfileChange("phone", value)}
+        onLocationChange={(value) => handleProfileChange("location", value)}
+        onLanguageToggle={handleLanguageToggle}
+        onDetectLocation={handleDetectLocation}
+      />
     </div>
   );
 
