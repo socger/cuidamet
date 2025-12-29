@@ -5,6 +5,7 @@ import ChevronLeftIcon from './icons/ChevronLeftIcon';
 import CheckCircleIcon from './icons/CheckCircleIcon';
 import XMarkIcon from './icons/XMarkIcon';
 import PhoneIcon from './icons/PhoneIcon';
+import MapPinIcon from './icons/MapPinIcon';
 import PhotoCapture from './PhotoCapture';
 import { CareCategory, ClientProfile } from '../types';
 
@@ -20,17 +21,36 @@ const serviceCategories = [
     { id: CareCategory.HOUSEKEEPING, label: 'Limpieza', icon: '/resources/icons/housekeeping-icon.svg', color: 'text-blue-600', bg: 'bg-blue-100', border: 'border-blue-200' }
 ];
 
+const languagesList = [
+  "Español",
+  "Inglés",
+  "Francés",
+  "Alemán",
+  "Italiano",
+  "Portugués",
+  "Chino",
+  "Árabe",
+];
+
 const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onBack }) => {
   const [step, setStep] = useState(1);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [languages, setLanguages] = useState<string[]>([]);
   const [photoUrl, setPhotoUrl] = useState('');
   const [selectedCategories, setSelectedCategories] = useState<CareCategory[]>([]);
 
   const toggleCategory = (id: CareCategory) => {
     setSelectedCategories(prev => 
       prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]
+    );
+  };
+
+  const toggleLanguage = (lang: string) => {
+    setLanguages(prev => 
+      prev.includes(lang) ? prev.filter(l => l !== lang) : [...prev, lang]
     );
   };
 
@@ -63,6 +83,8 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
         name,
         email,
         phone,
+        location,
+        languages,
         photoUrl: photoUrl || 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200', // Fallback image
         preferences: selectedCategories
       };
@@ -167,6 +189,38 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                           <p className="text-red-500 text-sm mt-1">Por favor, introduce un teléfono válido (9 dígitos)</p>
                         )}
                     </div>
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">Ubicación (barrio/ciudad)</label>
+                        <div className="relative">
+                            <input 
+                                type="text" 
+                                value={location} 
+                                onChange={(e) => setLocation(e.target.value)} 
+                                placeholder="Ej. Chamberí, Madrid"
+                                className="w-full bg-white p-3.5 pl-12 border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 focus:outline-none text-slate-800"
+                            />
+                            <MapPinIcon className="absolute top-1/2 left-4 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                        </div>
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-2">Idiomas</label>
+                        <div className="flex flex-wrap gap-2">
+                            {languagesList.map((lang) => (
+                                <button
+                                    key={lang}
+                                    type="button"
+                                    onClick={() => toggleLanguage(lang)}
+                                    className={`px-3 py-1.5 rounded-lg text-sm border transition-colors ${
+                                        languages.includes(lang)
+                                            ? 'bg-teal-50 border-teal-500 text-teal-700'
+                                            : 'bg-white border-slate-200 text-slate-600'
+                                    }`}
+                                >
+                                    {lang}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
             </div>
             )}
@@ -231,8 +285,20 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({ onComplete, onB
                                 </div>
                                 <div className="text-slate-600 text-sm">
                                     {email}
-                                </div>
-                            </div>
+                                </div>                                {location && (
+                                    <div className="flex items-center text-slate-500 text-sm mt-2">
+                                        <MapPinIcon className="w-4 h-4 mr-1" /> {location}
+                                    </div>
+                                )}
+                                {languages.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 mt-2">
+                                        {languages.map(lang => (
+                                            <span key={lang} className="text-[10px] bg-teal-100 text-teal-700 px-2 py-0.5 rounded-full font-medium">
+                                                {lang}
+                                            </span>
+                                        ))}
+                                    </div>
+                                )}                            </div>
                         </div>
                     </div>
 

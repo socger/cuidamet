@@ -162,6 +162,8 @@ export interface ClientProfile {
     email: string;
     photoUrl: string;
     phone: string;
+    location: string;
+    languages: string[];
     preferences: CareCategory[];
 }
 

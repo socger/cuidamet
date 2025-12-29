@@ -7,6 +7,7 @@ import AlertModal from './AlertModal';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import ChatBubbleLeftRightIcon from './icons/ChatBubbleLeftRightIcon';
 import InformationCircleIcon from './icons/InformationCircleIcon';
+import MapPinIcon from './icons/MapPinIcon';
 import { ClientProfile, CareCategory } from '../types';
 import BriefcaseIcon from './icons/BriefcaseIcon';
 import PageHeader from './PageHeader';
@@ -58,6 +59,8 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
       photoUrl: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop', // Generic placeholder
       email: '',
       phone: '',
+      location: '',
+      languages: [],
       preferences: []
   };
 
@@ -138,6 +141,33 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
                     })}
                 </div>
             </div>
+
+            {/* Location & Languages Section */}
+            {(displayProfile.location || displayProfile.languages.length > 0) && (
+                <div className="mb-6 px-2">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mis detalles</h3>
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
+                        {displayProfile.location && (
+                            <div className="flex items-center text-slate-700">
+                                <MapPinIcon className="w-4 h-4 mr-2 text-teal-500" />
+                                <span className="text-sm">{displayProfile.location}</span>
+                            </div>
+                        )}
+                        {displayProfile.languages.length > 0 && (
+                            <div>
+                                <p className="text-xs text-slate-500 mb-2 font-medium">Idiomas</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {displayProfile.languages.map(lang => (
+                                        <span key={lang} className="px-2.5 py-1 bg-teal-50 text-teal-700 text-xs rounded-lg border border-teal-100 font-medium">
+                                            {lang}
+                                        </span>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
 
             {/* CUENTA Section */}
             <div className="mt-2">
