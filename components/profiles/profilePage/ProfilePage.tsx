@@ -11,6 +11,7 @@ import { ClientProfile, CareCategory } from "../../../types";
 import BriefcaseIcon from "../../icons/BriefcaseIcon";
 import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
+import LogoutSection from "./LogoutSection";
 
 interface ProfilePageProps {
   clientProfile: ClientProfile | null;
@@ -20,6 +21,7 @@ interface ProfilePageProps {
   onNavigateSupportChat: () => void;
   onSwitchToProvider: () => void;
   onBack: () => void;
+  onLogout: () => void;
 }
 
 interface ListItemProps {
@@ -67,6 +69,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   onNavigateSupportChat,
   onSwitchToProvider,
   onBack,
+  onLogout,
 }) => {
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
@@ -278,25 +281,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
 
         {/* Logout Section */}
         <div className="mt-8">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
-            SESIÓN
-          </h3>
-          <ul className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <ListItem
-              icon={<ArrowRightOnRectangleIcon className="w-6 h-6" />}
-              label="Cerrar Sesión"
-              onClick={() =>
-                setAlertModal({
-                  isOpen: true,
-                  message: "Cerrando sesión...",
-                  title: "Cerrar sesión",
-                })
-              }
-              highlight
-            />
-          </ul>
+          <LogoutSection onLogout={onLogout} />
         </div>
-        
+
       </main>
 
       <AlertModal

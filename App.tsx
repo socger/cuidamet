@@ -663,6 +663,12 @@ const App: React.FC = () => {
             setActiveRole('provider');
           }}
           onBack={handleNavigateHome}
+          onLogout={() => {
+            setIsAuthenticated(false);
+            setClientProfile(null);
+            setProviderProfile(null);
+            setView("landing");
+          }}
         />;
       }
     } else if (currentView === "roleSelection") {

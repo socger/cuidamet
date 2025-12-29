@@ -16,6 +16,7 @@ import ArrowRightOnRectangleIcon from "../../icons/ArrowRightOnRectangleIcon";
 import CameraIcon from "../../icons/CameraIcon";
 import PhotoUploadModal from "../../PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
+import LogoutSection from "./LogoutSection";
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -454,16 +455,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         </section>
 
         {/* BLOCK 6: Logout */}
-        <section>
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <SettingsItem
-              icon={<ArrowRightOnRectangleIcon className="w-6 h-6" />}
-              label="Cerrar Sesión"
-              onClick={onLogout}
-              isDestructive
-            />
-          </div>
-        </section>
+        <LogoutSection onLogout={onLogout} />
       </main>
 
       <PremiumSubscriptionModal
