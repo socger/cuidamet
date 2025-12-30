@@ -473,7 +473,9 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         />
 
         {/* BLOCK 7: Logout */}
-        <LogoutSection onLogout={onLogout} />
+        <div className="mt-8">
+          <LogoutSection onLogout={onLogout} />
+        </div>
       </main>
 
       <PremiumSubscriptionModal
