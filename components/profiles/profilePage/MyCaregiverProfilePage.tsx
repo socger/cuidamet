@@ -18,6 +18,7 @@ import PhotoUploadModal from "../../PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
+import SupportSection from "./SupportSection";
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -25,6 +26,8 @@ interface MyCaregiverProfilePageProps {
   onNavigateSecurity: () => void;
   onNavigateNotifications: () => void;
   onNavigateLegal: () => void;
+  onNavigateSupport: () => void;
+  onNavigateSupportChat: () => void;
   onLogout: () => void;
   onSwitchToClient: () => void;
   profile?: ProviderProfile | null;
@@ -106,6 +109,8 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   onNavigateSecurity,
   onNavigateNotifications,
   onNavigateLegal,
+  onNavigateSupport,
+  onNavigateSupportChat,
   onLogout,
   onSwitchToClient,
   profile,
@@ -461,7 +466,13 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
           </div>
         </section>
 
-        {/* BLOCK 6: Logout */}
+        {/* BLOCK 6: Cuidamet al Habla */}
+        <SupportSection
+          onNavigateSupportChat={onNavigateSupportChat}
+          onNavigateSupport={onNavigateSupport}
+        />
+
+        {/* BLOCK 7: Logout */}
         <LogoutSection onLogout={onLogout} />
       </main>
 

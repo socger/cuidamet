@@ -634,6 +634,14 @@ const App: React.FC = () => {
           onNavigateSecurity={() => setView("securitySettings")}
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}
+          onNavigateSupport={() => {
+            // TODO: Navigate to support
+            setAlertModal({ isOpen: true, title: 'Ayuda', message: 'Esta función estará disponible próximamente' });
+          }}
+          onNavigateSupportChat={() => {
+            // TODO: Navigate to support chat
+            setAlertModal({ isOpen: true, title: 'Chat de soporte', message: 'Esta función estará disponible próximamente' });
+          }}
           onLogout={() => {
             setIsAuthenticated(false);
             setClientProfile(null);

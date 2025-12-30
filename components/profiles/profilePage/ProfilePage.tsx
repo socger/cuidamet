@@ -12,6 +12,7 @@ import BriefcaseIcon from "../../icons/BriefcaseIcon";
 import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
+import SupportSection from "./SupportSection";
 
 interface ProfilePageProps {
   clientProfile: ClientProfile | null;
@@ -261,23 +262,10 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
         </div>
 
         {/* CUIDAMET AL HABLA Section */}
-        <div className="mt-8">
-          <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
-            CUIDAMET AL HABLA
-          </h3>
-          <ul className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-            <ListItem
-              icon={<ChatBubbleLeftRightIcon className="w-6 h-6" />}
-              label="Chat de soporte"
-              onClick={onNavigateSupportChat}
-            />
-            <ListItem
-              icon={<InformationCircleIcon className="w-6 h-6" />}
-              label="¿Necesitas ayuda?"
-              onClick={onNavigateSupport}
-            />
-          </ul>
-        </div>
+        <SupportSection
+          onNavigateSupportChat={onNavigateSupportChat}
+          onNavigateSupport={onNavigateSupport}
+        />
 
         {/* Logout Section */}
         <div className="mt-8">
