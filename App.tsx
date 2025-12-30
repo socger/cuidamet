@@ -640,7 +640,9 @@ const App: React.FC = () => {
             setProviderProfile(null);
             setView("landing");
           }}
-          onSwitchToClient={() => setActiveRole('client')}
+          onSwitchToClient={
+            () => setActiveRole('client')
+          }
         />;
       } else {
         // Client Profile

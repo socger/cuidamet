@@ -17,6 +17,7 @@ import CameraIcon from "../../icons/CameraIcon";
 import PhotoUploadModal from "../../PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
+import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -435,6 +436,12 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
             Cuenta y Seguridad
           </h3>
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <SettingsItem
+              icon={<BriefcaseIcon className="w-6 h-6" />}
+              label="Cambiar a modo familiar"
+              subLabel="Modo profesional"
+              onClick={onSwitchToClient}
+            />
             <SettingsItem
               icon={<ShieldCheckIcon className="w-6 h-6" />}
               label="Seguridad y Contraseña"
