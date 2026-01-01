@@ -4,8 +4,8 @@ import { GoogleGenAI, Chat } from '@google/genai';
 import { Message } from '../types';
 import ChevronLeftIcon from './icons/ChevronLeftIcon';
 import PaperAirplaneIcon from './icons/PaperAirplaneIcon';
-import CuidametIcon from './icons/CuidametIcon';
 import SearchIcon from './icons/SearchIcon';
+import CuidametLogoIconSvg from '../resources/logos/Logo CuidaMet_Icono.svg';
 
 interface SupportChatPageProps {
   onBack: () => void;
@@ -148,8 +148,8 @@ const SupportChatPage: React.FC<SupportChatPageProps> = ({ onBack }) => {
             <h1 className="text-lg font-semibold text-slate-800">Soporte Cuidamet</h1>
             <p className="text-xs text-green-500 font-medium">En línea • Con tecnología Gemini</p>
           </div>
-          <div className="w-10 h-10 p-1.5 bg-teal-500 rounded-full flex items-center justify-center shadow-md">
-             <CuidametIcon className="text-white" />
+          <div className="w-10 h-10 p-1.5 bg-teal-100 border-2 border-teal-200 rounded-full flex items-center justify-center shadow-md">
+            <img src={CuidametLogoIconSvg} alt="Cuidamet" className="w-full h-full" />
           </div>
         </div>
       </header>
@@ -162,8 +162,8 @@ const SupportChatPage: React.FC<SupportChatPageProps> = ({ onBack }) => {
           >
             <div className={`flex items-end gap-2 max-w-[90%] md:max-w-[80%] ${message.sender === 'me' ? 'justify-end' : 'justify-start'}`}>
                 {message.sender === 'other' && (
-                <div className="w-6 h-6 p-0.5 bg-teal-500 rounded-full flex items-center justify-center self-start flex-shrink-0 mt-1">
-                    <CuidametIcon className="text-white" />
+                <div className="w-6 h-6 p-0.5 bg-teal-100 border border-teal-200 rounded-full flex items-center justify-center self-start flex-shrink-0 mt-1">
+                    <img src={CuidametLogoIconSvg} alt="Cuidi" className="w-full h-full" />
                 </div>
                 )}
                 <div
@@ -212,8 +212,8 @@ const SupportChatPage: React.FC<SupportChatPageProps> = ({ onBack }) => {
         ))}
         {isBotTyping && (
           <div className="flex items-end gap-2 justify-start animate-pulse">
-            <div className="w-6 h-6 p-0.5 bg-teal-500 rounded-full flex items-center justify-center self-start flex-shrink-0">
-                <CuidametIcon className="text-white" />
+            <div className="w-6 h-6 p-0.5 bg-teal-100 border border-teal-200 rounded-full flex items-center justify-center self-start flex-shrink-0">
+                <img src={CuidametLogoIconSvg} alt="Cuidi" className="w-full h-full" />
             </div>
             <div className="p-3 rounded-2xl bg-white text-slate-700 rounded-bl-sm border border-slate-200">
               <div className="flex items-center space-x-1">
