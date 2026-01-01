@@ -1523,7 +1523,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
           {step === 3 && renderReview()}
 
           {/* Navigation Buttons - Now part of scrollable content */}
-          <div className="bg-white border-t border-slate-200 p-4 mt-6 rounded-xl shadow-sm flex justify-end items-center sticky bottom-0">
+          <div className="bg-transparent p-4 mt-6 rounded-xl flex justify-end items-center sticky bottom-0">
             {editingCategory ? (
               <button
                 onClick={handleSaveCategory}

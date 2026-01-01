@@ -431,7 +431,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
           )}
 
           {/* Navigation Buttons - Sticky al final del contenido visible */}
-          <div className="mt-8 bg-white border-t border-slate-200 p-4 rounded-xl shadow-sm flex justify-end items-center sticky bottom-20">
+          <div className="mt-8 bg-transparent p-4 rounded-xl flex justify-end items-center sticky bottom-20">
             <button
               onClick={handleNext}
               disabled={!isStepValid()}
