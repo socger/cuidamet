@@ -317,7 +317,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                 : "bg-white border border-slate-200 hover:border-amber-300"
             }`}
           >
-            <div className="flex items-center relative z-10">
+            <div className="flex items-center relative z-[5]">
               <div
                 className={`p-3 rounded-full mr-4 ${
                   isPremium
@@ -351,7 +351,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
                 isPremium
                   ? "bg-white/20 text-white"
                   : "bg-slate-50 text-slate-400 group-hover:text-amber-500 group-hover:bg-amber-50"
-              } transition-colors relative z-10`}
+              } transition-colors relative z-[5]`}
             >
               <ChevronRightIcon className="w-5 h-5" />
             </div>
