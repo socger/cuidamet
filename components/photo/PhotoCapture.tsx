@@ -170,7 +170,7 @@ const PhotoCapture: React.FC<PhotoCaptureProps> = ({
             </button>
             <button 
               onClick={capturePhoto} 
-              className="flex-1 bg-teal-500 text-white py-3 rounded-xl font-semibold hover:bg-teal-600 transition-colors shadow-md"
+              className="flex-1 bg-red-500 text-white py-3 rounded-xl font-semibold hover:bg-red-600 transition-colors shadow-md"
             >
               Capturar
             </button>
