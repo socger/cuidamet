@@ -136,6 +136,7 @@ export interface Message {
   sender: 'me' | 'other';
   timestamp: string;
   read: boolean;
+  groundingChunks?: { web?: { uri: string; title: string } }[];
 }
 
 export interface ChatConversation {
