@@ -98,3 +98,5 @@ Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components
 Hemos creado el componente "components/SupportChatPage.tsx", se supone que tiene que mantener una conversación con Cuidi (ntro agente IA - Gemini 3.0). Pero cuando le comentamos/preguntamos algo, siempre nos devuelve el mensaje "Oops, algo ha salido mal. Por favor, inténtalo de nuevo" ... esto es debido a que no se ha creado, creo, la conexión con Gemini, la IA de Google. O porque no está creado en .env el token/api de conexión (por supuesto habría que pagar por un uso continuo).
 
 Añadir a las copias de Cristobal el directorio cuidamet y la BD de cuidamet.
+
+Cuando el usuario se está registrando, no autenticando, introduce una contraseña (antes del paso de verificación del código enviado a su correo). Pero no hay un segundo campo para introducir/confirmar la contraseña (que se introdujo correctamente/igual en ambos campos)
