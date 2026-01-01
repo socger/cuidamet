@@ -4,7 +4,7 @@ import { CareCategory, ProviderProfile, ServiceConfig } from "../../../types";
 import MapPinIcon from "../../icons/MapPinIcon";
 import StarIcon from "../../icons/StarIcon";
 import PencilIcon from "../../icons/PencilIcon";
-import AlertModal from "../../AlertModal";
+import AlertModal from "../../actions/AlertModal";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import PremiumSubscriptionModal from "../../PremiumSubscriptionModal";
 import UserCircleIcon from "../../icons/UserCircleIcon";

@@ -18,7 +18,7 @@ import PetsIcon from "./icons/PetsIcon";
 import BroomIcon from "./icons/BroomIcon";
 import CategoryIcon from "./icons/CategoryIcon";
 import HeroSearch from "./HeroSearch";
-import AlertModal from "./AlertModal";
+import AlertModal from "./actions/AlertModal";
 
 // START - NEW in cuidamet_5
   const CategoryCard: React.FC<{

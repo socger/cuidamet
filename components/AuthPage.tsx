@@ -8,7 +8,7 @@ import UserIcon from "./icons/UserIcon";
 import HandRaisedIcon from "./icons/HandRaisedIcon";
 import { UserRole, AuthMode } from "../types";
 import XMarkIcon from "./icons/XMarkIcon";
-import AlertModal from "./AlertModal";
+import AlertModal from "./actions/AlertModal";
 
 interface AuthPageProps {
   initialMode?: AuthMode;

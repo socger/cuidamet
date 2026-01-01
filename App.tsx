@@ -16,7 +16,7 @@ import AuthPage from "./components/AuthPage";
 import BookingPage from "./components/BookingPage";
 import BookingsList from "./components/BookingsList";
 import { bookingService } from "./services/bookingService";
-import AlertModal from "./components/AlertModal";
+import AlertModal from "./components/actions/AlertModal";
 import ProfileLandingPage from "./components/ProfileLandingPage";
 import RoleSelection from "./components/RoleSelection";
 import ClientRegistration from "./components/profiles/createProfile/ClientRegistration";

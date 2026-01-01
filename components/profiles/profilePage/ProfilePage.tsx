@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import HeartIcon from "../../icons/HeartIcon";
 import Cog6ToothIcon from "../../icons/Cog6ToothIcon";
 import ArrowRightOnRectangleIcon from "../../icons/ArrowRightOnRectangleIcon";
-import AlertModal from "../../AlertModal";
+import AlertModal from "../../actions/AlertModal";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 import ChatBubbleLeftRightIcon from "../../icons/ChatBubbleLeftRightIcon";
 import InformationCircleIcon from "../../icons/InformationCircleIcon";

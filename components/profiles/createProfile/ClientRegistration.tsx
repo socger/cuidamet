@@ -8,7 +8,7 @@ import MapPinIcon from "../../icons/MapPinIcon";
 import GpsFixedIcon from "../../icons/GpsFixedIcon";
 import PhotoCapture from "../../PhotoCapture";
 import PersonalInfo from "./PersonalInfo";
-import AlertModal from "../../AlertModal";
+import AlertModal from "../../actions/AlertModal";
 import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import { CareCategory, ClientProfile } from "../../../types";

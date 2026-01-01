@@ -3,7 +3,7 @@ import XMarkIcon from './icons/XMarkIcon';
 import StarIcon from './icons/StarIcon';
 import LocationPinIcon from './icons/LocationPinIcon';
 import { Provider } from '../types';
-import AlertModal from './AlertModal';
+import AlertModal from './actions/AlertModal';
 
 interface ShareModalProps {
   isOpen: boolean;

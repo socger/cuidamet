@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import CameraIcon from './icons/CameraIcon';
 import PhotoIcon from './icons/PhotoIcon';
 import UserCircleIcon from './icons/UserCircleIcon';
-import AlertModal from './AlertModal';
+import AlertModal from './actions/AlertModal';
 
 interface PhotoCaptureProps {
   photoUrl: string;

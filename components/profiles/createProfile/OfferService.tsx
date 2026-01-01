@@ -11,7 +11,7 @@ import {
 } from "../../../types";
 import BottomNav from "../../BottomNav";
 import PhotoCapture from "../../PhotoCapture";
-import AlertModal from "../../AlertModal";
+import AlertModal from "../../actions/AlertModal";
 import PersonalInfo from "./PersonalInfo";
 import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
