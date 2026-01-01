@@ -202,7 +202,8 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
         profileData.email.trim() !== "" &&
         isValidEmail(profileData.email) &&
         profileData.phone.trim() !== "" &&
-        isValidPhone(profileData.phone)
+        isValidPhone(profileData.phone) &&
+        profileData.location.trim() !== ""
       );
     }
     return true;
@@ -210,7 +211,14 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
 
   const handleNext = () => {
     if (step === 1) {
-      if (!isStepValid()) return;
+      if (!isStepValid()) {
+        setAlertModal({
+          isOpen: true,
+          message: "Completa los campos obligatorios.",
+          title: "Campos requeridos",
+        });
+        return;
+      }
       setStep(2);
     } else if (step === 2) {
       setStep(3);
@@ -434,8 +442,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
           <div className="mt-8 bg-transparent p-4 rounded-xl flex justify-end items-center sticky bottom-20 pointer-events-none">
             <button
               onClick={handleNext}
-              disabled={!isStepValid()}
-              className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center disabled:bg-slate-300 disabled:shadow-none pointer-events-auto"
+              className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
             >
               {step === 1
                 ? "Siguiente"

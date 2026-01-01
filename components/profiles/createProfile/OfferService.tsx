@@ -398,6 +398,18 @@ const OfferService: React.FC<OfferServiceProps> = ({
     }));
   };
 
+  const isValidEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const isValidPhone = (phone: string): boolean => {
+    // Valida teléfonos españoles: 9 dígitos, puede empezar con +34 o 0034, permite espacios y guiones
+    const phoneRegex =
+      /^(\+34|0034)?\s?[6-9]\d{1}\s?\d{3}\s?\d{3}$|^(\+34|0034)?\s?[6-9]\d{8}$/;
+    return phoneRegex.test(phone.trim());
+  };
+
   // ---- Service Data Handlers ----
 
   const handleServiceDataChange = (
@@ -695,7 +707,14 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
   const nextStep = () => {
     if (step === 1) {
-      if (!profileData.name || !profileData.location) {
+      if (
+        profileData.name.trim() === "" ||
+        profileData.email.trim() === "" ||
+        !isValidEmail(profileData.email) ||
+        profileData.phone.trim() === "" ||
+        !isValidPhone(profileData.phone) ||
+        profileData.location.trim() === ""
+      ) {
         setAlertModal({
           isOpen: true,
           message: "Completa los campos obligatorios.",
