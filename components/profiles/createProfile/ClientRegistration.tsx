@@ -6,7 +6,7 @@ import XMarkIcon from "../../icons/XMarkIcon";
 import PhoneIcon from "../../icons/PhoneIcon";
 import MapPinIcon from "../../icons/MapPinIcon";
 import GpsFixedIcon from "../../icons/GpsFixedIcon";
-import PhotoCapture from "../../PhotoCapture";
+import PhotoCapture from "../../photo/PhotoCapture";
 import PersonalInfo from "./PersonalInfo";
 import AlertModal from "../../actions/AlertModal";
 import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";

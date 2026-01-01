@@ -14,7 +14,7 @@ import BellIcon from "../../icons/BellIcon";
 import DocumentTextIcon from "../../icons/DocumentTextIcon";
 import ArrowRightOnRectangleIcon from "../../icons/ArrowRightOnRectangleIcon";
 import CameraIcon from "../../icons/CameraIcon";
-import PhotoUploadModal from "../../PhotoUploadModal";
+import PhotoUploadModal from "../../photo/PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
