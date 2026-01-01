@@ -285,7 +285,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
                 onPhotoChange={(url) => handleProfileChange("photoUrl", url)}
                 title="Añade tu foto de perfil"
                 subtitle="Una buena foto genera confianza. Asegúrate de que se vea bien tu rostro."
-                size="large"
+                size="medium"
               />
 
               {/* Form Fields */}
