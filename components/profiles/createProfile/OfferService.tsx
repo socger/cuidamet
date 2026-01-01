@@ -707,17 +707,29 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
   const nextStep = () => {
     if (step === 1) {
-      if (
-        profileData.name.trim() === "" ||
-        profileData.email.trim() === "" ||
-        !isValidEmail(profileData.email) ||
-        profileData.phone.trim() === "" ||
-        !isValidPhone(profileData.phone) ||
-        profileData.location.trim() === ""
-      ) {
+      const errors: string[] = [];
+      
+      if (profileData.name.trim() === "") {
+        errors.push("Nombre");
+      }
+      if (profileData.email.trim() === "") {
+        errors.push("Email");
+      } else if (!isValidEmail(profileData.email)) {
+        errors.push("Email (formato inválido)");
+      }
+      if (profileData.phone.trim() === "") {
+        errors.push("Teléfono");
+      } else if (!isValidPhone(profileData.phone)) {
+        errors.push("Teléfono (formato inválido)");
+      }
+      if (profileData.location.trim() === "") {
+        errors.push("Ubicación");
+      }
+      
+      if (errors.length > 0) {
         setAlertModal({
           isOpen: true,
-          message: "Completa los campos obligatorios.",
+          message: `Por favor completa: ${errors.join(", ")}`,
           title: "Campos requeridos",
         });
         return;
