@@ -1523,18 +1523,18 @@ const OfferService: React.FC<OfferServiceProps> = ({
           {step === 3 && renderReview()}
 
           {/* Navigation Buttons - Now part of scrollable content */}
-          <div className="bg-transparent p-4 mt-6 rounded-xl flex justify-end items-center sticky bottom-0">
+          <div className="bg-transparent p-4 mt-6 rounded-xl flex justify-end items-center sticky bottom-0 pointer-events-none">
             {editingCategory ? (
               <button
                 onClick={handleSaveCategory}
-                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
+                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
               >
                 Guardar y Volver <CheckCircleIcon className="w-5 h-5 ml-2" />
               </button>
             ) : (
               <button
                 onClick={step === 3 ? confirmPublish : nextStep}
-                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center"
+                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
               >
                 {step === 3 ? "Finalizar registro" : "Siguiente"}
                 {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}

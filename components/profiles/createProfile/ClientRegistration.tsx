@@ -431,11 +431,11 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
           )}
 
           {/* Navigation Buttons - Sticky al final del contenido visible */}
-          <div className="mt-8 bg-transparent p-4 rounded-xl flex justify-end items-center sticky bottom-20">
+          <div className="mt-8 bg-transparent p-4 rounded-xl flex justify-end items-center sticky bottom-20 pointer-events-none">
             <button
               onClick={handleNext}
               disabled={!isStepValid()}
-              className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center disabled:bg-slate-300 disabled:shadow-none"
+              className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center disabled:bg-slate-300 disabled:shadow-none pointer-events-auto"
             >
               {step === 1
                 ? "Siguiente"
