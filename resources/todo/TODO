@@ -95,4 +95,6 @@ Ahora los componentes "components/MyCaregiverProfilePage.tsx" y "components/Prof
 Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También hay que ver que hay opciones en ambos componentes que todavía no se han terminado, como la edición.
 * A la vista Perfil hay que revisar todos sus botones y opciones de esta vista para ver si funcionan igual (por si hubiera todavía código que no he copiado). Creo que me falta el código del botón "Reservar"
 
+Hemos creado el componente "components/SupportChatPage.tsx", se supone que tiene que mantener una conversación con Cuidi (ntro agente IA - Gemini 3.0). Pero cuando le comentamos/preguntamos algo, siempre nos devuelve el mensaje "Oops, algo ha salido mal. Por favor, inténtalo de nuevo" ... esto es debido a que no se ha creado, creo, la conexión con Gemini, la IA de Google. O porque no está creado en .env el token/api de conexión (por supuesto habría que pagar por un uso continuo).
+
 Añadir a las copias de Cristobal el directorio cuidamet y la BD de cuidamet.
