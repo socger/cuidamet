@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import LockClosedIcon from "./icons/LockClosedIcon";
 import MailIcon from "./icons/MailIcon";
 import EyeIcon from "./icons/EyeIcon";
@@ -42,12 +42,19 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
+  const firstCodeInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (preselectedRole) {
       setRole(preselectedRole);
     }
   }, [preselectedRole]);
+
+  useEffect(() => {
+    if (mode === "verifyEmail" && firstCodeInputRef.current) {
+      firstCodeInputRef.current.focus();
+    }
+  }, [mode]);
 
   const hasMinLength = password.length >= 8;
   const hasNumber = /\d/.test(password);
@@ -314,6 +321,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                     <input
                       key={idx}
                       id={`code-${idx}`}
+                      ref={idx === 0 ? firstCodeInputRef : null}
                       type="text"
                       maxLength={1}
                       value={digit}
