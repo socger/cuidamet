@@ -60,3 +60,27 @@ npm install
 ```
 
 ¿Cuál de estas opciones prefieres usar?
+
+User: quiero hacerlo desde github, dime cual es el comando a poner en el otro equipo. Averigua cual es la url de este repositorio para clonarlo
+
+GitHub Copilot: Read [](file:///home/socger/trabajo/socger/cuidamet/package.json)
+
+Ran terminal command: cd /home/socger/trabajo/socger/cuidamet && git remote -v
+
+Perfecto, encontré la URL del repositorio. En el equipo destino debes ejecutar:
+
+```bash
+git clone https://github.com/socger/cuidamet.git
+cd cuidamet
+npm install
+```
+
+O si prefieres clonar usando SSH (requiere configurar tus claves SSH en GitHub):
+
+```bash
+git clone git@github.com:socger/cuidamet.git
+cd cuidamet
+npm install
+```
+
+La URL HTTPS es más simple y no requiere configuración adicional, solo te pedirá tus credenciales de GitHub si el repositorio es privado.
