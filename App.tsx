@@ -652,7 +652,22 @@ const App: React.FC = () => {
             setView("landing");
           }}
           onSwitchToClient={
-            () => setActiveRole('client')
+            () => {
+              // Si no existe clientProfile pero sí providerProfile, crear uno temporal con datos básicos
+              if (!clientProfile && providerProfile) {
+                const tempClientProfile: ClientProfile = {
+                  name: providerProfile.name,
+                  email: providerProfile.email,
+                  phone: providerProfile.phone,
+                  photoUrl: providerProfile.photoUrl,
+                  location: providerProfile.location,
+                  languages: providerProfile.languages,
+                  preferences: []
+                };
+                setClientProfile(tempClientProfile);
+              }
+              setActiveRole('client');
+            }
           }
         />;
       } else {
@@ -670,6 +685,53 @@ const App: React.FC = () => {
           }}
           onNavigateSupportChat={handleNavigateSupportChat}
           onSwitchToProvider={() => {
+            // Si no existe providerProfile pero sí clientProfile, crear uno temporal con datos básicos
+            if (!providerProfile && clientProfile) {
+              const tempProviderProfile: ProviderProfile = {
+                name: clientProfile.name,
+                email: clientProfile.email,
+                phone: clientProfile.phone,
+                photoUrl: clientProfile.photoUrl,
+                location: clientProfile.location,
+                languages: clientProfile.languages,
+                availability: [],
+                services: {
+                  [CareCategory.ELDERLY]: {
+                    completed: false,
+                    tasks: [],
+                    rates: { hourly: 0 },
+                    variations: [],
+                    experience: '',
+                    certificates: []
+                  },
+                  [CareCategory.CHILDREN]: {
+                    completed: false,
+                    tasks: [],
+                    rates: { hourly: 0 },
+                    variations: [],
+                    experience: '',
+                    certificates: []
+                  },
+                  [CareCategory.PETS]: {
+                    completed: false,
+                    tasks: [],
+                    rates: { hourly: 0 },
+                    variations: [],
+                    experience: '',
+                    certificates: []
+                  },
+                  [CareCategory.HOUSEKEEPING]: {
+                    completed: false,
+                    tasks: [],
+                    rates: { hourly: 0 },
+                    variations: [],
+                    experience: '',
+                    certificates: []
+                  }
+                }
+              };
+              setProviderProfile(tempProviderProfile);
+            }
             setActiveRole('provider');
           }}
           onBack={handleNavigateHome}
