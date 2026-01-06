@@ -97,4 +97,8 @@ Hemos creado el componente "components/SupportChatPage.tsx", se supone que tiene
 
 Cuando el usuario se está registrando, no autenticando, introduce una contraseña (antes del paso de verificación del código enviado a su correo). Pero no hay un segundo campo para introducir/confirmar la contraseña (que se introdujo correctamente/igual en ambos campos)
 
+Cuando desde el componente "components/profiles/profilePage/MyCaregiverProfilePage.tsx" le decimos de editar y antes teníamos un apartado de mascotas y ahora añadimos más apartados de mascotas (en la edición). Pues cuando vuelve al componente "components/profiles/profilePage/MyCaregiverProfilePage.tsx" no refresca esos cambios.
+
+Tanto en el componente "components/profiles/profilePage/MyCaregiverProfilePage.tsx", como en el componente "components/profiles/profilePage/ProfilePage.tsx" tenemos demasiados botones editar que se podrían refundir en el Editar de la barra de arriba.
+
 Añadir a las copias de Cristobal el directorio cuidamet y la BD de cuidamet.
