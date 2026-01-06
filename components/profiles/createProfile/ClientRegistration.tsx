@@ -16,6 +16,7 @@ import { CareCategory, ClientProfile } from "../../../types";
 interface ClientRegistrationProps {
   onComplete: (profileData: ClientProfile) => void;
   onBack: () => void;
+  initialData?: ClientProfile;
 }
 
 const serviceCategories = [
@@ -67,21 +68,22 @@ const languagesList = [
 const ClientRegistration: React.FC<ClientRegistrationProps> = ({
   onComplete,
   onBack,
+  initialData,
 }) => {
   const [step, setStep] = useState(1);
   const [profileData, setProfileData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    location: "",
-    languages: [] as string[],
-    photoUrl: "",
+    name: initialData?.name || "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
+    location: initialData?.location || "",
+    languages: initialData?.languages || ([] as string[]),
+    photoUrl: initialData?.photoUrl || "",
     coordinates: undefined as
       | { latitude: number; longitude: number }
       | undefined,
   });
   const [selectedCategories, setSelectedCategories] = useState<CareCategory[]>(
-    []
+    initialData?.preferences || []
   );
   const [isLocating, setIsLocating] = useState(false);
   const [alertModal, setAlertModal] = useState<{
@@ -274,7 +276,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
             )}
             <h1 className="text-lg font-bold text-slate-800">
               {step === 1
-                ? "Perfil familiar"
+                ? initialData ? "Editar perfil" : "Perfil familiar"
                 : step === 2
                 ? "Preferencias"
                 : "Resumen"}
@@ -467,7 +469,7 @@ const ClientRegistration: React.FC<ClientRegistrationProps> = ({
                 ? "Siguiente"
                 : step === 2
                 ? "Siguiente"
-                : "Finalizar registro"}
+                : initialData ? "Guardar cambios" : "Finalizar registro"}
               {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
             </button>
           </div>

@@ -684,6 +684,9 @@ const App: React.FC = () => {
             setAlertModal({ isOpen: true, title: 'Ayuda', message: 'Esta función estará disponible próximamente' });
           }}
           onNavigateSupportChat={handleNavigateSupportChat}
+          onUpdateProfile={(updatedProfile) => {
+            setClientProfile(updatedProfile);
+          }}
           onSwitchToProvider={() => {
             // Si no existe providerProfile pero sí clientProfile, crear uno temporal con datos básicos
             if (!providerProfile && clientProfile) {

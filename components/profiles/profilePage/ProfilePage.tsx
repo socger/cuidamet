@@ -13,6 +13,7 @@ import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import SupportSection from "./SupportSection";
+import ClientRegistration from "../createProfile/ClientRegistration";
 
 interface ProfilePageProps {
   clientProfile: ClientProfile | null;
@@ -23,6 +24,7 @@ interface ProfilePageProps {
   onSwitchToProvider: () => void;
   onBack: () => void;
   onLogout: () => void;
+  onUpdateProfile?: (profile: ClientProfile) => void;
 }
 
 interface ListItemProps {
@@ -71,12 +73,14 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   onSwitchToProvider,
   onBack,
   onLogout,
+  onUpdateProfile,
 }) => {
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
     message: string;
     title?: string;
   }>({ isOpen: false, message: "" });
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   // Default guest data if no client profile exists
   const displayProfile = clientProfile || {
@@ -118,6 +122,23 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
     CareCategory.HOUSEKEEPING,
   ];
 
+  const handleProfileUpdate = (updatedProfile: ClientProfile) => {
+    if (onUpdateProfile) {
+      onUpdateProfile(updatedProfile);
+    }
+    setIsEditingProfile(false);
+  };
+
+  if (isEditingProfile) {
+    return (
+      <ClientRegistration
+        initialData={clientProfile || undefined}
+        onComplete={handleProfileUpdate}
+        onBack={() => setIsEditingProfile(false)}
+      />
+    );
+  }
+
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
       <PageHeader 
@@ -125,13 +146,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
         onBack={onBack} 
         rightAction={
           <button
-            onClick={() => 
-              setAlertModal({
-                isOpen: true,
-                message: "Sección disponible próximamente.",
-                title: "Editar perfil",
-              })
-            }
+            onClick={() => setIsEditingProfile(true)}
             className="text-teal-600 font-semibold text-sm"
           >
             Editar
