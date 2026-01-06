@@ -637,6 +637,9 @@ const App: React.FC = () => {
             setEditingCategory(category);
             setView("editProfile");
           }}
+          onUpdateProfile={(updatedProfile) => {
+            setProviderProfile(updatedProfile);
+          }}
           onNavigateSecurity={() => setView("securitySettings")}
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}

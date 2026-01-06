@@ -344,8 +344,8 @@ const OfferService: React.FC<OfferServiceProps> = ({
   // General Profile Data
   const [profileData, setProfileData] = useState({
     name: initialData?.name || "",
-    email: "",
-    phone: "",
+    email: initialData?.email || "",
+    phone: initialData?.phone || "",
     location: initialData?.location || "",
     languages: initialData?.languages || ([] as string[]),
     photoUrl: initialData?.photoUrl || "",
@@ -360,10 +360,21 @@ const OfferService: React.FC<OfferServiceProps> = ({
   >(() => {
     const initial = {} as Record<CareCategory, ServiceConfig>;
     Object.values(CareCategory).forEach((cat) => {
-      initial[cat] = {
-        ...initialServiceConfig,
-        variations: JSON.parse(JSON.stringify(DEFAULT_SERVICE_VARIANTS[cat])), // Deep copy to avoid reference issues
-      };
+      // Use initialData services if available, otherwise use defaults
+      if (initialData?.services && initialData.services[cat]) {
+        initial[cat] = {
+          ...initialServiceConfig,
+          ...initialData.services[cat],
+          variations: initialData.services[cat].variations && initialData.services[cat].variations.length > 0
+            ? JSON.parse(JSON.stringify(initialData.services[cat].variations))
+            : JSON.parse(JSON.stringify(DEFAULT_SERVICE_VARIANTS[cat])),
+        };
+      } else {
+        initial[cat] = {
+          ...initialServiceConfig,
+          variations: JSON.parse(JSON.stringify(DEFAULT_SERVICE_VARIANTS[cat])), // Deep copy to avoid reference issues
+        };
+      }
     });
     return initial;
   });
@@ -1514,7 +1525,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
             )}
             <h1 className="text-lg font-bold text-slate-800">
               {step === 1
-                ? "Perfil profesional"
+                ? initialData ? "Editar perfil" : "Perfil profesional"
                 : step === 2
                 ? editingCategory
                   ? "Configuración"
@@ -1567,7 +1578,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
                 onClick={step === 3 ? confirmPublish : nextStep}
                 className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
               >
-                {step === 3 ? "Finalizar registro" : "Siguiente"}
+                {step === 3 ? (initialData ? "Guardar cambios" : "Finalizar registro") : "Siguiente"}
                 {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
               </button>
             )}

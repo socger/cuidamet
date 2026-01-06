@@ -19,6 +19,7 @@ import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
+import OfferService from "../createProfile/OfferService";
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -31,6 +32,7 @@ interface MyCaregiverProfilePageProps {
   onLogout: () => void;
   onSwitchToClient: () => void;
   profile?: ProviderProfile | null;
+  onUpdateProfile?: (profile: ProviderProfile) => void;
 }
 
 // Default fallback data
@@ -114,12 +116,14 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   onLogout,
   onSwitchToClient,
   profile,
+  onUpdateProfile,
 }) => {
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
     message: string;
     title?: string;
   }>({ isOpen: false, message: "" });
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
 
   const [isPremium, setIsPremium] = useState(false);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
@@ -152,6 +156,23 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
       }
     : defaultDashboardData;
 
+  const handleProfileUpdate = (updatedProfile: ProviderProfile) => {
+    if (onUpdateProfile) {
+      onUpdateProfile(updatedProfile);
+    }
+    setIsEditingProfile(false);
+  };
+
+  if (isEditingProfile) {
+    return (
+      <OfferService
+        initialData={profile || undefined}
+        onComplete={handleProfileUpdate}
+        onCancel={() => setIsEditingProfile(false)}
+      />
+    );
+  }
+
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col">
       <PageHeader
@@ -159,14 +180,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         onBack={onBack}
         rightAction={
           <button
-            onClick={() => 
-              // onNavigateEditProfile(null)
-              setAlertModal({
-                isOpen: true,
-                message: "Sección disponible próximamente.",
-                title: "Editar perfil",
-              })
-            }
+            onClick={() => setIsEditingProfile(true)}
             className="text-teal-600 font-semibold text-sm"
           >
             Editar
