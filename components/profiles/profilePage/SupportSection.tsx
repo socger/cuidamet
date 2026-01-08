@@ -1,10 +1,8 @@
 import React from "react";
-import ChatBubbleLeftRightIcon from "../../icons/ChatBubbleLeftRightIcon";
 import InformationCircleIcon from "../../icons/InformationCircleIcon";
 import ChevronRightIcon from "../../icons/ChevronRightIcon";
 
 interface SupportSectionProps {
-  onNavigateSupportChat: () => void;
   onNavigateSupport: () => void;
 }
 
@@ -46,7 +44,6 @@ const ListItem: React.FC<ListItemProps> = ({
 );
 
 const SupportSection: React.FC<SupportSectionProps> = ({
-  onNavigateSupportChat,
   onNavigateSupport,
 }) => {
   return (
@@ -55,11 +52,6 @@ const SupportSection: React.FC<SupportSectionProps> = ({
         CUIDAMET AL HABLA
       </h3>
       <ul className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <ListItem
-          icon={<ChatBubbleLeftRightIcon className="w-6 h-6" />}
-          label="Chat de soporte"
-          onClick={onNavigateSupportChat}
-        />
         <ListItem
           icon={<InformationCircleIcon className="w-6 h-6" />}
           label="¿Necesitas ayuda?"
