@@ -14,11 +14,15 @@ import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import SupportSection from "./SupportSection";
 import ClientRegistration from "../createProfile/ClientRegistration";
+import AccountSettingsSection from "./AccountSettingsSection";
 
 interface ProfilePageProps {
   clientProfile: ClientProfile | null;
   onNavigateFavorites: () => void;
   onNavigateSupport: () => void;
+  onNavigateSecurity: () => void;
+  onNavigateNotifications: () => void;
+  onNavigateLegal: () => void;
   onSwitchToProvider: () => void;
   onBack: () => void;
   onLogout: () => void;
@@ -66,6 +70,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
   clientProfile,
   onNavigateFavorites,
   onNavigateSupport,
+  onNavigateSecurity,
+  onNavigateNotifications,
+  onNavigateLegal,
   onSwitchToProvider,
   onBack,
   onLogout,
@@ -258,6 +265,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
               icon={<BriefcaseIcon className="w-6 h-6" />}
               label="Cambiar a modo Cuidador"
               onClick={onSwitchToProvider}
+            />
+            <AccountSettingsSection
+              onNavigateSecurity={onNavigateSecurity}
+              onNavigateNotifications={onNavigateNotifications}
+              onNavigateLegal={onNavigateLegal}
             />
             <ListItem
               icon={<HeartIcon className="w-6 h-6" />}

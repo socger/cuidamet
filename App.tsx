@@ -667,6 +667,9 @@ const App: React.FC = () => {
           clientProfile={clientProfile}
           onNavigateFavorites={handleNavigateFavorites}
           onNavigateSupport={() => setView("support")}
+          onNavigateSecurity={() => setView("securitySettings")}
+          onNavigateNotifications={() => setView("notifications")}
+          onNavigateLegal={() => setView("legalInfo")}
           onUpdateProfile={(updatedProfile) => {
             setClientProfile(updatedProfile);
           }}
