@@ -18,7 +18,7 @@ import PhotoUploadModal from "../../photo/PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
-import SupportSection from "./SupportSection";
+import SupportSection from "../../support/SupportSection";
 import OfferService from "../createProfile/OfferService";
 
 interface MyCaregiverProfilePageProps {

@@ -12,7 +12,7 @@ import BriefcaseIcon from "../../icons/BriefcaseIcon";
 import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
-import SupportSection from "./SupportSection";
+import SupportSection from "../../support/SupportSection";
 import ClientRegistration from "../createProfile/ClientRegistration";
 
 interface ProfilePageProps {
