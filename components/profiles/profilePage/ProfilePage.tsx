@@ -18,9 +18,7 @@ import ClientRegistration from "../createProfile/ClientRegistration";
 interface ProfilePageProps {
   clientProfile: ClientProfile | null;
   onNavigateFavorites: () => void;
-  onNavigateSettings: () => void;
   onNavigateSupport: () => void;
-  onNavigateSupportChat: () => void;
   onSwitchToProvider: () => void;
   onBack: () => void;
   onLogout: () => void;
@@ -67,9 +65,7 @@ const ListItem: React.FC<ListItemProps> = ({
 const ProfilePage: React.FC<ProfilePageProps> = ({
   clientProfile,
   onNavigateFavorites,
-  onNavigateSettings,
   onNavigateSupport,
-  onNavigateSupportChat,
   onSwitchToProvider,
   onBack,
   onLogout,
@@ -268,17 +264,11 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
               label="Favoritos"
               onClick={onNavigateFavorites}
             />
-            <ListItem
-              icon={<Cog6ToothIcon className="w-6 h-6" />}
-              label="Configuración"
-              onClick={onNavigateSettings}
-            />
           </ul>
         </div>
 
         {/* CUIDAMET AL HABLA Section */}
         <SupportSection
-          onNavigateSupportChat={onNavigateSupportChat}
           onNavigateSupport={onNavigateSupport}
         />
 

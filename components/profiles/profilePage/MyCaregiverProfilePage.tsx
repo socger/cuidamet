@@ -28,7 +28,6 @@ interface MyCaregiverProfilePageProps {
   onNavigateNotifications: () => void;
   onNavigateLegal: () => void;
   onNavigateSupport: () => void;
-  onNavigateSupportChat: () => void;
   onLogout: () => void;
   onSwitchToClient: () => void;
   profile?: ProviderProfile | null;
@@ -112,7 +111,6 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   onNavigateNotifications,
   onNavigateLegal,
   onNavigateSupport,
-  onNavigateSupportChat,
   onLogout,
   onSwitchToClient,
   profile,
@@ -482,7 +480,6 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
 
         {/* BLOCK 6: Cuidamet al Habla */}
         <SupportSection
-          onNavigateSupportChat={onNavigateSupportChat}
           onNavigateSupport={onNavigateSupport}
         />
 
