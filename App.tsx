@@ -24,6 +24,9 @@ import MyCaregiverProfilePage from "./components/profiles/profilePage/MyCaregive
 import SupportChatPage from "./components/support/SupportChatPage";
 import SupportPage from "./components/support/SupportPage";
 import SupportEmailPage from "./components/support/SupportEmailPage";
+import LegalInfoPage from "./components/legalinfo/LegalInfoPage";
+import LegalDocumentPage from "./components/legalinfo/LegalDocumentPage";
+import { legalDocuments } from "./components/legalinfo/legalContent";
 
 const getDistanceInKm = (
   lat1: number,
@@ -66,6 +69,7 @@ const App: React.FC = () => {
     | "supportChat"
     | "support"
     | "supportEmail"
+    | "legalDocument"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "map"
@@ -81,6 +85,9 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [chats, setChats] = useState<ChatConversation[]>([]);
   const [currentChatId, setCurrentChatId] = useState<number | null>(null);
+  const [selectedLegalDocId, setSelectedLegalDocId] = useState<string | null>(
+    null
+  );
   const [previousViewBeforeChat, setPreviousViewBeforeChat] = useState<typeof view>("inbox");
 
   const [userLocation, setUserLocation] = useState<{
@@ -801,13 +808,23 @@ const App: React.FC = () => {
     } else if (currentView === "supportEmail") {
       mainContent = <SupportEmailPage onBack={() => setView("support")} />;
     } else if (currentView === "legalInfo") {
-      setAlertModal({ 
-        isOpen: true, 
-        message: 'Esta sección estará disponible próximamente.', 
-        title: 'Legal y Privacidad' 
-      });
-      setView("myProfile");
-      mainContent = null;
+      mainContent = <LegalInfoPage 
+        onBack={() => setView("myProfile")} 
+        documents={legalDocuments} 
+        onNavigateLegalDocument={(docId) => {
+          setSelectedLegalDocId(docId);
+          setView("legalDocument");
+        }} 
+      />;
+    } else if (currentView === "legalDocument") {
+      const doc = legalDocuments.find(d => d.id === selectedLegalDocId);
+      mainContent = doc ? (
+        <LegalDocumentPage 
+          title={doc.title} 
+          content={doc.content} 
+          onBack={() => setView("legalInfo")} 
+        />
+      ) : null;
     } else {
       // Providers view
       mainContent = (

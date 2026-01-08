@@ -62,7 +62,7 @@ const AccountSettingsSection: React.FC<AccountSettingsSectionProps> = ({
       />
       <SettingsItem
         icon={<DocumentTextIcon className="w-6 h-6" />}
-        label="Legal y Privacidad"
+        label="Legal y privacidad"
         onClick={onNavigateLegal}
       />
     </>

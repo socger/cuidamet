@@ -1,3 +1,4 @@
+import React from 'react';
 
 export enum CareCategory {
   ELDERLY = 'Elderly Care',
@@ -143,6 +144,13 @@ export interface ChatConversation {
   id: number;
   provider: Provider;
   messages: Message[];
+}
+
+export interface LegalDocument {
+  id: string;
+  title: string;
+  description: string;
+  content: React.ReactNode;
 }
 
 // Booking Types
