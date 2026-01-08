@@ -28,6 +28,7 @@ import LegalInfoPage from "./components/legalinfo/LegalInfoPage";
 import LegalDocumentPage from "./components/legalinfo/LegalDocumentPage";
 import { legalDocuments } from "./components/legalinfo/legalContent";
 import NotificationsPage from "./components/NotificationsPage";
+import SecuritySettingsPage from "./components/SecuritySettingsPage";
 
 const getDistanceInKm = (
   lat1: number,
@@ -783,13 +784,16 @@ const App: React.FC = () => {
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
     } else if (currentView === "securitySettings") {
-      setAlertModal({ 
-        isOpen: true, 
-        message: 'Esta sección estará disponible próximamente.', 
-        title: 'Seguridad y Contraseña' 
-      });
-      setView("myProfile");
-      mainContent = null;
+      mainContent = <SecuritySettingsPage 
+        onBack={() => setView("myProfile")} 
+        onDeleteAccount={() => {
+          setAlertModal({
+            isOpen: true,
+            title: 'Eliminar Cuenta',
+            message: '¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.'
+          });
+        }}
+      />;
     } else if (currentView === "notifications") {
       mainContent = <NotificationsPage onBack={() => setView("myProfile")} />;
     } else if (currentView === "supportChat") {
