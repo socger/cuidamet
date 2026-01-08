@@ -41,3 +41,6 @@ This document outlines the rules and conventions to follow when developing the C
 *   **Testing library**: Use a testing library like Jest and React Testing Library.
 
 By following these rules, we can ensure that the Cuidamet application is developed in a consistent, maintainable, and scalable way.
+
+## 6. Responder en idioma español
+Siempre que me respondas a alguna pregunta o me ayudes dándome información, hazlo en español
