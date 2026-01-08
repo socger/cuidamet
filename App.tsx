@@ -27,6 +27,7 @@ import SupportEmailPage from "./components/support/SupportEmailPage";
 import LegalInfoPage from "./components/legalinfo/LegalInfoPage";
 import LegalDocumentPage from "./components/legalinfo/LegalDocumentPage";
 import { legalDocuments } from "./components/legalinfo/legalContent";
+import NotificationsPage from "./components/NotificationsPage";
 
 const getDistanceInKm = (
   lat1: number,
@@ -790,13 +791,7 @@ const App: React.FC = () => {
       setView("myProfile");
       mainContent = null;
     } else if (currentView === "notifications") {
-      setAlertModal({ 
-        isOpen: true, 
-        message: 'Esta sección estará disponible próximamente.', 
-        title: 'Notificaciones' 
-      });
-      setView("myProfile");
-      mainContent = null;
+      mainContent = <NotificationsPage onBack={() => setView("myProfile")} />;
     } else if (currentView === "supportChat") {
       mainContent = <SupportChatPage onBack={() => setView("myProfile")} />;
     } else if (currentView === "support") {

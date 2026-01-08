@@ -51,7 +51,7 @@ const AccountSettingsSection: React.FC<AccountSettingsSectionProps> = ({
     <>
       <SettingsItem
         icon={<ShieldCheckIcon className="w-6 h-6" />}
-        label="Seguridad y Contraseña"
+        label="Seguridad y contraseña"
         subLabel="Gestionar acceso y verificaciones"
         onClick={onNavigateSecurity}
       />
