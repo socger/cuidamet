@@ -60,7 +60,6 @@ const App: React.FC = () => {
     | "bookings"
     | "roleSelection"
     | "clientRegistration"
-    | "editProfile"
     | "securitySettings"
     | "notifications"
     | "legalInfo"
@@ -108,9 +107,6 @@ const App: React.FC = () => {
   
   // Alert Modal state
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
-  
-  // Editing category state for OfferService/EditProfile
-  const [editingCategory, setEditingCategory] = useState<CareCategory | null>(null);
   
   // Favorites filter state (when navigating from ProfilePage)
   const [showFavoritesFromProfile, setShowFavoritesFromProfile] = useState<boolean>(false);
@@ -633,10 +629,6 @@ const App: React.FC = () => {
         mainContent = <MyCaregiverProfilePage 
           profile={providerProfile}
           onBack={handleNavigateHome}
-          onNavigateEditProfile={(category) => {
-            setEditingCategory(category);
-            setView("editProfile");
-          }}
           onUpdateProfile={(updatedProfile) => {
             setProviderProfile(updatedProfile);
           }}
@@ -779,19 +771,6 @@ const App: React.FC = () => {
       />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
-    } else if (currentView === "editProfile") {
-      mainContent = (
-        <div className="bg-slate-50 min-h-screen flex flex-col items-center justify-center p-6">
-          <h2 className="text-2xl font-bold text-slate-800 mb-4">Editar Perfil</h2>
-          <p className="text-slate-600 mb-6">Esta sección estará disponible próximamente.</p>
-          <button
-            onClick={() => setView("myProfile")}
-            className="bg-teal-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-teal-600"
-          >
-            Volver a Mi Perfil
-          </button>
-        </div>
-      );
     } else if (currentView === "securitySettings") {
       setAlertModal({ 
         isOpen: true, 
