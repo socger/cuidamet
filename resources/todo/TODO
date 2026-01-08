@@ -109,3 +109,9 @@ Cuando desde el componente "components/profiles/profilePage/MyCaregiverProfilePa
 Añadir a las copias de Cristobal el directorio cuidamet y la BD de cuidamet.
 
 En la carpeta "components/legalinfo" tenemos tres componentes que tienen que ver con toda la información legal ... todos estos apartados hay que revisarlos. Son los apartados que aparecen si pinchamos en la opción "Legal y Privacidad" que tienen ambos tipos de perfil.
+
+También tenemos que comprobar las secciones (todo su contenido):
+- Notificaciones
+- Legal y privacidad
+- Seguridad y contraseña
+... puede que haya contenido que tengamos que modificar, borrar ó tener en cuenta para cuando trabajemos en la parte backend.
