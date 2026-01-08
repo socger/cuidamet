@@ -18,8 +18,9 @@ import PhotoUploadModal from "../../photo/PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
-import SupportSection from "../../support/SupportSection";
+import SupportSection from "./SupportSection";
 import OfferService from "../createProfile/OfferService";
+import AccountSettingsSection from "./AccountSettingsSection";
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -352,21 +353,10 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               subLabel="Modo profesional"
               onClick={onSwitchToClient}
             />
-            <SettingsItem
-              icon={<ShieldCheckIcon className="w-6 h-6" />}
-              label="Seguridad y Contraseña"
-              subLabel="Gestionar acceso y verificaciones"
-              onClick={onNavigateSecurity}
-            />
-            <SettingsItem
-              icon={<BellIcon className="w-6 h-6" />}
-              label="Notificaciones"
-              onClick={onNavigateNotifications}
-            />
-            <SettingsItem
-              icon={<DocumentTextIcon className="w-6 h-6" />}
-              label="Legal y Privacidad"
-              onClick={onNavigateLegal}
+            <AccountSettingsSection
+              onNavigateSecurity={onNavigateSecurity}
+              onNavigateNotifications={onNavigateNotifications}
+              onNavigateLegal={onNavigateLegal}
             />
           </div>
         </section>
