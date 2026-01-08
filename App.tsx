@@ -21,7 +21,9 @@ import ProfileLandingPage from "./components/ProfileLandingPage";
 import RoleSelection from "./components/RoleSelection";
 import ClientRegistration from "./components/profiles/createProfile/ClientRegistration";
 import MyCaregiverProfilePage from "./components/profiles/profilePage/MyCaregiverProfilePage";
-import SupportChatPage from "./components/SupportChatPage";
+import SupportChatPage from "./components/support/SupportChatPage";
+import SupportPage from "./components/support/SupportPage";
+import SupportEmailPage from "./components/support/SupportEmailPage";
 
 const getDistanceInKm = (
   lat1: number,
@@ -63,6 +65,8 @@ const App: React.FC = () => {
     | "notifications"
     | "legalInfo"
     | "supportChat"
+    | "support"
+    | "supportEmail"
   >("landing");
   const [previousView, setPreviousView] = useState<
     "providers" | "map"
@@ -180,10 +184,6 @@ const App: React.FC = () => {
     setView("landing");
     setSelectedProviderId(null);
     setCurrentChatId(null);
-  };
-
-  const handleNavigateSupportChat = () => {
-    setView("supportChat");
   };
 
   const handleShowAllProviders = () => {
@@ -643,11 +643,7 @@ const App: React.FC = () => {
           onNavigateSecurity={() => setView("securitySettings")}
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}
-          onNavigateSupport={() => {
-            // TODO: Navigate to support
-            setAlertModal({ isOpen: true, title: 'Ayuda', message: 'Esta función estará disponible próximamente' });
-          }}
-          onNavigateSupportChat={handleNavigateSupportChat}
+          onNavigateSupport={() => setView("support")}
           onLogout={() => {
             setIsAuthenticated(false);
             setClientProfile(null);
@@ -678,15 +674,7 @@ const App: React.FC = () => {
         mainContent = <ProfilePage 
           clientProfile={clientProfile}
           onNavigateFavorites={handleNavigateFavorites}
-          onNavigateSettings={() => {
-            // TODO: Navigate to settings
-            setAlertModal({ isOpen: true, title: 'Configuración', message: 'Esta función estará disponible próximamente' });
-          }}
-          onNavigateSupport={() => {
-            // TODO: Navigate to support
-            setAlertModal({ isOpen: true, title: 'Ayuda', message: 'Esta función estará disponible próximamente' });
-          }}
-          onNavigateSupportChat={handleNavigateSupportChat}
+          onNavigateSupport={() => setView("support")}
           onUpdateProfile={(updatedProfile) => {
             setClientProfile(updatedProfile);
           }}
@@ -822,6 +810,14 @@ const App: React.FC = () => {
       mainContent = null;
     } else if (currentView === "supportChat") {
       mainContent = <SupportChatPage onBack={() => setView("myProfile")} />;
+    } else if (currentView === "support") {
+      mainContent = <SupportPage 
+        onBack={() => setView("myProfile")} 
+        onNavigateChat={() => setView("supportChat")} 
+        onNavigateEmail={() => setView("supportEmail")} 
+      />;
+    } else if (currentView === "supportEmail") {
+      mainContent = <SupportEmailPage onBack={() => setView("support")} />;
     } else if (currentView === "legalInfo") {
       setAlertModal({ 
         isOpen: true, 
