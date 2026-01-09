@@ -16,11 +16,56 @@ import ArrowRightOnRectangleIcon from "../../icons/ArrowRightOnRectangleIcon";
 import CameraIcon from "../../icons/CameraIcon";
 import PhotoUploadModal from "../../photo/PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
+import Resumen_Services from "../resumenProfile/Resumen_Services";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
 import OfferService from "../createProfile/OfferService";
 import AccountSettingsSection from "./AccountSettingsSection";
+import ElderlyIcon from "../../icons/ElderlyIcon";
+import ChildIcon from "../../icons/ChildIcon";
+import PetIcon from "../../icons/PetIcon";
+import CleaningIcon from "../../icons/CleaningIcon";
+
+// Definición de categorías de servicio para el componente Resumen_Services
+const serviceCategories = [
+  {
+    id: CareCategory.ELDERLY,
+    label: "Cuidado de Mayores",
+    icon: ElderlyIcon,
+    description: "Asistencia, compañía y cuidados médicos",
+    color: "text-green-600",
+    bg: "bg-green-100",
+    border: "border-green-200",
+  },
+  {
+    id: CareCategory.CHILDREN,
+    label: "Cuidado de Niños",
+    icon: ChildIcon,
+    description: "Canguro, ayuda escolar y rutinas",
+    color: "text-slate-600",
+    bg: "bg-slate-200",
+    border: "border-slate-300",
+  },
+  {
+    id: CareCategory.PETS,
+    label: "Mascotas",
+    icon: PetIcon,
+    description: "Paseos, guardería y cuidados",
+    color: "text-orange-600",
+    bg: "bg-orange-100",
+    border: "border-orange-200",
+  },
+  {
+    id: CareCategory.HOUSEKEEPING,
+    label: "Limpieza y Mantenimiento",
+    icon: CleaningIcon,
+    description: "Hogar, cristales y reparaciones",
+    color: "text-blue-600",
+    bg: "bg-blue-100",
+    border: "border-blue-200",
+  },
+];
 
 interface MyCaregiverProfilePageProps {
   onBack: () => void;
@@ -287,60 +332,27 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         {/* BLOCK 4: Services */}
         <section className="mb-8">
           <div className="flex items-center justify-between mb-3 px-1">
-
             <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
             {/* <h3 className="font-bold text-slate-800"> */}
-              Mis Servicios y Tarifas
+              Mis Servicios y tarifas
             </h3>
           </div>
 
-
-
-          <div className="space-y-3">
-            {displayProfile.activeServices.map((service) => (
-              <div
-                key={service.id}
-                className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm relative group hover:border-teal-300 transition-colors"
-              >
-                <div className="flex justify-between items-start">
-                  <div className="flex items-center">
-                    <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center mr-3 ${
-                        service.id === CareCategory.ELDERLY
-                          ? "bg-green-100 text-green-600"
-                          : service.id === CareCategory.CHILDREN
-                          ? "bg-slate-100 text-slate-600"
-                          : service.id === CareCategory.PETS
-                          ? "bg-orange-100 text-orange-600"
-                          : "bg-blue-100 text-blue-600"
-                      }`}
-                    >
-                      <StarIcon className="w-5 h-5" />{" "}
-                      {/* Placeholder for dynamic category icon if needed */}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-slate-800">
-                        {service.label}
-                      </h4>
-                      <p className="text-sm text-teal-600 font-semibold">
-                        {service.price}€{" "}
-                        <span className="text-slate-400 font-normal">
-                          / hora
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {displayProfile.activeServices.length === 0 && (
-              <div className="text-center py-8 bg-white rounded-xl border-2 border-dashed border-slate-200">
-                <p className="text-slate-500 text-sm mb-3">
-                  No tienes servicios activos.
-                </p>
-              </div>
-            )}
-          </div>
+          {profile?.services ? (
+            <Resumen_Services
+              completedServices={Object.keys(profile.services).filter(
+                (key) => profile.services[key as CareCategory].completed
+              ) as CareCategory[]}
+              servicesData={profile.services}
+              serviceCategories={serviceCategories}
+            />
+          ) : (
+            <div className="text-center py-8 bg-white rounded-xl border-2 border-dashed border-slate-200">
+              <p className="text-slate-500 text-sm mb-3">
+                No tienes servicios activos.
+              </p>
+            </div>
+          )}
 
 
 
