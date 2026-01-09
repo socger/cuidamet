@@ -5,7 +5,7 @@ import { MOCK_CHATS } from "./services/mockChatData";
 import BottomNav from "./components/BottomNav";
 import LandingPage from "./components/LandingPage";
 import ProfileDetail from "./components/ProfileDetail";
-import OfferService from "./components/profiles/createProfile/OfferService";
+import ProfesionalRegistration from "./components/profiles/createProfile/ProfesionalRegistration";
 import Inbox from "./components/Inbox";
 import Chat from "./components/Chat";
 import ProfilePage from "./components/profiles/profilePage/ProfilePage";
@@ -19,7 +19,7 @@ import { bookingService } from "./services/bookingService";
 import AlertModal from "./components/actions/AlertModal";
 import ProfileLandingPage from "./components/ProfileLandingPage";
 import RoleSelection from "./components/RoleSelection";
-import ClientRegistration from "./components/profiles/createProfile/ClientRegistration";
+import FamiliarRegistration from "./components/profiles/createProfile/FamiliarRegistration";
 import MyCaregiverProfilePage from "./components/profiles/profilePage/MyCaregiverProfilePage";
 import SupportChatPage from "./components/support/SupportChatPage";
 import SupportPage from "./components/support/SupportPage";
@@ -64,7 +64,7 @@ const App: React.FC = () => {
     | "booking"
     | "bookings"
     | "roleSelection"
-    | "clientRegistration"
+    | "familiarRegistration"
     | "securitySettings"
     | "notifications"
     | "legalInfo"
@@ -428,13 +428,13 @@ const App: React.FC = () => {
     setIsAuthenticated(true);
     setAuthAttempts(0);
     
-    // If user is signing up as client (familiar), redirect to clientRegistration
+    // If user is signing up as client (familiar), redirect to familiarRegistration
     if (role === 'client' && !pendingAction) {
-      setView('clientRegistration');
+      setView('familiarRegistration');
       return;
     }
     
-    // If user is signing up as provider (cuidador), redirect to offerService
+    // If user is signing up as provider (cuidador), redirect to profesionalRegistration
     if (role === 'provider' && !pendingAction) {
       setView('offer');
       return;
@@ -470,7 +470,7 @@ const App: React.FC = () => {
     setView(previousViewBeforeAuth);
   };
   
-  const handleCancelClientRegistration = () => {
+  const handleCancelFamiliarRegistration = () => {
     // Revert authentication state since registration was cancelled
     setIsAuthenticated(false);
     setClientProfile(null);
@@ -478,7 +478,7 @@ const App: React.FC = () => {
     setView('roleSelection');
   };
   
-  const handleCancelOfferService = () => {
+  const handleCancelProfesionalRegistration = () => {
     // Revert authentication state since registration was cancelled
     setIsAuthenticated(false);
     setProviderProfile(null);
@@ -554,9 +554,9 @@ const App: React.FC = () => {
         />
       );
     } else if (currentView === "offer") {
-      mainContent = <OfferService 
+      mainContent = <ProfesionalRegistration 
         onComplete={handleProviderRegistrationComplete}
-        onCancel={handleCancelOfferService}
+        onCancel={handleCancelProfesionalRegistration}
         currentView={view}
         onNavigateHome={handleNavigateHome}
         onNavigateFavorites={handleNavigateFavorites}
@@ -761,8 +761,8 @@ const App: React.FC = () => {
         }}
         onBack={() => setView("myProfile")}
       />;
-    } else if (currentView === "clientRegistration") {
-      mainContent = <ClientRegistration 
+    } else if (currentView === "familiarRegistration") {
+      mainContent = <FamiliarRegistration 
         onComplete={(profileData) => {
           setClientProfile(profileData);
           setActiveRole('client');
@@ -779,7 +779,7 @@ const App: React.FC = () => {
             setView("myProfile");
           }, 2000);
         }}
-        onBack={handleCancelClientRegistration}
+        onBack={handleCancelFamiliarRegistration}
       />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;

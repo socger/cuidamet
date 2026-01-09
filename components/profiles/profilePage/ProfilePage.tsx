@@ -13,7 +13,7 @@ import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import LogoutSection from "./LogoutSection";
 import SupportSection from "./SupportSection";
-import ClientRegistration from "../createProfile/ClientRegistration";
+import FamiliarRegistration from "../createProfile/FamiliarRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
 
 interface ProfilePageProps {
@@ -134,7 +134,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
 
   if (isEditingProfile) {
     return (
-      <ClientRegistration
+      <FamiliarRegistration
         initialData={clientProfile || undefined}
         onComplete={handleProfileUpdate}
         onBack={() => setIsEditingProfile(false)}

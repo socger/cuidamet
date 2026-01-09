@@ -20,7 +20,7 @@ import Resumen_Services from "../resumenProfile/Resumen_Services";
 import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
-import OfferService from "../createProfile/OfferService";
+import ProfesionalRegistration from "../createProfile/ProfesionalRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
 import ElderlyIcon from "../../icons/ElderlyIcon";
 import ChildIcon from "../../icons/ChildIcon";
@@ -207,7 +207,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
 
   if (isEditingProfile) {
     return (
-      <OfferService
+      <ProfesionalRegistration
         initialData={profile || undefined}
         onComplete={handleProfileUpdate}
         onCancel={() => setIsEditingProfile(false)}
