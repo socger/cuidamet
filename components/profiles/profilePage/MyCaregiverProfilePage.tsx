@@ -293,6 +293,9 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               Mis Servicios y Tarifas
             </h3>
           </div>
+
+
+
           <div className="space-y-3">
             {displayProfile.activeServices.map((service) => (
               <div
@@ -338,6 +341,10 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
               </div>
             )}
           </div>
+
+
+
+
         </section>
 
         {/* BLOCK 5: Account & Settings */}
