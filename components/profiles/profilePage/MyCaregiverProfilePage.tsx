@@ -22,17 +22,13 @@ import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
 import ProfesionalRegistration from "../createProfile/ProfesionalRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
-import ElderlyIcon from "../../icons/ElderlyIcon";
-import ChildIcon from "../../icons/ChildIcon";
-import PetIcon from "../../icons/PetIcon";
-import CleaningIcon from "../../icons/CleaningIcon";
 
 // Definición de categorías de servicio para el componente Resumen_Services
 const serviceCategories = [
   {
     id: CareCategory.ELDERLY,
     label: "Cuidado de Mayores",
-    icon: ElderlyIcon,
+    icon: "/resources/icons/elderly-female-icon.svg",
     description: "Asistencia, compañía y cuidados médicos",
     color: "text-green-600",
     bg: "bg-green-100",
@@ -41,7 +37,7 @@ const serviceCategories = [
   {
     id: CareCategory.CHILDREN,
     label: "Cuidado de Niños",
-    icon: ChildIcon,
+    icon: "/resources/icons/baby-girl-icon.svg",
     description: "Canguro, ayuda escolar y rutinas",
     color: "text-slate-600",
     bg: "bg-slate-200",
@@ -50,7 +46,7 @@ const serviceCategories = [
   {
     id: CareCategory.PETS,
     label: "Mascotas",
-    icon: PetIcon,
+    icon: "/resources/icons/dog-puppy-face-icon.svg",
     description: "Paseos, guardería y cuidados",
     color: "text-orange-600",
     bg: "bg-orange-100",
@@ -59,7 +55,7 @@ const serviceCategories = [
   {
     id: CareCategory.HOUSEKEEPING,
     label: "Limpieza y Mantenimiento",
-    icon: CleaningIcon,
+    icon: "/resources/icons/housekeeping-icon.svg",
     description: "Hogar, cristales y reparaciones",
     color: "text-blue-600",
     bg: "bg-blue-100",

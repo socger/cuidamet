@@ -31,7 +31,7 @@ import PlusCircleIcon from "../../icons/PlusCircleIcon";
 import DocumentTextIcon from "../../icons/DocumentTextIcon";
 import PaperClipIcon from "../../icons/PaperClipIcon";
 
-interface ProfesionalRegistrationProps {
+interface OfferServiceProps {
   onComplete: (profileData: ProviderProfile) => void;
   onCancel?: () => void;
   initialData?: Partial<ProviderProfile>;
@@ -312,7 +312,7 @@ const initialServiceConfig: ServiceConfig = {
   medicalSkills: [],
 };
 
-const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
+const OfferService: React.FC<OfferServiceProps> = ({
   onComplete,
   onCancel,
   initialData,
@@ -1555,4 +1555,4 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   );
 };
 
-export default ProfesionalRegistration;
+export default OfferService;
