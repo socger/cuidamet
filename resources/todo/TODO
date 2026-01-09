@@ -78,9 +78,6 @@ Por lo que cuando se entre en mapas, favoritos o en buscar cuidadores ... por de
 
 Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado desde por ejemplo la opción "Reservas", el registro no termina. Es decir que no pasa a registrar los datos del usuario (tanto si es cuidador o familiar). Si no que se va directamente a la vista de Reservas, sin llegar a darse de alta nunca el usuario. Lo mismo ocurre desde Buzón, etc. El usuario tiene que terminar los datos de su registro antes de pasar al componente que necesitamos (reservas, favoritos, buzón, etc.)
 
-El componente "components/ClientRegistration.tsx" queremos renombrarlo a "Registro_familiar"
-El componente "components/OfferService.tsx" queremos renombrarlo a "Registro_Profesional"
-
 Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este componente llama a los componentes "components/PhotoUploadModal.tsx" y "components/PremiumSubscriptionModal.tsx" ... pero no se que hacen (investigarlos).
 
 Cuando el usuario se crea como un cuidador, este debería de poder verse a si mismo cuando hace búsquedas de cuidadores. Ahora mismo no lo hace.
@@ -90,28 +87,19 @@ El componente "components/PageHeader.tsx" se está usando en varios componentes 
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
 
-
-Resulta que los componentes "components/MyCaregiverProfilePage.tsx" y components/ProfilePage.tsx tienen una parte de abajo, despues de detallar los datos generales del perfil que son muy parecidas. Ver si podemos crear un componente común para ambos componentes. 
-Pero tener cuidado porque en uno hay opciones que en el otro no están y viceversa. También hay que ver que hay opciones en ambos componentes que todavía no se han terminado, como la edición.
-Los botones siguientes están en el perfil profesional:
-- "Seguridad y Contraseña"
-- Notificaciones
-- Legal y Privacidad
-... Hay que crearlos en el perfil familiar también .. hacer todos estos botones comunes, como hemos hecho con el botón ¿Necesitas ayuda?
-
 Hemos creado el componente "components/SupportChatPage.tsx", se supone que tiene que mantener una conversación con Cuidi (ntro agente IA - Gemini 3.0). Pero cuando le comentamos/preguntamos algo, siempre nos devuelve el mensaje "Oops, algo ha salido mal. Por favor, inténtalo de nuevo" ... esto es debido a que no se ha creado, creo, la conexión con Gemini, la IA de Google. O porque no está creado en .env el token/api de conexión (por supuesto habría que pagar por un uso continuo).
 
 Cuando el usuario se está registrando, no autenticando, introduce una contraseña (antes del paso de verificación del código enviado a su correo). Pero no hay un segundo campo para introducir/confirmar la contraseña (que se introdujo correctamente/igual en ambos campos)
 
-Cuando desde el componente "components/profiles/profilePage/MyCaregiverProfilePage.tsx" le decimos de editar y antes teníamos un apartado de mascotas y ahora añadimos más apartados de mascotas (en la edición). Pues cuando vuelve al componente "components/profiles/profilePage/MyCaregiverProfilePage.tsx" no refresca esos cambios.
-
 
 Añadir a las copias de Cristobal el directorio cuidamet y la BD de cuidamet.
-
-En la carpeta "components/legalinfo" tenemos tres componentes que tienen que ver con toda la información legal ... todos estos apartados hay que revisarlos. Son los apartados que aparecen si pinchamos en la opción "Legal y Privacidad" que tienen ambos tipos de perfil.
 
 También tenemos que comprobar las secciones (todo su contenido):
 - Notificaciones
 - Legal y privacidad
 - Seguridad y contraseña
 ... puede que haya contenido que tengamos que modificar, borrar ó tener en cuenta para cuando trabajemos en la parte backend.
+
+
+El perfil profesional tiene un apartado llamado "Hazte Cuidamet PRO" ... este apartado tengo que darle un vistazo grande con Daniel ... creo que no deberíamos de ponerlo todavía porque no tenemos contratada ninguna pasarela de pago todavía.
+
