@@ -1483,9 +1483,28 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
           <div className="flex items-center gap-3">
 
-            {/* jerofa 2 */}
-
-
+            {editingCategory ? (
+              <button
+                onClick={handleSaveCategory}
+                className="px-4 py-1.5 bg-teal-500 text-white text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
+              >
+                Guardar <CheckCircleIcon className="w-4 h-4 ml-1" />
+              </button>
+            ) : step < 3 ? (
+              <button
+                onClick={nextStep}
+                className="px-4 py-1.5 bg-teal-500 text-white text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
+              >
+                Siguiente <ChevronRightIcon className="w-4 h-4 ml-1" />
+              </button>
+            ) : (
+              <button
+                onClick={confirmPublish}
+                className="px-4 py-1.5 bg-teal-500 text-white text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
+              >
+                {initialData ? "Guardar cambios" : "Finalizar"}
+              </button>
+            )}
 
             {onCancel && (
               <button
@@ -1515,26 +1534,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
               ? renderServiceEditor(editingCategory)
               : renderServicesDashboard())}
           {step === 3 && renderReview()}
-
-          {/* Navigation Buttons - Now part of scrollable content */}
-          <div className="bg-transparent p-4 mt-6 rounded-xl flex justify-end items-center sticky bottom-0 pointer-events-none">
-            {editingCategory ? (
-              <button
-                onClick={handleSaveCategory}
-                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
-              >
-                Guardar y Volver <CheckCircleIcon className="w-5 h-5 ml-2" />
-              </button>
-            ) : (
-              <button
-                onClick={step === 3 ? confirmPublish : nextStep}
-                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
-              >
-                {step === 3 ? (initialData ? "Guardar cambios" : "Finalizar registro") : "Siguiente"}
-                {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
-              </button>
-            )}
-          </div>
         </div>
       </main>
 
