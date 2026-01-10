@@ -37,7 +37,9 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const [role, setRole] = useState<UserRole | null>(preselectedRole || null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [verificationCode, setVerificationCode] = useState(["", "", "", ""]);
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +61,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const hasMinLength = password.length >= 8;
   const hasNumber = /\d/.test(password);
   const hasSpecial = /[!@#$%^&*]/.test(password);
+  const passwordsMatch = password === confirmPassword && confirmPassword.length > 0;
 
   const handleVerificationChange = (index: number, value: string) => {
     if (value.length > 1) return;
@@ -124,6 +127,14 @@ const AuthPage: React.FC<AuthPageProps> = ({
     e.preventDefault();
     if (!role) {
       setAlertModal({ isOpen: true, message: "Por favor, selecciona si eres Familiar o Cuidador (necesario para la demo)." });
+      return;
+    }
+    if (password !== confirmPassword) {
+      setAlertModal({ isOpen: true, message: "Las contraseñas no coinciden. Por favor, verifica que ambas sean iguales.", title: "Error de contraseña" });
+      return;
+    }
+    if (!hasMinLength || !hasNumber || !hasSpecial) {
+      setAlertModal({ isOpen: true, message: "La contraseña debe cumplir todos los requisitos: mínimo 8 caracteres, un número y un símbolo especial.", title: "Contraseña débil" });
       return;
     }
     setIsLoading(true);
@@ -409,6 +420,56 @@ const AuthPage: React.FC<AuthPageProps> = ({
                 )}
 
                 {mode === "signup" && (
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1">
+                      Confirmar Contraseña
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={showConfirmPassword ? "text" : "password"}
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className={`w-full pl-10 pr-12 py-3.5 bg-white border rounded-xl focus:outline-none focus:ring-2 text-slate-800 shadow-sm ${
+                          confirmPassword && !passwordsMatch
+                            ? "border-red-400 focus:ring-red-500"
+                            : confirmPassword && passwordsMatch
+                            ? "border-green-400 focus:ring-green-500"
+                            : "border-slate-300 focus:ring-teal-500"
+                        }`}
+                      />
+                      <LockClosedIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                      <button
+                        type="button"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        className="absolute top-1/2 right-3 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1"
+                      >
+                        {showConfirmPassword ? (
+                          <EyeSlashIcon className="w-5 h-5" />
+                        ) : (
+                          <EyeIcon className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    {confirmPassword && (
+                      <div className="mt-2">
+                        {passwordsMatch ? (
+                          <div className="text-xs flex items-center text-green-600">
+                            <div className="w-1.5 h-1.5 rounded-full mr-2 bg-green-500"></div>
+                            Las contraseñas coinciden
+                          </div>
+                        ) : (
+                          <div className="text-xs flex items-center text-red-600">
+                            <div className="w-1.5 h-1.5 rounded-full mr-2 bg-red-500"></div>
+                            Las contraseñas no coinciden
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {mode === "signup" && (
                   <label className="flex items-start space-x-3 cursor-pointer pt-2 p-2 rounded-lg hover:bg-slate-100 transition-colors">
                     <div className="relative flex items-center">
                       <input
@@ -455,7 +516,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                   type="submit"
                   disabled={
                     isLoading ||
-                    (mode === "signup" && (!email || !password || !role))
+                    (mode === "signup" && (!email || !password || !confirmPassword || !role || !passwordsMatch))
                   }
                   className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-teal-500/20 hover:bg-teal-600 transition-all disabled:bg-slate-400 disabled:shadow-none disabled:cursor-not-allowed mt-6 flex items-center justify-center transform active:scale-95"
                 >
