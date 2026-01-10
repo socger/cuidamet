@@ -279,7 +279,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
 
             <h1 className="text-sm sm:text-lg font-bold text-slate-800">
               {step === 1
-                ? initialData ? "Editar perfil" : "Perfil familiar"
+                ? initialData ? "Perfil familiar" : "Perfil familiar"
                 : step === 2
                 ? "Preferencias"
                 : "Resumen"}

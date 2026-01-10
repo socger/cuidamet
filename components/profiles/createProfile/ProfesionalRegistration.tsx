@@ -1472,7 +1472,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
             <h1 className="text-sm sm:text-lg font-bold text-slate-800">
               {step === 1
-                ? initialData ? "Editar perfil" : "Perfil profesional"
+                ? initialData ? "Perfil profesional" : "Perfil profesional"
                 : step === 2
                 ? editingCategory
                   ? "Configuración"
