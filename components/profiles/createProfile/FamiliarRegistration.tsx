@@ -274,6 +274,9 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
                 <ChevronLeftIcon className="w-5 h-5" />
               </button>
             )}
+
+            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+
             <h1 className="text-lg font-bold text-slate-800">
               {step === 1
                 ? initialData ? "Editar perfil" : "Perfil familiar"
@@ -282,10 +285,8 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
                 : "Resumen"}
             </h1>
           </div>
+
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-teal-600">
-              {step} de 3
-            </span>
             <button
               onClick={onBack}
               className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"

@@ -1467,6 +1467,9 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
                 <ChevronLeftIcon className="w-5 h-5" />
               </button>
             )}
+
+            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+
             <h1 className="text-lg font-bold text-slate-800">
               {step === 1
                 ? initialData ? "Editar perfil" : "Perfil profesional"
@@ -1477,8 +1480,13 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
                 : "Resumen"}
             </h1>
           </div>
+
           <div className="flex items-center gap-3">
-            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+
+            {/* jerofa 2 */}
+
+
+
             {onCancel && (
               <button
                 onClick={onCancel}
