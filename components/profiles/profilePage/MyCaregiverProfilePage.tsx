@@ -145,6 +145,73 @@ const SettingsItem: React.FC<SettingsItemProps> = ({
   </button>
 );
 
+interface PremiumPromoButtonProps {
+  isPremium: boolean;
+  onClick: () => void;
+}
+
+const PremiumPromoButton: React.FC<PremiumPromoButtonProps> = ({
+  isPremium,
+  onClick,
+}) => (
+  <div className="mb-6">
+    <button
+      onClick={onClick}
+      className={`w-full p-4 rounded-2xl flex items-center justify-between shadow-sm transition-all relative overflow-hidden group ${
+        isPremium
+          ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white"
+          : "bg-white border border-slate-200 hover:border-amber-300"
+      }`}
+    >
+      <div className="flex items-center relative z-[5]">
+        <div
+          className={`p-3 rounded-full mr-4 ${
+            isPremium
+              ? "bg-white/20 text-white"
+              : "bg-amber-50 text-amber-500"
+          }`}
+        >
+          <StarIcon className="w-6 h-6" />
+        </div>
+
+        <div className="text-left">
+          <h3
+            className={`font-bold text-lg ${
+              isPremium ? "text-white" : "text-slate-800"
+            }`}
+          >
+            {isPremium ? "Cuidamet PRO Activo" : "Hazte Cuidamet PRO"}
+          </h3>
+          <p
+            className={`text-sm ${
+              isPremium ? "text-white/90" : "text-slate-500"
+            }`}
+          >
+            {isPremium
+              ? "Tu perfil está destacado."
+              : "Consigue hasta 3x más contactos."}
+          </p>
+        </div>
+      </div>
+
+      <div
+        className={`p-2 rounded-full ${
+          isPremium
+            ? "bg-white/20 text-white"
+            : "bg-slate-50 text-slate-400 group-hover:text-amber-500 group-hover:bg-amber-50"
+        } transition-colors relative z-[5]`}
+      >
+        <ChevronRightIcon className="w-5 h-5" />
+      </div>
+
+      {/* Decorative background for free users */}
+      {!isPremium && (
+        <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-amber-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+      )}
+    </button>
+  </div>
+);
+
 const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
   onBack,
   onNavigateSecurity,
@@ -283,61 +350,13 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         </div>
 
         {/* BLOCK 3: Cuidamet PRO Promo */}
-        <div className="mb-6">
-          <button
+        {/* Jerofa de momento el código de abajo lo comento --- hay que contratar primero pasarela de pago
+          <PremiumPromoButton
+            isPremium={isPremium}
             onClick={() => setIsPremiumModalOpen(true)}
-            className={`w-full p-4 rounded-2xl flex items-center justify-between shadow-sm transition-all relative overflow-hidden group ${
-              isPremium
-                ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white"
-                : "bg-white border border-slate-200 hover:border-amber-300"
-            }`}
-          >
-            <div className="flex items-center relative z-[5]">
-              <div
-                className={`p-3 rounded-full mr-4 ${
-                  isPremium
-                    ? "bg-white/20 text-white"
-                    : "bg-amber-50 text-amber-500"
-                }`}
-              >
-                <StarIcon className="w-6 h-6" />
-              </div>
-              <div className="text-left">
-                <h3
-                  className={`font-bold text-lg ${
-                    isPremium ? "text-white" : "text-slate-800"
-                  }`}
-                >
-                  {isPremium ? "Cuidamet PRO Activo" : "Hazte Cuidamet PRO"}
-                </h3>
-                <p
-                  className={`text-sm ${
-                    isPremium ? "text-white/90" : "text-slate-500"
-                  }`}
-                >
-                  {isPremium
-                    ? "Tu perfil está destacado."
-                    : "Consigue hasta 3x más contactos."}
-                </p>
-              </div>
-            </div>
-            <div
-              className={`p-2 rounded-full ${
-                isPremium
-                  ? "bg-white/20 text-white"
-                  : "bg-slate-50 text-slate-400 group-hover:text-amber-500 group-hover:bg-amber-50"
-              } transition-colors relative z-[5]`}
-            >
-              <ChevronRightIcon className="w-5 h-5" />
-            </div>
-
-            {/* Decorative background for free users */}
-            {!isPremium && (
-              <div className="absolute right-0 top-0 bottom-0 w-1/3 bg-gradient-to-l from-amber-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
-            )}
-          </button>
-        </div>
-
+          />
+        */}
+        
         {/* BLOCK 4: Services */}
         <section className="mb-8">
           <div className="flex items-center justify-between mb-3 px-4">
