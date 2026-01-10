@@ -287,6 +287,19 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
           </div>
 
           <div className="flex items-center gap-3">
+
+            <button
+              onClick={handleNext}
+              className="px-4 py-1.5 bg-teal-500 text-white text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
+            >
+              {step === 1
+                ? "Siguiente"
+                : step === 2
+                ? "Siguiente"
+                : initialData ? "Guardar cambios" : "Finalizar"}
+              {step < 3 && <ChevronRightIcon className="w-4 h-4 ml-1" />}
+            </button>
+
             <button
               onClick={onBack}
               className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
@@ -459,21 +472,6 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
               </div>
             </div>
           )}
-
-          {/* Navigation Buttons - Sticky al final del contenido visible */}
-          <div className="mt-8 bg-transparent p-4 rounded-xl flex justify-end items-center sticky bottom-20 pointer-events-none">
-            <button
-              onClick={handleNext}
-              className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
-            >
-              {step === 1
-                ? "Siguiente"
-                : step === 2
-                ? "Siguiente"
-                : initialData ? "Guardar cambios" : "Finalizar registro"}
-              {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
-            </button>
-          </div>
         </div>
       </main>
 
