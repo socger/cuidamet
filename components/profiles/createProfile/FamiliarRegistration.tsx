@@ -262,22 +262,22 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
   return (
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
       {/* Stepper Header */}
-      <div className="bg-white border-b border-slate-200 p-4 pt-safe-top">
-        <div className="flex items-center justify-between mb-4">
-          <div className="flex items-center gap-3">
+      <div className="bg-white border-b border-slate-200 p-2 sm:p-4 pt-safe-top">
+        <div className="flex items-center justify-between mb-2 sm:mb-4">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {step > 1 && (
               <button
                 onClick={() => setStep(step - 1)}
-                className="p-1.5 -ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1 sm:p-1.5 -ml-1 sm:-ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
                 aria-label="Atrás"
               >
-                <ChevronLeftIcon className="w-5 h-5" />
+                <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
               </button>
             )}
 
-            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
+            <span className="text-xs sm:text-sm font-medium text-teal-600">{step} de 3</span>
 
-            <h1 className="text-lg font-bold text-slate-800">
+            <h1 className="text-sm sm:text-lg font-bold text-slate-800">
               {step === 1
                 ? initialData ? "Editar perfil" : "Perfil familiar"
                 : step === 2
@@ -286,27 +286,27 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
             </h1>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
 
             <button
               onClick={handleNext}
-              className="px-4 py-1.5 bg-teal-500 text-white text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
+              className="px-2 sm:px-4 py-1 sm:py-1.5 bg-teal-500 text-white text-xs sm:text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
             >
               {step === 1
                 ? "Siguiente"
                 : step === 2
                 ? "Siguiente"
-                : initialData ? "Guardar cambios" : "Finalizar"}
-              {step < 3 && <ChevronRightIcon className="w-4 h-4 ml-1" />}
+                : initialData ? <><span className="hidden sm:inline">Guardar cambios</span><span className="sm:hidden">OK</span></> : <><span className="hidden sm:inline">Finalizar</span><span className="sm:hidden">OK</span></>}
+              {step < 3 && <ChevronRightIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-0.5 sm:ml-1" />}
             </button>
 
             <button
               onClick={onBack}
-              className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+              className="p-1 sm:p-1.5 -mr-1 sm:-mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
               aria-label="Cancelar"
               title="Cancelar registro"
             >
-              <XMarkIcon className="w-5 h-5" />
+              <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
