@@ -162,6 +162,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
     title?: string;
   }>({ isOpen: false, message: "" });
   const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isEditingServices, setIsEditingServices] = useState(false);
 
   const [isPremium, setIsPremium] = useState(false);
   const [isPremiumModalOpen, setIsPremiumModalOpen] = useState(false);
@@ -199,6 +200,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
       onUpdateProfile(updatedProfile);
     }
     setIsEditingProfile(false);
+    setIsEditingServices(false);
   };
 
   if (isEditingProfile) {
@@ -207,6 +209,17 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         initialData={profile || undefined}
         onComplete={handleProfileUpdate}
         onCancel={() => setIsEditingProfile(false)}
+      />
+    );
+  }
+
+  if (isEditingServices) {
+    return (
+      <ProfesionalRegistration
+        initialData={profile || undefined}
+        initialStep={2}
+        onComplete={handleProfileUpdate}
+        onCancel={() => setIsEditingServices(false)}
       />
     );
   }
@@ -327,11 +340,16 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
 
         {/* BLOCK 4: Services */}
         <section className="mb-8">
-          <div className="flex items-center justify-between mb-3 px-1">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
-            {/* <h3 className="font-bold text-slate-800"> */}
+          <div className="flex items-center justify-between mb-3 px-4">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">
               Mis Servicios y tarifas
             </h3>
+            <button
+              onClick={() => setIsEditingServices(true)}
+              className="text-teal-500 font-semibold text-sm hover:text-teal-600 transition-colors"
+            >
+              + Añadir
+            </button>
           </div>
 
           {profile?.services ? (

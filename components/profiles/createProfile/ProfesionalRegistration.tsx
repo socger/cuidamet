@@ -35,6 +35,7 @@ interface ProfesionalRegistrationProps {
   onComplete: (profileData: ProviderProfile) => void;
   onCancel?: () => void;
   initialData?: Partial<ProviderProfile>;
+  initialStep?: number;
   currentView?: string;
   onNavigateHome?: () => void;
   onNavigateFavorites?: () => void;
@@ -316,6 +317,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   onComplete,
   onCancel,
   initialData,
+  initialStep = 1,
   currentView = "offer",
   onNavigateHome = () => {},
   onNavigateFavorites = () => {},
@@ -326,7 +328,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   unreadCount = 0,
   isAuthenticated = true,
 }) => {
-  const [step, setStep] = useState(1); // 1: Profile, 2: Services Dashboard, 3: Summary
+  const [step, setStep] = useState(initialStep); // 1: Profile, 2: Services Dashboard, 3: Summary
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(
     null
   );
