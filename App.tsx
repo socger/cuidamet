@@ -117,6 +117,7 @@ const App: React.FC = () => {
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
+  const [editingBookingId, setEditingBookingId] = useState<string | null>(null);
   
   // Alert Modal state
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
@@ -512,20 +513,37 @@ const App: React.FC = () => {
   const handleBookingBack = () => {
     setView('profile');
     setBookingProviderId(null);
+    setEditingBookingId(null);
+  };
+  
+  const handleEditBooking = (bookingId: string) => {
+    const booking = bookingService.getBookingById(bookingId);
+    if (booking) {
+      setBookingProviderId(booking.providerId);
+      setEditingBookingId(bookingId);
+      setView('booking');
+    }
   };
   
   const handleBookingProceed = (details: BookingDetails) => {
     // Here you would normally process the payment
     console.log('Booking details:', details);
     
-    // Save booking using the service
-    const provider = providers.find(p => p.id === details.providerId);
-    if (provider) {
-      bookingService.addBooking(details, provider.name, provider.photoUrl);
+    if (editingBookingId) {
+      // Update existing booking
+      bookingService.updateBooking(editingBookingId, details);
+      setAlertModal({ isOpen: true, message: `Reserva actualizada: ${details.hours} horas por ${details.totalCost}€`, title: 'Reserva Actualizada' });
+      setEditingBookingId(null);
+    } else {
+      // Create new booking
+      const provider = providers.find(p => p.id === details.providerId);
+      if (provider) {
+        bookingService.addBooking(details, provider.name, provider.photoUrl);
+      }
+      setAlertModal({ isOpen: true, message: `Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`, title: 'Reserva Confirmada' });
     }
     
-    setAlertModal({ isOpen: true, message: `Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`, title: 'Reserva Confirmada' });
-    setView('bookings'); // Navigate to bookings list instead of landing
+    setView('bookings'); // Navigate to bookings list
     setBookingProviderId(null);
   };
 
@@ -586,11 +604,21 @@ const App: React.FC = () => {
         (p) => p.id === bookingProviderId
       );
       if (provider) {
+        const editingBooking = editingBookingId ? bookingService.getBookingById(editingBookingId) : null;
         mainContent = (
           <BookingPage
             provider={provider}
             onBack={handleBookingBack}
             onProceed={handleBookingProceed}
+            isEditing={!!editingBookingId}
+            initialBooking={editingBooking ? {
+              startDate: editingBooking.startDate,
+              startTime: editingBooking.startTime,
+              endDate: editingBooking.endDate,
+              endTime: editingBooking.endTime,
+              promoCode: '',
+              addInsurance: editingBooking.insuranceCost > 0,
+            } : undefined}
           />
         );
       }
@@ -810,7 +838,7 @@ const App: React.FC = () => {
         isAuthenticated={isAuthenticated}
       />;
     } else if (currentView === "bookings") {
-      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
+      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} onEditBooking={handleEditBooking} />;
     } else if (currentView === "securitySettings") {
       mainContent = <SecuritySettingsPage 
         onBack={() => setView("myProfile")} 

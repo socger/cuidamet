@@ -5,13 +5,15 @@ import ClockIcon from '../icons/ClockIcon';
 import CurrencyEuroIcon from '../icons/CurrencyEuroIcon';
 import PageHeader from './BookingList_Header';
 import PlusCircleIcon from '../icons/PlusCircleIcon';
+import PencilIcon from '../icons/PencilIcon';
 
 interface BookingsListProps {
   onBack: () => void;
   onNewBooking: () => void;
+  onEditBooking?: (bookingId: string) => void;
 }
 
-const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking }) => {
+const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEditBooking }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
@@ -115,6 +117,19 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking }) => 
                     </div>
                   </div>
                 </div>
+                
+                {/* Botón de edición - Solo para reservas confirmadas */}
+                {booking.status === 'confirmed' && onEditBooking && (
+                  <div className="px-4 pb-4">
+                    <button
+                      onClick={() => onEditBooking(booking.id)}
+                      className="w-full bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
+                    >
+                      <PencilIcon className="w-4 h-4" />
+                      <span>Editar reserva</span>
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           ))

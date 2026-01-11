@@ -60,5 +60,21 @@ export const bookingService = {
     };
     bookings = [newBooking, ...bookings];
     return newBooking;
+  },
+
+  updateBooking: (bookingId: string, details: BookingDetails): Booking | null => {
+    const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+    if (bookingIndex === -1) return null;
+    
+    const updatedBooking: Booking = {
+      ...bookings[bookingIndex],
+      ...details,
+    };
+    bookings[bookingIndex] = updatedBooking;
+    return updatedBooking;
+  },
+
+  getBookingById: (bookingId: string): Booking | null => {
+    return bookings.find(b => b.id === bookingId) || null;
   }
 };

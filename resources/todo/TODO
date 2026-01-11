@@ -94,6 +94,15 @@ Cambiar todos los alert por el componente popup común para mensajes.
 
 --------------------------------------------------------------------------------------------------------
 
+* Cuando el usuario está creando su perfil, registrándose al principio, ya introdujo su correo electrónico, por lo que en el step 1 debería crearse y no modificarse. ¿Pero deberíamos entonces de crear un proceso para cambiar entonces en algún momento este correo electrónico?
+
+
+* Si el usuario tiene el perfil Familiar, podrá crear reservas nuevas e incluso modificarlas. Pero si el usuario es profesional, sólo puede consultar las reservas, no podrá crear ni modificarlas.
+
+* Si el usuario es un familiar, cuando crea o modifica una reserva no puede cambiar nada de los precios establecidos por el cuidador. Sólo podrá elegir uno de sus servicios y cambiar los horarios. Siempre y cuando el cuidador hubiera elegido una franja horario de acuerdo a las necesidades del familiar.
+
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
+* Estamos creando un proceso de edición de reservas.
+Parece que solo crea el botón "Editar reserva", en el componente "BookingsList.tsx", para la primera reserva. Y debe de crear este botón para todas las reservas. Te paso una imagen para que veas el problema.

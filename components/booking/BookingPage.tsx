@@ -9,6 +9,15 @@ interface BookingPageProps {
   provider: Provider;
   onProceed: (details: BookingDetails) => void;
   onBack: () => void;
+  initialBooking?: {
+    startDate: string;
+    startTime: string;
+    endDate: string;
+    endTime: string;
+    promoCode?: string;
+    addInsurance?: boolean;
+  };
+  isEditing?: boolean;
 }
 
 const INSURANCE_COST = 4.00;
@@ -19,13 +28,13 @@ const hourPacks = [
     { name: '20 horas', hours: 20, discount: 0.10 },
 ];
 
-const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }) => {
-  const [startDate, setStartDate] = useState('');
-  const [startTime, setStartTime] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const [endTime, setEndTime] = useState('');
-  const [addInsurance, setAddInsurance] = useState(false);
-  const [promoCode, setPromoCode] = useState('');
+const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, initialBooking, isEditing = false }) => {
+  const [startDate, setStartDate] = useState(initialBooking?.startDate || '');
+  const [startTime, setStartTime] = useState(initialBooking?.startTime || '');
+  const [endDate, setEndDate] = useState(initialBooking?.endDate || '');
+  const [endTime, setEndTime] = useState(initialBooking?.endTime || '');
+  const [addInsurance, setAddInsurance] = useState(initialBooking?.addInsurance || false);
+  const [promoCode, setPromoCode] = useState(initialBooking?.promoCode || '');
   const [selectedPack, setSelectedPack] = useState<typeof hourPacks[0] | null>(null);
 
   const { hours, totalCost, serviceFee, subtotal, discountAmount, insuranceCost, isValid, finalHourlyRate } = useMemo(() => {
@@ -110,7 +119,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
 
   return (
     <div className="bg-white min-h-screen flex flex-col animate-fade-in">
-      <BookingPage_Header provider={provider} title="Reservar con:" onBack={onBack} />
+      <BookingPage_Header provider={provider} title={isEditing ? "Editar reserva con:" : "Reservar con:"} onBack={onBack} />
       
       {/* Sticky Payment Button at Top */}
       <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-lg border-b border-slate-200 p-3 shadow-sm">
@@ -119,7 +128,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack }
             disabled={!isValid}
             className="w-full bg-teal-500 text-white px-4 py-3.5 rounded-xl font-semibold hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-400 disabled:cursor-not-allowed text-lg shadow-lg shadow-teal-500/20"
         >
-            {isValid ? `Pagar ${totalCost.toFixed(2)}€` : 'Completa los datos'}
+            {isValid ? (isEditing ? `Actualizar ${totalCost.toFixed(2)}€` : `Pagar ${totalCost.toFixed(2)}€`) : 'Completa los datos'}
         </button>
       </div>
 

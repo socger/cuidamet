@@ -1,7 +1,9 @@
 import React from "react";
 import ChevronLeftIcon from "../icons/ChevronLeftIcon";
+import { Provider } from "../../types";
 
 interface BookingPage_HeaderProps {
+  provider: Provider;
   title: string;
   onBack: () => void;
   rightAction?: React.ReactNode;
