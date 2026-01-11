@@ -8,7 +8,7 @@ import ProfileDetail from "./components/ProfileDetail";
 import ProfesionalRegistration from "./components/profiles/createProfile/ProfesionalRegistration";
 import Inbox from "./components/Inbox";
 import Chat from "./components/Chat";
-import ProfilePage from "./components/profiles/profilePage/ProfilePage";
+import FamiliarProfilePage from "./components/profiles/profilePage/FamiliarProfilePage";
 import MapView from "./components/MapView";
 import CookieConsent from "./components/CookieConsent";
 import ProvidersList from "./components/ProvidersList";
@@ -20,7 +20,7 @@ import AlertModal from "./components/actions/AlertModal";
 import ProfileLandingPage from "./components/ProfileLandingPage";
 import RoleSelection from "./components/RoleSelection";
 import FamiliarRegistration from "./components/profiles/createProfile/FamiliarRegistration";
-import MyCaregiverProfilePage from "./components/profiles/profilePage/MyCaregiverProfilePage";
+import ProfesionalProfilePage from "./components/profiles/profilePage/ProfesionalProfilePage";
 import SupportChatPage from "./components/support/SupportChatPage";
 import SupportPage from "./components/support/SupportPage";
 import SupportEmailPage from "./components/support/SupportEmailPage";
@@ -117,7 +117,7 @@ const App: React.FC = () => {
   // Alert Modal state
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
   
-  // Favorites filter state (when navigating from ProfilePage)
+  // Favorites filter state (when navigating from FamiliarProfilePage)
   const [showFavoritesFromProfile, setShowFavoritesFromProfile] = useState<boolean>(false);
 
   useEffect(() => {
@@ -635,7 +635,7 @@ const App: React.FC = () => {
         />;
       } else if (activeRole === 'provider') {
         // Provider Profile
-        mainContent = <MyCaregiverProfilePage 
+        mainContent = <ProfesionalProfilePage 
           profile={providerProfile}
           onBack={handleNavigateHome}
           onUpdateProfile={(updatedProfile) => {
@@ -672,7 +672,7 @@ const App: React.FC = () => {
         />;
       } else {
         // Client Profile
-        mainContent = <ProfilePage 
+        mainContent = <FamiliarProfilePage 
           clientProfile={clientProfile}
           onNavigateFavorites={handleNavigateFavorites}
           onNavigateSupport={() => setView("support")}
