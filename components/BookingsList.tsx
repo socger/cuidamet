@@ -39,7 +39,7 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking }) => 
   return (
     <div className="bg-slate-50 min-h-screen flex flex-col animate-fade-in pb-24">
       <PageHeader 
-        title="Mis Reservas" 
+        title="Mis reservas" 
         onBack={onBack}
         rightAction={
           <button
