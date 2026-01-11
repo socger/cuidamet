@@ -243,6 +243,15 @@ const App: React.FC = () => {
   };
 
   const handleNavigateOffer = () => {
+    if (!isAuthenticated) {
+      setPreviousViewBeforeAuth(view);
+      setPendingAction(null);
+      setAuthAttempts(0);
+      setAuthMode('login');
+      setPreselectedRole('provider');
+      setView("auth");
+      return;
+    }
     setView("offer");
     setSelectedProviderId(null);
     setCurrentChatId(null);
