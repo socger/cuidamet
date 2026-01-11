@@ -117,20 +117,20 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEdi
                     </div>
                   </div>
                 </div>
-                
-                {/* Botón de edición - Solo para reservas confirmadas */}
-                {booking.status === 'confirmed' && onEditBooking && (
-                  <div className="px-4 pb-4">
-                    <button
-                      onClick={() => onEditBooking(booking.id)}
-                      className="w-full bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
-                    >
-                      <PencilIcon className="w-4 h-4" />
-                      <span>Editar reserva</span>
-                    </button>
-                  </div>
-                )}
               </div>
+                
+              {/* Botón de edición */}
+              {onEditBooking && (
+                <div className="px-4 pb-4">
+                  <button
+                    onClick={() => onEditBooking(booking.id)}
+                    className="w-full bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
+                  >
+                    <PencilIcon className="w-4 h-4" />
+                    <span>Editar reserva</span>
+                  </button>
+                </div>
+              )}
             </div>
           ))
         )}
