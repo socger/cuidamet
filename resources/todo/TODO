@@ -111,11 +111,5 @@ Ahora se renderiza una vista popup en la que te tienes que elegir/añadir lo sig
   - Añadir tu correo electrónico.
   - Añadir tu contraseña y confirmarla.
 
-Ahora cuando pulsas en el botón "Crear perfil", se renderiza la vista para introducir el código de verificación enviado a la cuenta de correo introducida por el usuario que se está registrando.
-Introducimos el código de verificación, pero, resulta que cuando pulsas sobre el botón "Verificar cuenta" se renderiza el componente "components/BookingsList.tsx", cuando lo que debería de hacer es continuar con el proceso de registro. Es decir, renderizar el componente "components/profiles/createProfile/FamiliarRegistration.tsx", ó el componente "components/profiles/createProfile/ProfesionalRegistration.tsx", según se hubiera elegido crear un perfil familiar ó profesional.
-Ten en cuenta que esto mismo ocurre cuando se pulsa la opción "Buzón" del componente "components/BottomNav.tsx". También debes de solucionarlo aquí.
-
-
-
 
 Cuando no estás autenticado, ni registrado, y pulsas el botón Ofrecer de la botonera común de la app ... directamente renderiza el componente "ProfesionalRegistration.tsx" ... cuando antes debe de registrarse o autenticarse.
