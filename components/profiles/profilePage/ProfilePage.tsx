@@ -171,23 +171,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
           />
         </div>
 
-        {/* User Info Header */}
-        {/* <div className="flex items-center space-x-4 py-6 px-2">
-                <div className="relative">
-                    <img
-                        src={displayProfile.photoUrl}
-                        alt="User Avatar"
-                        className="w-16 h-16 rounded-full object-cover border-2 shadow-md border-white"
-                    />
-                </div>
-                <div>
-                    <div className="flex items-center">
-                        <h2 className="text-xl font-bold text-slate-800">{displayProfile.name}</h2>
-                    </div>
-                    <p className="text-sm text-teal-600 font-medium bg-teal-50 px-2 py-0.5 rounded-full inline-block mt-1">Perfil Familiar</p>
-                </div>
-            </div> */}
-
         {/* Preferences / Needs Section */}
         <div className="mb-6">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
@@ -220,40 +203,6 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
             </div>
           </div>
         </div>
-
-        {/* Location & Languages Section */}
-        {/* {(displayProfile.location || displayProfile.languages.length > 0) && (
-          <div className="mb-6 px-2">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">
-              Mis detalles
-            </h3>
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 space-y-3">
-              {displayProfile.location && (
-                <div className="flex items-center text-slate-700">
-                  <MapPinIcon className="w-4 h-4 mr-2 text-teal-500" />
-                  <span className="text-sm">{displayProfile.location}</span>
-                </div>
-              )}
-              {displayProfile.languages.length > 0 && (
-                <div>
-                  <p className="text-xs text-slate-500 mb-2 font-medium">
-                    Idiomas
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    {displayProfile.languages.map((lang) => (
-                      <span
-                        key={lang}
-                        className="px-2.5 py-1 bg-teal-50 text-teal-700 text-xs rounded-lg border border-teal-100 font-medium"
-                      >
-                        {lang}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        )} */}
 
         {/* CUENTA Section */}
         <div className="mt-2">
