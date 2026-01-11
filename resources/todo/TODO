@@ -103,6 +103,3 @@ Cambiar todos los alert por el componente popup común para mensajes.
 
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
-
-* Estamos creando un proceso de edición de reservas.
-Parece que solo crea el botón "Editar reserva", en el componente "BookingsList.tsx", para la primera reserva. Y debe de crear este botón para todas las reservas. Te paso una imagen para que veas el problema.
