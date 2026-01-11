@@ -2,8 +2,6 @@
 De vez en cuando se nos presenta sobre el mapa un mensaje de que ha aparecido un nuevo cuidador en nuestra zona.
 Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
-* Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
-
 * Cuando una reserva se ha realizado, es decir el servicio se ha cumplido, viene el pago si lo hace desde la aplicación. Pero también viene el momento de calificar el servicio. Creo que no hay ninguna vista para realizar esta acción. Pero podríamos usar la vista que presenta "Mis Reservas" y allí que el usuario que contrató lo haga.
 
 * Comprobar que las reservas nuevas, las que creamos en la vista "Reservar", también aparecen también en la vista "Mis reservas"
@@ -29,13 +27,7 @@ Quiero comprobar como funciona este mensaje que aparece de vez en cuando.
 
 * Ver el resto de páginas como Inicio, favoritos, buzon, registrarse, perfil ... la página principal tiene contenido nuevo en el footer (revisar el resto header, body, etc)
 
-* Ver que ahora hay una nueva opción de cuidado ... CuidaClean
-
-* La barra de abajo de botones, no aparece en todas las pantallas que son llamadas desde otros sitios.
-
 * En la versión 1 de cuidamet si le pulsamos ver el mapa, nos sale un previo para activar la geolocalización. En la versión-7 no aparece este previo. ¿es necesario? ... creo que no.
-
-* Cuando el usuario le sale la pantalla de autenticación, si pulsamos en la opción de Registrarme tengo que ver que tipo de operación hace / lógica. Porque creo que todavía no está terminada (como la autenticación de 2 pasos vía correo electrónico, etc).
 
 * Las cookies de privacidad duran mucho. Habría que hacer que fueran perecederas xxxx tiempo. Así podría volver a aparecer la pantalla de aceptar las cookies de vez en cuando.
 * Hay que crear la vista para "Política de Privacidad" de las Cookies (lo que nadie lee). Y hay que crear la vista de "configuración de las cookies"
@@ -75,14 +67,13 @@ Por lo que cuando se entre en mapas, favoritos o en buscar cuidadores ... por de
 
 
 
-
-Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado desde por ejemplo la opción "Reservas", el registro no termina. Es decir que no pasa a registrar los datos del usuario (tanto si es cuidador o familiar). Si no que se va directamente a la vista de Reservas, sin llegar a darse de alta nunca el usuario. Lo mismo ocurre desde Buzón, etc. El usuario tiene que terminar los datos de su registro antes de pasar al componente que necesitamos (reservas, favoritos, buzón, etc.)
-
 Hemos creado el componente "components/MyCaregiverProfilePage.tsx" y este componente llama a los componentes "components/PhotoUploadModal.tsx" y "components/PremiumSubscriptionModal.tsx" ... pero no se que hacen (investigarlos).
 
 Cuando el usuario se crea como un cuidador, este debería de poder verse a si mismo cuando hace búsquedas de cuidadores. Ahora mismo no lo hace.
 
 El componente "components/PageHeader.tsx" se está usando en varios componentes y en realidad estos componentes deberían de teher su propio componente header o eso creo.
+
+--------------------------------------------------------------------------------------------------------
 
 Hemos creado el componente "components/SupportChatPage.tsx", se supone que tiene que mantener una conversación con Cuidi (ntro agente IA - Gemini 3.0). Pero cuando le comentamos/preguntamos algo, siempre nos devuelve el mensaje "Oops, algo ha salido mal. Por favor, inténtalo de nuevo" ... esto es debido a que no se ha creado, creo, la conexión con Gemini, la IA de Google. O porque no está creado en .env el token/api de conexión (por supuesto habría que pagar por un uso continuo).
 
@@ -98,3 +89,15 @@ Añadir a las copias del servidor el directorio cuidamet y la BD de cuidamet.
 
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
+
+--------------------------------------------------------------------------------------------------------
+
+
+* Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
+
+
+* Cuando el usuario le sale la pantalla de autenticación, si pulsamos en la opción de Registrarme tengo que ver que tipo de operación hace / lógica. Porque creo que todavía no está terminada (como la autenticación de 2 pasos vía correo electrónico, etc).
+
+
+Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado desde por ejemplo la opción "Reservas", el registro no termina. Es decir que no pasa a registrar los datos del usuario (tanto si es cuidador o familiar). Si no que se va directamente a la vista de Reservas, sin llegar a darse de alta nunca el usuario. Lo mismo ocurre desde Buzón, etc. El usuario tiene que terminar los datos de su registro antes de pasar al componente que necesitamos (reservas, favoritos, buzón, etc.)
+
