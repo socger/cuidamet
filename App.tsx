@@ -111,6 +111,9 @@ const App: React.FC = () => {
   const [clientProfile, setClientProfile] = useState<ClientProfile | null>(null);
   const [providerProfile, setProviderProfile] = useState<ProviderProfile | null>(null);
   const [activeRole, setActiveRole] = useState<'client' | 'provider'>('client');
+  const [userEmail, setUserEmail] = useState<string>('');
+  const [userName, setUserName] = useState<string>('');
+  const [userPhone, setUserPhone] = useState<string>('');
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -437,6 +440,7 @@ const App: React.FC = () => {
   const handleSignupSuccess = (role: UserRole, email: string) => {
     setIsAuthenticated(true);
     setAuthAttempts(0);
+    setUserEmail(email);
     
     // After signup, always redirect to registration flow first (regardless of pending action)
     // The user needs to complete their profile before accessing other features
@@ -569,6 +573,13 @@ const App: React.FC = () => {
         onNavigateBookings={handleNavigateBookings}
         unreadCount={unreadCount}
         isAuthenticated={isAuthenticated}
+        initialStep={2}
+        initialData={{
+          ...providerProfile,
+          email: userEmail || providerProfile?.email,
+          name: userName || providerProfile?.name,
+          phone: userPhone || providerProfile?.phone,
+        }}
       />;
     } else if (currentView === "booking" && bookingProviderId) {
       const provider = providersWithDistance.find(
