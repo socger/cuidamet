@@ -275,8 +275,8 @@ const AuthPage: React.FC<AuthPageProps> = ({
             {mode === "login" && "Bienvenido de nuevo"}
             {mode === "signup" &&
               (preselectedRole
-                ? `Crear cuenta de ${
-                    preselectedRole === "provider" ? "Cuidador" : "Familiar"
+                ? `Crear perfil ${
+                    preselectedRole === "provider" ? "profesional" : "familiar"
                   }`
                 : "Crea tu cuenta gratis")}
             {mode === "forgotPassword" && "Recuperar contraseña"}
@@ -310,19 +310,18 @@ const AuthPage: React.FC<AuthPageProps> = ({
 
               {/* <h2 className="text-2xl font-bold text-slate-800">
                         {mode === 'login' && 'Bienvenido de nuevo'}
-                        {mode === 'signup' && (preselectedRole ? `Crear cuenta de ${preselectedRole === 'provider' ? 'Cuidador' : 'Familiar'}` : 'Crea tu cuenta gratis')}
+                        {mode === 'signup' && (preselectedRole ? `Crear perfil ${preselectedRole === 'provider' ? 'profesional' : 'familiar'}` : 'Crea tu cuenta gratis')}
                         {mode === 'forgotPassword' && 'Recuperar contraseña'}
                         {mode === 'verifyEmail' && 'Verifica tu email'}
                     </h2> */}
-              <p className="text-slate-500 mt-2 text-sm">
-                {mode === "login" && "Modo desarrollo: pulsa para entrar."}
-                {mode === "signup" &&
-                  "Modo desarrollo: validaciones desactivadas."}
-                {mode === "forgotPassword" &&
-                  "Introduce tu email y te enviaremos instrucciones."}
-                {mode === "verifyEmail" &&
-                  `Código enviado a ${email} (pulsa verificar).`}
-              </p>
+              {(mode === "forgotPassword" || mode === "verifyEmail") && (
+                <p className="text-slate-500 mt-2 text-sm">
+                  {mode === "forgotPassword" &&
+                    "Introduce tu email y te enviaremos instrucciones."}
+                  {mode === "verifyEmail" &&
+                    `Código enviado a ${email} (pulsa verificar).`}
+                </p>
+              )}
             </div>
 
             {mode === "verifyEmail" && (
@@ -525,10 +524,10 @@ const AuthPage: React.FC<AuthPageProps> = ({
                   ) : (
                     <>
                       {mode === "login" && "Iniciar Sesión"}
-                      {mode === "signup" &&
-                        (preselectedRole
-                          ? "Crear Cuenta"
-                          : "Crear Cuenta")}
+                      {
+                        mode === "signup" &&
+                        (preselectedRole ? "Crear perfil" : "Crear perfil")
+                      }
                       {mode === "forgotPassword" && "Enviar Instrucciones"}
                     </>
                   )}
