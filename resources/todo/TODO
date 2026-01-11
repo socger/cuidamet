@@ -99,5 +99,23 @@ Cambiar todos los alert por el componente popup común para mensajes.
 * Cuando el usuario le sale la pantalla de autenticación, si pulsamos en la opción de Registrarme tengo que ver que tipo de operación hace / lógica. Porque creo que todavía no está terminada (como la autenticación de 2 pasos vía correo electrónico, etc).
 
 
-Cuando te estas registrando, pero el componente AuthPage.tsx ha sido llamado desde por ejemplo la opción "Reservas", el registro no termina. Es decir que no pasa a registrar los datos del usuario (tanto si es cuidador o familiar). Si no que se va directamente a la vista de Reservas, sin llegar a darse de alta nunca el usuario. Lo mismo ocurre desde Buzón, etc. El usuario tiene que terminar los datos de su registro antes de pasar al componente que necesitamos (reservas, favoritos, buzón, etc.)
 
+Imagina la siguiente situación, todavía no estás autenticado en la app.
+Ni tan siquiera has creado en alguna ocasión tu perfil en la app. 
+Ahora pulsas, en la botonera común de la app (componente "components/BottomNav.tsx"), la opción "Reservas". 
+Como no estás autenticado, entonces se renderiza el componente "components/AuthPage.tsx". 
+Y como nunca te has creado un perfil en la app, pulsas sobre la opción "Registrarte".
+
+Ahora se renderiza una vista popup en la que te tienes que elegir/añadir lo siguiente:
+  - Elegir que tipo de perfil vas a crear ("Perfil familiar" ó "Perfil profesional").
+  - Añadir tu correo electrónico.
+  - Añadir tu contraseña y confirmarla.
+
+Ahora cuando pulsas en el botón "Crear perfil", se renderiza la vista para introducir el código de verificación enviado a la cuenta de correo introducida por el usuario que se está registrando.
+Introducimos el código de verificación, pero, resulta que cuando pulsas sobre el botón "Verificar cuenta" se renderiza el componente "components/BookingsList.tsx", cuando lo que debería de hacer es continuar con el proceso de registro. Es decir, renderizar el componente "components/profiles/createProfile/FamiliarRegistration.tsx", ó el componente "components/profiles/createProfile/ProfesionalRegistration.tsx", según se hubiera elegido crear un perfil familiar ó profesional.
+Ten en cuenta que esto mismo ocurre cuando se pulsa la opción "Buzón" del componente "components/BottomNav.tsx". También debes de solucionarlo aquí.
+
+
+
+
+Cuando no estás autenticado, ni registrado, y pulsas el botón Ofrecer de la botonera común de la app ... directamente renderiza el componente "ProfesionalRegistration.tsx" ... cuando antes debe de registrarse o autenticarse.
