@@ -346,7 +346,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                   disabled={isLoading}
                   className="w-full bg-teal-500 text-white py-4 rounded-xl font-bold shadow-lg shadow-teal-500/30 hover:bg-teal-600 transition-all disabled:bg-slate-400 transform active:scale-95"
                 >
-                  {isLoading ? "Verificando..." : "Verificar Cuenta"}
+                  {isLoading ? "Verificando..." : "Verificar cuenta"}
                 </button>
                 <button
                   type="button"
