@@ -1,0 +1,127 @@
+import React, { useEffect, useState } from 'react';
+import { bookingService, Booking } from '../../services/bookingService';
+import CalendarDaysIcon from '../icons/CalendarDaysIcon';
+import ClockIcon from '../icons/ClockIcon';
+import CurrencyEuroIcon from '../icons/CurrencyEuroIcon';
+import PageHeader from './BookingList_Header';
+import PlusCircleIcon from '../icons/PlusCircleIcon';
+
+interface BookingsListProps {
+  onBack: () => void;
+  onNewBooking: () => void;
+}
+
+const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking }) => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+
+  useEffect(() => {
+    setBookings(bookingService.getBookings());
+  }, []);
+
+  const getStatusColor = (status: Booking['status']) => {
+    switch (status) {
+      case 'confirmed': return 'bg-green-100 text-green-800';
+      case 'completed': return 'bg-slate-100 text-slate-800';
+      case 'cancelled': return 'bg-red-100 text-red-800';
+      default: return 'bg-slate-100 text-slate-800';
+    }
+  };
+
+  const getStatusLabel = (status: Booking['status']) => {
+    switch (status) {
+      case 'confirmed': return 'Confirmada';
+      case 'completed': return 'Completada';
+      case 'cancelled': return 'Cancelada';
+      default: return status;
+    }
+  };
+
+  return (
+    <div className="bg-slate-50 min-h-screen flex flex-col animate-fade-in pb-24">
+      <PageHeader 
+        title="Mis reservas" 
+        onBack={onBack}
+        rightAction={
+          <button
+            onClick={onNewBooking}
+            className="bg-teal-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors text-sm flex items-center gap-2"
+          >
+            <PlusCircleIcon className="w-4 h-4" />
+            <span>Reservar</span>
+          </button>
+        }
+      />
+      
+      <main className="flex-grow p-4 space-y-4">
+        {bookings.length === 0 ? (
+          <div className="text-center py-10 text-slate-500">
+            <p>No tienes reservas realizadas.</p>
+          </div>
+        ) : (
+          bookings.map((booking) => (
+            <div key={booking.id} className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <div className="p-4">
+                <div className="flex justify-between items-start mb-3">
+                  <div className="flex items-center space-x-3">
+                    <img 
+                      src={booking.providerPhotoUrl} 
+                      alt={booking.providerName} 
+                      className="w-10 h-10 rounded-full object-cover border border-slate-100"
+                    />
+                    <div>
+                      <h3 className="font-bold text-slate-800">{booking.providerName}</h3>
+                      <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${getStatusColor(booking.status)}`}>
+                        {getStatusLabel(booking.status)}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="block font-bold text-teal-600 text-lg">{booking.totalCost.toFixed(2)}€</span>
+                    <span className="text-xs text-slate-500">{booking.hours} horas</span>
+                  </div>
+                </div>
+                
+                <div className="bg-teal-50/100 p-3 rounded-lg">
+                  <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">Datos del servicio</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                    {/* Bloque de Inicio */}
+                    <div className="bg-white p-3 rounded-lg border border-slate-200">
+                      <p className="font-medium text-slate-700 mb-2">Inicio del servicio</p>
+                      <div className="flex items-center justify-between text-slate-600">
+                        <div className="flex items-center gap-2">
+                          <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
+                          <span>{new Date(booking.startDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <ClockIcon className="w-4 h-4 text-slate-400" />
+                          <span>{booking.startTime}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Bloque de Fin */}
+                    <div className="bg-white p-3 rounded-lg border border-slate-200">
+                      <p className="font-medium text-slate-700 mb-2">Fin del servicio</p>
+                      <div className="flex items-center justify-between text-slate-600">
+                        <div className="flex items-center gap-2">
+                          <CalendarDaysIcon className="w-4 h-4 text-slate-400" />
+                          <span>{new Date(booking.endDate).toLocaleDateString()}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <ClockIcon className="w-4 h-4 text-slate-400" />
+                          <span>{booking.endTime}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </main>
+    </div>
+  );
+};
+
+export default BookingsList;
