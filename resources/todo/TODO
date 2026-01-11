@@ -111,5 +111,3 @@ Ahora se renderiza una vista popup en la que te tienes que elegir/añadir lo sig
   - Añadir tu correo electrónico.
   - Añadir tu contraseña y confirmarla.
 
-
-Cuando no estás autenticado, ni registrado, y pulsas el botón Ofrecer de la botonera común de la app ... directamente renderiza el componente "ProfesionalRegistration.tsx" ... cuando antes debe de registrarse o autenticarse.
