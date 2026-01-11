@@ -902,7 +902,7 @@ const App: React.FC = () => {
   // For map view, render without wrapper to allow full screen
   if (view === "map") {
     return (
-      <>
+      <>  
         {renderContent()}
         <BottomNav
           currentView={view}
@@ -914,6 +914,7 @@ const App: React.FC = () => {
           onNavigateBookings={handleNavigateBookings}
           unreadCount={unreadCount}
           isAuthenticated={isAuthenticated}
+          activeRole={activeRole}
         />
         <CookieConsent />
         <AlertModal 
@@ -939,6 +940,7 @@ const App: React.FC = () => {
           onNavigateBookings={handleNavigateBookings}
           unreadCount={unreadCount}
           isAuthenticated={isAuthenticated}
+          activeRole={activeRole}
         />
       )}
       <CookieConsent />

@@ -4,6 +4,7 @@ import PlusCircleIcon from './icons/PlusCircleIcon';
 import InboxIcon from './icons/InboxIcon';
 import UserIcon from './icons/UserIcon';
 import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
+import { UserRole } from '../types';
 
 interface BottomNavProps {
     currentView: 'landing' | 'providers' | 'offer' | 'inbox' | 'chat' | 'myProfile' | 'map' | 'bookings';
@@ -14,9 +15,10 @@ interface BottomNavProps {
     onNavigateBookings: () => void;
     unreadCount: number;
     isAuthenticated: boolean;
+    activeRole?: UserRole | null;
 }
 
-const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount, isAuthenticated }) => {
+const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNavigateOffer, onNavigateInbox, onNavigateProfile, onNavigateBookings, unreadCount, isAuthenticated, activeRole }) => {
     const navItems = [
         { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing', action: onNavigateHome },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
@@ -63,14 +65,23 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                     {offerItem && (
                         <div className="w-1/5 flex justify-center">
                              <button
-                                onClick={offerItem.action}
+                                onClick={activeRole === 'client' ? undefined : offerItem.action}
+                                disabled={activeRole === 'client'}
                                 className="flex flex-col items-center justify-center text-center group focus:outline-none"
                                 aria-label={offerItem.label}
                             >
-                                <div className="bg-teal-500 text-white rounded-full w-16 h-16 flex items-center justify-center shadow-lg transform -translate-y-5 group-hover:bg-teal-600 transition-all duration-300 group-hover:scale-105 group-focus:ring-2 group-focus:ring-offset-2 group-focus:ring-teal-500">
+                                <div className={`rounded-full w-16 h-16 flex items-center justify-center shadow-lg transform -translate-y-5 transition-all duration-300 ${
+                                    activeRole === 'client'
+                                        ? 'bg-slate-300 text-slate-400 cursor-not-allowed'
+                                        : 'bg-teal-500 text-white group-hover:bg-teal-600 group-hover:scale-105 group-focus:ring-2 group-focus:ring-offset-2 group-focus:ring-teal-500'
+                                }`}>
                                     <offerItem.icon className="w-8 h-8"/>
                                 </div>
-                                <span className={`text-xs font-medium transition-colors transform -translate-y-3.5 ${offerItem.active ? 'text-teal-500' : 'text-slate-600 group-hover:text-teal-500'}`}>
+                                <span className={`text-xs font-medium transition-colors transform -translate-y-3.5 ${
+                                    activeRole === 'client'
+                                        ? 'text-slate-400'
+                                        : offerItem.active ? 'text-teal-500' : 'text-slate-600 group-hover:text-teal-500'
+                                }`}>
                                     {offerItem.label}
                                 </span>
                             </button>
