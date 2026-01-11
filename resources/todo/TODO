@@ -90,10 +90,10 @@ Añadir a las copias del servidor el directorio cuidamet y la BD de cuidamet.
 De vez en cuando comprobar si se coló en toda la app algún alert() de javascript
 Cambiar todos los alert por el componente popup común para mensajes.
 
+* Cuando el usuario le sale la pantalla de autenticación, si pulsamos en la opción de Registrarme tengo que ver que tipo de operación hace / lógica. Porque creo que todavía no está terminada (como la autenticación de 2 pasos vía correo electrónico, etc).
+
 --------------------------------------------------------------------------------------------------------
 
 
 * Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
 
-
-* Cuando el usuario le sale la pantalla de autenticación, si pulsamos en la opción de Registrarme tengo que ver que tipo de operación hace / lógica. Porque creo que todavía no está terminada (como la autenticación de 2 pasos vía correo electrónico, etc).
