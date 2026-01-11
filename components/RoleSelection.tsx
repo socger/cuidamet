@@ -35,12 +35,12 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelec
                  <div className="w-14 h-14 bg-teal-100 rounded-2xl flex items-center justify-center mb-4 text-teal-600 group-hover:bg-teal-500 group-hover:text-white transition-colors">
                      <SearchIcon className="w-8 h-8" />
                  </div>
-                 <h3 className="text-xl font-bold text-slate-800 mb-2">Busco un cuidador</h3>
+                 <h3 className="text-xl font-bold text-slate-800 mb-2">Crea tu perfil familiar</h3>
                  <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                     Encuentra profesionales de confianza para mayores, niños, mascotas o limpieza.
+                     Encuentra y contrata a profesionales de confianza para tus necesidades.
                  </p>
                  <div className="flex items-center text-teal-600 font-semibold text-sm group-hover:translate-x-2 transition-transform">
-                     Empezar búsqueda <ChevronRightIcon className="w-4 h-4 ml-1" />
+                     ¿Empezamos? <ChevronRightIcon className="w-4 h-4 ml-1" />
                  </div>
              </div>
         </button>
@@ -57,12 +57,12 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelec
                  <div className="w-14 h-14 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 text-blue-600 group-hover:bg-blue-500 group-hover:text-white transition-colors">
                      <HandRaisedIcon className="w-8 h-8" />
                  </div>
-                 <h3 className="text-xl font-bold text-slate-800 mb-2">Quiero trabajar</h3>
+                 <h3 className="text-xl font-bold text-slate-800 mb-2">Crea tu perfil profesional</h3>
                  <p className="text-slate-600 text-sm leading-relaxed mb-4">
-                     Ofrece tus servicios, gestiona tu horario y gana dinero cuidando de lo que importa.
+                     Ofrece tus servicios, gestiona tu disponibilidad y revisa tus reservas.
                  </p>
                  <div className="flex items-center text-blue-600 font-semibold text-sm group-hover:translate-x-2 transition-transform">
-                     Crear perfil profesional <ChevronRightIcon className="w-4 h-4 ml-1" />
+                     ¿Empezamos? <ChevronRightIcon className="w-4 h-4 ml-1" />
                  </div>
              </div>
         </button>
