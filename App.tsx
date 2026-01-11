@@ -65,6 +65,7 @@ const App: React.FC = () => {
     | "bookings"
     | "roleSelection"
     | "familiarRegistration"
+    | "profesionalRegistration"
     | "securitySettings"
     | "notifications"
     | "legalInfo"
@@ -428,31 +429,24 @@ const App: React.FC = () => {
     setIsAuthenticated(true);
     setAuthAttempts(0);
     
-    // If user is signing up as client (familiar), redirect to familiarRegistration
-    if (role === 'client' && !pendingAction) {
+    // After signup, always redirect to registration flow first (regardless of pending action)
+    // The user needs to complete their profile before accessing other features
+    if (role === 'client') {
+      setActiveRole('client');
       setView('familiarRegistration');
+      setPendingAction(null);
       return;
     }
     
-    // If user is signing up as provider (cuidador), redirect to profesionalRegistration
-    if (role === 'provider' && !pendingAction) {
-      setView('offer');
+    if (role === 'provider') {
+      setActiveRole('provider');
+      setView('profesionalRegistration');
+      setPendingAction(null);
       return;
     }
     
-    // Execute pending action
-    if (pendingAction === 'booking' && bookingProviderId) {
-      setView('booking');
-    } else if (pendingAction === 'bookings') {
-      setView('bookings');
-    } else if (pendingAction === 'inbox') {
-      setView('inbox');
-    } else if (pendingAction === 'chat' && bookingProviderId) {
-      // Use bookingProviderId which stores the provider ID for chat
-      handleContactProviderAfterAuth(bookingProviderId);
-    } else {
-      setView(previousViewBeforeAuth);
-    }
+    // Fallback (shouldn't reach here normally)
+    setView(previousViewBeforeAuth);
     setPendingAction(null);
   };
 
@@ -780,6 +774,20 @@ const App: React.FC = () => {
           }, 2000);
         }}
         onBack={handleCancelFamiliarRegistration}
+      />;
+    } else if (currentView === "profesionalRegistration") {
+      mainContent = <ProfesionalRegistration 
+        onComplete={handleProviderRegistrationComplete}
+        onCancel={handleCancelProfesionalRegistration}
+        currentView={view}
+        onNavigateHome={handleNavigateHome}
+        onNavigateFavorites={handleNavigateFavorites}
+        onNavigateOffer={handleNavigateOffer}
+        onNavigateInbox={handleNavigateInbox}
+        onNavigateProfile={handleNavigateMyProfile}
+        onNavigateBookings={handleNavigateBookings}
+        unreadCount={unreadCount}
+        isAuthenticated={isAuthenticated}
       />;
     } else if (currentView === "bookings") {
       mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} />;
