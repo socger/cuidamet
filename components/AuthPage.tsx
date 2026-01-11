@@ -189,7 +189,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
               role === "client" ? "text-teal-900" : "text-slate-600"
             }`}
           >
-            Soy Familiar
+            Perfil familiar
           </span>
           <span className="text-xs text-slate-500 mt-1">Busco cuidados</span>
         </button>
@@ -212,7 +212,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
               role === "provider" ? "text-blue-900" : "text-slate-600"
             }`}
           >
-            Soy Cuidador
+            Perfil profesional
           </span>
           <span className="text-xs text-slate-500 mt-1">Ofrezco servicios</span>
         </button>
@@ -278,7 +278,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                 ? `Crear perfil ${
                     preselectedRole === "provider" ? "profesional" : "familiar"
                   }`
-                : "Crea tu cuenta gratis")}
+                : "Elige y crea tu tipo de perfil")}
             {mode === "forgotPassword" && "Recuperar contraseña"}
             {mode === "verifyEmail" && "Verifica tu email"}
           </h2>
@@ -302,20 +302,19 @@ const AuthPage: React.FC<AuthPageProps> = ({
                 />
               </div>
 
-              {/* {pendingActionMessage && (
-                        <div className="mb-4 bg-teal-50 text-teal-800 px-4 py-2 rounded-lg text-sm font-medium border border-teal-100 animate-pulse">
-                            {pendingActionMessage}
-                        </div>
-                    )} */}
+              {pendingActionMessage && (
+                <div className="mb-4 bg-teal-50 text-teal-800 px-4 py-2 rounded-lg text-sm font-medium border border-teal-100 animate-pulse">
+                    {pendingActionMessage}
+                </div>
+              )}
 
-              {/* <h2 className="text-2xl font-bold text-slate-800">
-                        {mode === 'login' && 'Bienvenido de nuevo'}
-                        {mode === 'signup' && (preselectedRole ? `Crear perfil ${preselectedRole === 'provider' ? 'profesional' : 'familiar'}` : 'Crea tu cuenta gratis')}
-                        {mode === 'forgotPassword' && 'Recuperar contraseña'}
-                        {mode === 'verifyEmail' && 'Verifica tu email'}
-                    </h2> */}
               {(mode === "forgotPassword" || mode === "verifyEmail") && (
                 <p className="text-slate-500 mt-2 text-sm">
+                  {/* La variable "mode" puede tener los valores: 
+                    - 'login'
+                    - 'signup'
+                    - 'forgotPassword'
+                    - 'verifyEmail' */}
                   {mode === "forgotPassword" &&
                     "Introduce tu email y te enviaremos instrucciones."}
                   {mode === "verifyEmail" &&

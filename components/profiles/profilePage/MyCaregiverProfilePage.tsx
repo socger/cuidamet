@@ -395,7 +395,7 @@ const MyCaregiverProfilePage: React.FC<MyCaregiverProfilePageProps> = ({
         {/* BLOCK 5: Account & Settings */}
         <section className="mb-6">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
-            Cuenta y Seguridad
+            Cuenta y seguridad
           </h3>
 
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">

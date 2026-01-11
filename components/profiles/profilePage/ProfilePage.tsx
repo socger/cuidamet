@@ -258,7 +258,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({
         {/* CUENTA Section */}
         <div className="mt-2">
           <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-4">
-            CUENTA Y SEGURIDAD
+            Cuenta y seguridad
           </h3>
           <ul className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <ListItem
