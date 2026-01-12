@@ -13,8 +13,8 @@ let bookings: Booking[] = [
   {
     id: '1',
     providerId: 1,
-    providerName: 'María García',
-    providerPhotoUrl: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    providerName: 'Ana García',
+    providerPhotoUrl: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=400&auto=format&fit=crop',
     startDate: '2023-11-15',
     startTime: '09:00',
     endDate: '2023-11-16',
@@ -29,8 +29,8 @@ let bookings: Booking[] = [
   {
     id: '2',
     providerId: 2,
-    providerName: 'Carlos Rodríguez',
-    providerPhotoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
+    providerName: 'Carlos Rodriguez',
+    providerPhotoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=400&auto=format&fit=crop',
     startDate: '2023-12-20',
     startTime: '15:00',
     endDate: '2023-12-20',
