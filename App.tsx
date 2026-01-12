@@ -118,6 +118,7 @@ const App: React.FC = () => {
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
   const [editingBookingId, setEditingBookingId] = useState<string | null>(null);
+  const [cloningBookingId, setCloningBookingId] = useState<string | null>(null);
   
   // Alert Modal state
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
@@ -514,6 +515,7 @@ const App: React.FC = () => {
     setView('profile');
     setBookingProviderId(null);
     setEditingBookingId(null);
+    setCloningBookingId(null);
   };
   
   const handleEditBooking = (bookingId: string) => {
@@ -521,6 +523,16 @@ const App: React.FC = () => {
     if (booking) {
       setBookingProviderId(booking.providerId);
       setEditingBookingId(bookingId);
+      setView('booking');
+    }
+  };
+  
+  const handleCloneBooking = (bookingId: string) => {
+    const booking = bookingService.getBookingById(bookingId);
+    if (booking) {
+      setBookingProviderId(booking.providerId);
+      setEditingBookingId(null); // No estamos editando, estamos creando una nueva
+      setCloningBookingId(bookingId); // Guardamos el ID de la reserva que estamos clonando
       setView('booking');
     }
   };
@@ -535,12 +547,16 @@ const App: React.FC = () => {
       setAlertModal({ isOpen: true, message: `Reserva actualizada: ${details.hours} horas por ${details.totalCost}€`, title: 'Reserva Actualizada' });
       setEditingBookingId(null);
     } else {
-      // Create new booking
+      // Create new booking (incluye las clonadas)
       const provider = providers.find(p => p.id === details.providerId);
       if (provider) {
         bookingService.addBooking(details, provider.name, provider.photoUrl);
       }
-      setAlertModal({ isOpen: true, message: `Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`, title: 'Reserva Confirmada' });
+      const message = cloningBookingId 
+        ? `Reserva duplicada y confirmada: ${details.hours} horas por ${details.totalCost}€`
+        : `Reserva confirmada para ${details.hours} horas por ${details.totalCost}€`;
+      setAlertModal({ isOpen: true, message, title: 'Reserva Confirmada' });
+      setCloningBookingId(null);
     }
     
     setView('bookings'); // Navigate to bookings list
@@ -605,19 +621,22 @@ const App: React.FC = () => {
       );
       if (provider) {
         const editingBooking = editingBookingId ? bookingService.getBookingById(editingBookingId) : null;
+        const cloningBooking = cloningBookingId ? bookingService.getBookingById(cloningBookingId) : null;
+        const sourceBooking = editingBooking || cloningBooking;
+        
         mainContent = (
           <BookingPage
             provider={provider}
             onBack={handleBookingBack}
             onProceed={handleBookingProceed}
             isEditing={!!editingBookingId}
-            initialBooking={editingBooking ? {
-              startDate: editingBooking.startDate,
-              startTime: editingBooking.startTime,
-              endDate: editingBooking.endDate,
-              endTime: editingBooking.endTime,
+            initialBooking={sourceBooking ? {
+              startDate: sourceBooking.startDate,
+              startTime: sourceBooking.startTime,
+              endDate: sourceBooking.endDate,
+              endTime: sourceBooking.endTime,
               promoCode: '',
-              addInsurance: editingBooking.insuranceCost > 0,
+              addInsurance: sourceBooking.insuranceCost > 0,
             } : undefined}
           />
         );
@@ -838,7 +857,7 @@ const App: React.FC = () => {
         isAuthenticated={isAuthenticated}
       />;
     } else if (currentView === "bookings") {
-      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} onEditBooking={handleEditBooking} />;
+      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} onEditBooking={handleEditBooking} onCloneBooking={handleCloneBooking} />;
     } else if (currentView === "securitySettings") {
       mainContent = <SecuritySettingsPage 
         onBack={() => setView("myProfile")} 

@@ -6,14 +6,16 @@ import CurrencyEuroIcon from '../icons/CurrencyEuroIcon';
 import PageHeader from './BookingList_Header';
 import PlusCircleIcon from '../icons/PlusCircleIcon';
 import PencilIcon from '../icons/PencilIcon';
+import DocumentDuplicateIcon from '../icons/DocumentDuplicateIcon';
 
 interface BookingsListProps {
   onBack: () => void;
   onNewBooking: () => void;
   onEditBooking?: (bookingId: string) => void;
+  onCloneBooking?: (bookingId: string) => void;
 }
 
-const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEditBooking }) => {
+const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEditBooking, onCloneBooking }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
 
   useEffect(() => {
@@ -119,16 +121,27 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEdi
                 </div>
               </div>
                 
-              {/* Botón de edición */}
-              {onEditBooking && (
-                <div className="px-4 pb-4">
-                  <button
-                    onClick={() => onEditBooking(booking.id)}
-                    className="w-full bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
-                  >
-                    <PencilIcon className="w-4 h-4" />
-                    <span>Editar reserva</span>
-                  </button>
+              {/* Botones de acción */}
+              {(onEditBooking || onCloneBooking) && (
+                <div className="px-4 pb-4 flex gap-2">
+                  {onEditBooking && (
+                    <button
+                      onClick={() => onEditBooking(booking.id)}
+                      className="flex-1 bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
+                    >
+                      <PencilIcon className="w-4 h-4" />
+                      <span>Editar</span>
+                    </button>
+                  )}
+                  {onCloneBooking && (
+                    <button
+                      onClick={() => onCloneBooking(booking.id)}
+                      className="flex-1 bg-teal-50 text-teal-700 px-4 py-2.5 rounded-lg font-medium hover:bg-teal-100 transition-colors flex items-center justify-center gap-2 border border-teal-300"
+                    >
+                      <DocumentDuplicateIcon className="w-4 h-4" />
+                      <span>Repetir</span>
+                    </button>
+                  )}
                 </div>
               )}
             </div>
