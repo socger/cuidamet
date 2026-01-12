@@ -97,14 +97,18 @@ Cambiar todos los alert por el componente popup común para mensajes.
 * Cuando el usuario está creando su perfil, registrándose al principio, ya introdujo su correo electrónico, por lo que en el step 1 debería crearse y no modificarse. ¿Pero deberíamos entonces de crear un proceso para cambiar entonces en algún momento este correo electrónico?
 
 
+
+
+
+
 * Si el usuario tiene el perfil Familiar, podrá crear reservas nuevas e incluso modificarlas. Pero si el usuario es profesional, sólo puede consultar las reservas, no podrá crear ni modificarlas.
 
 * Si el usuario es un familiar, cuando crea o modifica una reserva no puede cambiar nada de los precios establecidos por el cuidador. Sólo podrá elegir uno de sus servicios y cambiar los horarios. Siempre y cuando el cuidador hubiera elegido una franja horario de acuerdo a las necesidades del familiar.
 
 
-Las reservas deberían de poder tener una gestión para saber si están confirmadas, si está terminado el trabajo y un control de contento/gestión de estrellas por parte del familiar ... para informar sobre el estado de contento que está por el servicio
+Las reservas deberían de poder tener una gestión para saber si están confirmadas, si está terminado el trabajo(completada) y un control de contento/gestión de estrellas por parte del familiar ... para informar sobre el estado de contento que está por el servicio
 
 Además un cuidador tiene varios tipos de servicios y la reserva no permite elegir entre uno de los servicios que ofrece. Además si tiene contratado algún tipo de bono. No va restando servicios realizados al bono contratado.
 
-La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería ... además cambia al cuidador, no pone al mismo cuidador de la reserva que se clonó.
+La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería
 
