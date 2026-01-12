@@ -1,0 +1,9 @@
+# This file is used to configure the pnpm workspace settings.
+
+# It specifies the minimum age a package release must have before it can be considered for updates, 
+minimumReleaseAge: 1440 # in minutes (1440 minutes = 1 day)
+
+# if you want to exclude certain packages of the last
+# minimumReleaseAgeExclude:
+#   - react
+#   - react-dom
