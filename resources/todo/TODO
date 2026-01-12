@@ -102,4 +102,9 @@ Cambiar todos los alert por el componente popup común para mensajes.
 * Si el usuario es un familiar, cuando crea o modifica una reserva no puede cambiar nada de los precios establecidos por el cuidador. Sólo podrá elegir uno de sus servicios y cambiar los horarios. Siempre y cuando el cuidador hubiera elegido una franja horario de acuerdo a las necesidades del familiar.
 
 
-* Para la vista reservar igual necesitamos crear algún tipo de duplicidad de contratación, por si se necesitara que el mismo servicio se hiciera durante varias semanas el mismo día de la semana y a la misma hora.
+Las reservas deberían de poder tener una gestión para saber si están confirmadas, si está terminado el trabajo y un control de contento/gestión de estrellas por parte del familiar ... para informar sobre el estado de contento que está por el servicio
+
+Además un cuidador tiene varios tipos de servicios y la reserva no permite elegir entre uno de los servicios que ofrece. Además si tiene contratado algún tipo de bono. No va restando servicios realizados al bono contratado.
+
+La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería ... además cambia al cuidador, no pone al mismo cuidador de la reserva que se clonó.
+
