@@ -127,25 +127,39 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEdi
               </div>
                 
               {/* Botones de acción */}
-              {(permissions.canEdit || permissions.canDuplicate) && (onEditBooking || onCloneBooking) && (
+              {onEditBooking && (
                 <div className="px-4 pb-4 flex gap-2">
-                  {permissions.canEdit && onEditBooking && (
+                  {/* Para profesionales: solo botón "Consultar" */}
+                  {!permissions.canEdit && (
                     <button
                       onClick={() => onEditBooking(booking.id)}
-                      className="flex-1 bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
+                      className="flex-1 bg-blue-50 text-blue-700 px-4 py-2.5 rounded-lg font-medium hover:bg-blue-100 transition-colors flex items-center justify-center gap-2 border border-blue-300"
                     >
                       <PencilIcon className="w-4 h-4" />
-                      <span>Editar</span>
+                      <span>Consultar</span>
                     </button>
                   )}
-                  {permissions.canDuplicate && onCloneBooking && (
-                    <button
-                      onClick={() => onCloneBooking(booking.id)}
-                      className="flex-1 bg-teal-50 text-teal-700 px-4 py-2.5 rounded-lg font-medium hover:bg-teal-100 transition-colors flex items-center justify-center gap-2 border border-teal-300"
-                    >
-                      <DocumentDuplicateIcon className="w-4 h-4" />
-                      <span>Repetir</span>
-                    </button>
+                  
+                  {/* Para familiares: botones "Editar" y "Repetir" */}
+                  {permissions.canEdit && (
+                    <>
+                      <button
+                        onClick={() => onEditBooking(booking.id)}
+                        className="flex-1 bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
+                      >
+                        <PencilIcon className="w-4 h-4" />
+                        <span>Editar</span>
+                      </button>
+                      {permissions.canDuplicate && onCloneBooking && (
+                        <button
+                          onClick={() => onCloneBooking(booking.id)}
+                          className="flex-1 bg-teal-50 text-teal-700 px-4 py-2.5 rounded-lg font-medium hover:bg-teal-100 transition-colors flex items-center justify-center gap-2 border border-teal-300"
+                        >
+                          <DocumentDuplicateIcon className="w-4 h-4" />
+                          <span>Repetir</span>
+                        </button>
+                      )}
+                    </>
                   )}
                 </div>
               )}
