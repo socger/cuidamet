@@ -630,6 +630,7 @@ const App: React.FC = () => {
             onBack={handleBookingBack}
             onProceed={handleBookingProceed}
             isEditing={!!editingBookingId}
+            userRole={activeRole}
             initialBooking={sourceBooking ? {
               startDate: sourceBooking.startDate,
               startTime: sourceBooking.startTime,
@@ -857,7 +858,7 @@ const App: React.FC = () => {
         isAuthenticated={isAuthenticated}
       />;
     } else if (currentView === "bookings") {
-      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} onEditBooking={handleEditBooking} onCloneBooking={handleCloneBooking} />;
+      mainContent = <BookingsList onBack={handleNavigateHome} onNewBooking={handleShowAllProviders} onEditBooking={handleEditBooking} onCloneBooking={handleCloneBooking} userRole={activeRole} />;
     } else if (currentView === "securitySettings") {
       mainContent = <SecuritySettingsPage 
         onBack={() => setView("myProfile")} 

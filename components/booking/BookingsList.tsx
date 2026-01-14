@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { bookingService, Booking } from '../../services/bookingService';
+import { UserRole, getBookingPermissions } from '../../types';
 import CalendarDaysIcon from '../icons/CalendarDaysIcon';
 import ClockIcon from '../icons/ClockIcon';
 import CurrencyEuroIcon from '../icons/CurrencyEuroIcon';
@@ -13,10 +14,12 @@ interface BookingsListProps {
   onNewBooking: () => void;
   onEditBooking?: (bookingId: string) => void;
   onCloneBooking?: (bookingId: string) => void;
+  userRole: UserRole;
 }
 
-const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEditBooking, onCloneBooking }) => {
+const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEditBooking, onCloneBooking, userRole }) => {
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const permissions = getBookingPermissions(userRole);
 
   useEffect(() => {
     setBookings(bookingService.getBookings());
@@ -46,13 +49,15 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEdi
         title="Mis reservas" 
         onBack={onBack}
         rightAction={
-          <button
-            onClick={onNewBooking}
-            className="bg-teal-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors text-sm flex items-center gap-2"
-          >
-            <PlusCircleIcon className="w-4 h-4" />
-            <span>Reservar</span>
-          </button>
+          permissions.canCreate ? (
+            <button
+              onClick={onNewBooking}
+              className="bg-teal-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors text-sm flex items-center gap-2"
+            >
+              <PlusCircleIcon className="w-4 h-4" />
+              <span>Reservar</span>
+            </button>
+          ) : undefined
         }
       />
       
@@ -122,9 +127,9 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEdi
               </div>
                 
               {/* Botones de acción */}
-              {(onEditBooking || onCloneBooking) && (
+              {(permissions.canEdit || permissions.canDuplicate) && (onEditBooking || onCloneBooking) && (
                 <div className="px-4 pb-4 flex gap-2">
-                  {onEditBooking && (
+                  {permissions.canEdit && onEditBooking && (
                     <button
                       onClick={() => onEditBooking(booking.id)}
                       className="flex-1 bg-slate-100 text-slate-700 px-4 py-2.5 rounded-lg font-medium hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 border border-slate-300"
@@ -133,7 +138,7 @@ const BookingsList: React.FC<BookingsListProps> = ({ onBack, onNewBooking, onEdi
                       <span>Editar</span>
                     </button>
                   )}
-                  {onCloneBooking && (
+                  {permissions.canDuplicate && onCloneBooking && (
                     <button
                       onClick={() => onCloneBooking(booking.id)}
                       className="flex-1 bg-teal-50 text-teal-700 px-4 py-2.5 rounded-lg font-medium hover:bg-teal-100 transition-colors flex items-center justify-center gap-2 border border-teal-300"

@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Provider, BookingDetails } from '../../types';
+import { Provider, BookingDetails, UserRole, getBookingPermissions } from '../../types';
 import BookingPage_Header from './BookingPage_Header';
 import CalendarDaysIcon from '../icons/CalendarDaysIcon';
 import ClockIcon from '../icons/ClockIcon';
@@ -18,6 +18,7 @@ interface BookingPageProps {
     addInsurance?: boolean;
   };
   isEditing?: boolean;
+  userRole: UserRole;
 }
 
 const INSURANCE_COST = 4.00;
@@ -28,7 +29,7 @@ const hourPacks = [
     { name: '20 horas', hours: 20, discount: 0.10 },
 ];
 
-const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, initialBooking, isEditing = false }) => {
+const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, initialBooking, isEditing = false, userRole }) => {
   const [startDate, setStartDate] = useState(initialBooking?.startDate || '');
   const [startTime, setStartTime] = useState(initialBooking?.startTime || '');
   const [endDate, setEndDate] = useState(initialBooking?.endDate || '');
@@ -36,6 +37,9 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, 
   const [addInsurance, setAddInsurance] = useState(initialBooking?.addInsurance || false);
   const [promoCode, setPromoCode] = useState(initialBooking?.promoCode || '');
   const [selectedPack, setSelectedPack] = useState<typeof hourPacks[0] | null>(null);
+  
+  const permissions = getBookingPermissions(userRole);
+  const isReadOnly = !permissions.canEdit; // If user cannot edit, it's read-only mode
 
   const { hours, totalCost, serviceFee, subtotal, discountAmount, insuranceCost, isValid, finalHourlyRate } = useMemo(() => {
     let calculatedHours = 0;
@@ -119,18 +123,29 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, 
 
   return (
     <div className="bg-white min-h-screen flex flex-col animate-fade-in">
-      <BookingPage_Header provider={provider} title={isEditing ? "Editar reserva con:" : "Reservar con:"} onBack={onBack} />
+      <BookingPage_Header provider={provider} title={isEditing ? "Editar reserva con:" : isReadOnly ? "Ver reserva con:" : "Reservar con:"} onBack={onBack} />
       
-      {/* Sticky Payment Button at Top */}
-      <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-lg border-b border-slate-200 p-3 shadow-sm">
-        <button
-            onClick={handleProceed}
-            disabled={!isValid}
-            className="w-full bg-teal-500 text-white px-4 py-3.5 rounded-xl font-semibold hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-400 disabled:cursor-not-allowed text-lg shadow-lg shadow-teal-500/20"
-        >
-            {isValid ? (isEditing ? `Actualizar ${totalCost.toFixed(2)}€` : `Pagar ${totalCost.toFixed(2)}€`) : 'Completa los datos'}
-        </button>
-      </div>
+      {/* Sticky Payment Button at Top - Only show if not read-only */}
+      {!isReadOnly && (
+        <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-lg border-b border-slate-200 p-3 shadow-sm">
+          <button
+              onClick={handleProceed}
+              disabled={!isValid}
+              className="w-full bg-teal-500 text-white px-4 py-3.5 rounded-xl font-semibold hover:bg-teal-600 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500 disabled:bg-slate-400 disabled:cursor-not-allowed text-lg shadow-lg shadow-teal-500/20"
+          >
+              {isValid ? (isEditing ? `Actualizar ${totalCost.toFixed(2)}€` : `Pagar ${totalCost.toFixed(2)}€`) : 'Completa los datos'}
+          </button>
+        </div>
+      )}
+      
+      {/* Read-only mode notice */}
+      {isReadOnly && (
+        <div className="sticky top-16 z-20 bg-amber-50 border-b border-amber-200 p-3">
+          <p className="text-amber-800 text-sm text-center font-medium">
+            📋 Estás viendo esta reserva en modo consulta. Los profesionales no pueden modificar reservas.
+          </p>
+        </div>
+      )}
 
       <main className="flex-grow overflow-y-auto p-4 pb-28 bg-slate-50">{/* Caregiver Info */}
         {/* Hour Packs */}
@@ -141,7 +156,10 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, 
                     <button 
                         key={pack.name} 
                         onClick={() => handleSelectPack(pack)}
-                        className={`flex-1 p-3 border rounded-lg text-center transition-all ${selectedPack === pack ? 'bg-teal-500 text-white border-teal-600' : 'bg-slate-100 hover:bg-slate-200'}`}
+                        disabled={isReadOnly}
+                        className={`flex-1 p-3 border rounded-lg text-center transition-all ${
+                          isReadOnly ? 'opacity-50 cursor-not-allowed' : ''
+                        } ${selectedPack === pack ? 'bg-teal-500 text-white border-teal-600' : 'bg-slate-100 hover:bg-slate-200'}`}
                     >
                         <p className="font-bold">{pack.name}</p>
                         <p className="text-sm">-{pack.discount * 100}% dto.</p>
@@ -161,14 +179,14 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, 
                     <div>
                         <label htmlFor="startDate" className="block text-sm font-medium text-slate-700 mb-1">Fecha de inicio</label>
                         <div className="relative">
-                            <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} min={today} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
+                            <input id="startDate" type="date" value={startDate} onChange={e => setStartDate(e.target.value)} min={today} disabled={!!selectedPack || isReadOnly} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200 disabled:cursor-not-allowed"/>
                             <CalendarDaysIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                         </div>
                     </div>
                     <div>
                         <label htmlFor="startTime" className="block text-sm font-medium text-slate-700 mb-1">Hora de inicio</label>
                         <div className="relative">
-                            <input id="startTime" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
+                            <input id="startTime" type="time" value={startTime} onChange={e => setStartTime(e.target.value)} disabled={!!selectedPack || isReadOnly} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200 disabled:cursor-not-allowed"/>
                             <ClockIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                         </div>
                     </div>
@@ -185,14 +203,14 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, 
                     <div>
                         <label htmlFor="endDate" className="block text-sm font-medium text-slate-700 mb-1">Fecha de fin</label>
                         <div className="relative">
-                            <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} min={startDate || today} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
+                            <input id="endDate" type="date" value={endDate} onChange={e => setEndDate(e.target.value)} min={startDate || today} disabled={!!selectedPack || isReadOnly} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200 disabled:cursor-not-allowed"/>
                             <CalendarDaysIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                         </div>
                     </div>
                     <div>
                         <label htmlFor="endTime" className="block text-sm font-medium text-slate-700 mb-1">Hora de fin</label>
                         <div className="relative">
-                            <input id="endTime" type="time" value={endTime} onChange={e => setEndTime(e.target.value)} disabled={!!selectedPack} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200"/>
+                            <input id="endTime" type="time" value={endTime} onChange={e => setEndTime(e.target.value)} disabled={!!selectedPack || isReadOnly} className="w-full bg-slate-50 p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 disabled:bg-slate-200 disabled:cursor-not-allowed"/>
                             <ClockIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                         </div>
                     </div>
@@ -207,7 +225,7 @@ const BookingPage: React.FC<BookingPageProps> = ({ provider, onProceed, onBack, 
                 <div className="bg-slate-50 p-4 rounded-lg border border-slate-200">
                     <label htmlFor="promo" className="block text-sm font-medium text-slate-700 mb-2">Código de promoción</label>
                     <div className="relative">
-                        <input id="promo" type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Ej: BIENVENIDO10" className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 uppercase placeholder:normal-case"/>
+                        <input id="promo" type="text" value={promoCode} onChange={e => setPromoCode(e.target.value)} placeholder="Ej: BIENVENIDO10" disabled={isReadOnly} className="w-full bg-white p-3 pl-10 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 transition text-slate-800 uppercase placeholder:normal-case disabled:bg-slate-200 disabled:cursor-not-allowed"/>
                         <TicketIcon className="absolute top-1/2 left-3 -translate-y-1/2 w-5 h-5 text-slate-400 pointer-events-none" />
                     </div>
                 </div>

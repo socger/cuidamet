@@ -179,3 +179,31 @@ export interface ClientProfile {
 // Auth Types
 export type AuthMode = 'login' | 'signup' | 'forgotPassword' | 'verifyEmail';
 export type UserRole = 'client' | 'provider';
+
+// Booking Permissions
+export interface BookingPermissions {
+  canCreate: boolean;
+  canEdit: boolean;
+  canDuplicate: boolean;
+  canView: boolean;
+}
+
+// Helper function to get booking permissions based on user role
+export const getBookingPermissions = (role: UserRole): BookingPermissions => {
+  if (role === 'client') {
+    return {
+      canCreate: true,
+      canEdit: true,
+      canDuplicate: true,
+      canView: true,
+    };
+  }
+  
+  // Provider role: can only view, cannot create/edit/duplicate
+  return {
+    canCreate: false,
+    canEdit: false, // Can view but not modify
+    canDuplicate: false,
+    canView: true,
+  };
+};
