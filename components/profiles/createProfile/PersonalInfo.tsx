@@ -3,15 +3,14 @@ import MapPinIcon from "../../icons/MapPinIcon";
 import GpsFixedIcon from "../../icons/GpsFixedIcon";
 
 interface PersonalInfoFormProps {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phone: string;
   location: string;
   languages: string[];
   languagesList: string[];
   isLocating?: boolean;
-  onNameChange: (value: string) => void;
-  onEmailChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onLocationChange: (value: string) => void;
   onLanguageToggle: (lang: string) => void;
@@ -19,15 +18,14 @@ interface PersonalInfoFormProps {
 }
 
 const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
-  name,
+  firstName,
+  lastName,
   email,
   phone,
   location,
   languages,
   languagesList,
   isLocating = false,
-  onNameChange,
-  onEmailChange,
   onPhoneChange,
   onLocationChange,
   onLanguageToggle,
@@ -37,14 +35,27 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
     <div className="space-y-4">
       <div>
         <label className="block text-sm font-medium text-slate-700 mb-1">
-          Nombre y apellidos
+          Nombre
         </label>
         <input
           type="text"
-          value={name}
-          onChange={(e) => onNameChange(e.target.value)}
-          className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
-          placeholder="Ej. Laura Martínez"
+          value={firstName}
+          readOnly
+          className="w-full p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-600 cursor-not-allowed"
+          placeholder="Nombre"
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Apellido
+        </label>
+        <input
+          type="text"
+          value={lastName}
+          readOnly
+          className="w-full p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-600 cursor-not-allowed"
+          placeholder="Apellido"
         />
       </div>
 
@@ -55,8 +66,8 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         <input
           type="email"
           value={email}
-          onChange={(e) => onEmailChange(e.target.value)}
-          className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
+          readOnly
+          className="w-full p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-600 cursor-not-allowed"
           placeholder="tu-email@ejemplo.com"
         />
       </div>

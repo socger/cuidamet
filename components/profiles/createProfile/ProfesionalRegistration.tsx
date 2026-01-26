@@ -34,7 +34,14 @@ import PaperClipIcon from "../../icons/PaperClipIcon";
 interface ProfesionalRegistrationProps {
   onComplete: (profileData: ProviderProfile) => void;
   onCancel?: () => void;
-  initialData?: Partial<ProviderProfile>;
+  initialData?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    location?: string;
+    languages?: string[];
+  };
   initialStep?: number;
   currentView?: string;
   onNavigateHome?: () => void;
@@ -342,12 +349,13 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
   // General Profile Data
   const [profileData, setProfileData] = useState({
-    name: initialData?.name || "",
+    firstName: initialData?.firstName || "",
+    lastName: initialData?.lastName || "",
     email: initialData?.email || "",
     phone: initialData?.phone || "",
     location: initialData?.location || "",
     languages: initialData?.languages || ([] as string[]),
-    photoUrl: initialData?.photoUrl || "",
+    photoUrl: "",
     coordinates: undefined as
       | { latitude: number; longitude: number }
       | undefined,
@@ -719,9 +727,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     if (step === 1) {
       const errors: string[] = [];
       
-      if (profileData.name.trim() === "") {
-        errors.push("Nombre");
-      }
       if (profileData.email.trim() === "") {
         errors.push("Email");
       } else if (!isValidEmail(profileData.email)) {
@@ -777,8 +782,14 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
       s.availability?.forEach((a: string) => allAvailabilities.add(a))
     );
 
+    const fullName = [profileData.firstName, profileData.lastName]
+      .filter(Boolean)
+      .join(' ')
+      .trim() || 'Usuario';
+
     const finalProfile: ProviderProfile = {
       ...profileData,
+      name: fullName,
       availability: Array.from(allAvailabilities),
       services: servicesData,
     };
@@ -949,15 +960,14 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
       {/* Fields */}
       <PersonalInfo
-        name={profileData.name}
+        firstName={profileData.firstName}
+        lastName={profileData.lastName}
         email={profileData.email}
         phone={profileData.phone}
         location={profileData.location}
         languages={profileData.languages}
         languagesList={languagesList}
         isLocating={isLocating}
-        onNameChange={(value) => handleProfileChange("name", value)}
-        onEmailChange={(value) => handleProfileChange("email", value)}
         onPhoneChange={(value) => handleProfileChange("phone", value)}
         onLocationChange={(value) => handleProfileChange("location", value)}
         onLanguageToggle={handleLanguageToggle}
@@ -1437,7 +1447,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <Resumen_PersonalInfo
             photoUrl={profileData.photoUrl || "https://via.placeholder.com/150"}
-            name={profileData.name}
+            name={[profileData.firstName, profileData.lastName].filter(Boolean).join(' ').trim() || 'Usuario'}
             phone={profileData.phone}
             email={profileData.email}
             location={profileData.location}

@@ -16,7 +16,16 @@ import { CareCategory, ClientProfile } from "../../../types";
 interface FamiliarRegistrationProps {
   onComplete: (profileData: ClientProfile) => void;
   onBack: () => void;
-  initialData?: ClientProfile;
+  initialData?: {
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    phone?: string;
+    location?: string;
+    languages?: string[];
+    photoUrl?: string;
+    preferences?: CareCategory[];
+  };
 }
 
 const serviceCategories = [
@@ -72,7 +81,8 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
 }) => {
   const [step, setStep] = useState(1);
   const [profileData, setProfileData] = useState({
-    name: initialData?.name || "",
+    firstName: initialData?.firstName || "",
+    lastName: initialData?.lastName || "",
     email: initialData?.email || "",
     phone: initialData?.phone || "",
     location: initialData?.location || "",
@@ -200,7 +210,6 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
   const isStepValid = (): boolean => {
     if (step === 1) {
       return (
-        profileData.name.trim() !== "" &&
         profileData.email.trim() !== "" &&
         isValidEmail(profileData.email) &&
         profileData.phone.trim() !== "" &&
@@ -215,9 +224,6 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
     if (step === 1) {
       const errors: string[] = [];
       
-      if (profileData.name.trim() === "") {
-        errors.push("Nombre");
-      }
       if (profileData.email.trim() === "") {
         errors.push("Email");
       } else if (!isValidEmail(profileData.email)) {
@@ -244,8 +250,13 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
     } else if (step === 2) {
       setStep(3);
     } else if (step === 3) {
+      const fullName = [profileData.firstName, profileData.lastName]
+        .filter(Boolean)
+        .join(' ')
+        .trim() || 'Usuario';
+      
       const profile: ClientProfile = {
-        name: profileData.name,
+        name: fullName,
         email: profileData.email,
         phone: profileData.phone,
         location: profileData.location,
@@ -334,15 +345,14 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
               {/* Form Fields */}
               <div className="pt-2">
                 <PersonalInfo
-                  name={profileData.name}
+                  firstName={profileData.firstName}
+                  lastName={profileData.lastName}
                   email={profileData.email}
                   phone={profileData.phone}
                   location={profileData.location}
                   languages={profileData.languages}
                   languagesList={languagesList}
                   isLocating={isLocating}
-                  onNameChange={(value) => handleProfileChange("name", value)}
-                  onEmailChange={(value) => handleProfileChange("email", value)}
                   onPhoneChange={(value) => handleProfileChange("phone", value)}
                   onLocationChange={(value) =>
                     handleProfileChange("location", value)
@@ -432,7 +442,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
                     profileData.photoUrl ||
                     "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200"
                   }
-                  name={profileData.name}
+                  name={[profileData.firstName, profileData.lastName].filter(Boolean).join(' ').trim() || 'Usuario'}
                   phone={profileData.phone}
                   email={profileData.email}
                   location={profileData.location}

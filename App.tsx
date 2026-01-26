@@ -114,7 +114,8 @@ const App: React.FC = () => {
   const [providerProfile, setProviderProfile] = useState<ProviderProfile | null>(null);
   const [activeRole, setActiveRole] = useState<'client' | 'provider'>('client');
   const [userEmail, setUserEmail] = useState<string>('');
-  const [userName, setUserName] = useState<string>('');
+  const [userFirstName, setUserFirstName] = useState<string>('');
+  const [userLastName, setUserLastName] = useState<string>('');
   const [userPhone, setUserPhone] = useState<string>('');
   
   // Booking state
@@ -140,7 +141,8 @@ const App: React.FC = () => {
           if (user && role) {
             setIsAuthenticated(true);
             setUserEmail(user.email);
-            setUserName(user.username);
+            setUserFirstName(user.firstName || '');
+            setUserLastName(user.lastName || '');
             setActiveRole(role === 'provider' ? 'provider' : 'client');
           } else {
             // Token existe pero no hay datos de usuario, limpiar
@@ -474,14 +476,17 @@ const App: React.FC = () => {
     setAuthAttempts(0);
     setUserEmail(email);
     
-    // Obtener el perfil creado automáticamente
+    // Obtener los datos del usuario registrado
     try {
       const user = tokenStorage.getUser();
       if (user && user.id) {
+        // Guardar firstName y lastName del usuario
+        setUserFirstName(user.firstName || '');
+        setUserLastName(user.lastName || '');
+        
         // Obtener el perfil de cliente creado automáticamente
         const profile = await clientProfileService.getByUserId(user.id);
         setClientProfile(profile);
-        setUserName(profile.name);
         if (profile.phone) setUserPhone(profile.phone);
       }
     } catch (error) {
@@ -887,10 +892,16 @@ const App: React.FC = () => {
       />;
     } else if (currentView === "familiarRegistration") {
       mainContent = <FamiliarRegistration 
-        initialData={clientProfile ? {
-          ...clientProfile,
-          email: userEmail || clientProfile.email,
-        } : undefined}
+        initialData={{
+          firstName: userFirstName,
+          lastName: userLastName,
+          email: userEmail,
+          phone: userPhone,
+          location: clientProfile?.location || '',
+          languages: clientProfile?.languages || [],
+          photoUrl: clientProfile?.photoUrl || '',
+          preferences: clientProfile?.preferences || [],
+        }}
         onComplete={(profileData) => {
           setClientProfile(profileData);
           setActiveRole('client');
@@ -911,16 +922,13 @@ const App: React.FC = () => {
       />;
     } else if (currentView === "profesionalRegistration") {
       mainContent = <ProfesionalRegistration 
-        initialData={clientProfile ? {
-          name: clientProfile.name,
-          email: userEmail || clientProfile.email,
-          phone: clientProfile.phone,
-          location: clientProfile.location,
-          languages: clientProfile.languages,
-        } : {
-          name: userName,
+        initialData={{
+          firstName: userFirstName,
+          lastName: userLastName,
           email: userEmail,
           phone: userPhone,
+          location: clientProfile?.location || '',
+          languages: clientProfile?.languages || [],
         }}
         onComplete={handleProviderRegistrationComplete}
         onCancel={handleCancelProfesionalRegistration}
