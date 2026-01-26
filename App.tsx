@@ -29,6 +29,7 @@ import LegalDocumentPage from "./components/legalinfo/LegalDocumentPage";
 import { legalDocuments } from "./components/legalinfo/legalContent";
 import NotificationsPage from "./components/NotificationsPage";
 import SecuritySettingsPage from "./components/SecuritySettingsPage";
+import { authService, tokenStorage } from "./services/authService";
 
 const getDistanceInKm = (
   lat1: number,
@@ -125,6 +126,34 @@ const App: React.FC = () => {
   
   // Favorites filter state (when navigating from FamiliarProfilePage)
   const [showFavoritesFromProfile, setShowFavoritesFromProfile] = useState<boolean>(false);
+
+  // Verificar si hay una sesión activa al cargar la app
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      const hasToken = authService.isAuthenticated();
+      if (hasToken) {
+        try {
+          const user = tokenStorage.getUser();
+          const role = tokenStorage.getUserRole();
+          
+          if (user && role) {
+            setIsAuthenticated(true);
+            setUserEmail(user.email);
+            setUserName(user.username);
+            setActiveRole(role === 'provider' ? 'provider' : 'client');
+          } else {
+            // Token existe pero no hay datos de usuario, limpiar
+            tokenStorage.clearTokens();
+          }
+        } catch (error) {
+          console.error('Error al verificar sesión:', error);
+          tokenStorage.clearTokens();
+        }
+      }
+    };
+    
+    checkAuthStatus();
+  }, []);
 
   useEffect(() => {
     // Simulate fetching data
@@ -707,7 +736,12 @@ const App: React.FC = () => {
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}
           onNavigateSupport={() => setView("support")}
-          onLogout={() => {
+          onLogout={async () => {
+            try {
+              await authService.logout();
+            } catch (error) {
+              console.error('Error al cerrar sesión:', error);
+            }
             setIsAuthenticated(false);
             setClientProfile(null);
             setProviderProfile(null);
@@ -795,7 +829,12 @@ const App: React.FC = () => {
             setActiveRole('provider');
           }}
           onBack={handleNavigateHome}
-          onLogout={() => {
+          onLogout={async () => {
+            try {
+              await authService.logout();
+            } catch (error) {
+              console.error('Error al cerrar sesión:', error);
+            }
             setIsAuthenticated(false);
             setClientProfile(null);
             setProviderProfile(null);

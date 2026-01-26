@@ -9,6 +9,8 @@ import HandRaisedIcon from "./icons/HandRaisedIcon";
 import { UserRole, AuthMode } from "../types";
 import XMarkIcon from "./icons/XMarkIcon";
 import AlertModal from "./actions/AlertModal";
+import { authService, tokenStorage } from "../services/authService";
+import { createProfileBasedOnRole } from "../services/profileService";
 
 interface AuthPageProps {
   initialMode?: AuthMode;
@@ -45,6 +47,9 @@ const AuthPage: React.FC<AuthPageProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [alertModal, setAlertModal] = useState<{ isOpen: boolean; message: string; title?: string }>({ isOpen: false, message: '' });
   const firstCodeInputRef = useRef<HTMLInputElement>(null);
+  const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
     if (preselectedRole) {
@@ -82,22 +87,34 @@ const AuthPage: React.FC<AuthPageProps> = ({
       setMode("login");
     } else {
       onBack();
-    }
-  };
-
-  const handleLogin = (e: React.FormEvent) => {
+    }async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // In development mode, always allow login (validation)
-    // In production, you would validate credentials against a backend
-    // Validación simple de ejemplo
-    // JEROFA tenn en cuenta que he cambiado a la línea de abajo para que no me de la vara de que introduzca la pwd correcta
-    // const isValidLogin = email === "socger@cuidamet.com" && password === "1234";
-    const isValidLogin = true; // for demo
-    
     const maxAttempts = parseInt(import.meta.env.MAX_AUTH_ATTEMPTS || '3', 10);
-
-    if (!isValidLogin) {
+    
+    setIsLoading(true);
+    
+    try {
+      // Llamar al backend para login
+      const response = await authService.login({
+        email,
+        password,
+      });
+      
+      // Determinar el rol del usuario basado en sus roles
+      let userRole: UserRole = "client";
+      if (response.user.roles.includes('provider') || response.user.roles.includes('admin')) {
+        userRole = "provider";
+      }
+      
+      // Guardar el rol del usuario
+      tokenStorage.setUserRole(userRole);
+      
+      setIsLoading(false);
+      onLoginSuccess(userRole);
+    } catch (error: any) {
+      setIsLoading(false);
+      
       // Increment attempt counter
       if (onAttemptIncrement) {
         onAttemptIncrement();
@@ -111,26 +128,83 @@ const AuthPage: React.FC<AuthPageProps> = ({
         return;
       }
       
-      setAlertModal({ isOpen: true, message: `Credenciales inválidas. Intento ${authAttempts + 1} de ${maxAttempts}.`, title: 'Error de autenticación' });
-      return;
-    }
-    
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      // Use the role state if set (e.g. via preselection), otherwise default to client.
-      onLoginSuccess(role || "client");
-    }, 500);
-  };
-
-  const handleSignupStep1 = (e: React.FormEvent) => {
+      setAlertModal({ async (e: React.FormEvent) => {
     e.preventDefault();
     if (!role) {
-      setAlertModal({ isOpen: true, message: "Por favor, selecciona si eres Familiar o Cuidador (necesario para la demo)." });
+      setAlertModal({ isOpen: true, message: "Por favor, selecciona si eres Familiar o Cuidador." });
       return;
     }
     if (password !== confirmPassword) {
       setAlertModal({ isOpen: true, message: "Las contraseñas no coinciden. Por favor, verifica que ambas sean iguales.", title: "Error de contraseña" });
+      return;
+    }
+    if (!hasMinLength || !hasNumber || !hasSpecial) {
+      setAlertModal({ isOpen: true, message: "La contraseña debe cumplir todos los requisitos: mínimo 8 caracteres, un número y un símbolo especial.", title: "Contraseña débil" });
+      return;
+    }
+    if (!termsAccepted) {
+      setAlertModal({ isOpen: true, message: "Debes aceptar los Términos de Servicio y la Política de Privacidad.", title: "Términos no aceptados" });
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    try {
+      // Generar username a partir del email si no se proporciona
+      const generatedUsername = username || email.split('@')[0];
+      
+      // Registrar usuario en el backend
+      const response = await authService.register({
+        username: generatedUsername,
+        email,
+        password,
+        firstName: firstName || undefined,
+        lastName: lastName || undefined,
+      });async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+    
+    try {
+      await authService.requestPasswordReset(email);
+      setIsLoading(false);
+      setAlertModal({ 
+        isOpen: true, 
+        message: `Hemos enviado un enlace de recuperación a ${email}`, 
+        title: 'Email enviado' 
+      });
+      setTimeout(() => {
+        setMode("login");
+      }, 2000);
+    } catch (error: any) {
+      setIsLoading(false);
+      setAlertModal({ 
+        isOpen: true, 
+        message: error.message || "Error al solicitar recuperación de contraseña.", 
+        title: 'Error' 
+      });
+    }
+      setIsLoading(false);
+      
+      // Mostrar mensaje de éxito y redirigir
+      setAlertModal({ 
+        isOpen: true, 
+        message: "¡Cuenta creada exitosamente! Ya puedes comenzar a usar Cuidamet.", 
+        title: "Registro exitoso" 
+      });
+      
+      // Llamar a onSignupSuccess después de un breve delay para mostrar el mensaje
+      setTimeout(() => {
+        onSignupSuccess(role, email);
+      }, 1500);
+      
+    } catch (error: any) {
+      setIsLoading(false);
+      setAlertModal({ 
+        isOpen: true, 
+        message: error.message || "Error al crear la cuenta. Por favor, verifica los datos e intenta de nuevo.", 
+        title: "Error de registro" 
+      });
+    }rtModal({ isOpen: true, message: "Las contraseñas no coinciden. Por favor, verifica que ambas sean iguales.", title: "Error de contraseña" });
       return;
     }
     if (!hasMinLength || !hasNumber || !hasSpecial) {
@@ -370,6 +444,52 @@ const AuthPage: React.FC<AuthPageProps> = ({
                 className="space-y-4"
               >
                 {mode === "signup" && renderRoleSelection()}
+
+                {mode === "signup" && (
+                  <>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          Nombre
+                        </label>
+                        <input
+                          type="text"
+                          value={firstName}
+                          onChange={(e) => setFirstName(e.target.value)}
+                          placeholder="Juan"
+                          className="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 shadow-sm"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-slate-700 mb-1">
+                          Apellido
+                        </label>
+                        <input
+                          type="text"
+                          value={lastName}
+                          onChange={(e) => setLastName(e.target.value)}
+                          placeholder="Pérez"
+                          className="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 shadow-sm"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">
+                        Nombre de usuario
+                      </label>
+                      <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="juanperez (opcional)"
+                        className="w-full px-4 py-3.5 bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-500 text-slate-800 shadow-sm"
+                      />
+                      <p className="text-xs text-slate-500 mt-1">
+                        Si no lo proporcionas, se generará automáticamente desde tu email
+                      </p>
+                    </div>
+                  </>
+                )}
 
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-1">
