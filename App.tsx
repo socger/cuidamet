@@ -30,6 +30,7 @@ import { legalDocuments } from "./components/legalinfo/legalContent";
 import NotificationsPage from "./components/NotificationsPage";
 import SecuritySettingsPage from "./components/SecuritySettingsPage";
 import { authService, tokenStorage } from "./services/authService";
+import { clientProfileService } from "./services/profileService";
 
 const getDistanceInKm = (
   lat1: number,
@@ -468,10 +469,25 @@ const App: React.FC = () => {
     setPendingAction(null);
   };
 
-  const handleSignupSuccess = (role: UserRole, email: string) => {
+  const handleSignupSuccess = async (role: UserRole, email: string) => {
     setIsAuthenticated(true);
     setAuthAttempts(0);
     setUserEmail(email);
+    
+    // Obtener el perfil creado automáticamente
+    try {
+      const user = tokenStorage.getUser();
+      if (user && user.id) {
+        // Obtener el perfil de cliente creado automáticamente
+        const profile = await clientProfileService.getByUserId(user.id);
+        setClientProfile(profile);
+        setUserName(profile.name);
+        if (profile.phone) setUserPhone(profile.phone);
+      }
+    } catch (error) {
+      console.error('Error al obtener perfil automático:', error);
+      // No bloquear el flujo si falla
+    }
     
     // After signup, always redirect to registration flow first (regardless of pending action)
     // The user needs to complete their profile before accessing other features
@@ -625,6 +641,19 @@ const App: React.FC = () => {
       );
     } else if (currentView === "offer") {
       mainContent = <ProfesionalRegistration 
+        initialData={clientProfile ? {
+          ...clientProfile,
+          // Convertir clientProfile a estructura compatible con ProviderProfile
+          name: clientProfile.name,
+          email: userEmail || clientProfile.email,
+          phone: clientProfile.phone,
+          location: clientProfile.location,
+          languages: clientProfile.languages,
+        } : {
+          name: userName,
+          email: userEmail,
+          phone: userPhone,
+        }}
         onComplete={handleProviderRegistrationComplete}
         onCancel={handleCancelProfesionalRegistration}
         currentView={view}
@@ -637,12 +666,6 @@ const App: React.FC = () => {
         unreadCount={unreadCount}
         isAuthenticated={isAuthenticated}
         initialStep={2}
-        initialData={{
-          ...providerProfile,
-          email: userEmail || providerProfile?.email,
-          name: userName || providerProfile?.name,
-          phone: userPhone || providerProfile?.phone,
-        }}
       />;
     } else if (currentView === "booking" && bookingProviderId) {
       const provider = providersWithDistance.find(
@@ -864,6 +887,10 @@ const App: React.FC = () => {
       />;
     } else if (currentView === "familiarRegistration") {
       mainContent = <FamiliarRegistration 
+        initialData={clientProfile ? {
+          ...clientProfile,
+          email: userEmail || clientProfile.email,
+        } : undefined}
         onComplete={(profileData) => {
           setClientProfile(profileData);
           setActiveRole('client');
@@ -884,6 +911,17 @@ const App: React.FC = () => {
       />;
     } else if (currentView === "profesionalRegistration") {
       mainContent = <ProfesionalRegistration 
+        initialData={clientProfile ? {
+          name: clientProfile.name,
+          email: userEmail || clientProfile.email,
+          phone: clientProfile.phone,
+          location: clientProfile.location,
+          languages: clientProfile.languages,
+        } : {
+          name: userName,
+          email: userEmail,
+          phone: userPhone,
+        }}
         onComplete={handleProviderRegistrationComplete}
         onCancel={handleCancelProfesionalRegistration}
         currentView={view}

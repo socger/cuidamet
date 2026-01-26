@@ -87,11 +87,13 @@ const AuthPage: React.FC<AuthPageProps> = ({
       setMode("login");
     } else {
       onBack();
-    }async (e: React.FormEvent) => {
+    }
+  };
+
+  const maxAttempts = 5;
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const maxAttempts = parseInt(import.meta.env.MAX_AUTH_ATTEMPTS || '3', 10);
-    
     setIsLoading(true);
     
     try {
@@ -128,7 +130,15 @@ const AuthPage: React.FC<AuthPageProps> = ({
         return;
       }
       
-      setAlertModal({ async (e: React.FormEvent) => {
+      setAlertModal({ 
+        isOpen: true, 
+        message: error.message || "Email o contraseña incorrectos. Por favor, verifica tus credenciales.", 
+        title: "Error de inicio de sesión" 
+      });
+    }
+  };
+
+  const handleSignupStep1 = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!role) {
       setAlertModal({ isOpen: true, message: "Por favor, selecciona si eres Familiar o Cuidador." });
@@ -160,7 +170,42 @@ const AuthPage: React.FC<AuthPageProps> = ({
         password,
         firstName: firstName || undefined,
         lastName: lastName || undefined,
-      });async (e: React.FormEvent) => {
+      });
+      
+      // Determinar el rol del usuario basado en sus roles
+      let userRole: UserRole = "client";
+      if (response.user.roles.includes('provider') || response.user.roles.includes('admin')) {
+        userRole = "provider";
+      }
+      
+      // Guardar el rol del usuario
+      tokenStorage.setUserRole(userRole);
+      
+      setIsLoading(false);
+      
+      // Mostrar mensaje de éxito y redirigir
+      setAlertModal({ 
+        isOpen: true, 
+        message: "¡Cuenta creada exitosamente! Ya puedes comenzar a usar Cuidamet.", 
+        title: "Registro exitoso" 
+      });
+      
+      // Llamar a onSignupSuccess después de un breve delay para mostrar el mensaje
+      setTimeout(() => {
+        onSignupSuccess(role, email);
+      }, 1500);
+      
+    } catch (error: any) {
+      setIsLoading(false);
+      setAlertModal({ 
+        isOpen: true, 
+        message: error.message || "Error al crear la cuenta. Por favor, verifica los datos e intenta de nuevo.", 
+        title: "Error de registro" 
+      });
+    }
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     
@@ -183,39 +228,6 @@ const AuthPage: React.FC<AuthPageProps> = ({
         title: 'Error' 
       });
     }
-      setIsLoading(false);
-      
-      // Mostrar mensaje de éxito y redirigir
-      setAlertModal({ 
-        isOpen: true, 
-        message: "¡Cuenta creada exitosamente! Ya puedes comenzar a usar Cuidamet.", 
-        title: "Registro exitoso" 
-      });
-      
-      // Llamar a onSignupSuccess después de un breve delay para mostrar el mensaje
-      setTimeout(() => {
-        onSignupSuccess(role, email);
-      }, 1500);
-      
-    } catch (error: any) {
-      setIsLoading(false);
-      setAlertModal({ 
-        isOpen: true, 
-        message: error.message || "Error al crear la cuenta. Por favor, verifica los datos e intenta de nuevo.", 
-        title: "Error de registro" 
-      });
-    }rtModal({ isOpen: true, message: "Las contraseñas no coinciden. Por favor, verifica que ambas sean iguales.", title: "Error de contraseña" });
-      return;
-    }
-    if (!hasMinLength || !hasNumber || !hasSpecial) {
-      setAlertModal({ isOpen: true, message: "La contraseña debe cumplir todos los requisitos: mínimo 8 caracteres, un número y un símbolo especial.", title: "Contraseña débil" });
-      return;
-    }
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setMode("verifyEmail");
-    }, 500);
   };
 
   const handleVerify = (e: React.FormEvent) => {
@@ -227,16 +239,6 @@ const AuthPage: React.FC<AuthPageProps> = ({
         onSignupSuccess(role, email || "demo@user.com");
       }
     }, 500);
-  };
-
-  const handleForgot = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      setAlertModal({ isOpen: true, message: `Hemos enviado un enlace de recuperación a ${email}`, title: 'Email enviado' });
-      setMode("login");
-    }, 1000);
   };
 
   const renderRoleSelection = () => {
@@ -439,7 +441,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
                     ? handleLogin
                     : mode === "signup"
                     ? handleSignupStep1
-                    : handleForgot
+                    : handleForgotPassword
                 }
                 className="space-y-4"
               >
