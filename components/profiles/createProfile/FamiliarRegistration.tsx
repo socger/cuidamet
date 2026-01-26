@@ -133,7 +133,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
     return phoneRegex.test(phone.trim());
   };
 
-  const handleDetectLocation = () => {
+  const handleDetectLocation = async () => {
     if (!navigator.geolocation) {
       setAlertModal({
         isOpen: true,
@@ -145,66 +145,30 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
 
     setIsLocating(true);
 
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-        handleProfileChange("coordinates", { latitude, longitude });
-
-        try {
-          const response = await fetch(
-            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
-            {
-              headers: {
-                "Accept-Language": "es-ES,es;q=0.9",
-              },
-            }
-          );
-
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-
-          const data = await response.json();
-
-          if (data.error) {
-            throw new Error(data.error);
-          }
-
-          const address = data.address || {};
-          const locationParts = [
-            address.road || address.pedestrian,
-            address.neighbourhood || address.suburb,
-            address.city || address.town || address.village,
-          ].filter(Boolean);
-
-          const locationStr =
-            locationParts.length > 0
-              ? locationParts.join(", ")
-              : `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`;
-
-          handleProfileChange("location", locationStr);
-        } catch (error) {
-          console.warn("Error fetching address:", error);
-          handleProfileChange(
-            "location",
-            `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`
-          );
-        } finally {
-          setIsLocating(false);
-        }
-      },
-      (error) => {
-        console.error("Error getting location:", error.message);
-        setAlertModal({
-          isOpen: true,
-          message:
-            "No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.",
-          title: "Error de ubicación",
-        });
-        setIsLocating(false);
-      },
-      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-    );
+    try {
+      const { getCurrentLocation } = await import('../../../services/geocodingService');
+      const result = await getCurrentLocation();
+      
+      // Guardar coordenadas
+      handleProfileChange("coordinates", result.coordinates);
+      // Guardar dirección (puede ser coordenadas si falló la geocodificación)
+      handleProfileChange("location", result.address);
+      
+      // Si hubo un error en la geocodificación pero tenemos coordenadas, mostrar aviso
+      if (result.error) {
+        console.warn('Geocodificación falló, usando coordenadas:', result.error);
+      }
+    } catch (error: any) {
+      console.error("Error getting location:", error.message);
+      setAlertModal({
+        isOpen: true,
+        message:
+          "No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.",
+        title: "Error de ubicación",
+      });
+    } finally {
+      setIsLocating(false);
+    }
   };
 
   const isStepValid = (): boolean => {

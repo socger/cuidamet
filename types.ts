@@ -90,6 +90,7 @@ export interface ProviderProfile {
     phone: string;
     photoUrl: string;
     location: string;
+    coordinates?: { latitude: number; longitude: number };
     languages: string[];
     availability: string[]; // Aggregated availability for search filtering
     services: Record<CareCategory, ServiceConfig>;
@@ -172,6 +173,7 @@ export interface ClientProfile {
     photoUrl: string;
     phone: string;
     location: string;
+    coordinates?: { latitude: number; longitude: number };
     languages: string[];
     preferences: CareCategory[];
 }

@@ -30,7 +30,7 @@ import { legalDocuments } from "./components/legalinfo/legalContent";
 import NotificationsPage from "./components/NotificationsPage";
 import SecuritySettingsPage from "./components/SecuritySettingsPage";
 import { authService, tokenStorage } from "./services/authService";
-import { clientProfileService } from "./services/profileService";
+import { clientProfileService, providerProfileService } from "./services/profileService";
 
 const getDistanceInKm = (
   lat1: number,
@@ -294,39 +294,55 @@ const App: React.FC = () => {
     setCurrentChatId(null);
   };
 
-  const handleProviderRegistrationComplete = (data: ProviderProfile) => {
-    setProviderProfile(data);
-    setActiveRole('provider');
-    setIsAuthenticated(true);
-    
-    // Create provider descriptions from service data
-    const activeServices = Object.entries(data.services)
-        .filter(([_, conf]) => conf.completed)
-        .map(([cat]) => cat as CareCategory);
+  const handleProviderRegistrationComplete = async (data: ProviderProfile) => {
+    try {
+      // Obtener el userId del usuario autenticado
+      const user = tokenStorage.getUser();
+      if (!user || !user.id) {
+        throw new Error('No se pudo obtener el ID del usuario');
+      }
 
-    const allTasks = Object.values(data.services).flatMap(s => s.tasks);
-    
-    const descriptions: ServiceDescription[] = [];
-    Object.entries(data.services).forEach(([cat, conf]) => {
-        if (conf.completed && conf.description) {
-            descriptions.push({
-                category: cat as CareCategory,
-                text: conf.description
-            });
-        }
-    });
+      // Preparar datos para la API
+      const createProviderDto = {
+        userId: user.id,
+        phone: data.phone,
+        photoUrl: data.photoUrl,
+        location: data.location,
+        latitude: data.coordinates?.latitude,
+        longitude: data.coordinates?.longitude,
+        languages: data.languages,
+        availability: data.availability,
+        profileStatus: 'published', // Perfil publicado al completar el registro
+        // Los servicios se guardarán a través de service-configs y service-variations endpoints
+      };
 
-    // Show success alert
-    setAlertModal({ 
-      isOpen: true, 
-      message: '¡Tu perfil de cuidador se ha creado exitosamente! Ahora los clientes podrán encontrarte.', 
-      title: 'Perfil publicado' 
-    });
-    
-    // Navigate to myProfile view after a short delay
-    setTimeout(() => {
-      setView("myProfile");
-    }, 2000);
+      // Guardar el perfil en la base de datos
+      const savedProfile = await providerProfileService.create(createProviderDto);
+      
+      // Actualizar el estado local con el perfil guardado
+      setProviderProfile(data);
+      setActiveRole('provider');
+      setIsAuthenticated(true);
+      
+      // Show success alert
+      setAlertModal({ 
+        isOpen: true, 
+        message: '¡Tu perfil de cuidador se ha creado exitosamente! Ahora los clientes podrán encontrarte.', 
+        title: 'Perfil publicado' 
+      });
+      
+      // Navigate to myProfile view after a short delay
+      setTimeout(() => {
+        setView("myProfile");
+      }, 2000);
+    } catch (error: any) {
+      console.error('Error al guardar perfil de proveedor:', error);
+      setAlertModal({ 
+        isOpen: true, 
+        message: error.message || 'Error al guardar el perfil. Por favor, intenta de nuevo.', 
+        title: 'Error' 
+      });
+    }
   };
 
   const handleNavigateMyProfile = () => {
@@ -476,21 +492,16 @@ const App: React.FC = () => {
     setAuthAttempts(0);
     setUserEmail(email);
     
-    // Obtener los datos del usuario registrado
+    // Obtener los datos del usuario registrado (firstName, lastName) del token
     try {
       const user = tokenStorage.getUser();
-      if (user && user.id) {
-        // Guardar firstName y lastName del usuario
+      if (user) {
+        // Guardar firstName y lastName del usuario para pre-rellenar formularios
         setUserFirstName(user.firstName || '');
         setUserLastName(user.lastName || '');
-        
-        // Obtener el perfil de cliente creado automáticamente
-        const profile = await clientProfileService.getByUserId(user.id);
-        setClientProfile(profile);
-        if (profile.phone) setUserPhone(profile.phone);
       }
     } catch (error) {
-      console.error('Error al obtener perfil automático:', error);
+      console.error('Error al obtener datos del usuario:', error);
       // No bloquear el flujo si falla
     }
     
@@ -902,21 +913,53 @@ const App: React.FC = () => {
           photoUrl: clientProfile?.photoUrl || '',
           preferences: clientProfile?.preferences || [],
         }}
-        onComplete={(profileData) => {
-          setClientProfile(profileData);
-          setActiveRole('client');
-          
-          // Show success alert
-          setAlertModal({ 
-            isOpen: true, 
-            message: '¡Tu perfil familiar se ha creado exitosamente! Ya puedes buscar cuidadores.', 
-            title: 'Perfil publicado'
-          });
-          
-          // Navigate to myProfile view after a short delay
-          setTimeout(() => {
-            setView("myProfile");
-          }, 2000);
+        onComplete={async (profileData) => {
+          try {
+            // Obtener el userId del usuario autenticado
+            const user = tokenStorage.getUser();
+            if (!user || !user.id) {
+              throw new Error('No se pudo obtener el ID del usuario');
+            }
+
+            // Preparar datos para la API
+            const createClientDto = {
+              userId: user.id,
+              phone: profileData.phone,
+              photoUrl: profileData.photoUrl,
+              location: profileData.location,
+              latitude: profileData.coordinates?.latitude,
+              longitude: profileData.coordinates?.longitude,
+              languages: profileData.languages,
+              preferences: profileData.preferences,
+              profileStatus: 'published', // Perfil publicado al completar el registro
+            };
+
+            // Guardar el perfil en la base de datos
+            await clientProfileService.create(createClientDto);
+            
+            // Actualizar el estado local
+            setClientProfile(profileData);
+            setActiveRole('client');
+            
+            // Show success alert
+            setAlertModal({ 
+              isOpen: true, 
+              message: '¡Tu perfil familiar se ha creado exitosamente! Ya puedes buscar cuidadores.', 
+              title: 'Perfil publicado'
+            });
+            
+            // Navigate to myProfile view after a short delay
+            setTimeout(() => {
+              setView("myProfile");
+            }, 2000);
+          } catch (error: any) {
+            console.error('Error al guardar perfil de cliente:', error);
+            setAlertModal({ 
+              isOpen: true, 
+              message: error.message || 'Error al guardar el perfil. Por favor, intenta de nuevo.', 
+              title: 'Error' 
+            });
+          }
         }}
         onBack={handleCancelFamiliarRegistration}
       />;
