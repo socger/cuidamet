@@ -30,14 +30,21 @@ export interface ClientProfile {
 // Tipos para Provider Profile
 export interface ProviderProfileCreateDto {
   userId: number;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  bio?: string;
-  serviceTypeId?: number;
-  hourlyRate?: number;
-  yearsOfExperience?: number;
+  phone?: string;
+  photoUrl?: string;
+  location: string;
+  latitude?: number;
+  longitude?: number;
+  languages?: string[];
+  availability?: string[];
+  profileStatus?: string;
+  isPremium?: boolean;
+  providerStatus?: string;
+  rating?: number;
+  reviewsCount?: number;
+  completedBookings?: number;
+  verifications?: string[];
+  badges?: string[];
 }
 
 export interface ProviderProfile {
@@ -138,12 +145,31 @@ export const providerProfileService = {
    * Crear perfil de proveedor
    */
   create: async (data: ProviderProfileCreateDto): Promise<ProviderProfile> => {
+    // Solo enviar los campos que espera el backend
+    const payload: any = {
+      userId: data.userId,
+      phone: data.phone,
+      photoUrl: data.photoUrl,
+      location: data.location,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      languages: data.languages,
+      availability: data.availability,
+      profileStatus: data.profileStatus,
+      isPremium: data.isPremium,
+      providerStatus: data.providerStatus,
+      rating: data.rating,
+      reviewsCount: data.reviewsCount,
+      completedBookings: data.completedBookings,
+      verifications: data.verifications,
+      badges: data.badges,
+    };
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/provider-profiles`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {

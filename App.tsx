@@ -327,7 +327,7 @@ const App: React.FC = () => {
       // Show success alert
       setAlertModal({ 
         isOpen: true, 
-        message: '¡Tu perfil de cuidador se ha creado exitosamente! Ahora los clientes podrán encontrarte.', 
+        message: '¡Tu perfil profesional se ha creado exitosamente! Ahora los clientes podrán encontrarte.', 
         title: 'Perfil publicado' 
       });
       

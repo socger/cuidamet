@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { resizeAndCompressImageToBase64 } from '../../utils/imageUtils';
 import CameraIcon from '../icons/CameraIcon';
 import PhotoIcon from '../icons/PhotoIcon';
 import UserCircleIcon from '../icons/UserCircleIcon';
@@ -98,7 +99,7 @@ const PhotoCapture: React.FC<PhotoCaptureProps> = ({
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       const validTypes = ['image/jpeg', 'image/png', 'image/jpg'];
@@ -106,14 +107,12 @@ const PhotoCapture: React.FC<PhotoCaptureProps> = ({
         setAlertModal({ isOpen: true, message: 'El archivo debe ser JPG o PNG y menor de 5MB.', title: 'Archivo inválido' });
         return;
       }
-
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (event.target?.result) {
-          onPhotoChange(event.target.result as string);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
+      try {
+        const base64 = await resizeAndCompressImageToBase64(file, 200, 200, 0.7);
+        onPhotoChange(base64);
+      } catch (err) {
+        setAlertModal({ isOpen: true, message: 'No se pudo procesar la imagen.', title: 'Error' });
+      }
     }
   };
 
