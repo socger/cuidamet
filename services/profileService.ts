@@ -7,11 +7,15 @@ const API_VERSION = import.meta.env.VITE_API_VERSION || 'v1';
 // Tipos para Client Profile
 export interface ClientProfileCreateDto {
   userId: number;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  bio?: string;
+  phone?: string;
+  photoUrl?: string;
+  location?: string;
+  latitude?: number;
+  longitude?: number;
+  languages?: string[];
+  preferences?: string[];
+  profileStatus?: string;
+  isPremium?: boolean;
 }
 
 export interface ClientProfile {
@@ -72,12 +76,25 @@ export const clientProfileService = {
    * Crear perfil de cliente
    */
   create: async (data: ClientProfileCreateDto): Promise<ClientProfile> => {
+    // Solo enviar los campos que espera el backend
+    const payload: any = {
+      userId: data.userId,
+      phone: data.phone,
+      photoUrl: data.photoUrl,
+      location: data.location,
+      latitude: data.latitude,
+      longitude: data.longitude,
+      languages: data.languages,
+      preferences: data.preferences,
+      profileStatus: data.profileStatus,
+      isPremium: data.isPremium,
+    };
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/client-profiles`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {

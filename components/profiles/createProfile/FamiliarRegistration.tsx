@@ -85,12 +85,14 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
     lastName: initialData?.lastName || "",
     email: initialData?.email || "",
     phone: initialData?.phone || "",
-    location: initialData?.location || "",
-    languages: initialData?.languages || ([] as string[]),
     photoUrl: initialData?.photoUrl || "",
-    coordinates: undefined as
-      | { latitude: number; longitude: number }
-      | undefined,
+    location: initialData?.location || "",
+    latitude: undefined as number | undefined,
+    longitude: undefined as number | undefined,
+    languages: initialData?.languages || ([] as string[]),
+    preferences: initialData?.preferences || ([] as CareCategory[]),
+    profileStatus: 'draft',
+    isPremium: false,
   });
   const [selectedCategories, setSelectedCategories] = useState<CareCategory[]>(
     initialData?.preferences || []
@@ -150,8 +152,10 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
       const result = await getCurrentLocation();
       
       // Guardar coordenadas
-      handleProfileChange("coordinates", result.coordinates);
-      // Guardar dirección (puede ser coordenadas si falló la geocodificación)
+      if (result.coordinates) {
+        handleProfileChange("latitude", result.coordinates.latitude);
+        handleProfileChange("longitude", result.coordinates.longitude);
+      }
       handleProfileChange("location", result.address);
       
       // Si hubo un error en la geocodificación pero tenemos coordenadas, mostrar aviso
@@ -219,18 +223,19 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
         .join(' ')
         .trim() || 'Usuario';
       
-      const profile: ClientProfile = {
-        name: fullName,
-        email: profileData.email,
+      // Construir el objeto alineado con el DTO del backend
+      const profilePayload = {
         phone: profileData.phone,
+        photoUrl: profileData.photoUrl || "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200",
         location: profileData.location,
+        latitude: profileData.latitude,
+        longitude: profileData.longitude,
         languages: profileData.languages,
-        photoUrl:
-          profileData.photoUrl ||
-          "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200",
         preferences: selectedCategories,
+        profileStatus: profileData.profileStatus,
+        isPremium: profileData.isPremium,
       };
-      onComplete(profile);
+      onComplete(profilePayload);
     }
   };
 
@@ -318,9 +323,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
                   languagesList={languagesList}
                   isLocating={isLocating}
                   onPhoneChange={(value) => handleProfileChange("phone", value)}
-                  onLocationChange={(value) =>
-                    handleProfileChange("location", value)
-                  }
+                  onLocationChange={(value) => handleProfileChange("location", value)}
                   onLanguageToggle={toggleLanguage}
                   onDetectLocation={handleDetectLocation}
                 />
