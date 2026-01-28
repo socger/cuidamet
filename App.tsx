@@ -144,6 +144,45 @@ const App: React.FC = () => {
             setUserFirstName(user.firstName || '');
             setUserLastName(user.lastName || '');
             setActiveRole(role === 'provider' ? 'provider' : 'client');
+            
+            // Cargar perfiles desde la base de datos
+            try {
+              if (role === 'provider') {
+                const profile = await providerProfileService.getByUserId(user.id);
+                // Mapear el perfil del backend al formato de la UI
+                setProviderProfile({
+                  id: profile.id,
+                  firstName: user.firstName || '',
+                  lastName: user.lastName || '',
+                  email: user.email,
+                  phone: profile.phoneNumber || '',
+                  photoUrl: '', // TODO: agregar photoUrl cuando esté disponible en el backend
+                  location: profile.address || '',
+                  coordinates: undefined,
+                  languages: [], // TODO: agregar languages cuando esté disponible
+                  availability: [],
+                  services: {} as any, // TODO: cargar servicios
+                });
+              } else if (role === 'client') {
+                const profile = await clientProfileService.getByUserId(user.id);
+                // Mapear el perfil del backend al formato de la UI
+                setClientProfile({
+                  id: profile.id,
+                  firstName: user.firstName || '',
+                  lastName: user.lastName || '',
+                  email: user.email,
+                  phone: profile.phoneNumber || '',
+                  photoUrl: '', // TODO: agregar photoUrl cuando esté disponible en el backend
+                  location: profile.address || '',
+                  coordinates: undefined,
+                  languages: [], // TODO: agregar languages cuando esté disponible
+                  preferences: [],
+                });
+              }
+            } catch (profileError) {
+              console.log('No se encontró perfil existente:', profileError);
+              // No mostrar error si no existe perfil, es normal para usuarios nuevos
+            }
           } else {
             // Token existe pero no hay datos de usuario, limpiar
             tokenStorage.clearTokens();
@@ -319,8 +358,8 @@ const App: React.FC = () => {
       // Guardar el perfil en la base de datos
       const savedProfile = await providerProfileService.create(createProviderDto);
       
-      // Actualizar el estado local con el perfil guardado
-      setProviderProfile(data);
+      // Actualizar el estado local con el perfil guardado (incluye el id)
+      setProviderProfile({ ...data, id: savedProfile.id });
       setActiveRole('provider');
       setIsAuthenticated(true);
       
@@ -341,6 +380,84 @@ const App: React.FC = () => {
         isOpen: true, 
         message: error.message || 'Error al guardar el perfil. Por favor, intenta de nuevo.', 
         title: 'Error' 
+      });
+    }
+  };
+
+  const handleUpdateProviderProfile = async (updatedProfile: ProviderProfile) => {
+    try {
+      if (!updatedProfile.id) {
+        throw new Error('No se puede actualizar el perfil sin ID');
+      }
+
+      // Preparar datos para actualizar
+      const updateDto = {
+        phone: updatedProfile.phone,
+        photoUrl: updatedProfile.photoUrl,
+        location: updatedProfile.location,
+        latitude: updatedProfile.coordinates?.latitude,
+        longitude: updatedProfile.coordinates?.longitude,
+        languages: updatedProfile.languages,
+        availability: updatedProfile.availability,
+      };
+
+      // Actualizar en la base de datos
+      await providerProfileService.update(updatedProfile.id, updateDto);
+      
+      // Actualizar estado local
+      setProviderProfile(updatedProfile);
+      
+      // Show success message
+      setAlertModal({
+        isOpen: true,
+        message: 'Perfil actualizado correctamente',
+        title: 'Éxito'
+      });
+    } catch (error: any) {
+      console.error('Error al actualizar perfil de proveedor:', error);
+      setAlertModal({
+        isOpen: true,
+        message: error.message || 'Error al actualizar el perfil. Por favor, intenta de nuevo.',
+        title: 'Error'
+      });
+    }
+  };
+
+  const handleUpdateClientProfile = async (updatedProfile: ClientProfile) => {
+    try {
+      if (!updatedProfile.id) {
+        throw new Error('No se puede actualizar el perfil sin ID');
+      }
+
+      // Preparar datos para actualizar
+      const updateDto = {
+        phone: updatedProfile.phone,
+        photoUrl: updatedProfile.photoUrl,
+        location: updatedProfile.location,
+        latitude: updatedProfile.coordinates?.latitude,
+        longitude: updatedProfile.coordinates?.longitude,
+        languages: updatedProfile.languages,
+        preferences: updatedProfile.preferences,
+      };
+
+      // Actualizar en la base de datos
+      await clientProfileService.update(updatedProfile.id, updateDto);
+      
+      // Actualizar estado local
+      setClientProfile(updatedProfile);
+      
+      // Show success message
+      setAlertModal({
+        isOpen: true,
+        message: 'Perfil actualizado correctamente',
+        title: 'Éxito'
+      });
+    } catch (error: any) {
+      console.error('Error al actualizar perfil de cliente:', error);
+      setAlertModal({
+        isOpen: true,
+        message: error.message || 'Error al actualizar el perfil. Por favor, intenta de nuevo.',
+        title: 'Error'
       });
     }
   };
@@ -660,13 +777,15 @@ const App: React.FC = () => {
         initialData={clientProfile ? {
           ...clientProfile,
           // Convertir clientProfile a estructura compatible con ProviderProfile
-          name: clientProfile.name,
+          firstName: clientProfile.firstName,
+          lastName: clientProfile.lastName,
           email: userEmail || clientProfile.email,
           phone: clientProfile.phone,
           location: clientProfile.location,
           languages: clientProfile.languages,
         } : {
-          name: userName,
+          firstName: userFirstName,
+          lastName: userLastName,
           email: userEmail,
           phone: userPhone,
         }}
@@ -768,9 +887,7 @@ const App: React.FC = () => {
         mainContent = <ProfesionalProfilePage 
           profile={providerProfile}
           onBack={handleNavigateHome}
-          onUpdateProfile={(updatedProfile) => {
-            setProviderProfile(updatedProfile);
-          }}
+          onUpdateProfile={handleUpdateProviderProfile}
           onNavigateSecurity={() => setView("securitySettings")}
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}
@@ -791,7 +908,8 @@ const App: React.FC = () => {
               // Si no existe clientProfile pero sí providerProfile, crear uno temporal con datos básicos
               if (!clientProfile && providerProfile) {
                 const tempClientProfile: ClientProfile = {
-                  name: providerProfile.name,
+                  firstName: providerProfile.firstName,
+                  lastName: providerProfile.lastName,
                   email: providerProfile.email,
                   phone: providerProfile.phone,
                   photoUrl: providerProfile.photoUrl,
@@ -814,14 +932,13 @@ const App: React.FC = () => {
           onNavigateSecurity={() => setView("securitySettings")}
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}
-          onUpdateProfile={(updatedProfile) => {
-            setClientProfile(updatedProfile);
-          }}
+          onUpdateProfile={handleUpdateClientProfile}
           onSwitchToProvider={() => {
             // Si no existe providerProfile pero sí clientProfile, crear uno temporal con datos básicos
             if (!providerProfile && clientProfile) {
               const tempProviderProfile: ProviderProfile = {
-                name: clientProfile.name,
+                firstName: clientProfile.firstName,
+                lastName: clientProfile.lastName,
                 email: clientProfile.email,
                 phone: clientProfile.phone,
                 photoUrl: clientProfile.photoUrl,
@@ -935,10 +1052,10 @@ const App: React.FC = () => {
             };
 
             // Guardar el perfil en la base de datos
-            await clientProfileService.create(createClientDto);
+            const savedProfile = await clientProfileService.create(createClientDto);
             
-            // Actualizar el estado local
-            setClientProfile(profileData);
+            // Actualizar el estado local con el perfil guardado (incluye el id)
+            setClientProfile({ ...profileData, id: savedProfile.id });
             setActiveRole('client');
             
             // Show success alert

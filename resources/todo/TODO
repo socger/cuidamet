@@ -94,12 +94,6 @@ Cambiar todos los alert por el componente popup común para mensajes.
 
 --------------------------------------------------------------------------------------------------------
 
-* Cuando el usuario está creando su perfil, registrándose al principio, ya introdujo su correo electrónico, por lo que en el step 1 debería crearse y no modificarse. ¿Pero deberíamos entonces de crear un proceso para cambiar entonces en algún momento este correo electrónico?
-
-
-
-
-
 
 * Si el usuario es un familiar, cuando crea o modifica una reserva no puede cambiar nada de los precios establecidos por el cuidador. Sólo podrá elegir uno de sus servicios y cambiar los horarios. Siempre y cuando el cuidador hubiera elegido una franja horario de acuerdo a las necesidades del familiar.
 
@@ -110,6 +104,10 @@ Además un cuidador tiene varios tipos de servicios y la reserva no permite eleg
 
 La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería
 
-* Cuando editas un perfil profesional, después de haberlo creado, ya no nos presenta la imagen que se había capturado anteriormente. Comprobar si ocurre lo mismo con el perfil familiar. 
+* NO SE ESTAN GUARDANDO los cambios realizados, en modo edición, de cualquier perfil de usuario (familiar ó profesional). Además deberíamos de permitir modificar el email, el nombre, y el apellido (incluso en la creación del perfil). Y por cierto, cuando editas un perfil no pasan los datos del email, el nombre, y el apellidos, por lo que no se pueden modificar. Hay que comprobar si pasa lo mismo con la imagen que se capturó del usuario en la creación de este perfil.
 
-* NO SE ESTAN GUARDANDO ... También tengo que ver si cuando se modifica un perfil, si se guarda el cambio (como la foto, el nombre, el apellido, el email ... que son datos que no se modifican en la creación, pero que puede ser necesario hacerlo en la edición)
+* Creemos que cuando se guardan los perfiles (familiar o profesional) no se están guardando todos los datos del perfil (por ejemplo los servicios que ofrece).
+
+* Hay que ver si cuando el usuario se autentica se comprueba si el usuario existe con esos datos que se envían y que recoge bien sus dos perfiles posibles (el familiar y el profesional. Si un usuario tiene ambos perfiles, entrará en el último que estuviera activo. Por lo que habría que crear algún sistema de activar el familiar o el profesional.)
+
+* Cuando creas el perfil, si después lo editas y guardas los cambios. Si después cambias de vista por ejemplo a Reservas y decides después volver a la vista TU... ya no recuerda tu perfil la app

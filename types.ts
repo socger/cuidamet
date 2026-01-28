@@ -85,7 +85,9 @@ export interface ServiceConfig {
 }
 
 export interface ProviderProfile {
-    name: string;
+    id?: number;
+    firstName: string;
+    lastName: string;
     email: string;
     phone: string;
     photoUrl: string;
@@ -168,7 +170,9 @@ export interface BookingDetails {
 }
 
 export interface ClientProfile {
-    name: string;
+    id?: number;
+    firstName: string;
+    lastName: string;
     email: string;
     photoUrl: string;
     phone: string;

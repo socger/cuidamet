@@ -11,6 +11,9 @@ interface PersonalInfoFormProps {
   languages: string[];
   languagesList: string[];
   isLocating?: boolean;
+  onFirstNameChange: (value: string) => void;
+  onLastNameChange: (value: string) => void;
+  onEmailChange: (value: string) => void;
   onPhoneChange: (value: string) => void;
   onLocationChange: (value: string) => void;
   onLanguageToggle: (lang: string) => void;
@@ -26,6 +29,9 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
   languages,
   languagesList,
   isLocating = false,
+  onFirstNameChange,
+  onLastNameChange,
+  onEmailChange,
   onPhoneChange,
   onLocationChange,
   onLanguageToggle,
@@ -40,8 +46,8 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         <input
           type="text"
           value={firstName}
-          readOnly
-          className="w-full p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-600 cursor-not-allowed"
+          onChange={(e) => onFirstNameChange(e.target.value)}
+          className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
           placeholder="Nombre"
         />
       </div>
@@ -53,8 +59,8 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         <input
           type="text"
           value={lastName}
-          readOnly
-          className="w-full p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-600 cursor-not-allowed"
+          onChange={(e) => onLastNameChange(e.target.value)}
+          className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
           placeholder="Apellido"
         />
       </div>
@@ -66,8 +72,8 @@ const PersonalInfoForm: React.FC<PersonalInfoFormProps> = ({
         <input
           type="email"
           value={email}
-          readOnly
-          className="w-full p-3 bg-slate-100 border border-slate-300 rounded-xl text-slate-600 cursor-not-allowed"
+          onChange={(e) => onEmailChange(e.target.value)}
+          className="w-full p-3 bg-white border border-slate-300 rounded-xl focus:ring-2 focus:ring-teal-500 outline-none"
           placeholder="tu-email@ejemplo.com"
         />
       </div>

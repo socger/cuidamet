@@ -81,6 +81,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
 }) => {
   const [step, setStep] = useState(1);
   const [profileData, setProfileData] = useState({
+    id: initialData?.id,
     firstName: initialData?.firstName || "",
     lastName: initialData?.lastName || "",
     email: initialData?.email || "",
@@ -225,15 +226,19 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
       
       // Construir el objeto alineado con el DTO del backend
       const profilePayload = {
+        id: profileData.id,
+        firstName: profileData.firstName,
+        lastName: profileData.lastName,
+        email: profileData.email,
         phone: profileData.phone,
         photoUrl: profileData.photoUrl || "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200",
         location: profileData.location,
-        latitude: profileData.latitude,
-        longitude: profileData.longitude,
+        coordinates: profileData.latitude && profileData.longitude ? {
+          latitude: profileData.latitude,
+          longitude: profileData.longitude
+        } : undefined,
         languages: profileData.languages,
         preferences: selectedCategories,
-        profileStatus: profileData.profileStatus,
-        isPremium: profileData.isPremium,
       };
       onComplete(profilePayload);
     }
@@ -322,6 +327,9 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
                   languages={profileData.languages}
                   languagesList={languagesList}
                   isLocating={isLocating}
+                  onFirstNameChange={(value) => handleProfileChange("firstName", value)}
+                  onLastNameChange={(value) => handleProfileChange("lastName", value)}
+                  onEmailChange={(value) => handleProfileChange("email", value)}
                   onPhoneChange={(value) => handleProfileChange("phone", value)}
                   onLocationChange={(value) => handleProfileChange("location", value)}
                   onLanguageToggle={toggleLanguage}

@@ -340,7 +340,9 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
   // General Profile Data
   const [profileData, setProfileData] = useState({
-    name: initialData?.name || "",
+    id: initialData?.id,
+    firstName: initialData?.firstName || "",
+    lastName: initialData?.lastName || "",
     email: initialData?.email || "",
     phone: initialData?.phone || "",
     location: initialData?.location || "",
@@ -717,8 +719,11 @@ const OfferService: React.FC<OfferServiceProps> = ({
     if (step === 1) {
       const errors: string[] = [];
       
-      if (profileData.name.trim() === "") {
+      if (profileData.firstName.trim() === "") {
         errors.push("Nombre");
+      }
+      if (profileData.lastName.trim() === "") {
+        errors.push("Apellido");
       }
       if (profileData.email.trim() === "") {
         errors.push("Email");
@@ -947,14 +952,16 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
       {/* Fields */}
       <PersonalInfo
-        name={profileData.name}
+        firstName={profileData.firstName}
+        lastName={profileData.lastName}
         email={profileData.email}
         phone={profileData.phone}
         location={profileData.location}
         languages={profileData.languages}
         languagesList={languagesList}
         isLocating={isLocating}
-        onNameChange={(value) => handleProfileChange("name", value)}
+        onFirstNameChange={(value) => handleProfileChange("firstName", value)}
+        onLastNameChange={(value) => handleProfileChange("lastName", value)}
         onEmailChange={(value) => handleProfileChange("email", value)}
         onPhoneChange={(value) => handleProfileChange("phone", value)}
         onLocationChange={(value) => handleProfileChange("location", value)}
@@ -1435,7 +1442,7 @@ const OfferService: React.FC<OfferServiceProps> = ({
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <Resumen_PersonalInfo
             photoUrl={profileData.photoUrl || "https://via.placeholder.com/150"}
-            name={profileData.name}
+            name={`${profileData.firstName} ${profileData.lastName}`.trim()}
             phone={profileData.phone}
             email={profileData.email}
             location={profileData.location}

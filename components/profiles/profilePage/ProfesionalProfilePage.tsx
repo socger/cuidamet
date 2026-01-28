@@ -243,7 +243,7 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   const displayProfile = profile
     ? {
         ...defaultDashboardData,
-        name: profile.name || "Usuario Nuevo",
+        name: `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || "Usuario Nuevo",
         photoUrl: profile.photoUrl || defaultDashboardData.photoUrl,
         location: profile.location || "Ubicación no definida",
         email: profile.email || "",

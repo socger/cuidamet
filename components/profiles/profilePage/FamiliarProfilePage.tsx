@@ -87,7 +87,8 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
 
   // Default guest data if no client profile exists
   const displayProfile = clientProfile || {
-    name: "Usuario Invitado",
+    firstName: "Usuario",
+    lastName: "Invitado",
     photoUrl:
       "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop", // Generic placeholder
     email: "",
@@ -163,7 +164,7 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
             photoUrl={
               displayProfile.photoUrl || "https://via.placeholder.com/150"
             }
-            name={displayProfile.name}
+            name={`${displayProfile.firstName || ''} ${displayProfile.lastName || ''}`.trim() || "Usuario Invitado"}
             phone={displayProfile.phone}
             email={displayProfile.email}
             location={displayProfile.location}
