@@ -147,14 +147,21 @@ const App: React.FC = () => {
             
             // Cargar perfiles desde la base de datos
             try {
+              console.log('🔍 Intentando cargar perfil para user:', user.id, 'role:', role);
+              
               if (role === 'provider') {
-                const profile = await providerProfileService.getByUserId(user.id);
+                const response = await providerProfileService.getByUserId(user.id);
+                console.log('✅ Respuesta del backend (provider):', response);
+                const profile = response.data; // El backend devuelve { message, data }
+                console.log('📦 Datos del perfil (provider):', profile);
+                
                 // Mapear el perfil del backend al formato de la UI
-                setProviderProfile({
+                // Usar datos del user que vienen con el perfil, no del token
+                const mappedProfile = {
                   id: profile.id,
-                  firstName: user.firstName || '',
-                  lastName: user.lastName || '',
-                  email: user.email,
+                  firstName: profile.user?.firstName || user.firstName || '',
+                  lastName: profile.user?.lastName || user.lastName || '',
+                  email: profile.user?.email || user.email,
                   phone: profile.phoneNumber || '',
                   photoUrl: '', // TODO: agregar photoUrl cuando esté disponible en el backend
                   location: profile.address || '',
@@ -162,25 +169,34 @@ const App: React.FC = () => {
                   languages: [], // TODO: agregar languages cuando esté disponible
                   availability: [],
                   services: {} as any, // TODO: cargar servicios
-                });
+                };
+                console.log('🎨 Perfil mapeado (provider):', mappedProfile);
+                setProviderProfile(mappedProfile);
               } else if (role === 'client') {
-                const profile = await clientProfileService.getByUserId(user.id);
+                const response = await clientProfileService.getByUserId(user.id);
+                console.log('✅ Respuesta del backend (client):', response);
+                const profile = response.data; // El backend devuelve { message, data }
+                console.log('📦 Datos del perfil (client):', profile);
+                
                 // Mapear el perfil del backend al formato de la UI
-                setClientProfile({
+                // Usar datos del user que vienen con el perfil, no del token
+                const mappedProfile = {
                   id: profile.id,
-                  firstName: user.firstName || '',
-                  lastName: user.lastName || '',
-                  email: user.email,
+                  firstName: profile.user?.firstName || user.firstName || '',
+                  lastName: profile.user?.lastName || user.lastName || '',
+                  email: profile.user?.email || user.email,
                   phone: profile.phoneNumber || '',
                   photoUrl: '', // TODO: agregar photoUrl cuando esté disponible en el backend
                   location: profile.address || '',
                   coordinates: undefined,
                   languages: [], // TODO: agregar languages cuando esté disponible
                   preferences: [],
-                });
+                };
+                console.log('🎨 Perfil mapeado (client):', mappedProfile);
+                setClientProfile(mappedProfile);
               }
             } catch (profileError) {
-              console.log('No se encontró perfil existente:', profileError);
+              console.error('❌ Error al cargar perfil:', profileError);
               // No mostrar error si no existe perfil, es normal para usuarios nuevos
             }
           } else {
@@ -584,9 +600,58 @@ const App: React.FC = () => {
     );
   };
 
-  const handleLoginSuccess = (role: UserRole) => {
+  const handleLoginSuccess = async (role: UserRole) => {
+    console.log('🎉 handleLoginSuccess llamado con role:', role);
     setIsAuthenticated(true);
+    setActiveRole(role); // ← CRÍTICO: Establecer el rol activo
     setAuthAttempts(0);
+    
+    // Cargar el perfil del usuario después del login
+    try {
+      const user = tokenStorage.getUser();
+      if (user) {
+        console.log('📥 Cargando perfil después del login para user:', user.id, 'role:', role);
+        
+        if (role === 'provider') {
+          const response = await providerProfileService.getByUserId(user.id);
+          const profile = response.data;
+          console.log('✅ Perfil de proveedor cargado:', profile);
+          
+          setProviderProfile({
+            id: profile.id,
+            firstName: profile.user?.firstName || user.firstName || '',
+            lastName: profile.user?.lastName || user.lastName || '',
+            email: profile.user?.email || user.email,
+            phone: profile.phoneNumber || '',
+            photoUrl: '',
+            location: profile.address || '',
+            coordinates: undefined,
+            languages: [],
+            availability: [],
+            services: {} as any,
+          });
+        } else if (role === 'client') {
+          const response = await clientProfileService.getByUserId(user.id);
+          const profile = response.data;
+          console.log('✅ Perfil de cliente cargado:', profile);
+          
+          setClientProfile({
+            id: profile.id,
+            firstName: profile.user?.firstName || user.firstName || '',
+            lastName: profile.user?.lastName || user.lastName || '',
+            email: profile.user?.email || user.email,
+            phone: profile.phoneNumber || '',
+            photoUrl: '',
+            location: profile.address || '',
+            coordinates: undefined,
+            languages: [],
+            preferences: [],
+          });
+        }
+      }
+    } catch (error) {
+      console.log('ℹ️ No se encontró perfil existente (puede ser normal):', error);
+    }
     
     // Execute pending action
     if (pendingAction === 'booking' && bookingProviderId) {
@@ -883,6 +948,7 @@ const App: React.FC = () => {
           onBack={handleNavigateHome}
         />;
       } else if (activeRole === 'provider') {
+        console.log('🔵 Mostrando perfil PROFESIONAL. activeRole:', activeRole, 'providerProfile:', providerProfile);
         // Provider Profile
         mainContent = <ProfesionalProfilePage 
           profile={providerProfile}
@@ -924,6 +990,7 @@ const App: React.FC = () => {
           }
         />;
       } else {
+        console.log('🟡 Mostrando perfil FAMILIAR. activeRole:', activeRole, 'clientProfile:', clientProfile);
         // Client Profile
         mainContent = <FamiliarProfilePage 
           clientProfile={clientProfile}

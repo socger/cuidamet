@@ -223,6 +223,8 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   profile,
   onUpdateProfile,
 }) => {
+  console.log('🎯 ProfesionalProfilePage renderizado con profile:', profile);
+  
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
     message: string;

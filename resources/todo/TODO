@@ -94,7 +94,6 @@ Cambiar todos los alert por el componente popup común para mensajes.
 
 --------------------------------------------------------------------------------------------------------
 
-
 * Si el usuario es un familiar, cuando crea o modifica una reserva no puede cambiar nada de los precios establecidos por el cuidador. Sólo podrá elegir uno de sus servicios y cambiar los horarios. Siempre y cuando el cuidador hubiera elegido una franja horario de acuerdo a las necesidades del familiar.
 
 
@@ -103,6 +102,8 @@ Las reservas deberían de poder tener una gestión para saber si están confirma
 Además un cuidador tiene varios tipos de servicios y la reserva no permite elegir entre uno de los servicios que ofrece. Además si tiene contratado algún tipo de bono. No va restando servicios realizados al bono contratado.
 
 La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería
+
+--------------------------------------------------------------------------------------------------------
 
 * NO SE ESTAN GUARDANDO los cambios realizados, en modo edición, de cualquier perfil de usuario (familiar ó profesional). Además deberíamos de permitir modificar el email, el nombre, y el apellido (incluso en la creación del perfil). Y por cierto, cuando editas un perfil no pasan los datos del email, el nombre, y el apellidos, por lo que no se pueden modificar. Hay que comprobar si pasa lo mismo con la imagen que se capturó del usuario en la creación de este perfil.
 

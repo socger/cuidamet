@@ -103,11 +103,17 @@ const AuthPage: React.FC<AuthPageProps> = ({
         password,
       });
       
+      console.log('🔐 Respuesta de login:', response);
+      console.log('👤 Usuario:', response.user);
+      console.log('🎭 Roles del usuario:', response.user.roles);
+      
       // Determinar el rol del usuario basado en sus roles
       let userRole: UserRole = "client";
       if (response.user.roles.includes('provider') || response.user.roles.includes('admin')) {
         userRole = "provider";
       }
+      
+      console.log('✅ Rol determinado:', userRole);
       
       // Guardar el rol del usuario
       tokenStorage.setUserRole(userRole);
