@@ -110,4 +110,4 @@ Además un cuidador tiene varios tipos de servicios y la reserva no permite eleg
 
 La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería
 
-* Cuando editas un perfil profesional, después de haberlo creado, ya no nos presenta la imagen que se había capturado anteriormente. Comprobar si ocurre lo mismo con el perfil familiar.
+* Cuando editas un perfil profesional, después de haberlo creado, ya no nos presenta la imagen que se había capturado anteriormente. Comprobar si ocurre lo mismo con el perfil familiar. También tengo que ver si cuando se modifica un perfil, si se guarda el cambio (como la foto, el nombre, el apellido, el email ... que son datos que no se modifican en la creación, pero que puede ser necesario hacerlo en la edición)
