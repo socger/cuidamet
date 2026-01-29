@@ -154,6 +154,8 @@ const App: React.FC = () => {
                 console.log('✅ Respuesta del backend (provider):', response);
                 const profile = response.data; // El backend devuelve { message, data }
                 console.log('📦 Datos del perfil (provider):', profile);
+                console.log('🗣️ Idiomas en el perfil del backend:', profile.languages);
+                console.log('🗣️ Tipo de languages:', typeof profile.languages, Array.isArray(profile.languages));
                 
                 // Mapear el perfil del backend al formato de la UI
                 // Usar datos del user que vienen con el perfil, no del token
@@ -165,12 +167,15 @@ const App: React.FC = () => {
                   phone: profile.phone || '',
                   photoUrl: profile.photoUrl || '',
                   location: profile.location || '',
-                  coordinates: undefined,
-                  languages: [], // TODO: agregar languages cuando esté disponible
-                  availability: [],
-                  services: {} as any, // TODO: cargar servicios
+                  coordinates: profile.latitude && profile.longitude 
+                    ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+                    : undefined,
+                  languages: profile.languages || [],
+                  availability: profile.availability || [],
+                  services: {} as any, // TODO: cargar servicios desde profile.services
                 };
                 console.log('🎨 Perfil mapeado (provider):', mappedProfile);
+                console.log('🗣️ Idiomas en perfil mapeado:', mappedProfile.languages);
                 setProviderProfile(mappedProfile);
               } else if (role === 'client') {
                 const response = await clientProfileService.getByUserId(user.id);
@@ -188,9 +193,11 @@ const App: React.FC = () => {
                   phone: profile.phone || '',
                   photoUrl: profile.photoUrl || '',
                   location: profile.location || '',
-                  coordinates: undefined,
-                  languages: [], // TODO: agregar languages cuando esté disponible
-                  preferences: [],
+                  coordinates: profile.latitude && profile.longitude 
+                    ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+                    : undefined,
+                  languages: profile.languages || [],
+                  preferences: profile.preferences || [],
                 };
                 console.log('🎨 Perfil mapeado (client):', mappedProfile);
                 setClientProfile(mappedProfile);
@@ -651,37 +658,51 @@ const App: React.FC = () => {
           const response = await providerProfileService.getByUserId(user.id);
           const profile = response.data;
           console.log('✅ Perfil de proveedor cargado:', profile);
+          console.log('🗣️ Idiomas desde backend:', profile.languages);
+          console.log('📸 Foto desde backend:', profile.photoUrl);
           
-          setProviderProfile({
+          // Mapear correctamente TODOS los campos del perfil
+          const mappedProfile = {
             id: profile.id,
             firstName: profile.user?.firstName || user.firstName || '',
             lastName: profile.user?.lastName || user.lastName || '',
             email: profile.user?.email || user.email,
             phone: profile.phone || '',
-            photoUrl: profile.photoUrl || '',
+            photoUrl: profile.photoUrl || '', // ← MAPEAR photoUrl
             location: profile.location || '',
-            coordinates: undefined,
-            languages: [],
-            availability: [],
-            services: {} as any,
-          });
+            coordinates: profile.latitude && profile.longitude 
+              ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+              : undefined,
+            languages: profile.languages || [], // ← MAPEAR languages del backend
+            availability: profile.availability || [], // ← MAPEAR availability del backend
+            services: {} as any, // TODO: mapear services
+          };
+          
+          console.log('🎨 Perfil mapeado para setState:', mappedProfile);
+          console.log('🗣️ Idiomas en perfil mapeado:', mappedProfile.languages);
+          setProviderProfile(mappedProfile);
         } else if (role === 'client') {
           const response = await clientProfileService.getByUserId(user.id);
           const profile = response.data;
           console.log('✅ Perfil de cliente cargado:', profile);
           
-          setClientProfile({
+          // Mapear correctamente TODOS los campos del perfil
+          const mappedProfile = {
             id: profile.id,
             firstName: profile.user?.firstName || user.firstName || '',
             lastName: profile.user?.lastName || user.lastName || '',
             email: profile.user?.email || user.email,
             phone: profile.phone || '',
-            photoUrl: profile.photoUrl || '',
+            photoUrl: profile.photoUrl || '', // ← MAPEAR photoUrl
             location: profile.location || '',
-            coordinates: undefined,
-            languages: [],
-            preferences: [],
-          });
+            coordinates: profile.latitude && profile.longitude 
+              ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+              : undefined,
+            languages: profile.languages || [], // ← MAPEAR languages del backend
+            preferences: profile.preferences || [], // ← MAPEAR preferences del backend
+          };
+          
+          setClientProfile(mappedProfile);
         }
       }
     } catch (error) {

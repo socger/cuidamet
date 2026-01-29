@@ -264,6 +264,10 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
       }
     : defaultDashboardData;
 
+  console.log('🎯 displayProfile.languages:', displayProfile.languages);
+  console.log('🎯 profile original:', profile);
+  console.log('🎯 profile.languages:', profile?.languages);
+
   const handleProfileUpdate = (updatedProfile: ProviderProfile) => {
     if (onUpdateProfile) {
       onUpdateProfile(updatedProfile);
@@ -273,6 +277,8 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   };
 
   if (isEditingProfile) {
+    console.log('🔧 Editando perfil - initialData:', profile);
+    console.log('🔧 photoUrl específica:', profile?.photoUrl);
     return (
       <ProfesionalRegistration
         initialData={profile || undefined}
@@ -283,6 +289,7 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   }
 
   if (isEditingServices) {
+    console.log('🔧 Editando servicios - initialData:', profile);
     return (
       <ProfesionalRegistration
         initialData={profile || undefined}

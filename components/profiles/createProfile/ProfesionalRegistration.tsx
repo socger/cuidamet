@@ -34,14 +34,7 @@ import PaperClipIcon from "../../icons/PaperClipIcon";
 interface ProfesionalRegistrationProps {
   onComplete: (profileData: ProviderProfile) => void;
   onCancel?: () => void;
-  initialData?: {
-    firstName?: string;
-    lastName?: string;
-    email?: string;
-    phone?: string;
-    location?: string;
-    languages?: string[];
-  };
+  initialData?: Partial<ProviderProfile>;
   initialStep?: number;
   currentView?: string;
   onNavigateHome?: () => void;
@@ -335,6 +328,9 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   unreadCount = 0,
   isAuthenticated = true,
 }) => {
+  console.log('🎨 ProfesionalRegistration renderizado con initialData:', initialData);
+  console.log('🎨 photoUrl en initialData:', initialData?.photoUrl);
+  
   const [step, setStep] = useState(initialStep); // 1: Profile, 2: Services Dashboard, 3: Summary
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(
     null
@@ -355,11 +351,14 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     phone: initialData?.phone || "",
     location: initialData?.location || "",
     languages: initialData?.languages || ([] as string[]),
-    photoUrl: "",
-    coordinates: undefined as
+    photoUrl: initialData?.photoUrl || "",
+    coordinates: initialData?.coordinates || undefined as
       | { latitude: number; longitude: number }
       | undefined,
   });
+
+  console.log('🎨 profileData inicial:', profileData);
+  console.log('🎨 photoUrl en profileData:', profileData.photoUrl);
 
   // Specific Data per Service - Initialize all categories with default variations
   const [servicesData, setServicesData] = useState<
@@ -751,6 +750,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
     const finalProfile: ProviderProfile = {
       ...profileData,
+      id: initialData?.id, // Preservar el ID si existe (para actualizaciones)
       name: fullName,
       availability: Array.from(allAvailabilities),
       services: servicesData,

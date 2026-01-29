@@ -110,7 +110,3 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 * Hay que ver si cuando el usuario se autentica se comprueba si el usuario existe con esos datos que se envían y que recoge bien sus dos perfiles posibles (el familiar y el profesional. Si un usuario tiene ambos perfiles, entrará en el último que estuviera activo. Por lo que habría que crear algún sistema de activar el familiar o el profesional.)
 
 * En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando en ninguna tabla.
-
-* Cuando creas el perfil, si después lo editas y guardas los cambios. Si después cambias de vista por ejemplo a Reservas y decides después volver a la vista TU... ya no recuerda tu perfil la app
-
-* Si estoy autenticado o he creado un suario, con su perfil, y ahora en el navegador le doy a refrescar, parece que el usuario, EN EL APARTADO TU, todavía lo recuerda. Pero si le damos a editarlo no pasa nada, ni nombre, ni foto, nada de nada. Igual si le damos a refrescar, el usuario debería de autenticarse.
