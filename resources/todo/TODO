@@ -105,18 +105,12 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 
 --------------------------------------------------------------------------------------------------------
 
-* NO SE ESTAN GUARDANDO los cambios realizados, en modo edición, de cualquier perfil de usuario (familiar ó profesional). Además deberíamos de permitir modificar el email, el nombre, y el apellido (incluso en la creación del perfil). Y por cierto, cuando editas un perfil no pasan los datos del email, el nombre, y el apellidos, por lo que no se pueden modificar. Hay que comprobar si pasa lo mismo con la imagen que se capturó del usuario en la creación de este perfil.
-
-* Creemos que cuando se guardan los perfiles (familiar o profesional) no se están guardando todos los datos del perfil (por ejemplo los servicios que ofrece).
+* El usuario puede desde la vista TU cambiarse el tipo de perfil. Si se cambia de perfil debe de actualizarlo en la tabla user_roles y cargar el perfil correcto si existiera (al perfil al que está cambiándose, por lo que supone su intento de carga de este perfil para ese usuario de la app).
 
 * Hay que ver si cuando el usuario se autentica se comprueba si el usuario existe con esos datos que se envían y que recoge bien sus dos perfiles posibles (el familiar y el profesional. Si un usuario tiene ambos perfiles, entrará en el último que estuviera activo. Por lo que habría que crear algún sistema de activar el familiar o el profesional.)
 
+* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando en ninguna tabla.
+
 * Cuando creas el perfil, si después lo editas y guardas los cambios. Si después cambias de vista por ejemplo a Reservas y decides después volver a la vista TU... ya no recuerda tu perfil la app
-
-* Cuando se está creando el usuario, siempre se guarda en la tabla user_roles con con el valor del id del rol con name = "user", cuando debería de guardarse con el valor del id del rol con name = "provider" para perfil profesional y el id del rol con name = "client" para perfil familiar. Y no lo está haciendo, cuando el usuario si que está obligado a elegir que tipo de perfil es con el que se va a crear como usuario.
-
-* El usuario puede desde la vista TU cambiarse el tipo de perfil. Si se cambia de perfil debe de actualizarlo en la tabla user_roles y cargar el perfil correcto si existiera (al perfil al que está cambiándose, por lo que supone su intento de carga de este perfil para ese usuario de la app).
-
-* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición).
 
 * Si estoy autenticado o he creado un suario, con su perfil, y ahora en el navegador le doy a refrescar, parece que el usuario, EN EL APARTADO TU, todavía lo recuerda. Pero si le damos a editarlo no pasa nada, ni nombre, ni foto, nada de nada. Igual si le damos a refrescar, el usuario debería de autenticarse.
