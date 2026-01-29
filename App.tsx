@@ -357,6 +357,13 @@ const App: React.FC = () => {
         throw new Error('No se pudo obtener el ID del usuario');
       }
 
+      // Preparar datos del usuario para actualizar
+      const userData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+      };
+
       // Preparar datos para la API
       const createProviderDto = {
         userId: user.id,
@@ -371,8 +378,8 @@ const App: React.FC = () => {
         // Los servicios se guardarán a través de service-configs y service-variations endpoints
       };
 
-      // Guardar el perfil en la base de datos
-      const savedProfile = await providerProfileService.create(createProviderDto);
+      // Guardar el perfil en la base de datos (también actualiza datos del usuario)
+      const savedProfile = await providerProfileService.create(createProviderDto, userData);
       
       // Actualizar el estado local con el perfil guardado (incluye el id)
       setProviderProfile({ ...data, id: savedProfile.id });
@@ -406,8 +413,22 @@ const App: React.FC = () => {
         throw new Error('No se puede actualizar el perfil sin ID');
       }
 
+      // Obtener el userId del usuario autenticado
+      const user = tokenStorage.getUser();
+      if (!user || !user.id) {
+        throw new Error('No se pudo obtener el ID del usuario');
+      }
+
+      // Preparar datos del usuario para actualizar
+      const userData = {
+        firstName: updatedProfile.firstName,
+        lastName: updatedProfile.lastName,
+        email: updatedProfile.email,
+      };
+
       // Preparar datos para actualizar
       const updateDto = {
+        userId: user.id,
         phone: updatedProfile.phone,
         photoUrl: updatedProfile.photoUrl,
         location: updatedProfile.location,
@@ -417,8 +438,8 @@ const App: React.FC = () => {
         availability: updatedProfile.availability,
       };
 
-      // Actualizar en la base de datos
-      await providerProfileService.update(updatedProfile.id, updateDto);
+      // Actualizar en la base de datos (también actualiza datos del usuario)
+      await providerProfileService.update(updatedProfile.id, updateDto, userData);
       
       // Actualizar estado local
       setProviderProfile(updatedProfile);
@@ -445,8 +466,22 @@ const App: React.FC = () => {
         throw new Error('No se puede actualizar el perfil sin ID');
       }
 
+      // Obtener el userId del usuario autenticado
+      const user = tokenStorage.getUser();
+      if (!user || !user.id) {
+        throw new Error('No se pudo obtener el ID del usuario');
+      }
+
+      // Preparar datos del usuario para actualizar
+      const userData = {
+        firstName: updatedProfile.firstName,
+        lastName: updatedProfile.lastName,
+        email: updatedProfile.email,
+      };
+
       // Preparar datos para actualizar
       const updateDto = {
+        userId: user.id,
         phone: updatedProfile.phone,
         photoUrl: updatedProfile.photoUrl,
         location: updatedProfile.location,
@@ -456,8 +491,8 @@ const App: React.FC = () => {
         preferences: updatedProfile.preferences,
       };
 
-      // Actualizar en la base de datos
-      await clientProfileService.update(updatedProfile.id, updateDto);
+      // Actualizar en la base de datos (también actualiza datos del usuario)
+      await clientProfileService.update(updatedProfile.id, updateDto, userData);
       
       // Actualizar estado local
       setClientProfile(updatedProfile);
@@ -1105,6 +1140,13 @@ const App: React.FC = () => {
               throw new Error('No se pudo obtener el ID del usuario');
             }
 
+            // Preparar datos del usuario para actualizar
+            const userData = {
+              firstName: profileData.firstName,
+              lastName: profileData.lastName,
+              email: profileData.email,
+            };
+
             // Preparar datos para la API
             const createClientDto = {
               userId: user.id,
@@ -1118,8 +1160,8 @@ const App: React.FC = () => {
               profileStatus: 'published', // Perfil publicado al completar el registro
             };
 
-            // Guardar el perfil en la base de datos
-            const savedProfile = await clientProfileService.create(createClientDto);
+            // Guardar el perfil en la base de datos (también actualiza datos del usuario)
+            const savedProfile = await clientProfileService.create(createClientDto, userData);
             
             // Actualizar el estado local con el perfil guardado (incluye el id)
             setClientProfile({ ...profileData, id: savedProfile.id });

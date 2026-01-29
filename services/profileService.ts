@@ -4,6 +4,29 @@ import { fetchWithAuth, tokenStorage } from './authService';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_VERSION = import.meta.env.VITE_API_VERSION || 'v1';
 
+// Servicio para actualizar datos del usuario
+export const userService = {
+  /**
+   * Actualizar datos del usuario (firstName, lastName, email)
+   */
+  update: async (userId: number, data: { firstName?: string; lastName?: string; email?: string }) => {
+    const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/users/${userId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al actualizar datos del usuario');
+    }
+
+    return response.json();
+  },
+};
+
 // Tipos para Client Profile
 export interface ClientProfileCreateDto {
   userId: number;
@@ -75,7 +98,17 @@ export const clientProfileService = {
   /**
    * Crear perfil de cliente
    */
-  create: async (data: ClientProfileCreateDto): Promise<ClientProfile> => {
+  create: async (data: ClientProfileCreateDto, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ClientProfile> => {
+    // Si se proporcionan datos del usuario, actualizarlos primero
+    if (userData && (userData.firstName || userData.lastName || userData.email)) {
+      try {
+        await userService.update(data.userId, userData);
+      } catch (error) {
+        console.error('Error al actualizar datos del usuario:', error);
+        // No bloqueamos la creación del perfil si falla la actualización del usuario
+      }
+    }
+
     // Solo enviar los campos que espera el backend
     const payload: any = {
       userId: data.userId,
@@ -124,7 +157,17 @@ export const clientProfileService = {
   /**
    * Actualizar perfil de cliente
    */
-  update: async (id: number, data: Partial<ClientProfileCreateDto>): Promise<ClientProfile> => {
+  update: async (id: number, data: Partial<ClientProfileCreateDto>, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ClientProfile> => {
+    // Si se proporcionan datos del usuario, actualizarlos primero
+    if (userData && data.userId && (userData.firstName || userData.lastName || userData.email)) {
+      try {
+        await userService.update(data.userId, userData);
+      } catch (error) {
+        console.error('Error al actualizar datos del usuario:', error);
+        // No bloqueamos la actualización del perfil si falla la actualización del usuario
+      }
+    }
+
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/client-profiles/${id}`, {
       method: 'PATCH',
       headers: {
@@ -161,7 +204,17 @@ export const providerProfileService = {
   /**
    * Crear perfil de proveedor
    */
-  create: async (data: ProviderProfileCreateDto): Promise<ProviderProfile> => {
+  create: async (data: ProviderProfileCreateDto, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ProviderProfile> => {
+    // Si se proporcionan datos del usuario, actualizarlos primero
+    if (userData && (userData.firstName || userData.lastName || userData.email)) {
+      try {
+        await userService.update(data.userId, userData);
+      } catch (error) {
+        console.error('Error al actualizar datos del usuario:', error);
+        // No bloqueamos la creación del perfil si falla la actualización del usuario
+      }
+    }
+
     // Solo enviar los campos que espera el backend
     const payload: any = {
       userId: data.userId,
@@ -216,7 +269,17 @@ export const providerProfileService = {
   /**
    * Actualizar perfil de proveedor
    */
-  update: async (id: number, data: Partial<ProviderProfileCreateDto>): Promise<ProviderProfile> => {
+  update: async (id: number, data: Partial<ProviderProfileCreateDto>, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ProviderProfile> => {
+    // Si se proporcionan datos del usuario, actualizarlos primero
+    if (userData && data.userId && (userData.firstName || userData.lastName || userData.email)) {
+      try {
+        await userService.update(data.userId, userData);
+      } catch (error) {
+        console.error('Error al actualizar datos del usuario:', error);
+        // No bloqueamos la actualización del perfil si falla la actualización del usuario
+      }
+    }
+
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/provider-profiles/${id}`, {
       method: 'PATCH',
       headers: {

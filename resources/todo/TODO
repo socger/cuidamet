@@ -118,3 +118,5 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 * El usuario puede desde la vista TU cambiarse el tipo de perfil. Si se cambia de perfil debe de actualizarlo en la tabla user_roles y cargar el perfil correcto si existiera (al perfil al que está cambiándose, por lo que supone su intento de carga de este perfil para ese usuario de la app).
 
 * En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición).
+
+* Si estoy autenticado o he creado un suario, con su perfil, y ahora en el navegador le doy a refrescar, parece que el usuario, EN EL APARTADO TU, todavía lo recuerda. Pero si le damos a editarlo no pasa nada, ni nombre, ni foto, nada de nada. Igual si le damos a refrescar, el usuario debería de autenticarse.
