@@ -108,3 +108,5 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 * En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
 
 * Tengo que comprobar si el perfil profesional, cuando lo carga, carga sus servicios creados a mano, los que no son ofrecidos automáticamente. Y también debo de ver si carga sus certificados.
+
+* Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
