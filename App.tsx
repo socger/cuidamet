@@ -1229,16 +1229,15 @@ const App: React.FC = () => {
               if (result.profile) {
                 console.log('✅ Perfil profesional encontrado en BD:', result.profile);
                 
-                // Cargar servicios del proveedor
+                // Los servicios ya vienen en result.profile.services del backend
                 let servicesMap = {};
-                try {
-                  console.log('📦 Cargando servicios del proveedor:', result.profile.id);
-                  const servicesResponse = await serviceConfigService.getByProviderId(result.profile.id);
-                  console.log('✅ Servicios cargados:', servicesResponse);
+                
+                if (result.profile.services && result.profile.services.length > 0) {
+                  console.log('📦 Servicios incluidos en el perfil:', result.profile.services.length);
                   
                   // Transformar array de ServiceConfigs a objeto por categoría
-                  servicesMap = servicesResponse.reduce((acc: any, service: any) => {
-                    acc[service.category] = {
+                  servicesMap = result.profile.services.reduce((acc: any, service: any) => {
+                    acc[service.careCategory] = {
                       completed: service.completed || false,
                       tasks: service.tasks || [],
                       rates: {
@@ -1254,10 +1253,8 @@ const App: React.FC = () => {
                   }, {});
                   
                   console.log('📦 Servicios transformados:', servicesMap);
-                } catch (error) {
-                  console.error('⚠️ Error al cargar servicios:', error);
-                  // Si no se pueden cargar servicios, usar estructura vacía
-                  servicesMap = {};
+                } else {
+                  console.log('⚠️ No hay servicios guardados para este perfil');
                 }
 
                 // Mapear el perfil del backend al formato de la UI
