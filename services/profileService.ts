@@ -378,3 +378,141 @@ export const getProfileByRole = async (
     return null;
   }
 };
+
+// Servicio para Service Configs (Configuraciones de Servicios)
+export const serviceConfigService = {
+  /**
+   * Guardar o actualizar servicios de un proveedor
+   * Este método maneja la creación/actualización de múltiples servicios a la vez
+   */
+  saveProviderServices: async (providerId: number, services: Record<string, any>) => {
+    console.log('💾 Guardando servicios para proveedor:', providerId, services);
+    
+    const results = [];
+    
+    // Iterar sobre cada categoría de servicio
+    for (const [categoryKey, serviceConfig] of Object.entries(services)) {
+      if (!serviceConfig.completed) {
+        console.log(`⏭️ Saltando categoría ${categoryKey} porque no está completada`);
+        continue; // Solo guardar servicios completados
+      }
+      
+      try {
+        // Preparar datos del servicio - SOLO propiedades del ServiceConfig DTO
+        const serviceData = {
+          providerId: providerId,
+          careCategory: categoryKey,
+          completed: serviceConfig.completed,
+          tasks: serviceConfig.tasks || [],
+          availability: serviceConfig.availability || [],
+          hourlyRate: serviceConfig.rates?.hourly || 0,
+          description: serviceConfig.description || '',
+          // NOTA: experienceYears, skills y certificates pertenecen a ProviderProfile, no a ServiceConfig
+        };
+        
+        console.log(`📝 Guardando servicio ${categoryKey}:`, serviceData);
+        
+        // Si el servicio tiene ID, actualizarlo; si no, crearlo
+        let response;
+        if (serviceConfig.id) {
+          response = await fetchWithAuth(
+            `${API_URL}/${API_VERSION}/service-configs/${serviceConfig.id}`,
+            {
+              method: 'PATCH',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(serviceData),
+            }
+          );
+        } else {
+          response = await fetchWithAuth(
+            `${API_URL}/${API_VERSION}/service-configs`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(serviceData),
+            }
+          );
+        }
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.message || `Error al guardar servicio ${categoryKey}`);
+        }
+        
+        const result = await response.json();
+        console.log(`✅ Servicio ${categoryKey} guardado:`, result);
+        
+        // Guardar las variaciones (tareas con precios individuales)
+        if (serviceConfig.variations && serviceConfig.variations.length > 0) {
+          console.log(`📝 Guardando ${serviceConfig.variations.length} variaciones para ${categoryKey}...`);
+          
+          for (const variation of serviceConfig.variations) {
+            // Solo guardar variaciones habilitadas
+            if (!variation.enabled) {
+              console.log(`⏭️ Saltando variación "${variation.name}" (deshabilitada)`);
+              continue;
+            }
+            
+            try {
+              const variationData = {
+                serviceConfigId: result.data.id, // ID del ServiceConfig recién creado
+                name: variation.name,
+                price: variation.price,
+                unit: variation.unit,
+                enabled: variation.enabled,
+                description: variation.description || '',
+                isCustom: variation.isCustom || false,
+                displayOrder: variation.displayOrder || 0,
+              };
+              
+              const variationResponse = await fetchWithAuth(
+                `${API_URL}/${API_VERSION}/service-variations`,
+                {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(variationData),
+                }
+              );
+              
+              if (!variationResponse.ok) {
+                const error = await variationResponse.json();
+                console.warn(`⚠️ Error al guardar variación "${variation.name}":`, error);
+                // No detenemos el proceso si falla una variación
+              } else {
+                const variationResult = await variationResponse.json();
+                console.log(`✅ Variación "${variation.name}" guardada:`, variationResult);
+              }
+            } catch (error) {
+              console.warn(`⚠️ Error al guardar variación "${variation.name}":`, error);
+              // Continuamos con las demás variaciones
+            }
+          }
+        }
+        
+        results.push(result);
+        
+      } catch (error) {
+        console.error(`❌ Error al guardar servicio ${categoryKey}:`, error);
+        throw error;
+      }
+    }
+    
+    return results;
+  },
+  
+  /**
+   * Obtener servicios de un proveedor
+   */
+  getByProviderId: async (providerId: number) => {
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/service-configs/provider/${providerId}`
+    );
+    
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al obtener servicios del proveedor');
+    }
+    
+    return response.json();
+  },
+};

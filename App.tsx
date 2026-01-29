@@ -30,7 +30,7 @@ import { legalDocuments } from "./components/legalinfo/legalContent";
 import NotificationsPage from "./components/NotificationsPage";
 import SecuritySettingsPage from "./components/SecuritySettingsPage";
 import { authService, tokenStorage } from "./services/authService";
-import { clientProfileService, providerProfileService } from "./services/profileService";
+import { clientProfileService, providerProfileService, serviceConfigService } from "./services/profileService";
 
 const getDistanceInKm = (
   lat1: number,
@@ -159,6 +159,51 @@ const App: React.FC = () => {
                 
                 // Mapear el perfil del backend al formato de la UI
                 // Usar datos del user que vienen con el perfil, no del token
+                // Cargar servicios del proveedor
+                let servicesMap = {};
+                try {
+                  console.log('📦 Cargando servicios del proveedor:', profile.id);
+                  const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
+                  console.log('✅ Servicios cargados:', servicesResponse);
+                  
+                  // Transformar array de ServiceConfigs a objeto por categoría
+                  if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
+                    servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
+                      // Mapear variaciones del backend al formato del frontend
+                      const variations = service.variations && Array.isArray(service.variations)
+                        ? service.variations.map((v: any) => ({
+                            id: v.id,
+                            name: v.name,
+                            price: parseFloat(v.price) || 0,
+                            unit: v.unit,
+                            enabled: v.enabled,
+                            description: v.description || '',
+                            isCustom: v.isCustom || false,
+                            displayOrder: v.displayOrder || 0,
+                          }))
+                        : [];
+                      
+                      acc[service.careCategory] = {
+                        id: service.id,
+                        completed: service.completed,
+                        tasks: service.tasks || [],
+                        availability: service.availability || [],
+                        rates: {
+                          hourly: parseFloat(service.hourlyRate) || 0,
+                          shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
+                          urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
+                        },
+                        description: service.description || '',
+                        variations: variations, // ← Incluir variaciones
+                      };
+                      return acc;
+                    }, {});
+                    console.log('🗺️ Servicios mapeados con variaciones:', servicesMap);
+                  }
+                } catch (error) {
+                  console.warn('⚠️ Error al cargar servicios (puede ser nuevo usuario):', error);
+                }
+                
                 const mappedProfile = {
                   id: profile.id,
                   firstName: profile.user?.firstName || user.firstName || '',
@@ -172,15 +217,15 @@ const App: React.FC = () => {
                     : undefined,
                   languages: profile.languages || [],
                   availability: profile.availability || [],
-                  services: {} as any, // TODO: cargar servicios desde profile.services
+                  services: servicesMap,
                 };
                 console.log('🎨 Perfil mapeado (provider):', mappedProfile);
                 console.log('🗣️ Idiomas en perfil mapeado:', mappedProfile.languages);
                 setProviderProfile(mappedProfile);
               } else if (role === 'client') {
-                const response = await clientProfileService.getByUserId(user.id);
-                console.log('✅ Respuesta del backend (client):', response);
-                const profile = response.data; // El backend devuelve { message, data }
+                const profile = await clientProfileService.getByUserId(user.id);
+                // IMPORTANTE: clientProfileService devuelve el perfil directamente
+                console.log('✅ Respuesta del backend (client):', profile);
                 console.log('📦 Datos del perfil (client):', profile);
                 
                 // Mapear el perfil del backend al formato de la UI
@@ -426,6 +471,9 @@ const App: React.FC = () => {
         throw new Error('No se pudo obtener el ID del usuario');
       }
 
+      console.log('💾 Actualizando perfil de proveedor:', updatedProfile);
+      console.log('🎯 Servicios a guardar:', updatedProfile.services);
+
       // Preparar datos del usuario para actualizar
       const userData = {
         firstName: updatedProfile.firstName,
@@ -445,8 +493,15 @@ const App: React.FC = () => {
         availability: updatedProfile.availability,
       };
 
-      // Actualizar en la base de datos (también actualiza datos del usuario)
+      // Actualizar perfil básico (también actualiza datos del usuario)
       await providerProfileService.update(updatedProfile.id, updateDto, userData);
+      
+      // Guardar servicios si existen
+      if (updatedProfile.services && Object.keys(updatedProfile.services).length > 0) {
+        console.log('📝 Guardando servicios del proveedor...');
+        await serviceConfigService.saveProviderServices(updatedProfile.id, updatedProfile.services);
+        console.log('✅ Servicios guardados correctamente');
+      }
       
       // Actualizar estado local
       setProviderProfile(updatedProfile);
@@ -454,7 +509,7 @@ const App: React.FC = () => {
       // Show success message
       setAlertModal({
         isOpen: true,
-        message: 'Perfil actualizado correctamente',
+        message: 'Perfil y servicios actualizados correctamente',
         title: 'Éxito'
       });
     } catch (error: any) {
@@ -661,6 +716,51 @@ const App: React.FC = () => {
           console.log('🗣️ Idiomas desde backend:', profile.languages);
           console.log('📸 Foto desde backend:', profile.photoUrl);
           
+          // Cargar servicios del proveedor
+          let servicesMap = {};
+          try {
+            console.log('📦 Cargando servicios del proveedor:', profile.id);
+            const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
+            console.log('✅ Servicios cargados:', servicesResponse);
+            
+            // Transformar array de ServiceConfigs a objeto por categoría
+            if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
+              servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
+                // Mapear variaciones del backend al formato del frontend
+                const variations = service.variations && Array.isArray(service.variations)
+                  ? service.variations.map((v: any) => ({
+                      id: v.id,
+                      name: v.name,
+                      price: parseFloat(v.price) || 0,
+                      unit: v.unit,
+                      enabled: v.enabled,
+                      description: v.description || '',
+                      isCustom: v.isCustom || false,
+                      displayOrder: v.displayOrder || 0,
+                    }))
+                  : [];
+                
+                acc[service.careCategory] = {
+                  id: service.id,
+                  completed: service.completed,
+                  tasks: service.tasks || [],
+                  availability: service.availability || [],
+                  rates: {
+                    hourly: parseFloat(service.hourlyRate) || 0,
+                    shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
+                    urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
+                  },
+                  description: service.description || '',
+                  variations: variations, // ← Incluir variaciones
+                };
+                return acc;
+              }, {});
+              console.log('🗺️ Servicios mapeados con variaciones:', servicesMap);
+            }
+          } catch (error) {
+            console.warn('⚠️ Error al cargar servicios (puede ser nuevo usuario):', error);
+          }
+          
           // Mapear correctamente TODOS los campos del perfil
           const mappedProfile = {
             id: profile.id,
@@ -675,16 +775,20 @@ const App: React.FC = () => {
               : undefined,
             languages: profile.languages || [], // ← MAPEAR languages del backend
             availability: profile.availability || [], // ← MAPEAR availability del backend
-            services: {} as any, // TODO: mapear services
+            services: servicesMap, // ← SERVICIOS CARGADOS
           };
           
           console.log('🎨 Perfil mapeado para setState:', mappedProfile);
           console.log('🗣️ Idiomas en perfil mapeado:', mappedProfile.languages);
           setProviderProfile(mappedProfile);
         } else if (role === 'client') {
-          const response = await clientProfileService.getByUserId(user.id);
-          const profile = response.data;
+          const profile = await clientProfileService.getByUserId(user.id);
+          // IMPORTANTE: clientProfileService devuelve el perfil directamente, 
+          // NO envuelto en { message, data } como providerProfileService
           console.log('✅ Perfil de cliente cargado:', profile);
+          console.log('🗣️ Idiomas desde backend (cliente):', profile.languages);
+          console.log('📸 Foto desde backend (cliente):', profile.photoUrl);
+          console.log('🎯 Preferencias desde backend:', profile.preferences);
           
           // Mapear correctamente TODOS los campos del perfil
           const mappedProfile = {
@@ -702,6 +806,9 @@ const App: React.FC = () => {
             preferences: profile.preferences || [], // ← MAPEAR preferences del backend
           };
           
+          console.log('🎨 Perfil mapeado para setState (cliente):', mappedProfile);
+          console.log('🗣️ Idiomas en perfil mapeado (cliente):', mappedProfile.languages);
+          console.log('📸 Foto en perfil mapeado (cliente):', mappedProfile.photoUrl);
           setClientProfile(mappedProfile);
         }
       }

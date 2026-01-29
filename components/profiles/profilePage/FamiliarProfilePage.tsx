@@ -85,6 +85,8 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
   }>({ isOpen: false, message: "" });
   const [isEditingProfile, setIsEditingProfile] = useState(false);
 
+  console.log('🏠 FamiliarProfilePage - clientProfile recibido:', clientProfile);
+
   // Default guest data if no client profile exists
   const displayProfile = clientProfile || {
     firstName: "Usuario",
@@ -97,6 +99,10 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
     languages: [],
     preferences: [],
   };
+
+  console.log('🎯 FamiliarProfilePage - displayProfile:', displayProfile);
+  console.log('📸 FamiliarProfilePage - photoUrl:', displayProfile.photoUrl);
+  console.log('🗣️ FamiliarProfilePage - languages:', displayProfile.languages);
 
   const getCategoryIcon = (cat: CareCategory): string => {
     const iconMap: Record<CareCategory, string> = {
