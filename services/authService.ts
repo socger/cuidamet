@@ -11,6 +11,7 @@ export interface RegisterData {
   password: string;
   firstName?: string;
   lastName?: string;
+  profileType: 'provider' | 'client'; // Tipo de perfil: provider (cuidador) o client (familiar)
 }
 
 export interface LoginData {

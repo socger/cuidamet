@@ -169,23 +169,21 @@ const AuthPage: React.FC<AuthPageProps> = ({
       // Generar username a partir del email si no se proporciona
       const generatedUsername = username || email.split('@')[0];
       
-      // Registrar usuario en el backend
+      // Convertir el rol del frontend a profileType del backend
+      const profileType = role === 'provider' ? 'provider' : 'client';
+      
+      // Registrar usuario en el backend con el tipo de perfil
       const response = await authService.register({
         username: generatedUsername,
         email,
         password,
         firstName: firstName || undefined,
         lastName: lastName || undefined,
+        profileType, // Enviar el tipo de perfil al backend
       });
       
-      // Determinar el rol del usuario basado en sus roles
-      let userRole: UserRole = "client";
-      if (response.user.roles.includes('provider') || response.user.roles.includes('admin')) {
-        userRole = "provider";
-      }
-      
       // Guardar el rol del usuario
-      tokenStorage.setUserRole(userRole);
+      tokenStorage.setUserRole(role);
       
       setIsLoading(false);
       

@@ -113,7 +113,7 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 
 * Cuando creas el perfil, si después lo editas y guardas los cambios. Si después cambias de vista por ejemplo a Reservas y decides después volver a la vista TU... ya no recuerda tu perfil la app
 
-* Cuando se está creando el usuario, siempre se guarda en la tabla user_roles con el rol_id = 2, cuando debería de guardarse con el valor del id del rol con name = provider para perfil profesional y el id del rol con name = client para perfil familiar. Y no lo está haciendo, cuando el usuario si que está obligado a elegir que tipo de perfil es con el que se va a crear como usuario.
+* Cuando se está creando el usuario, siempre se guarda en la tabla user_roles con con el valor del id del rol con name = "user", cuando debería de guardarse con el valor del id del rol con name = "provider" para perfil profesional y el id del rol con name = "client" para perfil familiar. Y no lo está haciendo, cuando el usuario si que está obligado a elegir que tipo de perfil es con el que se va a crear como usuario.
 
 * El usuario puede desde la vista TU cambiarse el tipo de perfil. Si se cambia de perfil debe de actualizarlo en la tabla user_roles y cargar el perfil correcto si existiera (al perfil al que está cambiándose, por lo que supone su intento de carga de este perfil para ese usuario de la app).
 

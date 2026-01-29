@@ -930,6 +930,9 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
         languages={profileData.languages}
         languagesList={languagesList}
         isLocating={isLocating}
+        onFirstNameChange={(value) => handleProfileChange("firstName", value)}
+        onLastNameChange={(value) => handleProfileChange("lastName", value)}
+        onEmailChange={(value) => handleProfileChange("email", value)}
         onPhoneChange={(value) => handleProfileChange("phone", value)}
         onLocationChange={(value) => handleProfileChange("location", value)}
         onLanguageToggle={handleLanguageToggle}
