@@ -340,6 +340,42 @@ export const authService = {
   isAuthenticated: (): boolean => {
     return !!tokenStorage.getAccessToken();
   },
+
+  /**
+   * Cambiar el rol activo del usuario
+   * Actualiza en la BD qué rol está activo y devuelve el perfil correspondiente
+   */
+  switchActiveRole: async (userId: number, roleName: 'client' | 'provider'): Promise<{
+    activeRole: string;
+    profile: any | null;
+    profileType: 'client' | 'provider' | 'none';
+  }> => {
+    const accessToken = tokenStorage.getAccessToken();
+    
+    if (!accessToken) {
+      throw new Error('No hay token de acceso');
+    }
+
+    const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/users/${userId}/active-role`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ roleName }),
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al cambiar rol activo');
+    }
+
+    const result = await response.json();
+    
+    // Actualizar rol en localStorage
+    tokenStorage.setUserRole(roleName as UserRole);
+    
+    return result.data;
+  },
 };
 
 // Interceptor para manejar requests con token

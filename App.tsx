@@ -1133,22 +1133,67 @@ const App: React.FC = () => {
             setView("landing");
           }}
           onSwitchToClient={
-            () => {
-              // Si no existe clientProfile pero sí providerProfile, crear uno temporal con datos básicos
-              if (!clientProfile && providerProfile) {
-                const tempClientProfile: ClientProfile = {
-                  firstName: providerProfile.firstName,
-                  lastName: providerProfile.lastName,
-                  email: providerProfile.email,
-                  phone: providerProfile.phone,
-                  photoUrl: providerProfile.photoUrl,
-                  location: providerProfile.location,
-                  languages: providerProfile.languages,
-                  preferences: []
-                };
-                setClientProfile(tempClientProfile);
+            async () => {
+              try {
+                const user = tokenStorage.getUser();
+                if (!user || !user.id) {
+                  console.error('❌ No hay usuario autenticado');
+                  return;
+                }
+
+                console.log('🔄 Cambiando a perfil FAMILIAR...');
+                
+                // 1. Llamar al backend para cambiar el rol activo
+                const result = await authService.switchActiveRole(user.id, 'client');
+                console.log('✅ Respuesta del backend:', result);
+
+                // 2. Actualizar el rol activo en el estado
+                setActiveRole('client');
+
+                // 3. Si existe el perfil en la BD, cargarlo
+                if (result.profile) {
+                  console.log('✅ Perfil familiar encontrado en BD:', result.profile);
+                  
+                  // Mapear el perfil del backend al formato de la UI
+                  const mappedProfile: ClientProfile = {
+                    id: result.profile.id,
+                    firstName: result.profile.user?.firstName || user.firstName || '',
+                    lastName: result.profile.user?.lastName || user.lastName || '',
+                    email: result.profile.user?.email || user.email,
+                    phone: result.profile.phone || '',
+                    photoUrl: result.profile.photoUrl || '',
+                    location: result.profile.location || '',
+                    coordinates: result.profile.latitude && result.profile.longitude 
+                      ? { latitude: parseFloat(result.profile.latitude), longitude: parseFloat(result.profile.longitude) }
+                      : undefined,
+                    languages: result.profile.languages || [],
+                    preferences: result.profile.preferences || [],
+                  };
+                  
+                  setClientProfile(mappedProfile);
+                } else {
+                  console.log('⚠️ No existe perfil familiar en BD, navegando a creación...');
+                  // Si no existe el perfil, redirigir a la creación
+                  setView('familiarRegistration');
+                }
+              } catch (error) {
+                console.error('❌ Error al cambiar a perfil familiar:', error);
+                // En caso de error, mantener perfil temporal si existe providerProfile
+                if (!clientProfile && providerProfile) {
+                  const tempClientProfile: ClientProfile = {
+                    firstName: providerProfile.firstName,
+                    lastName: providerProfile.lastName,
+                    email: providerProfile.email,
+                    phone: providerProfile.phone,
+                    photoUrl: providerProfile.photoUrl,
+                    location: providerProfile.location,
+                    languages: providerProfile.languages,
+                    preferences: []
+                  };
+                  setClientProfile(tempClientProfile);
+                }
+                setActiveRole('client');
               }
-              setActiveRole('client');
             }
           }
         />;
@@ -1163,56 +1208,166 @@ const App: React.FC = () => {
           onNavigateNotifications={() => setView("notifications")}
           onNavigateLegal={() => setView("legalInfo")}
           onUpdateProfile={handleUpdateClientProfile}
-          onSwitchToProvider={() => {
-            // Si no existe providerProfile pero sí clientProfile, crear uno temporal con datos básicos
-            if (!providerProfile && clientProfile) {
-              const tempProviderProfile: ProviderProfile = {
-                firstName: clientProfile.firstName,
-                lastName: clientProfile.lastName,
-                email: clientProfile.email,
-                phone: clientProfile.phone,
-                photoUrl: clientProfile.photoUrl,
-                location: clientProfile.location,
-                languages: clientProfile.languages,
-                availability: [],
-                services: {
-                  [CareCategory.ELDERLY]: {
-                    completed: false,
-                    tasks: [],
-                    rates: { hourly: 0 },
-                    variations: [],
-                    experience: '',
-                    certificates: []
-                  },
-                  [CareCategory.CHILDREN]: {
-                    completed: false,
-                    tasks: [],
-                    rates: { hourly: 0 },
-                    variations: [],
-                    experience: '',
-                    certificates: []
-                  },
-                  [CareCategory.PETS]: {
-                    completed: false,
-                    tasks: [],
-                    rates: { hourly: 0 },
-                    variations: [],
-                    experience: '',
-                    certificates: []
-                  },
-                  [CareCategory.HOUSEKEEPING]: {
-                    completed: false,
-                    tasks: [],
-                    rates: { hourly: 0 },
-                    variations: [],
-                    experience: '',
-                    certificates: []
-                  }
+          onSwitchToProvider={async () => {
+            try {
+              const user = tokenStorage.getUser();
+              if (!user || !user.id) {
+                console.error('❌ No hay usuario autenticado');
+                return;
+              }
+
+              console.log('🔄 Cambiando a perfil PROFESIONAL...');
+              
+              // 1. Llamar al backend para cambiar el rol activo
+              const result = await authService.switchActiveRole(user.id, 'provider');
+              console.log('✅ Respuesta del backend:', result);
+
+              // 2. Actualizar el rol activo en el estado
+              setActiveRole('provider');
+
+              // 3. Si existe el perfil en la BD, cargarlo
+              if (result.profile) {
+                console.log('✅ Perfil profesional encontrado en BD:', result.profile);
+                
+                // Cargar servicios del proveedor
+                let servicesMap = {};
+                try {
+                  console.log('📦 Cargando servicios del proveedor:', result.profile.id);
+                  const servicesResponse = await serviceConfigService.getByProviderId(result.profile.id);
+                  console.log('✅ Servicios cargados:', servicesResponse);
+                  
+                  // Transformar array de ServiceConfigs a objeto por categoría
+                  servicesMap = servicesResponse.reduce((acc: any, service: any) => {
+                    acc[service.category] = {
+                      completed: service.completed || false,
+                      tasks: service.tasks || [],
+                      rates: {
+                        hourly: service.hourlyRate || 0,
+                        daily: service.dailyRate,
+                        weekly: service.weeklyRate,
+                      },
+                      variations: service.variations || [],
+                      experience: service.experience || '',
+                      certificates: service.certificates || []
+                    };
+                    return acc;
+                  }, {});
+                  
+                  console.log('📦 Servicios transformados:', servicesMap);
+                } catch (error) {
+                  console.error('⚠️ Error al cargar servicios:', error);
+                  // Si no se pueden cargar servicios, usar estructura vacía
+                  servicesMap = {};
                 }
-              };
-              setProviderProfile(tempProviderProfile);
+
+                // Mapear el perfil del backend al formato de la UI
+                const mappedProfile: ProviderProfile = {
+                  id: result.profile.id,
+                  firstName: result.profile.user?.firstName || user.firstName || '',
+                  lastName: result.profile.user?.lastName || user.lastName || '',
+                  email: result.profile.user?.email || user.email,
+                  phone: result.profile.phone || '',
+                  photoUrl: result.profile.photoUrl || '',
+                  location: result.profile.location || '',
+                  coordinates: result.profile.latitude && result.profile.longitude 
+                    ? { latitude: parseFloat(result.profile.latitude), longitude: parseFloat(result.profile.longitude) }
+                    : undefined,
+                  languages: result.profile.languages || [],
+                  availability: result.profile.availability || [],
+                  services: Object.keys(servicesMap).length > 0 ? servicesMap : {
+                    [CareCategory.ELDERLY]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    },
+                    [CareCategory.CHILDREN]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    },
+                    [CareCategory.PETS]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    },
+                    [CareCategory.HOUSEKEEPING]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    }
+                  }
+                };
+                
+                setProviderProfile(mappedProfile);
+              } else {
+                console.log('⚠️ No existe perfil profesional en BD, navegando a creación...');
+                // Si no existe el perfil, redirigir a la creación
+                setView('profesionalRegistration');
+              }
+            } catch (error) {
+              console.error('❌ Error al cambiar a perfil profesional:', error);
+              // En caso de error, mantener perfil temporal si existe clientProfile
+              if (!providerProfile && clientProfile) {
+                const tempProviderProfile: ProviderProfile = {
+                  firstName: clientProfile.firstName,
+                  lastName: clientProfile.lastName,
+                  email: clientProfile.email,
+                  phone: clientProfile.phone,
+                  photoUrl: clientProfile.photoUrl,
+                  location: clientProfile.location,
+                  languages: clientProfile.languages,
+                  availability: [],
+                  services: {
+                    [CareCategory.ELDERLY]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    },
+                    [CareCategory.CHILDREN]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    },
+                    [CareCategory.PETS]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    },
+                    [CareCategory.HOUSEKEEPING]: {
+                      completed: false,
+                      tasks: [],
+                      rates: { hourly: 0 },
+                      variations: [],
+                      experience: '',
+                      certificates: []
+                    }
+                  }
+                };
+                setProviderProfile(tempProviderProfile);
+              }
+              setActiveRole('provider');
             }
-            setActiveRole('provider');
           }}
           onBack={handleNavigateHome}
           onLogout={async () => {

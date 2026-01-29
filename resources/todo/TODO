@@ -105,8 +105,14 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 
 --------------------------------------------------------------------------------------------------------
 
-* El usuario puede desde la vista TU cambiarse el tipo de perfil. Si se cambia de perfil debe de actualizarlo en la tabla user_roles y cargar el perfil correcto si existiera (al perfil al que está cambiándose, por lo que supone su intento de carga de este perfil para ese usuario de la app).
+* ~~El usuario puede desde la vista TU cambiarse el tipo de perfil. Si se cambia de perfil debe de actualizarlo en la tabla user_roles y cargar el perfil correcto si existiera (al perfil al que está cambiándose, por lo que supone su intento de carga de este perfil para ese usuario de la app).~~ ✅ **COMPLETADO** (29/01/2026)
+  - **Implementado**: Sistema completo de cambio de perfiles con REEMPLAZO de rol (no acumulación)
+  - **Backend**: Endpoint `PATCH /users/:userId/active-role` que ELIMINA el rol anterior y asigna el nuevo
+  - **Lógica**: Un usuario solo tiene UN rol activo a la vez (client O provider, no ambos)
+  - **Protección BD**: La tabla `user_roles` tiene PRIMARY KEY(user_id, role_id)
+  - **Frontend**: Llama al backend, carga perfil si existe o redirige a creación
+  - **Documentación**: Ver `resources/docs/IA chats/019-1 - Implementación de cambio de perfiles.md`
 
 * Hay que ver si cuando el usuario se autentica se comprueba si el usuario existe con esos datos que se envían y que recoge bien sus dos perfiles posibles (el familiar y el profesional. Si un usuario tiene ambos perfiles, entrará en el último que estuviera activo. Por lo que habría que crear algún sistema de activar el familiar o el profesional.)
 
-* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando en ninguna tabla.
+* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
