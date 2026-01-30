@@ -104,14 +104,14 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 
 --------------------------------------------------------------------------------------------------------
 
-* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
-
-* Tengo que comprobar si el perfil profesional, cuando lo carga, debo de ver si carga sus certificados y si los guarda cuando se crean.
-
 * Cuando estamos sugeriendo precios para que un perfil profesional pueda elegir por ejemplo mascotas uno de los servicios standard ... ¿de donde está sacando el precio del servicio?
+
+* Se están subiendo certificados sin problema, pero no hay límite ó cantidad de ficheros a subir por usuario. Debería de existir en .env alguna propiedad para ello y controlarla.
+
+* Si cerramos la sesión y volvemos a abrirla... cuando editamos el perfil, nos aparece el certificado en uno de los tipos de servicios elegidos, pero no podemos ni borrarlo ni visionarlo. Además, ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
+
+* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
 
 * Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 yoline@yoline.com
-
-* Se están subiendo certificados sin problema, pero no se si se están respetando las normas de tamaño por fichero a subir y la cantidad de ficheros a subir por usuario. Además si cerramos la sesión y volvemos a abrirla... cuando editamos el perfil, nos aparece el certificado en uno de los tipos de servicios elegidos, pero no podemos ni borrarlo ni visionarlo. Además, ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
