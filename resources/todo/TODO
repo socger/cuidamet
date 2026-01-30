@@ -110,3 +110,6 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 * Tengo que comprobar si el perfil profesional, cuando lo carga, carga sus servicios creados a mano, los que no son ofrecidos automáticamente. Y también debo de ver si carga sus certificados.
 
 * Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
+
+* Cuando estamos sugeriendo precios para que un perfil profesional pueda elegir por ejemplo mascotas uno de los servicios standard ... ¿de donde está sacando el precio del servicio?
+
