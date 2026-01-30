@@ -442,20 +442,72 @@ export const serviceConfigService = {
         const result = await response.json();
         console.log(`✅ Servicio ${categoryKey} guardado:`, result);
         
-        // Guardar las variaciones (tareas con precios individuales)
+        // Guardar/actualizar las variaciones (tareas con precios individuales)
         if (serviceConfig.variations && serviceConfig.variations.length > 0) {
-          console.log(`📝 Guardando ${serviceConfig.variations.length} variaciones para ${categoryKey}...`);
+          console.log(`📝 Procesando ${serviceConfig.variations.length} variaciones para ${categoryKey}...`);
           
-          for (const variation of serviceConfig.variations) {
-            // Solo guardar variaciones habilitadas
-            if (!variation.enabled) {
-              console.log(`⏭️ Saltando variación "${variation.name}" (deshabilitada)`);
-              continue;
-            }
+          // Primero, obtener las variaciones existentes para eliminar las que ya no están
+          try {
+            const existingVariationsResponse = await fetchWithAuth(
+              `${API_URL}/${API_VERSION}/service-variations/service-config/${result.data.id}`
+            );
             
+            if (existingVariationsResponse.ok) {
+              const existingResult = await existingVariationsResponse.json();
+              const existingVariations = existingResult.data || [];
+              
+              // IDs de variaciones que vienen del frontend
+              const frontendVariationIds = serviceConfig.variations
+                .filter(v => v.id)
+                .map(v => v.id);
+              
+              // Eliminar variaciones que ya no existen en el frontend
+              for (const existingVar of existingVariations) {
+                if (!frontendVariationIds.includes(existingVar.id)) {
+                  console.log(`🗑️ Eliminando variación antigua: "${existingVar.name}"`);
+                  try {
+                    await fetchWithAuth(
+                      `${API_URL}/${API_VERSION}/service-variations/${existingVar.id}`,
+                      { method: 'DELETE' }
+                    );
+                  } catch (delError) {
+                    console.warn(`⚠️ Error al eliminar variación ${existingVar.id}:`, delError);
+                  }
+                }
+              }
+            }
+          } catch (error) {
+            console.warn('⚠️ Error al obtener variaciones existentes:', error);
+          }
+          
+          // Ahora crear, actualizar o eliminar cada variación
+          for (const variation of serviceConfig.variations) {
             try {
+              // Si la variación tiene ID pero está desactivada → ELIMINAR
+              if (variation.id && !variation.enabled) {
+                console.log(`🗑️ Eliminando variación desactivada: "${variation.name}" (ID: ${variation.id})`);
+                const deleteResponse = await fetchWithAuth(
+                  `${API_URL}/${API_VERSION}/service-variations/${variation.id}`,
+                  { method: 'DELETE' }
+                );
+                
+                if (!deleteResponse.ok) {
+                  console.warn(`⚠️ Error al eliminar variación "${variation.name}"`);
+                } else {
+                  console.log(`✅ Variación "${variation.name}" eliminada`);
+                }
+                continue; // Pasar a la siguiente variación
+              }
+              
+              // Si la variación NO tiene ID y está desactivada → IGNORAR (no crear)
+              if (!variation.id && !variation.enabled) {
+                console.log(`⏭️ Ignorando variación nueva desactivada: "${variation.name}"`);
+                continue;
+              }
+              
+              // Si llegamos aquí, la variación está habilitada → CREAR o ACTUALIZAR
               const variationData = {
-                serviceConfigId: result.data.id, // ID del ServiceConfig recién creado
+                serviceConfigId: result.data.id,
                 name: variation.name,
                 price: variation.price,
                 unit: variation.unit,
@@ -465,25 +517,40 @@ export const serviceConfigService = {
                 displayOrder: variation.displayOrder || 0,
               };
               
-              const variationResponse = await fetchWithAuth(
-                `${API_URL}/${API_VERSION}/service-variations`,
-                {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify(variationData),
-                }
-              );
+              let variationResponse;
+              if (variation.id) {
+                // Actualizar variación existente
+                console.log(`🔄 Actualizando variación "${variation.name}" (ID: ${variation.id})`);
+                variationResponse = await fetchWithAuth(
+                  `${API_URL}/${API_VERSION}/service-variations/${variation.id}`,
+                  {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(variationData),
+                  }
+                );
+              } else {
+                // Crear nueva variación
+                console.log(`➕ Creando nueva variación "${variation.name}"`);
+                variationResponse = await fetchWithAuth(
+                  `${API_URL}/${API_VERSION}/service-variations`,
+                  {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(variationData),
+                  }
+                );
+              }
               
               if (!variationResponse.ok) {
                 const error = await variationResponse.json();
                 console.warn(`⚠️ Error al guardar variación "${variation.name}":`, error);
-                // No detenemos el proceso si falla una variación
               } else {
                 const variationResult = await variationResponse.json();
                 console.log(`✅ Variación "${variation.name}" guardada:`, variationResult);
               }
             } catch (error) {
-              console.warn(`⚠️ Error al guardar variación "${variation.name}":`, error);
+              console.warn(`⚠️ Error al procesar variación "${variation.name}":`, error);
               // Continuamos con las demás variaciones
             }
           }
