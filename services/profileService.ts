@@ -386,7 +386,20 @@ export const serviceConfigService = {
    * Este método maneja la creación/actualización de múltiples servicios a la vez
    */
   saveProviderServices: async (providerId: number, services: Record<string, any>) => {
-    console.log('💾 Guardando servicios para proveedor:', providerId, services);
+    console.log('� [PROFILE_SERVICE] saveProviderServices iniciado');
+    console.log('🟡 [PROFILE_SERVICE] providerId:', providerId);
+    console.log('🟡 [PROFILE_SERVICE] services:', JSON.stringify(services, null, 2));
+    
+    // Verificar certificados en services
+    Object.entries(services).forEach(([key, service]) => {
+      if (service.certificates && service.certificates.length > 0) {
+        console.log(`🟡 [PROFILE_SERVICE] Servicio "${key}" tiene ${service.certificates.length} certificados:`, service.certificates);
+      } else {
+        console.log(`🟡 [PROFILE_SERVICE] Servicio "${key}" NO tiene certificados`);
+      }
+    });
+    
+    console.log('�💾 Guardando servicios para proveedor:', providerId, services);
     
     const results = [];
     
@@ -556,6 +569,66 @@ export const serviceConfigService = {
           }
         }
         
+        // Guardar/actualizar los certificados
+        if (serviceConfig.certificates && serviceConfig.certificates.length > 0) {
+          console.log(`📄 Procesando ${serviceConfig.certificates.length} certificados para ${categoryKey}...`);
+          
+          for (const cert of serviceConfig.certificates) {
+            try {
+              const certificateData = {
+                serviceConfigId: result.data.id,
+                name: cert.name,
+                contactInfo: cert.contactInfo || '',
+                description: cert.description || '',
+                certificateType: cert.type || 'other',
+                fileName: cert.fileName,
+                fileUrl: cert.fileUrl,
+                verificationStatus: cert.status || 'pending',
+              };
+              
+              let certResponse;
+              // Si el certificado tiene ID numérico válido de BD (no timestamp), actualizarlo
+              // Los IDs de BD son números < 1000000, los timestamps son mucho mayores
+              const certId = Number(cert.id);
+              const isDbId = !isNaN(certId) && certId < 1000000;
+              
+              if (isDbId) {
+                console.log(`🔄 Actualizando certificado "${cert.name}" (ID de BD: ${cert.id})`);
+                certResponse = await fetchWithAuth(
+                  `${API_URL}/${API_VERSION}/certificates/${cert.id}`,
+                  {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(certificateData),
+                  }
+                );
+              } else {
+                // Crear nuevo certificado (incluye timestamps generados en frontend)
+                console.log(`➕ Creando nuevo certificado "${cert.name}" (ID temporal: ${cert.id})`);
+                certResponse = await fetchWithAuth(
+                  `${API_URL}/${API_VERSION}/certificates`,
+                  {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(certificateData),
+                  }
+                );
+              }
+              
+              if (!certResponse.ok) {
+                const error = await certResponse.json();
+                console.warn(`⚠️ Error al guardar certificado "${cert.name}":`, error);
+              } else {
+                const certResult = await certResponse.json();
+                console.log(`✅ Certificado "${cert.name}" guardado:`, certResult);
+              }
+            } catch (error) {
+              console.warn(`⚠️ Error al procesar certificado "${cert.name}":`, error);
+              // Continuamos con los demás certificados
+            }
+          }
+        }
+        
         results.push(result);
         
       } catch (error) {
@@ -583,3 +656,121 @@ export const serviceConfigService = {
     return response.json();
   },
 };
+
+// Servicio para Certificates (Certificados)
+export const certificateService = {
+  /**
+   * Subir archivo de certificado
+   */
+  uploadFile: async (file: File) => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/certificates/upload`,
+      {
+        method: 'POST',
+        body: formData,
+        // No establecer Content-Type, el navegador lo hará automáticamente con el boundary
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al subir archivo');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Crear certificado
+   */
+  create: async (certificateData: {
+    serviceConfigId: number;
+    name: string;
+    contactInfo?: string;
+    description?: string;
+    certificateType: string;
+    fileName?: string;
+    fileUrl?: string;
+    verificationStatus?: string;
+  }) => {
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/certificates`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(certificateData),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al crear certificado');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Obtener certificados de una configuración de servicio
+   */
+  getByServiceConfig: async (serviceConfigId: number) => {
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/certificates/service-config/${serviceConfigId}`
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al obtener certificados');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Actualizar certificado
+   */
+  update: async (certificateId: number, certificateData: any) => {
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/certificates/${certificateId}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(certificateData),
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al actualizar certificado');
+    }
+
+    return response.json();
+  },
+
+  /**
+   * Eliminar certificado
+   */
+  delete: async (certificateId: number) => {
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/certificates/${certificateId}`,
+      {
+        method: 'DELETE',
+      }
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al eliminar certificado');
+    }
+
+    return response.json();
+  },
+};
+

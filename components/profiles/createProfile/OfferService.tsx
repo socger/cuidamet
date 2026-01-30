@@ -508,28 +508,70 @@ const OfferService: React.FC<OfferServiceProps> = ({
   };
 
   // ---- Certificate Handlers ----
-  const handleCertificateUpload = (
+  const handleCertificateUpload = async (
     category: CareCategory,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
-      const newCert: Certificate = {
-        id: Date.now().toString(),
-        name: file.name.split(".")[0],
-        description: "Documento subido",
-        type: "other",
-        fileName: file.name,
-        fileUrl: URL.createObjectURL(file),
-        status: "pending",
-        dateAdded: new Date().toISOString(),
-      };
+      
+      // Validaciones básicas
+      const maxSize = 5 * 1024 * 1024; // 5MB
+      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+      
+      if (file.size > maxSize) {
+        setAlertModal({
+          isOpen: true,
+          title: "Error",
+          message: "El archivo no debe superar los 5MB"
+        });
+        return;
+      }
+      
+      if (!allowedTypes.includes(file.type)) {
+        setAlertModal({
+          isOpen: true,
+          title: "Error",
+          message: "Solo se permiten archivos PDF, JPG, JPEG o PNG"
+        });
+        return;
+      }
 
-      const currentCerts = servicesData[category].certificates || [];
-      handleServiceDataChange(category, "certificates", [
-        ...currentCerts,
-        newCert,
-      ]);
+      try {
+        // Importar el servicio de certificados
+        const { certificateService } = await import('../../../services/profileService');
+        
+        // Subir el archivo al servidor
+        const uploadResult = await certificateService.uploadFile(file);
+        
+        if (uploadResult && uploadResult.data) {
+          const newCert: Certificate = {
+            id: Date.now().toString(),
+            name: file.name.split(".")[0],
+            description: "Documento subido",
+            type: "other",
+            fileName: uploadResult.data.fileName,
+            fileUrl: uploadResult.data.fileUrl, // URL del servidor
+            status: "pending",
+            dateAdded: new Date().toISOString(),
+          };
+
+          const currentCerts = servicesData[category].certificates || [];
+          handleServiceDataChange(category, "certificates", [
+            ...currentCerts,
+            newCert,
+          ]);
+          
+          console.log('✅ Certificado subido exitosamente:', newCert);
+        }
+      } catch (error) {
+        console.error('❌ Error al subir certificado:', error);
+        setAlertModal({
+          isOpen: true,
+          title: "Error",
+          message: "Error al subir el archivo. Por favor, intenta nuevamente."
+        });
+      }
     }
   };
 

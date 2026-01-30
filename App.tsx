@@ -460,6 +460,21 @@ const App: React.FC = () => {
   };
 
   const handleUpdateProviderProfile = async (updatedProfile: ProviderProfile) => {
+    console.log('🔵 [APP.TSX] handleUpdateProviderProfile iniciado');
+    console.log('🔵 [APP.TSX] updatedProfile recibido:', JSON.stringify(updatedProfile, null, 2));
+    console.log('🔵 [APP.TSX] updatedProfile.services:', updatedProfile.services);
+    
+    // Verificar si hay certificados en los servicios
+    if (updatedProfile.services) {
+      Object.entries(updatedProfile.services).forEach(([key, service]) => {
+        if (service.certificates && service.certificates.length > 0) {
+          console.log(`🔵 [APP.TSX] Servicio "${key}" tiene ${service.certificates.length} certificados:`, service.certificates);
+        } else {
+          console.log(`🔵 [APP.TSX] Servicio "${key}" NO tiene certificados`);
+        }
+      });
+    }
+    
     try {
       if (!updatedProfile.id) {
         throw new Error('No se puede actualizar el perfil sin ID');
@@ -740,6 +755,21 @@ const App: React.FC = () => {
                     }))
                   : [];
                 
+                // Mapear certificados del backend al formato del frontend
+                const certificates = service.certificates && Array.isArray(service.certificates)
+                  ? service.certificates.map((cert: any) => ({
+                      id: cert.id,
+                      name: cert.name,
+                      contactInfo: cert.contactInfo || '',
+                      description: cert.description || '',
+                      type: cert.certificateType || 'other',
+                      fileName: cert.fileName,
+                      fileUrl: cert.fileUrl,
+                      status: cert.verificationStatus || 'pending',
+                      dateAdded: cert.createdAt,
+                    }))
+                  : [];
+                
                 acc[service.careCategory] = {
                   id: service.id,
                   completed: service.completed,
@@ -752,10 +782,11 @@ const App: React.FC = () => {
                   },
                   description: service.description || '',
                   variations: variations, // ← Incluir variaciones
+                  certificates: certificates, // ← Incluir certificados
                 };
                 return acc;
               }, {});
-              console.log('🗺️ Servicios mapeados con variaciones:', servicesMap);
+              console.log('🗺️ Servicios mapeados con variaciones y certificados:', servicesMap);
             }
           } catch (error) {
             console.warn('⚠️ Error al cargar servicios (puede ser nuevo usuario):', error);
@@ -1237,22 +1268,54 @@ const App: React.FC = () => {
                   
                   // Transformar array de ServiceConfigs a objeto por categoría
                   servicesMap = result.profile.services.reduce((acc: any, service: any) => {
+                    // Mapear variaciones del backend al formato del frontend
+                    const variations = service.variations && Array.isArray(service.variations)
+                      ? service.variations.map((v: any) => ({
+                          id: v.id,
+                          name: v.name,
+                          price: parseFloat(v.price) || 0,
+                          unit: v.unit,
+                          enabled: v.enabled,
+                          description: v.description || '',
+                          isCustom: v.isCustom || false,
+                          displayOrder: v.displayOrder || 0,
+                        }))
+                      : [];
+                    
+                    // Mapear certificados del backend al formato del frontend
+                    const certificates = service.certificates && Array.isArray(service.certificates)
+                      ? service.certificates.map((cert: any) => ({
+                          id: cert.id,
+                          name: cert.name,
+                          contactInfo: cert.contactInfo || '',
+                          description: cert.description || '',
+                          type: cert.certificateType || 'other',
+                          fileName: cert.fileName,
+                          fileUrl: cert.fileUrl,
+                          status: cert.verificationStatus || 'pending',
+                          dateAdded: cert.createdAt,
+                        }))
+                      : [];
+                    
                     acc[service.careCategory] = {
+                      id: service.id,
                       completed: service.completed || false,
                       tasks: service.tasks || [],
+                      availability: service.availability || [],
                       rates: {
-                        hourly: service.hourlyRate || 0,
-                        daily: service.dailyRate,
-                        weekly: service.weeklyRate,
+                        hourly: parseFloat(service.hourlyRate) || 0,
+                        shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
+                        urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
                       },
-                      variations: service.variations || [],
+                      description: service.description || '',
+                      variations: variations,
                       experience: service.experience || '',
-                      certificates: service.certificates || []
+                      certificates: certificates,
                     };
                     return acc;
                   }, {});
                   
-                  console.log('📦 Servicios transformados:', servicesMap);
+                  console.log('📦 Servicios transformados con variaciones y certificados:', servicesMap);
                 } else {
                   console.log('⚠️ No hay servicios guardados para este perfil');
                 }

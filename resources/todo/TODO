@@ -113,3 +113,5 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 * Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 yoline@yoline.com
+
+* Se están subiendo certificados sin problema, pero no se si se están respetando las normas de tamaño por fichero a subir y la cantidad de ficheros a subir por usuario. Además si cerramos la sesión y volvemos a abrirla... cuando editamos el perfil, nos aparece el certificado en uno de los tipos de servicios elegidos, pero no podemos ni borrarlo ni visionarlo. Además, ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
