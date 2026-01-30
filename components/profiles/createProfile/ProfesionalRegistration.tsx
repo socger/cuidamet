@@ -523,11 +523,12 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
       const file = e.target.files[0];
       
       // Validaciones básicas
-      const maxSize = 5 * 1024 * 1024; // 5MB
+      const maxSizeMB = Number(import.meta.env.MAX_CERTIFICATE_SIZE_MB) || 5;
+      const maxSize = maxSizeMB * 1024 * 1024; // Convertir MB a bytes
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
       
       if (file.size > maxSize) {
-        alert('El archivo no debe superar los 5MB');
+        alert(`El archivo no debe superar los ${maxSizeMB}MB`);
         return;
       }
       
@@ -1397,7 +1398,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
                 Sube tu CV o Certificados
               </p>
               <p className="text-xs text-slate-400 mt-1">
-                PDF, JPG o PNG (Máx 5MB)
+                PDF, JPG o PNG (Máx {import.meta.env.MAX_CERTIFICATE_SIZE_MB || 5}MB)
               </p>
             </div>
             <input
