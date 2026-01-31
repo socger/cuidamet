@@ -104,9 +104,11 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 
 --------------------------------------------------------------------------------------------------------
 
-* Se están subiendo certificados sin problema, pero no hay límite ó cantidad de ficheros a subir por usuario. Debería de existir en .env alguna propiedad para ello y controlarla. Igual debería de avisarse de que se ha llegado al tope de documentos/certificados que un usuario puede subir. Es decir, que cuando se cargase el usuario, también debería cargar la cantidad de certificados que se han subido. Y conforme se suban o se borren certificados, que se actualice este contador.
+* Si entramos en un usuario como yoline@yoline.com, con password 1a2b3c4d@, y le borramos uno de sus certificados el contador de total de certificados por usuario se regenera bien. Pero en realidad no se están borrando los certificados. Si guardamos el perfil, después de borrar algún certificado, y cerramos la sesión para volverla a abrir con el mismo usuario. Los certificados que borré siguen apareciendo.
 
 * Si cerramos la sesión y volvemos a abrirla... cuando editamos el perfil, nos aparece el certificado en uno de los tipos de servicios elegidos, pero no podemos ni borrarlo ni visionarlo. Además, ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
+
+* Si Estamos creando un usuario, sea del perfil que sea, y ahora que ya hemos creado el usuario, no terminamos de crear el perfil. Cuando volvemos a editar este perfil (si cerramos la sesión y volvemos a abrirla) no sabe nada del correo, nombre, apellidos que se le introdujo en su momento.
 
 * En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
 
