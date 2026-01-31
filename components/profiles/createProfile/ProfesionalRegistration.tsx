@@ -161,40 +161,46 @@ const UNIT_OPTIONS = [
   "mes",
 ];
 
+// Helper function to get price from env or use default
+const getEnvPrice = (key: string, defaultValue: number): number => {
+  const value = import.meta.env[key];
+  return value ? parseFloat(value) : defaultValue;
+};
+
 // Default Service Variants with Prices
 const DEFAULT_SERVICE_VARIANTS: Record<CareCategory, ServiceVariation[]> = {
   [CareCategory.ELDERLY]: [
     {
       name: "Acompañamiento",
-      price: 12,
+      price: getEnvPrice('VITE_PRICE_ELDERLY_COMPANIONSHIP', 12),
       unit: "hora",
       enabled: false,
       description: "Compañía en casa, paseos y conversación.",
     },
     {
       name: "Cuidado Personal",
-      price: 15,
+      price: getEnvPrice('VITE_PRICE_ELDERLY_PERSONAL_CARE', 15),
       unit: "hora",
       enabled: false,
       description: "Ayuda con aseo, vestido y movilidad.",
     },
     {
       name: "Cuidado Nocturno",
-      price: 80,
+      price: getEnvPrice('VITE_PRICE_ELDERLY_NIGHT_CARE', 80),
       unit: "noche",
       enabled: false,
       description: "Vigilancia y asistencia durante la noche.",
     },
     {
       name: "Gestión Médica",
-      price: 20,
+      price: getEnvPrice('VITE_PRICE_ELDERLY_MEDICAL_MANAGEMENT', 20),
       unit: "visita",
       enabled: false,
       description: "Control de medicación, curas o acompañamiento al médico.",
     },
     {
       name: "Interno/a",
-      price: 1200,
+      price: getEnvPrice('VITE_PRICE_ELDERLY_LIVE_IN', 1200),
       unit: "mes",
       enabled: false,
       description: "Cuidado permanente viviendo en el domicilio.",
@@ -203,28 +209,28 @@ const DEFAULT_SERVICE_VARIANTS: Record<CareCategory, ServiceVariation[]> = {
   [CareCategory.CHILDREN]: [
     {
       name: "Canguro / Niñera",
-      price: 12,
+      price: getEnvPrice('VITE_PRICE_CHILDREN_BABYSITTER', 12),
       unit: "hora",
       enabled: false,
       description: "Cuidado puntual o recurrente en casa.",
     },
     {
       name: "Recogida Colegio",
-      price: 10,
+      price: getEnvPrice('VITE_PRICE_CHILDREN_SCHOOL_PICKUP', 10),
       unit: "trayecto",
       enabled: false,
       description: "Acompañamiento seguro desde el colegio a casa.",
     },
     {
       name: "Ayuda Deberes",
-      price: 15,
+      price: getEnvPrice('VITE_PRICE_CHILDREN_HOMEWORK_HELP', 15),
       unit: "hora",
       enabled: false,
       description: "Apoyo escolar y tutoría.",
     },
     {
       name: "Cuidado Nocturno",
-      price: 70,
+      price: getEnvPrice('VITE_PRICE_CHILDREN_NIGHT_CARE', 70),
       unit: "noche",
       enabled: false,
       description: "Cuidado de niños durante la noche.",
@@ -233,28 +239,28 @@ const DEFAULT_SERVICE_VARIANTS: Record<CareCategory, ServiceVariation[]> = {
   [CareCategory.PETS]: [
     {
       name: "Paseo de perros",
-      price: 10,
+      price: getEnvPrice('VITE_PRICE_PETS_DOG_WALKING', 10),
       unit: "paseo",
       enabled: false,
       description: "Paseo de 1 hora por tu barrio o parque.",
     },
     {
       name: "Alojamiento",
-      price: 25,
+      price: getEnvPrice('VITE_PRICE_PETS_ACCOMMODATION', 25),
       unit: "noche",
       enabled: false,
       description: "Tu mascota duerme en mi casa.",
     },
     {
       name: "Visita a domicilio",
-      price: 12,
+      price: getEnvPrice('VITE_PRICE_PETS_HOME_VISIT', 12),
       unit: "visita",
       enabled: false,
       description: "Alimentación, limpieza y juego en tu casa.",
     },
     {
       name: "Guardería de día",
-      price: 20,
+      price: getEnvPrice('VITE_PRICE_PETS_DAY_CARE', 20),
       unit: "día",
       enabled: false,
       description: "Cuidado diurno en mi casa.",
@@ -263,28 +269,28 @@ const DEFAULT_SERVICE_VARIANTS: Record<CareCategory, ServiceVariation[]> = {
   [CareCategory.HOUSEKEEPING]: [
     {
       name: "Limpieza General",
-      price: 12,
+      price: getEnvPrice('VITE_PRICE_HOUSEKEEPING_GENERAL_CLEANING', 12),
       unit: "hora",
       enabled: false,
       description: "Mantenimiento semanal del hogar.",
     },
     {
       name: "Limpieza a Fondo",
-      price: 50,
+      price: getEnvPrice('VITE_PRICE_HOUSEKEEPING_DEEP_CLEANING', 50),
       unit: "servicio",
       enabled: false,
       description: "Limpieza profunda (cocina, baños, cristales).",
     },
     {
       name: "Planchado",
-      price: 12,
+      price: getEnvPrice('VITE_PRICE_HOUSEKEEPING_IRONING', 12),
       unit: "hora",
       enabled: false,
       description: "Servicio exclusivo de planchado.",
     },
     {
       name: "Cocina",
-      price: 15,
+      price: getEnvPrice('VITE_PRICE_HOUSEKEEPING_COOKING', 15),
       unit: "hora",
       enabled: false,
       description: "Preparación de menús semanales.",
@@ -523,7 +529,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
       const file = e.target.files[0];
       
       // Validaciones básicas
-      const maxSizeMB = Number(import.meta.env.MAX_CERTIFICATE_SIZE_MB) || 5;
+      const maxSizeMB = Number(import.meta.env.VITE_MAX_CERTIFICATE_SIZE_MB) || 5;
       const maxSize = maxSizeMB * 1024 * 1024; // Convertir MB a bytes
       const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
       
@@ -1398,7 +1404,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
                 Sube tu CV o Certificados
               </p>
               <p className="text-xs text-slate-400 mt-1">
-                PDF, JPG o PNG (Máx {import.meta.env.MAX_CERTIFICATE_SIZE_MB || 5}MB)
+                PDF, JPG o PNG (Máx {import.meta.env.VITE_MAX_CERTIFICATE_SIZE_MB || 5}MB)
               </p>
             </div>
             <input
