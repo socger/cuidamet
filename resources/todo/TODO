@@ -104,8 +104,6 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 
 --------------------------------------------------------------------------------------------------------
 
-* Cuando estamos sugeriendo precios para que un perfil profesional pueda elegir por ejemplo mascotas uno de los servicios standard ... ¿de donde está sacando el precio del servicio?
-
 * Se están subiendo certificados sin problema, pero no hay límite ó cantidad de ficheros a subir por usuario. Debería de existir en .env alguna propiedad para ello y controlarla.
 
 * Si cerramos la sesión y volvemos a abrirla... cuando editamos el perfil, nos aparece el certificado en uno de los tipos de servicios elegidos, pero no podemos ni borrarlo ni visionarlo. Además, ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
