@@ -732,6 +732,22 @@ export const certificateService = {
   },
 
   /**
+   * Verificar límite de certificados para una configuración de servicio
+   */
+  checkLimit: async (serviceConfigId: number) => {
+    const response = await fetchWithAuth(
+      `${API_URL}/${API_VERSION}/certificates/service-config/${serviceConfigId}/limit`
+    );
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Error al verificar límite');
+    }
+
+    return response.json();
+  },
+
+  /**
    * Actualizar certificado
    */
   update: async (certificateId: number, certificateData: any) => {

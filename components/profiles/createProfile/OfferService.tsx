@@ -9,6 +9,7 @@ import {
   ServiceVariation,
   Certificate,
 } from "../../../types";
+import { uploadCertificate } from "../../../utils/certificateUploadHelper";
 import BottomNav from "../../BottomNav";
 import PhotoCapture from "../../photo/PhotoCapture";
 import AlertModal from "../../actions/AlertModal";
@@ -521,63 +522,25 @@ const OfferService: React.FC<OfferServiceProps> = ({
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
       
-      // Validaciones básicas
-      const maxSize = 5 * 1024 * 1024; // 5MB
-      const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
-      
-      if (file.size > maxSize) {
-        setAlertModal({
-          isOpen: true,
-          title: "Error",
-          message: "El archivo no debe superar los 5MB"
-        });
-        return;
-      }
-      
-      if (!allowedTypes.includes(file.type)) {
-        setAlertModal({
-          isOpen: true,
-          title: "Error",
-          message: "Solo se permiten archivos PDF, JPG, JPEG o PNG"
-        });
-        return;
-      }
-
-      try {
-        // Importar el servicio de certificados
-        const { certificateService } = await import('../../../services/profileService');
-        
-        // Subir el archivo al servidor
-        const uploadResult = await certificateService.uploadFile(file);
-        
-        if (uploadResult && uploadResult.data) {
-          const newCert: Certificate = {
-            id: Date.now().toString(),
-            name: file.name.split(".")[0],
-            description: "Documento subido",
-            type: "other",
-            fileName: uploadResult.data.fileName,
-            fileUrl: uploadResult.data.fileUrl, // URL del servidor
-            status: "pending",
-            dateAdded: new Date().toISOString(),
-          };
-
+      await uploadCertificate({
+        file,
+        servicesData,
+        category,
+        onError: (message, title = "Error") => {
+          setAlertModal({
+            isOpen: true,
+            title,
+            message
+          });
+        },
+        onSuccess: (newCert, category) => {
           const currentCerts = servicesData[category].certificates || [];
           handleServiceDataChange(category, "certificates", [
             ...currentCerts,
             newCert,
           ]);
-          
-          console.log('✅ Certificado subido exitosamente:', newCert);
         }
-      } catch (error) {
-        console.error('❌ Error al subir certificado:', error);
-        setAlertModal({
-          isOpen: true,
-          title: "Error",
-          message: "Error al subir el archivo. Por favor, intenta nuevamente."
-        });
-      }
+      });
     }
   };
 
@@ -1386,10 +1349,37 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
         {/* Certificates Section */}
         <div className="mt-4 pt-4 border-t border-slate-100">
-          <label className="text-sm font-bold text-slate-700 mb-3 flex items-center">
-            <DocumentTextIcon className="w-4 h-4 mr-2 text-teal-600" />{" "}
-            Certificados y Documentación
-          </label>
+          <div className="flex items-center justify-between mb-3">
+            <label className="text-sm font-bold text-slate-700 flex items-center">
+              <DocumentTextIcon className="w-4 h-4 mr-2 text-teal-600" />{" "}
+              Certificados y Documentación
+            </label>
+            {(() => {
+              const maxCerts = Number(import.meta.env.VITE_MAX_CERTIFICATES_PER_USER) || 10;
+              // Contar TODOS los certificados del usuario (todas las categorías)
+              const totalCertificates = Object.values(servicesData).reduce(
+                (total, service) => total + ((service as any).certificates?.length || 0),
+                0
+              );
+              const remaining = maxCerts - totalCertificates;
+              
+              return (
+                <div className="flex items-center gap-2">
+                  <div className="text-xs text-slate-500">
+                    <span className={`font-semibold ${totalCertificates >= maxCerts ? 'text-red-600' : 'text-teal-600'}`}>
+                      {totalCertificates}
+                    </span>
+                    <span className="text-slate-400">/{maxCerts}</span>
+                  </div>
+                  {totalCertificates >= maxCerts && (
+                    <span className="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-medium">
+                      Límite alcanzado
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
+          </div>
 
           <div className="space-y-3">
             {config.certificates?.map((cert) => (
@@ -1429,9 +1419,27 @@ const OfferService: React.FC<OfferServiceProps> = ({
               <p className="text-sm font-medium text-slate-600 group-hover:text-teal-600">
                 Sube tu CV o Certificados
               </p>
-              <p className="text-xs text-slate-400 mt-1">
-                PDF, JPG o PNG (Máx 5MB)
-              </p>
+              {(() => {
+                const maxCerts = Number(import.meta.env.VITE_MAX_CERTIFICATES_PER_USER) || 10;
+                // Contar TODOS los certificados (global)
+                const totalCertificates = Object.values(servicesData).reduce(
+                  (total, service) => total + ((service as any).certificates?.length || 0),
+                  0
+                );
+                const remaining = maxCerts - totalCertificates;
+                return (
+                  <>
+                    <p className="text-xs text-slate-400 mt-1">
+                      PDF, JPG o PNG (Máx 5MB)
+                    </p>
+                    {remaining > 0 && remaining <= 3 && (
+                      <p className="text-xs text-orange-600 font-medium mt-1">
+                        Solo puedes subir {remaining} certificado{remaining !== 1 ? 's' : ''} más en total
+                      </p>
+                    )}
+                  </>
+                );
+              })()}
             </div>
             <input
               type="file"

@@ -35,15 +35,24 @@ Ver "resources/docs/IA chats/012 - Integrating User Registration with API Endpoi
 
 3. **Configurar variables de entorno:**
    ```bash
-   cp .env.example .env
+   # Copia la plantilla de ejemplo a tu archivo local
+   cp .env.example .env.local
    ```
    
-   Edita el archivo `.env` con tu configuración:
+   Edita el archivo `.env.local` con tus valores reales:
    ```bash
    VITE_API_URL=http://localhost:3000
    VITE_API_VERSION=v1
+   GEMINI_API_KEY=tu_api_key_real_aquí  # Obtener en https://aistudio.google.com/app/apikey
    MAX_AUTH_ATTEMPTS=3
+   VITE_MAX_CERTIFICATE_SIZE_MB=5
+   VITE_MAX_CERTIFICATES_PER_USER=3     # Debe coincidir con backend
    ```
+   
+   ⚠️ **Importante:** 
+   - `.env.local` contiene tus secrets y NO se sube a git (está en `.gitignore`)
+   - `.env.example` es la plantilla que SÍ se versiona
+   - Para producción, crea `.env.production.local` con valores de producción
 
 4. **Iniciar el servidor de desarrollo:**
    ```bash
@@ -100,16 +109,19 @@ cuidamet/
 │   ├── profileService.ts  # ✨ Nuevo: Perfiles
 │   ├── mockData.ts        # Datos de prueba
 │   └── ...
-├── types.ts            # Definiciones de TypeScript
-├── App.tsx             # Componente principal
-└── .env                # Variables de entorno
+├── types.ts               # Definiciones de TypeScript
+├── App.tsx                # Componente principal
+├── .env.example           # Plantilla de variables (se versiona)
+└── .env.local             # Tu configuración real (NO se versiona)
 ```
 
 ## 🔐 Seguridad
 
 - **Tokens JWT**: Access tokens (15 min) y refresh tokens (7 días)
 - **Renovación automática**: Los tokens se renuevan automáticamente antes de expirar
-- **Almacenamiento seguro**: Tokens en localStorage (considerar httpOnly cookies para producción)
+- **Almacenamiento seguro**: Tokens en localStorage (considerar httpOnly cooki
+- **Variables de entorno**: Secrets en `.env.local` excluidos de git
+- **Límites de subida**: Certificados limitados a 3 por usuario, 5MB máximo por archivoes para producción)
 - **CORS configurado**: En el backend para permitir requests desde el frontend
 
 ## 🧪 Testing
