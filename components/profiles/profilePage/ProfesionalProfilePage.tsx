@@ -72,7 +72,7 @@ interface ProfesionalProfilePageProps {
   onLogout: () => void;
   onSwitchToClient: () => void;
   profile?: ProviderProfile | null;
-  onUpdateProfile?: (profile: ProviderProfile) => void;
+  onUpdateProfile?: (profile: ProviderProfile, deletedCertificateIds: number[]) => void;
 }
 
 // Default fallback data
@@ -268,9 +268,13 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   console.log('🎯 profile original:', profile);
   console.log('🎯 profile.languages:', profile?.languages);
 
-  const handleProfileUpdate = (updatedProfile: ProviderProfile) => {
+  const handleProfileUpdate = (updatedProfile: ProviderProfile, deletedCertificateIds: number[]) => {
+    console.log('🟡 [PROFESIONAL_PROFILE_PAGE] handleProfileUpdate recibido:', {
+      updatedProfile,
+      deletedCertificateIds
+    });
     if (onUpdateProfile) {
-      onUpdateProfile(updatedProfile);
+      onUpdateProfile(updatedProfile, deletedCertificateIds);
     }
     setIsEditingProfile(false);
     setIsEditingServices(false);

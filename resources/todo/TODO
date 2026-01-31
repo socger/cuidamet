@@ -115,3 +115,5 @@ La reserva cuando es duplicada copia exactamente todo, si está confirmada y no 
 * Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 yoline@yoline.com
+
+* Quitar todos los console.log que pueda de la app (tanto back como front)

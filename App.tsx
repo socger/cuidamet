@@ -401,7 +401,11 @@ const App: React.FC = () => {
     setCurrentChatId(null);
   };
 
-  const handleProviderRegistrationComplete = async (data: ProviderProfile) => {
+  const handleProviderRegistrationComplete = async (data: ProviderProfile, deletedCertificateIds: number[]) => {
+    console.log('🔵 [APP.TSX] handleProviderRegistrationComplete iniciado');
+    console.log('🔵 [APP.TSX] deletedCertificateIds recibidos:', deletedCertificateIds);
+    console.log('🔵 [APP.TSX] typeof deletedCertificateIds:', typeof deletedCertificateIds);
+    console.log('🔵 [APP.TSX] Array.isArray(deletedCertificateIds):', Array.isArray(deletedCertificateIds));
     try {
       // Obtener el userId del usuario autenticado
       const user = tokenStorage.getUser();
@@ -459,9 +463,12 @@ const App: React.FC = () => {
     }
   };
 
-  const handleUpdateProviderProfile = async (updatedProfile: ProviderProfile) => {
+  const handleUpdateProviderProfile = async (updatedProfile: ProviderProfile, deletedCertificateIds: number[]) => {
     console.log('🔵 [APP.TSX] handleUpdateProviderProfile iniciado');
     console.log('🔵 [APP.TSX] updatedProfile recibido:', JSON.stringify(updatedProfile, null, 2));
+    console.log('🔵 [APP.TSX] deletedCertificateIds recibidos:', deletedCertificateIds);
+    console.log('🔵 [APP.TSX] typeof deletedCertificateIds:', typeof deletedCertificateIds);
+    console.log('🔵 [APP.TSX] Array.isArray(deletedCertificateIds):', Array.isArray(deletedCertificateIds));
     console.log('🔵 [APP.TSX] updatedProfile.services:', updatedProfile.services);
     
     // Verificar si hay certificados en los servicios
@@ -514,7 +521,8 @@ const App: React.FC = () => {
       // Guardar servicios si existen
       if (updatedProfile.services && Object.keys(updatedProfile.services).length > 0) {
         console.log('📝 Guardando servicios del proveedor...');
-        await serviceConfigService.saveProviderServices(updatedProfile.id, updatedProfile.services);
+        console.log('🗑️ [APP.TSX] Pasando deletedCertificateIds a saveProviderServices:', deletedCertificateIds);
+        await serviceConfigService.saveProviderServices(updatedProfile.id, updatedProfile.services, deletedCertificateIds);
         console.log('✅ Servicios guardados correctamente');
       }
       

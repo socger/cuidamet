@@ -33,7 +33,7 @@ import DocumentTextIcon from "../../icons/DocumentTextIcon";
 import PaperClipIcon from "../../icons/PaperClipIcon";
 
 interface OfferServiceProps {
-  onComplete: (profileData: ProviderProfile) => void;
+  onComplete: (profileData: ProviderProfile, deletedCertificateIds?: number[]) => void;
   onCancel?: () => void;
   initialData?: Partial<ProviderProfile>;
   currentView?: string;
@@ -387,6 +387,9 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
   const certInputRef = useRef<HTMLInputElement>(null);
 
+  // Track de certificados eliminados (IDs de base de datos)
+  const [deletedCertificateIds, setDeletedCertificateIds] = useState<number[]>([]);
+
   // Geolocation Logic
   const [isLocating, setIsLocating] = useState(false);
 
@@ -546,6 +549,18 @@ const OfferService: React.FC<OfferServiceProps> = ({
 
   const handleRemoveCertificate = (category: CareCategory, certId: string) => {
     const currentCerts = servicesData[category].certificates || [];
+    
+    // Detectar si es un certificado de BD (ID numérico < 1000000)
+    const certIdNum = Number(certId);
+    const isDbId = !isNaN(certIdNum) && certIdNum < 1000000;
+    
+    // Si es de BD, añadir a la lista de eliminados
+    if (isDbId) {
+      console.log(`🗑️ Marcando certificado ${certId} para eliminar de BD`);
+      setDeletedCertificateIds(prev => [...prev, certIdNum]);
+    }
+    
+    // Eliminar del estado local
     handleServiceDataChange(
       category,
       "certificates",
@@ -796,7 +811,9 @@ const OfferService: React.FC<OfferServiceProps> = ({
       availability: Array.from(allAvailabilities),
       services: servicesData,
     };
-    onComplete(finalProfile);
+    console.log('🗑️ [OFFER_SERVICE] deletedCertificateIds:', deletedCertificateIds);
+    onComplete(finalProfile, deletedCertificateIds);
+    // NOTA: NO resetear aquí - se hará en App.tsx después de guardar exitosamente
   };
 
   // ---- Helper Renders for Modals ----

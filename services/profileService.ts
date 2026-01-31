@@ -384,11 +384,15 @@ export const serviceConfigService = {
   /**
    * Guardar o actualizar servicios de un proveedor
    * Este método maneja la creación/actualización de múltiples servicios a la vez
+   * @param providerId - ID del proveedor
+   * @param services - Servicios a guardar
+   * @param deletedCertificateIds - IDs de certificados a eliminar de BD
    */
-  saveProviderServices: async (providerId: number, services: Record<string, any>) => {
+  saveProviderServices: async (providerId: number, services: Record<string, any>, deletedCertificateIds: number[] = []) => {
     console.log('� [PROFILE_SERVICE] saveProviderServices iniciado');
     console.log('🟡 [PROFILE_SERVICE] providerId:', providerId);
     console.log('🟡 [PROFILE_SERVICE] services:', JSON.stringify(services, null, 2));
+    console.log('🗑️ [PROFILE_SERVICE] deletedCertificateIds:', deletedCertificateIds);
     
     // Verificar certificados en services
     Object.entries(services).forEach(([key, service]) => {
@@ -402,6 +406,26 @@ export const serviceConfigService = {
     console.log('�💾 Guardando servicios para proveedor:', providerId, services);
     
     const results = [];
+    
+    // PRIMERO: Eliminar certificados marcados para eliminar (ANTES del loop)
+    if (deletedCertificateIds && deletedCertificateIds.length > 0) {
+      console.log(`🗑️ [PROFILE_SERVICE] Eliminando ${deletedCertificateIds.length} certificados marcados...`);
+      console.log(`🗑️ [PROFILE_SERVICE] certificateService disponible:`, typeof certificateService);
+      
+      for (const certId of deletedCertificateIds) {
+        try {
+          console.log(`🗑️ [PROFILE_SERVICE] Eliminando certificado ID ${certId}...`);
+          const deleteResult = await certificateService.delete(certId);
+          console.log(`✅ [PROFILE_SERVICE] Certificado ${certId} eliminado exitosamente:`, deleteResult);
+        } catch (error) {
+          console.error(`❌ [PROFILE_SERVICE] Error al eliminar certificado ${certId}:`, error);
+          // Continuar con los demás
+        }
+      }
+      console.log(`✅ [PROFILE_SERVICE] Proceso de eliminación completado`);
+    } else {
+      console.log(`ℹ️ [PROFILE_SERVICE] No hay certificados para eliminar`);
+    }
     
     // Iterar sobre cada categoría de servicio
     for (const [categoryKey, serviceConfig] of Object.entries(services)) {
