@@ -508,8 +508,9 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     
     // Verificar certificados en servicesData
     Object.entries(servicesData).forEach(([key, service]) => {
-      if (service.certificates && service.certificates.length > 0) {
-        console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" tiene ${service.certificates.length} certificados:`, service.certificates);
+      const serviceConfig = service as ServiceConfig;
+      if (serviceConfig.certificates && serviceConfig.certificates.length > 0) {
+        console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" tiene ${serviceConfig.certificates.length} certificados:`, serviceConfig.certificates);
       } else {
         console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" NO tiene certificados`);
       }
@@ -1098,8 +1099,8 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
             {(() => {
               const maxCerts = Number(import.meta.env.VITE_MAX_CERTIFICATES_PER_USER) || 10;
               // Contar TODOS los certificados del usuario (todas las categorías)
-              const totalCertificates = Object.values(servicesData).reduce(
-                (total, service) => total + ((service as any).certificates?.length || 0),
+              const totalCertificates: number = Object.values(servicesData).reduce<number>(
+                (total: number, service) => total + ((service as ServiceConfig).certificates?.length || 0),
                 0
               );
               const remaining = maxCerts - totalCertificates;
@@ -1163,8 +1164,8 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
               {(() => {
                 const maxCerts = Number(import.meta.env.VITE_MAX_CERTIFICATES_PER_USER) || 10;
                 // Contar TODOS los certificados (global)
-                const totalCertificates = Object.values(servicesData).reduce(
-                  (total, service) => total + ((service as any).certificates?.length || 0),
+                const totalCertificates: number = Object.values(servicesData).reduce<number>(
+                  (total: number, service) => total + ((service as ServiceConfig).certificates?.length || 0),
                   0
                 );
                 const remaining = maxCerts - totalCertificates;
