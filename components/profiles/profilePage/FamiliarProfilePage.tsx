@@ -8,7 +8,7 @@ import ChatBubbleLeftRightIcon from "../../icons/ChatBubbleLeftRightIcon";
 import InformationCircleIcon from "../../icons/InformationCircleIcon";
 import MapPinIcon from "../../icons/MapPinIcon";
 import { ClientProfile, CareCategory } from "../../../types";
-import { getCategoryIcon, getCategoryLabel } from "../../../utils/serviceConstants";
+import { getCategoryIcon, getCategoryLabel } from "../../../services/serviceConstants";
 import BriefcaseIcon from "../../icons/BriefcaseIcon";
 import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";

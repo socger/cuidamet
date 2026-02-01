@@ -19,7 +19,7 @@ import {
   UNIT_OPTIONS,
   DEFAULT_SERVICE_VARIANTS,
   initialServiceConfig,
-} from "../../../utils/serviceConstants";
+} from "../../../services/serviceConstants";
 import { uploadCertificate } from "../../../utils/certificateUploadHelper";
 import BottomNav from "../../BottomNav";
 import PhotoCapture from "../../photo/PhotoCapture";

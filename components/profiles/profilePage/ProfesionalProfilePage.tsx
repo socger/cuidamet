@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import PageHeader from "../../PageHeader";
 import { CareCategory, ProviderProfile, ServiceConfig } from "../../../types";
-import { serviceCategories, categoryLabels } from "../../../utils/serviceConstants";
+import { serviceCategories, categoryLabels } from "../../../services/serviceConstants";
 import MapPinIcon from "../../icons/MapPinIcon";
 import StarIcon from "../../icons/StarIcon";
 import PencilIcon from "../../icons/PencilIcon";

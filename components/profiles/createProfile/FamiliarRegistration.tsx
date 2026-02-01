@@ -12,7 +12,7 @@ import AlertModal from "../../actions/AlertModal";
 import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import { CareCategory, ClientProfile } from "../../../types";
-import { serviceCategories, languagesList } from "../../../utils/serviceConstants";
+import { serviceCategories, languagesList } from "../../../services/serviceConstants";
 
 interface FamiliarRegistrationProps {
   onComplete: (profileData: ClientProfile) => void;
