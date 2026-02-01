@@ -100,11 +100,6 @@ export interface ProviderProfile {
 
 export type ProfileStatus = 'draft' | 'published' | 'suspended';
 
-
-
-
-
-
 export interface Provider {
   id: number;
   name: string;
@@ -132,7 +127,6 @@ export interface Provider {
   badges?: string[];
   certificates?: Certificate[];
 }
-
 
 export interface Message {
   id: number;
