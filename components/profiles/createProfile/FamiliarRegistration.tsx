@@ -12,58 +12,13 @@ import AlertModal from "../../actions/AlertModal";
 import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import { CareCategory, ClientProfile } from "../../../types";
+import { serviceCategories, languagesList } from "../../../utils/serviceConstants";
 
 interface FamiliarRegistrationProps {
   onComplete: (profileData: ClientProfile) => void;
   onBack: () => void;
   initialData?: Partial<ClientProfile>;
 }
-
-const serviceCategories = [
-  {
-    id: CareCategory.ELDERLY,
-    label: "Mayores",
-    icon: "/resources/icons/elderly-female-icon.svg",
-    color: "text-green-600",
-    bg: "bg-green-100",
-    border: "border-green-200",
-  },
-  {
-    id: CareCategory.CHILDREN,
-    label: "Niños",
-    icon: "/resources/icons/baby-girl-icon.svg",
-    color: "text-slate-600",
-    bg: "bg-slate-200",
-    border: "border-slate-300",
-  },
-  {
-    id: CareCategory.PETS,
-    label: "Mascotas",
-    icon: "/resources/icons/dog-puppy-face-icon.svg",
-    color: "text-orange-600",
-    bg: "bg-orange-100",
-    border: "border-orange-200",
-  },
-  {
-    id: CareCategory.HOUSEKEEPING,
-    label: "Limpieza",
-    icon: "/resources/icons/housekeeping-icon.svg",
-    color: "text-blue-600",
-    bg: "bg-blue-100",
-    border: "border-blue-200",
-  },
-];
-
-const languagesList = [
-  "Español",
-  "Inglés",
-  "Francés",
-  "Alemán",
-  "Italiano",
-  "Portugués",
-  "Chino",
-  "Árabe",
-];
 
 const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
   onComplete,

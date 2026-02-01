@@ -8,6 +8,7 @@ import ChatBubbleLeftRightIcon from "../../icons/ChatBubbleLeftRightIcon";
 import InformationCircleIcon from "../../icons/InformationCircleIcon";
 import MapPinIcon from "../../icons/MapPinIcon";
 import { ClientProfile, CareCategory } from "../../../types";
+import { getCategoryIcon, getCategoryLabel } from "../../../utils/serviceConstants";
 import BriefcaseIcon from "../../icons/BriefcaseIcon";
 import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
@@ -104,27 +105,6 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
   console.log('📸 FamiliarProfilePage - photoUrl:', displayProfile.photoUrl);
   console.log('🗣️ FamiliarProfilePage - languages:', displayProfile.languages);
 
-  const getCategoryIcon = (cat: CareCategory): string => {
-    const iconMap: Record<CareCategory, string> = {
-      [CareCategory.ELDERLY]: "/resources/icons/elderly-female-icon.svg",
-      [CareCategory.CHILDREN]: "/resources/icons/baby-girl-icon.svg",
-      [CareCategory.PETS]: "/resources/icons/dog-puppy-face-icon.svg",
-      [CareCategory.HOUSEKEEPING]: "/resources/icons/housekeeping-icon.svg",
-    };
-
-    return iconMap[cat] || "";
-  };
-
-  const getCategoryName = (cat: CareCategory): string => {
-    const nameMap: Record<CareCategory, string> = {
-      [CareCategory.ELDERLY]: "Mayores",
-      [CareCategory.CHILDREN]: "Niños",
-      [CareCategory.PETS]: "Mascotas",
-      [CareCategory.HOUSEKEEPING]: "Limpieza",
-    };
-    return nameMap[cat] || cat;
-  };
-
   const allCategories = [
     CareCategory.ELDERLY,
     CareCategory.CHILDREN,
@@ -195,11 +175,11 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
                         ? "bg-teal-500 shadow-lg shadow-teal-500/50"
                         : "bg-white border border-slate-200"
                     }`}
-                    title={getCategoryName(cat)}
+                    title={getCategoryLabel(cat)}
                   >
                     <img
                       src={getCategoryIcon(cat)}
-                      alt={getCategoryName(cat)}
+                      alt={getCategoryLabel(cat)}
                       className={`w-7 h-7 transition-all duration-300 ${
                         isSelected ? "brightness-0 invert" : "opacity-70"
                       }`}

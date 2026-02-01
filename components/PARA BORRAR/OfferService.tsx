@@ -8,7 +8,7 @@ import {
   HousekeepingAttributes,
   ServiceVariation,
   Certificate,
-} from "../../../types";
+} from "../../types";
 import {
   serviceCategories,
   languagesList,
@@ -19,35 +19,34 @@ import {
   UNIT_OPTIONS,
   DEFAULT_SERVICE_VARIANTS,
   initialServiceConfig,
-} from "../../../utils/serviceConstants";
-import { uploadCertificate } from "../../../utils/certificateUploadHelper";
-import BottomNav from "../../BottomNav";
-import PhotoCapture from "../../photo/PhotoCapture";
-import AlertModal from "../../actions/AlertModal";
-import PersonalInfo from "./PersonalInfo";
-import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
-import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
-import Resumen_Services from "../resumenProfile/Resumen_Services";
-import MapPinIcon from "../../icons/MapPinIcon";
-import CurrencyEuroIcon from "../../icons/CurrencyEuroIcon";
-import CheckCircleIcon from "../../icons/CheckCircleIcon";
-import ChevronLeftIcon from "../../icons/ChevronLeftIcon";
-import ChevronRightIcon from "../../icons/ChevronRightIcon";
-import ClockIcon from "../../icons/ClockIcon";
-import HealthIcon from "../../icons/HealthIcon";
-import GpsFixedIcon from "../../icons/GpsFixedIcon";
-import CalendarDaysIcon from "../../icons/CalendarDaysIcon";
-import XMarkIcon from "../../icons/XMarkIcon";
-import TrashIcon from "../../icons/TrashIcon";
-import PlusCircleIcon from "../../icons/PlusCircleIcon";
-import DocumentTextIcon from "../../icons/DocumentTextIcon";
-import PaperClipIcon from "../../icons/PaperClipIcon";
+} from "../../utils/serviceConstants";
+import { uploadCertificate } from "../../utils/certificateUploadHelper";
+import BottomNav from "../BottomNav";
+import PhotoCapture from "../photo/PhotoCapture";
+import AlertModal from "../actions/AlertModal";
+import PersonalInfo from "../profiles/createProfile/PersonalInfo";
+import Resumen_Revisa from "../profiles/resumenProfile/Resumen_Revisa";
+import Resumen_PersonalInfo from "../profiles/resumenProfile/Resumen_PersonalInfo";
+import Resumen_Services from "../profiles/resumenProfile/Resumen_Services";
+import MapPinIcon from "../icons/MapPinIcon";
+import CurrencyEuroIcon from "../icons/CurrencyEuroIcon";
+import CheckCircleIcon from "../icons/CheckCircleIcon";
+import ChevronLeftIcon from "../icons/ChevronLeftIcon";
+import ChevronRightIcon from "../icons/ChevronRightIcon";
+import ClockIcon from "../icons/ClockIcon";
+import HealthIcon from "../icons/HealthIcon";
+import GpsFixedIcon from "../icons/GpsFixedIcon";
+import CalendarDaysIcon from "../icons/CalendarDaysIcon";
+import XMarkIcon from "../icons/XMarkIcon";
+import TrashIcon from "../icons/TrashIcon";
+import PlusCircleIcon from "../icons/PlusCircleIcon";
+import DocumentTextIcon from "../icons/DocumentTextIcon";
+import PaperClipIcon from "../icons/PaperClipIcon";
 
-interface ProfesionalRegistrationProps {
-  onComplete: (profileData: ProviderProfile, deletedCertificateIds: number[]) => void;
+interface OfferServiceProps {
+  onComplete: (profileData: ProviderProfile, deletedCertificateIds?: number[]) => void;
   onCancel?: () => void;
   initialData?: Partial<ProviderProfile>;
-  initialStep?: number;
   currentView?: string;
   onNavigateHome?: () => void;
   onNavigateFavorites?: () => void;
@@ -59,11 +58,10 @@ interface ProfesionalRegistrationProps {
   isAuthenticated?: boolean;
 }
 
-const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
+const OfferService: React.FC<OfferServiceProps> = ({
   onComplete,
   onCancel,
   initialData,
-  initialStep = 1,
   currentView = "offer",
   onNavigateHome = () => {},
   onNavigateFavorites = () => {},
@@ -74,10 +72,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   unreadCount = 0,
   isAuthenticated = true,
 }) => {
-  console.log('🎨 ProfesionalRegistration renderizado con initialData:', initialData);
-  console.log('🎨 photoUrl en initialData:', initialData?.photoUrl);
-  
-  const [step, setStep] = useState(initialStep); // 1: Profile, 2: Services Dashboard, 3: Summary
+  const [step, setStep] = useState(1); // 1: Profile, 2: Services Dashboard, 3: Summary
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(
     null
   );
@@ -91,6 +86,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
   // General Profile Data
   const [profileData, setProfileData] = useState({
+    id: initialData?.id,
     firstName: initialData?.firstName || "",
     lastName: initialData?.lastName || "",
     email: initialData?.email || "",
@@ -98,13 +94,10 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     location: initialData?.location || "",
     languages: initialData?.languages || ([] as string[]),
     photoUrl: initialData?.photoUrl || "",
-    coordinates: initialData?.coordinates || undefined as
+    coordinates: undefined as
       | { latitude: number; longitude: number }
       | undefined,
   });
-
-  console.log('🎨 profileData inicial:', profileData);
-  console.log('🎨 photoUrl en profileData:', profileData.photoUrl);
 
   // Specific Data per Service - Initialize all categories with default variations
   const [servicesData, setServicesData] = useState<
@@ -387,7 +380,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   };
 
   // ---- Geolocation Logic ----
-  const handleDetectLocation = async () => {
+  const handleDetectLocation = () => {
     if (!navigator.geolocation) {
       setAlertModal({
         isOpen: true,
@@ -399,30 +392,68 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
     setIsLocating(true);
 
-    try {
-      const { getCurrentLocation } = await import('../../../services/geocodingService');
-      const result = await getCurrentLocation();
-      
-      // Guardar coordenadas para el mapa del perfil
-      handleProfileChange("coordinates", result.coordinates);
-      // Guardar dirección (puede ser coordenadas si falló la geocodificación)
-      handleProfileChange("location", result.address);
-      
-      // Si hubo un error en la geocodificación pero tenemos coordenadas, mostrar aviso
-      if (result.error) {
-        console.warn('Geocodificación falló, usando coordenadas:', result.error);
-      }
-    } catch (error: any) {
-      console.error("Error getting location:", error.message);
-      setAlertModal({
-        isOpen: true,
-        message:
-          "No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.",
-        title: "Error de ubicación",
-      });
-    } finally {
-      setIsLocating(false);
-    }
+    navigator.geolocation.getCurrentPosition(
+      async (position) => {
+        const { latitude, longitude } = position.coords;
+        // Save coordinates for the profile map
+        handleProfileChange("coordinates", { latitude, longitude });
+
+        try {
+          const response = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+            {
+              headers: {
+                "Accept-Language": "es-ES,es;q=0.9",
+              },
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          const address = data.address || {};
+          const locationParts = [
+            address.road || address.pedestrian,
+            address.neighbourhood || address.suburb,
+            address.city || address.town || address.village,
+          ].filter(Boolean);
+
+          const locationStr =
+            locationParts.length > 0
+              ? locationParts.join(", ")
+              : `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`;
+
+          handleProfileChange("location", locationStr);
+        } catch (error) {
+          console.warn("Error fetching address:", error);
+          // Fallback to coordinates
+          handleProfileChange(
+            "location",
+            `Lat: ${latitude.toFixed(4)}, Lon: ${longitude.toFixed(4)}`
+          );
+        } finally {
+          setIsLocating(false);
+        }
+      },
+      (error) => {
+        console.error("Error getting location:", error.message);
+        setAlertModal({
+          isOpen: true,
+          message:
+            "No pudimos obtener tu ubicación. Asegúrate de dar permisos al navegador.",
+          title: "Error de ubicación",
+        });
+        setIsLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+    );
   };
 
   // ---- Navigation & Submit ----
@@ -453,6 +484,12 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     if (step === 1) {
       const errors: string[] = [];
       
+      if (profileData.firstName.trim() === "") {
+        errors.push("Nombre");
+      }
+      if (profileData.lastName.trim() === "") {
+        errors.push("Apellido");
+      }
       if (profileData.email.trim() === "") {
         errors.push("Email");
       } else if (!isValidEmail(profileData.email)) {
@@ -503,39 +540,17 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   };
 
   const confirmPublish = () => {
-    console.log('🟢 [PROFESIONAL_REGISTRATION] confirmPublish iniciado');
-    console.log('🟢 [PROFESIONAL_REGISTRATION] servicesData:', servicesData);
-    
-    // Verificar certificados en servicesData
-    Object.entries(servicesData).forEach(([key, service]) => {
-      if (service.certificates && service.certificates.length > 0) {
-        console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" tiene ${service.certificates.length} certificados:`, service.certificates);
-      } else {
-        console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" NO tiene certificados`);
-      }
-    });
-    
     const allAvailabilities = new Set<string>();
     Object.values(servicesData).forEach((s: any) =>
       s.availability?.forEach((a: string) => allAvailabilities.add(a))
     );
 
-    const fullName = [profileData.firstName, profileData.lastName]
-      .filter(Boolean)
-      .join(' ')
-      .trim() || 'Usuario';
-
     const finalProfile: ProviderProfile = {
       ...profileData,
-      id: initialData?.id, // Preservar el ID si existe (para actualizaciones)
-      name: fullName,
       availability: Array.from(allAvailabilities),
       services: servicesData,
     };
-    
-    console.log('🟢 [PROFESIONAL_REGISTRATION] finalProfile creado:', JSON.stringify(finalProfile, null, 2));
-    console.log('🟢 [PROFESIONAL_REGISTRATION] deletedCertificateIds:', deletedCertificateIds);
-    console.log('🟢 [PROFESIONAL_REGISTRATION] Llamando a onComplete...');
+    console.log('🗑️ [OFFER_SERVICE] deletedCertificateIds:', deletedCertificateIds);
     onComplete(finalProfile, deletedCertificateIds);
     // NOTA: NO resetear aquí - se hará en App.tsx después de guardar exitosamente
   };
@@ -1171,7 +1186,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
                 return (
                   <>
                     <p className="text-xs text-slate-400 mt-1">
-                      PDF, JPG o PNG (Máx {import.meta.env.VITE_MAX_CERTIFICATE_SIZE_MB || 5}MB)
+                      PDF, JPG o PNG (Máx 5MB)
                     </p>
                     {remaining > 0 && remaining <= 3 && (
                       <p className="text-xs text-orange-600 font-medium mt-1">
@@ -1239,7 +1254,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <Resumen_PersonalInfo
             photoUrl={profileData.photoUrl || "https://via.placeholder.com/150"}
-            name={[profileData.firstName, profileData.lastName].filter(Boolean).join(' ').trim() || 'Usuario'}
+            name={`${profileData.firstName} ${profileData.lastName}`.trim()}
             phone={profileData.phone}
             email={profileData.email}
             location={profileData.location}
@@ -1259,24 +1274,21 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   return (
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
       {/* Stepper Header */}
-      <div className="bg-white border-b border-slate-200 p-2 sm:p-4 pt-safe-top">
-        <div className="flex items-center justify-between mb-2 sm:mb-4">
-          <div className="flex items-center gap-1.5 sm:gap-3">
+      <div className="bg-white border-b border-slate-200 p-4 pt-safe-top">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-3">
             {(step > 1 || editingCategory) && (
               <button
                 onClick={prevStep}
-                className="p-1 sm:p-1.5 -ml-1 sm:-ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1.5 -ml-1.5 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
                 aria-label="Atrás"
               >
-                <ChevronLeftIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <ChevronLeftIcon className="w-5 h-5" />
               </button>
             )}
-
-            <span className="text-xs sm:text-sm font-medium text-teal-600">{step} de 3</span>
-
-            <h1 className="text-sm sm:text-lg font-bold text-slate-800">
+            <h1 className="text-lg font-bold text-slate-800">
               {step === 1
-                ? initialData ? "Perfil profesional" : "Perfil profesional"
+                ? initialData ? "Editar perfil" : "Perfil profesional"
                 : step === 2
                 ? editingCategory
                   ? "Configuración"
@@ -1284,43 +1296,16 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
                 : "Resumen"}
             </h1>
           </div>
-
-          <div className="flex items-center gap-1.5 sm:gap-3">
-
-            {editingCategory ? (
-              <button
-                onClick={handleSaveCategory}
-                className="px-2 sm:px-4 py-1 sm:py-1.5 bg-teal-500 text-white text-xs sm:text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
-              >
-                <span className="hidden sm:inline">Guardar</span>
-                <span className="sm:hidden">OK</span>
-                <CheckCircleIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-0.5 sm:ml-1" />
-              </button>
-            ) : step < 3 ? (
-              <button
-                onClick={nextStep}
-                className="px-2 sm:px-4 py-1 sm:py-1.5 bg-teal-500 text-white text-xs sm:text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
-              >
-                Siguiente <ChevronRightIcon className="w-3 h-3 sm:w-4 sm:h-4 ml-0.5 sm:ml-1" />
-              </button>
-            ) : (
-              <button
-                onClick={confirmPublish}
-                className="px-2 sm:px-4 py-1 sm:py-1.5 bg-teal-500 text-white text-xs sm:text-sm font-bold rounded-lg hover:bg-teal-600 transition-colors shadow-sm flex items-center"
-              >
-                <span className="hidden sm:inline">{initialData ? "Guardar cambios" : "Finalizar"}</span>
-                <span className="sm:hidden">OK</span>
-              </button>
-            )}
-
+          <div className="flex items-center gap-3">
+            <span className="text-sm font-medium text-teal-600">{step} de 3</span>
             {onCancel && (
               <button
                 onClick={onCancel}
-                className="p-1 sm:p-1.5 -mr-1 sm:-mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
+                className="p-1.5 -mr-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg transition-colors"
                 aria-label="Cancelar"
                 title="Cancelar registro"
               >
-                <XMarkIcon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <XMarkIcon className="w-5 h-5" />
               </button>
             )}
           </div>
@@ -1341,6 +1326,26 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
               ? renderServiceEditor(editingCategory)
               : renderServicesDashboard())}
           {step === 3 && renderReview()}
+
+          {/* Navigation Buttons - Now part of scrollable content */}
+          <div className="bg-transparent p-4 mt-6 rounded-xl flex justify-end items-center sticky bottom-0 pointer-events-none">
+            {editingCategory ? (
+              <button
+                onClick={handleSaveCategory}
+                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
+              >
+                Guardar y Volver <CheckCircleIcon className="w-5 h-5 ml-2" />
+              </button>
+            ) : (
+              <button
+                onClick={step === 3 ? confirmPublish : nextStep}
+                className="px-8 py-3 bg-teal-500 text-white font-bold rounded-xl hover:bg-teal-600 transition-colors shadow-lg shadow-teal-500/30 flex items-center pointer-events-auto"
+              >
+                {step === 3 ? (initialData ? "Guardar cambios" : "Finalizar registro") : "Siguiente"}
+                {step < 3 && <ChevronRightIcon className="w-5 h-5 ml-2" />}
+              </button>
+            )}
+          </div>
         </div>
       </main>
 
@@ -1369,4 +1374,4 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   );
 };
 
-export default ProfesionalRegistration;
+export default OfferService;

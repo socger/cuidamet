@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PageHeader from "../../PageHeader";
 import { CareCategory, ProviderProfile, ServiceConfig } from "../../../types";
+import { serviceCategories, categoryLabels } from "../../../utils/serviceConstants";
 import MapPinIcon from "../../icons/MapPinIcon";
 import StarIcon from "../../icons/StarIcon";
 import PencilIcon from "../../icons/PencilIcon";
@@ -22,46 +23,6 @@ import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
 import ProfesionalRegistration from "../createProfile/ProfesionalRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
-
-// Definición de categorías de servicio para el componente Resumen_Services
-const serviceCategories = [
-  {
-    id: CareCategory.ELDERLY,
-    label: "Cuidado de Mayores",
-    icon: "/resources/icons/elderly-female-icon.svg",
-    description: "Asistencia, compañía y cuidados médicos",
-    color: "text-green-600",
-    bg: "bg-green-100",
-    border: "border-green-200",
-  },
-  {
-    id: CareCategory.CHILDREN,
-    label: "Cuidado de Niños",
-    icon: "/resources/icons/baby-girl-icon.svg",
-    description: "Canguro, ayuda escolar y rutinas",
-    color: "text-slate-600",
-    bg: "bg-slate-200",
-    border: "border-slate-300",
-  },
-  {
-    id: CareCategory.PETS,
-    label: "Mascotas",
-    icon: "/resources/icons/dog-puppy-face-icon.svg",
-    description: "Paseos, guardería y cuidados",
-    color: "text-orange-600",
-    bg: "bg-orange-100",
-    border: "border-orange-200",
-  },
-  {
-    id: CareCategory.HOUSEKEEPING,
-    label: "Limpieza y Mantenimiento",
-    icon: "/resources/icons/housekeeping-icon.svg",
-    description: "Hogar, cristales y reparaciones",
-    color: "text-blue-600",
-    bg: "bg-blue-100",
-    border: "border-blue-200",
-  },
-];
 
 interface ProfesionalProfilePageProps {
   onBack: () => void;
@@ -96,13 +57,6 @@ const defaultDashboardData = {
     status: string;
     price: number;
   }[],
-};
-
-const categoryLabels: Record<CareCategory, string> = {
-  [CareCategory.ELDERLY]: "Cuidado de Mayores",
-  [CareCategory.CHILDREN]: "Cuidado de Niños",
-  [CareCategory.PETS]: "Cuidado de Mascotas",
-  [CareCategory.HOUSEKEEPING]: "Limpieza de Hogar",
 };
 
 interface SettingsItemProps {
