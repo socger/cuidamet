@@ -102,6 +102,8 @@ Además un cuidador tiene varios tipos de servicios y la reserva no permite eleg
 
 La reserva cuando es duplicada copia exactamente todo, si está confirmada y no debería
 
+Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se hayan pasado dos días desde que se dejó de usar la app. Las cookies de la app, por sesión, deberían de durar horas, no días.
+
 --------------------------------------------------------------------------------------------------------
 
 * El perfil profesional todavía tiene campos que no se si se están guardando. Además cuando estás añadiendo un servicio manualmente, tienes una serie de botones preconfigurables que no se de donde se están cargando y que podrían ser configurables en .env
