@@ -1,6 +1,6 @@
 /**
  * Constantes y configuraciones de servicios para perfiles de proveedores
- * Usado por: ProfesionalRegistration.tsx y OfferService.tsx
+ * Usado por: FamiliarRegistration.tsx, ProfesionalRegistration.tsx y ProfesionalProfilePage.tsx
  */
 
 import { CareCategory, ServiceConfig, ServiceVariation } from "../types";
