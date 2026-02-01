@@ -5,6 +5,23 @@
 
 import { CareCategory, ServiceConfig, ServiceVariation } from "../types";
 
+/**
+ * Helper function para parsear arrays desde variables de entorno
+ */
+const getEnvArray = (key: string, defaultValue: string[]): string[] => {
+  const value = import.meta.env[key];
+  if (!value) return defaultValue;
+  return value.split(',').map((item: string) => item.trim());
+};
+
+/**
+ * Helper function para obtener valores numéricos desde variables de entorno
+ */
+const getEnvNumber = (key: string, defaultValue: number): number => {
+  const value = import.meta.env[key];
+  return value ? parseFloat(value) : defaultValue;
+};
+
 // Categorías de servicios con información visual
 export const serviceCategories = [
   {
@@ -45,44 +62,41 @@ export const serviceCategories = [
   },
 ];
 
-// Lista de idiomas disponibles
-export const languagesList = [
-  "Español",
-  "Inglés",
-  "Francés",
-  "Alemán",
-  "Italiano",
-  "Portugués",
-  "Chino",
-  "Árabe",
-];
+// Lista de idiomas disponibles (configurables desde .env)
+export const languagesList = getEnvArray(
+  'VITE_AVAILABLE_LANGUAGES',
+  ["Español", "Inglés", "Francés", "Alemán", "Italiano", "Portugués", "Chino", "Árabe"]
+);
 
-// Habilidades médicas especializadas (para cuidado de mayores)
-export const MEDICAL_SKILLS = [
-  "Alzheimer",
-  "Demencia Senil",
-  "Parkinson",
-  "Diabetes (Insulina)",
-  "Movilidad Reducida (Grúa)",
-  "Recuperación Ictus",
-  "Cuidados Paliativos",
-  "Post-operatorio",
-  "Sondaje / Curas",
-  "Diálisis",
-  "Ostomías",
-];
+// Habilidades médicas especializadas (para cuidado de mayores) (configurables desde .env)
+export const MEDICAL_SKILLS = getEnvArray(
+  'VITE_MEDICAL_SKILLS',
+  [
+    "Alzheimer",
+    "Demencia Senil",
+    "Parkinson",
+    "Diabetes (Insulina)",
+    "Movilidad Reducida (Grúa)",
+    "Recuperación Ictus",
+    "Cuidados Paliativos",
+    "Post-operatorio",
+    "Sondaje / Curas",
+    "Diálisis",
+    "Ostomías",
+  ]
+);
 
-// Tipos de mascotas aceptadas
-export const PET_TYPES = ["Perros", "Gatos", "Pequeños animales", "Otros"];
+// Tipos de mascotas aceptadas (configurables desde .env)
+export const PET_TYPES = getEnvArray(
+  'VITE_PET_TYPES',
+  ["Perros", "Gatos", "Pequeños animales", "Otros"]
+);
 
-// Opciones de disponibilidad estándar
-export const STANDARD_AVAILABILITY = [
-  "Mañanas",
-  "Tardes",
-  "Noches",
-  "Fines de Semana",
-  "Interno/a",
-];
+// Opciones de disponibilidad estándar (configurables desde .env)
+export const STANDARD_AVAILABILITY = getEnvArray(
+  'VITE_STANDARD_AVAILABILITY',
+  ["Mañanas", "Tardes", "Noches", "Fines de Semana", "Interno/a"]
+);
 
 // Sugerencias de servicios personalizados por categoría
 export const CUSTOM_SERVICE_SUGGESTIONS: Record<CareCategory, string[]> = {
@@ -116,24 +130,18 @@ export const CUSTOM_SERVICE_SUGGESTIONS: Record<CareCategory, string[]> = {
   ],
 };
 
-// Opciones de unidades para precios
-export const UNIT_OPTIONS = [
-  "hora",
-  "servicio",
-  "noche",
-  "día",
-  "paseo",
-  "visita",
-  "mes",
-];
+// Opciones de unidades para precios (configurables desde .env)
+export const UNIT_OPTIONS = getEnvArray(
+  'VITE_UNIT_OPTIONS',
+  ["hora", "servicio", "noche", "día", "paseo", "visita", "mes"]
+);
 
 /**
  * Helper function para obtener precios desde variables de entorno
  * con fallback a valor por defecto
  */
 export const getEnvPrice = (key: string, defaultValue: number): number => {
-  const value = import.meta.env[key];
-  return value ? parseFloat(value) : defaultValue;
+  return getEnvNumber(key, defaultValue);
 };
 
 /**
@@ -309,13 +317,17 @@ export const initialServiceConfig: ServiceConfig = {
   completed: false,
   tasks: [],
   variations: [], // Se pobla dinámicamente desde DEFAULT_SERVICE_VARIANTS
-  rates: { hourly: 10 },
+  rates: { hourly: getEnvNumber('VITE_DEFAULT_HOURLY_RATE', 10) },
   experience: "",
   certificates: [],
   availability: [],
   schedule: { startTime: "", endTime: "" },
   specificDates: [],
-  petAttributes: { acceptedPets: [], workZones: [], maxPets: 1 },
+  petAttributes: { 
+    acceptedPets: [], 
+    workZones: [], 
+    maxPets: getEnvNumber('VITE_DEFAULT_MAX_PETS', 1) 
+  },
   housekeepingAttributes: {
     products: "flexible",
     equipment: false,
