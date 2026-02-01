@@ -1,12 +1,4 @@
-import { BookingDetails } from '../types';
-
-export interface Booking extends BookingDetails {
-  id: string;
-  status: 'confirmed' | 'completed' | 'cancelled';
-  createdAt: string;
-  providerName: string; // Denormalized for easier display
-  providerPhotoUrl: string; // Denormalized for easier display
-}
+import { Booking, BookingDetails } from '../types';
 
 // Mock initial data
 let bookings: Booking[] = [

@@ -1,52 +1,15 @@
-import { UserRole } from '../types';
+import { 
+  UserRole,
+  RegisterData,
+  LoginData,
+  AuthResponse,
+  RefreshResponse,
+  ProfileCreateData
+} from '../types';
 
 // Configuración de la API
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
 const API_VERSION = import.meta.env.VITE_API_VERSION || 'v1';
-
-// Tipos de datos
-export interface RegisterData {
-  username: string;
-  email: string;
-  password: string;
-  firstName?: string;
-  lastName?: string;
-  profileType: 'provider' | 'client'; // Tipo de perfil: provider (cuidador) o client (familiar)
-}
-
-export interface LoginData {
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  message: string;
-  accessToken: string;
-  refreshToken: string;
-  user: {
-    id: number;
-    username: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    roles: string[];
-  };
-}
-
-export interface RefreshResponse {
-  message: string;
-  accessToken: string;
-  refreshToken: string;
-}
-
-export interface ProfileCreateData {
-  userId: number;
-  phoneNumber?: string;
-  address?: string;
-  city?: string;
-  postalCode?: string;
-  bio?: string;
-}
 
 // Utilidad para obtener el User-Agent
 const getUserAgent = (): string => {

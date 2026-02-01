@@ -16,6 +16,17 @@ export interface BookingDetails {
   insuranceCost: number;
 }
 
+/**
+ * Reserva completa con información de estado y proveedor
+ */
+export interface Booking extends BookingDetails {
+  id: string;
+  status: 'confirmed' | 'completed' | 'cancelled';
+  createdAt: string;
+  providerName: string; // Denormalized for easier display
+  providerPhotoUrl: string; // Denormalized for easier display
+}
+
 export interface BookingPermissions {
   canCreate: boolean;
   canEdit: boolean;

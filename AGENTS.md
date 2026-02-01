@@ -37,8 +37,9 @@ types/
   ├── common.ts             ← Enums y tipos globales (CareCategory, ProviderStatus, etc.)
   ├── profiles.ts           ← Tipos de perfiles (Provider, ProviderProfile, ClientProfile, Review)
   ├── services.ts           ← Servicios y configuración (ServiceConfig, ServiceVariation, Certificate)
-  ├── auth.ts               ← Autenticación y roles (UserRole, AuthMode)
-  ├── booking.ts            ← Reservas (BookingDetails, BookingPermissions)
+  ├── auth.ts               ← Autenticación y roles (UserRole, AuthMode, RegisterData, LoginData, etc.)
+  ├── api.ts                ← DTOs para comunicación con API (ClientProfileCreateDto, ProviderProfileCreateDto, etc.)
+  ├── booking.ts            ← Reservas (BookingDetails, Booking, BookingPermissions)
   ├── chat.ts               ← Mensajería (Message, ChatConversation)
   └── legal.ts              ← Documentos legales (LegalDocument)
 ```

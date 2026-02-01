@@ -17,6 +17,9 @@ export * from './profiles';
 // Authentication types
 export * from './auth';
 
+// API DTOs
+export * from './api';
+
 // Booking types
 export * from './booking';
 
