@@ -106,7 +106,7 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 --------------------------------------------------------------------------------------------------------
 
-* El perfil profesional todavía tiene campos que no se si se están guardando. Además cuando estás añadiendo un servicio manualmente, tienes una serie de botones preconfigurables que no se de donde se están cargando y que podrían ser configurables en .env
+* El perfil profesional todavía tiene campos que no se si se están guardando.
 
 * Si cerramos la sesión y volvemos a abrirla , ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
 
