@@ -114,12 +114,44 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     Object.values(CareCategory).forEach((cat) => {
       // Use initialData services if available, otherwise use defaults
       if (initialData?.services && initialData.services[cat]) {
+        // SOLUCIÓN: Siempre fusionar variaciones estándar con las de la BD
+        // Las variaciones estándar que existen en BD se marcan como enabled: true
+        // Las que no existen en BD se marcan como enabled: false
+        const standardVariations = JSON.parse(JSON.stringify(DEFAULT_SERVICE_VARIANTS[cat]));
+        const dbVariations = initialData.services[cat].variations || [];
+        
+        // Crear un mapa de variaciones de BD por nombre para búsqueda rápida
+        const dbVariationsMap = new Map(
+          dbVariations.map(v => [v.name.toLowerCase().trim(), v])
+        );
+        
+        // Fusionar: mantener todas las variaciones estándar, actualizar con datos de BD si existen
+        const mergedVariations = standardVariations.map(standardVar => {
+          const dbVar = dbVariationsMap.get(standardVar.name.toLowerCase().trim());
+          if (dbVar) {
+            // Si existe en BD, usar los datos de BD (enabled: true, price actualizado, etc.)
+            return { ...standardVar, ...dbVar, enabled: true };
+          } else {
+            // Si NO existe en BD, marcar como desactivado
+            return { ...standardVar, enabled: false };
+          }
+        });
+        
+        // Agregar variaciones personalizadas (custom) que no estén en las estándar
+        dbVariations.forEach(dbVar => {
+          const existsInStandard = standardVariations.some(
+            stdVar => stdVar.name.toLowerCase().trim() === dbVar.name.toLowerCase().trim()
+          );
+          if (!existsInStandard) {
+            // Es una variación custom/personalizada, agregarla
+            mergedVariations.push({ ...dbVar, enabled: true });
+          }
+        });
+        
         initial[cat] = {
           ...initialServiceConfig,
           ...initialData.services[cat],
-          variations: initialData.services[cat].variations && initialData.services[cat].variations.length > 0
-            ? JSON.parse(JSON.stringify(initialData.services[cat].variations))
-            : JSON.parse(JSON.stringify(DEFAULT_SERVICE_VARIANTS[cat])),
+          variations: mergedVariations,
         };
       } else {
         initial[cat] = {

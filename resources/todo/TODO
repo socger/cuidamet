@@ -106,32 +106,12 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 --------------------------------------------------------------------------------------------------------
 
-* Si cerramos la sesión y volvemos a abrirla , ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
-
 * Si Estamos creando un usuario, sea del perfil que sea, y ahora que ya hemos creado el usuario, no terminamos de crear el perfil. Cuando volvemos a editar este perfil (si cerramos la sesión y volvemos a abrirla) no sabe nada del correo, nombre, apellidos que se le introdujo en su momento. Igual estos datos deberían estar en el usuario, no en el perfil (tablas).
-
-* Si editamos un perfil profesional, y por ejemplo en limpieza le desactivamos uno de sus servicios estandard, este se borra de la BD. Pero el servicio también desaparece de la pantalla si cerramos la sesión y volvemos a abrirla con el mismo usuario. Lo que en realidad debería de hacer es que si no está (se ha borrado de la BD) pues que aparezca en la pantalla como desactivado. Y si volvemos a activarlo, pues que lo guarde en la BD.
-
-Imagina esta situación, creamos un usuario con perfil profesional. Y creando sus servicios, en el apartado para "Cuidado de niños" activamos "Cuidado Nocturno", "Ayuda Deberes" y "Recogida Colegio" (Estos son algunos de los servicios standard que tiene para "Cuidado de niños"). Después de guardar el perfil, estos servicios para "Cuidado de niños" se guardan correctamente en la Base de Datos de cuidamet-api.
-
-Ahora cerramos la sesión de este usuario y nos volvemos a autenticar como este usuario. 
-Nos vamos a editar el perfil (que es profesional) y en el apartado para "Cuidado de niños" desactivamos por ejemplo "Cuidado Nocturno" y "Ayuda Deberes" (ver imagen "Pasted Image"). 
-Si guardamos el perfil, cerramos sesión y nos volvemos a autenticar con el mismo usuario para entonces editar otra vez el perfil profesional, veremos que en el apartado para "Cuidado de niños" ya no están los servicios "Cuidado Nocturno" y "Ayuda Deberes", es decir que no han sido renderizados (ver imagen "Pasted Image 2").
-
-Bien, lo que necesitamos es que se rendericen los servicios que fueron borrados, pero como desactivados.
-Esto debes de hacerlo tanto para "Cuidado de mayores", como para "Cuidado de Niños", "Mascotas" y también "Limpieza y Mantenimiento".
-
-Y si el usuario los vuelve a activar alguno de estos servicios standard, pues que se guarden en la Base de datos.
-
-Hazme las preguntas que necesites que te conteste, o ante cualquier duda que tengas (sobre lo que te he comentado), pregúntamela.
-
-
-* En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
-
-* Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 * Resulta que si yo soy un cuidador (perfil profesional) y estoy añadiendo mis horarios de disponibilidad, en realidad debería de poner el margen de horas y que día de la semana puedo(lunes, martes, miércoles, jueves, viernes, sábado, domingo - Sería seleccionar todos los checkBox). No como lo está haciendo ahora mismo. Que añades franjas de horarios y que días del año tienes disponibilidad. Lo lógico es que fueran franja de horario y que días esa franja yo podría de la semana.
 
 yoline@yoline.com
+
+* Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 * Quitar todos los console.log que pueda de la app (tanto back como front)
