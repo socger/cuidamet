@@ -110,7 +110,7 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 * Si cerramos la sesión y volvemos a abrirla , ¿si borramos todos los servicios de por ejemplo "Limpieza y mantenimiento" seguirán guardándose sus certificados?
 
-* Si Estamos creando un usuario, sea del perfil que sea, y ahora que ya hemos creado el usuario, no terminamos de crear el perfil. Cuando volvemos a editar este perfil (si cerramos la sesión y volvemos a abrirla) no sabe nada del correo, nombre, apellidos que se le introdujo en su momento.
+* Si Estamos creando un usuario, sea del perfil que sea, y ahora que ya hemos creado el usuario, no terminamos de crear el perfil. Cuando volvemos a editar este perfil (si cerramos la sesión y volvemos a abrirla) no sabe nada del correo, nombre, apellidos que se le introdujo en su momento. Igual estos datos deberían estar en el usuario, no en el perfil (tablas).
 
 * En general tengo que comprobar tanto la creación como la edicion de perfiles. Tanto de los perfiles recién creados comprobar su edición. Como de los perfiles de usuarios autenticados, comprobar su edición. El motivo es de que creemos que no se están guardando todos los datos del perfil profesional o familiar (tanto en la creación como en la edición). Por ejemplo los servicios que ofrece creemos que no se están guardando cuando son servicios de tipo configurables.
 
