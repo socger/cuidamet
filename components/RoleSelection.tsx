@@ -4,14 +4,23 @@ import PageHeader from './PageHeader';
 import HandRaisedIcon from './icons/HandRaisedIcon';
 import SearchIcon from './icons/SearchIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
+import LogoutSection from './profiles/profilePage/LogoutSection';
 
 interface RoleSelectionProps {
   onSelectProvider: () => void;
   onSelectSeeker: () => void;
   onBack: () => void;
+  isAuthenticated?: boolean;
+  onLogout?: () => void;
 }
 
-const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelectSeeker, onBack }) => {
+const RoleSelection: React.FC<RoleSelectionProps> = ({ 
+  onSelectProvider, 
+  onSelectSeeker, 
+  onBack,
+  isAuthenticated = false,
+  onLogout
+}) => {
   return (
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
       <PageHeader title="Selecciona tu perfil" onBack={onBack} />
@@ -66,6 +75,13 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({ onSelectProvider, onSelec
                  </div>
              </div>
         </button>
+        
+        {/* Logout Section - Solo si está autenticado */}
+        {isAuthenticated && onLogout && (
+          <div className="mt-8">
+            <LogoutSection onLogout={onLogout} />
+          </div>
+        )}
         </div>
       </main>
     </div>

@@ -143,113 +143,120 @@ const App: React.FC = () => {
             setUserEmail(user.email);
             setUserFirstName(user.firstName || '');
             setUserLastName(user.lastName || '');
-            setActiveRole(role === 'provider' ? 'provider' : 'client');
             
-            // Cargar perfiles desde la base de datos
+            // Cargar AMBOS perfiles para determinar cuál existe
+            console.log('🔍 Intentando cargar perfiles para user:', user.id);
+            
+            let loadedProviderProfile = null;
+            let loadedClientProfile = null;
+            
+            // Intentar cargar perfil profesional
             try {
-              console.log('🔍 Intentando cargar perfil para user:', user.id, 'role:', role);
+              const response = await providerProfileService.getByUserId(user.id);
+              const profile = response.data;
+              console.log('✅ Perfil profesional encontrado:', profile);
               
-              if (role === 'provider') {
-                const response = await providerProfileService.getByUserId(user.id);
-                console.log('✅ Respuesta del backend (provider):', response);
-                const profile = response.data; // El backend devuelve { message, data }
-                console.log('📦 Datos del perfil (provider):', profile);
-                console.log('🗣️ Idiomas en el perfil del backend:', profile.languages);
-                console.log('🗣️ Tipo de languages:', typeof profile.languages, Array.isArray(profile.languages));
+              let servicesMap = {};
+              try {
+                console.log('📦 Cargando servicios del proveedor:', profile.id);
+                const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
+                console.log('✅ Servicios cargados:', servicesResponse);
                 
-                // Mapear el perfil del backend al formato de la UI
-                // Usar datos del user que vienen con el perfil, no del token
-                // Cargar servicios del proveedor
-                let servicesMap = {};
-                try {
-                  console.log('📦 Cargando servicios del proveedor:', profile.id);
-                  const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
-                  console.log('✅ Servicios cargados:', servicesResponse);
-                  
-                  // Transformar array de ServiceConfigs a objeto por categoría
-                  if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
-                    servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
-                      // Mapear variaciones del backend al formato del frontend
-                      const variations = service.variations && Array.isArray(service.variations)
-                        ? service.variations.map((v: any) => ({
-                            id: v.id,
-                            name: v.name,
-                            price: parseFloat(v.price) || 0,
-                            unit: v.unit,
-                            enabled: v.enabled,
-                            description: v.description || '',
-                            isCustom: v.isCustom || false,
-                            displayOrder: v.displayOrder || 0,
-                          }))
-                        : [];
-                      
-                      acc[service.careCategory] = {
-                        id: service.id,
-                        completed: service.completed,
-                        tasks: service.tasks || [],
-                        availability: service.availability || [],
-                        rates: {
-                          hourly: parseFloat(service.hourlyRate) || 0,
-                          shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
-                          urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
-                        },
-                        description: service.description || '',
-                        variations: variations, // ← Incluir variaciones
-                      };
-                      return acc;
-                    }, {});
-                    console.log('🗺️ Servicios mapeados con variaciones:', servicesMap);
-                  }
-                } catch (error) {
-                  console.warn('⚠️ Error al cargar servicios (puede ser nuevo usuario):', error);
+                if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
+                  servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
+                    const variations = service.variations && Array.isArray(service.variations)
+                      ? service.variations.map((v: any) => ({
+                          id: v.id,
+                          name: v.name,
+                          price: parseFloat(v.price) || 0,
+                          unit: v.unit,
+                          enabled: v.enabled,
+                          description: v.description || '',
+                          isCustom: v.isCustom || false,
+                          displayOrder: v.displayOrder || 0,
+                        }))
+                      : [];
+                    
+                    acc[service.careCategory] = {
+                      id: service.id,
+                      completed: service.completed,
+                      tasks: service.tasks || [],
+                      availability: service.availability || [],
+                      rates: {
+                        hourly: parseFloat(service.hourlyRate) || 0,
+                        shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
+                        urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
+                      },
+                      description: service.description || '',
+                      variations: variations,
+                    };
+                    return acc;
+                  }, {});
+                  console.log('🗺️ Servicios mapeados:', servicesMap);
                 }
-                
-                const mappedProfile = {
-                  id: profile.id,
-                  firstName: profile.user?.firstName || user.firstName || '',
-                  lastName: profile.user?.lastName || user.lastName || '',
-                  email: profile.user?.email || user.email,
-                  phone: profile.phone || '',
-                  photoUrl: profile.photoUrl || '',
-                  location: profile.location || '',
-                  coordinates: profile.latitude && profile.longitude 
-                    ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
-                    : undefined,
-                  languages: profile.languages || [],
-                  availability: profile.availability || [],
-                  services: servicesMap,
-                };
-                console.log('🎨 Perfil mapeado (provider):', mappedProfile);
-                console.log('🗣️ Idiomas en perfil mapeado:', mappedProfile.languages);
-                setProviderProfile(mappedProfile);
-              } else if (role === 'client') {
-                const profile = await clientProfileService.getByUserId(user.id);
-                // IMPORTANTE: clientProfileService devuelve el perfil directamente
-                console.log('✅ Respuesta del backend (client):', profile);
-                console.log('📦 Datos del perfil (client):', profile);
-                
-                // Mapear el perfil del backend al formato de la UI
-                // Usar datos del user que vienen con el perfil, no del token
-                const mappedProfile = {
-                  id: profile.id,
-                  firstName: profile.user?.firstName || user.firstName || '',
-                  lastName: profile.user?.lastName || user.lastName || '',
-                  email: profile.user?.email || user.email,
-                  phone: profile.phone || '',
-                  photoUrl: profile.photoUrl || '',
-                  location: profile.location || '',
-                  coordinates: profile.latitude && profile.longitude 
-                    ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
-                    : undefined,
-                  languages: profile.languages || [],
-                  preferences: profile.preferences || [],
-                };
-                console.log('🎨 Perfil mapeado (client):', mappedProfile);
-                setClientProfile(mappedProfile);
+              } catch (error) {
+                console.warn('⚠️ Sin servicios configurados:', error);
               }
-            } catch (profileError) {
-              console.error('❌ Error al cargar perfil:', profileError);
-              // No mostrar error si no existe perfil, es normal para usuarios nuevos
+              
+              loadedProviderProfile = {
+                id: profile.id,
+                firstName: profile.user?.firstName || user.firstName || '',
+                lastName: profile.user?.lastName || user.lastName || '',
+                email: profile.user?.email || user.email,
+                phone: profile.phone || '',
+                photoUrl: profile.photoUrl || '',
+                location: profile.location || '',
+                coordinates: profile.latitude && profile.longitude 
+                  ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+                  : undefined,
+                languages: profile.languages || [],
+                availability: profile.availability || [],
+                services: servicesMap,
+              };
+              
+              setProviderProfile(loadedProviderProfile);
+            } catch (error) {
+              console.log('ℹ️ No existe perfil profesional');
+            }
+            
+            // Intentar cargar perfil familiar
+            try {
+              const profile = await clientProfileService.getByUserId(user.id);
+              console.log('✅ Perfil familiar encontrado:', profile);
+              
+              loadedClientProfile = {
+                id: profile.id,
+                firstName: profile.user?.firstName || user.firstName || '',
+                lastName: profile.user?.lastName || user.lastName || '',
+                email: profile.user?.email || user.email,
+                phone: profile.phone || '',
+                photoUrl: profile.photoUrl || '',
+                location: profile.location || '',
+                coordinates: profile.latitude && profile.longitude 
+                  ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+                  : undefined,
+                languages: profile.languages || [],
+                preferences: profile.preferences || [],
+              };
+              
+              setClientProfile(loadedClientProfile);
+            } catch (error) {
+              console.log('ℹ️ No existe perfil familiar');
+            }
+            
+            // Determinar activeRole basándose en los perfiles que existen
+            if (loadedProviderProfile && !loadedClientProfile) {
+              console.log('🔵 Solo perfil profesional, activeRole=provider');
+              setActiveRole('provider');
+            } else if (loadedClientProfile && !loadedProviderProfile) {
+              console.log('🟢 Solo perfil familiar, activeRole=client');
+              setActiveRole('client');
+            } else if (loadedProviderProfile && loadedClientProfile) {
+              console.log('🟡 Ambos perfiles, usando rol del token:', role);
+              setActiveRole(role === 'provider' ? 'provider' : 'client');
+            } else {
+              console.log('⚪ Sin perfiles, usando rol del token:', role);
+              setActiveRole(role === 'provider' ? 'provider' : 'client');
             }
           } else {
             // Token existe pero no hay datos de usuario, limpiar
@@ -723,136 +730,143 @@ const App: React.FC = () => {
   const handleLoginSuccess = async (role: UserRole) => {
     console.log('🎉 handleLoginSuccess llamado con role:', role);
     setIsAuthenticated(true);
-    setActiveRole(role); // ← CRÍTICO: Establecer el rol activo
     setAuthAttempts(0);
     
-    // Cargar el perfil del usuario después del login
-    try {
-      const user = tokenStorage.getUser();
-      if (user) {
-        console.log('📥 Cargando perfil después del login para user:', user.id, 'role:', role);
+    // Cargar AMBOS perfiles independientemente del rol para determinar cuál existe
+    const user = tokenStorage.getUser();
+    if (user) {
+      console.log('📥 Cargando perfiles para user:', user.id);
+      
+      let loadedProviderProfile = null;
+      let loadedClientProfile = null;
+      
+      // Intentar cargar perfil profesional
+      try {
+        const response = await providerProfileService.getByUserId(user.id);
+        const profile = response.data;
+        console.log('✅ Perfil profesional encontrado:', profile);
         
-        if (role === 'provider') {
-          const response = await providerProfileService.getByUserId(user.id);
-          const profile = response.data;
-          console.log('✅ Perfil de proveedor cargado:', profile);
-          console.log('🗣️ Idiomas desde backend:', profile.languages);
-          console.log('📸 Foto desde backend:', profile.photoUrl);
+        // Cargar servicios del proveedor
+        let servicesMap = {};
+        try {
+          console.log('📦 Cargando servicios del proveedor:', profile.id);
+          const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
+          console.log('✅ Servicios cargados:', servicesResponse);
           
-          // Cargar servicios del proveedor
-          let servicesMap = {};
-          try {
-            console.log('📦 Cargando servicios del proveedor:', profile.id);
-            const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
-            console.log('✅ Servicios cargados:', servicesResponse);
-            
-            // Transformar array de ServiceConfigs a objeto por categoría
-            if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
-              servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
-                // Mapear variaciones del backend al formato del frontend
-                const variations = service.variations && Array.isArray(service.variations)
-                  ? service.variations.map((v: any) => ({
-                      id: v.id,
-                      name: v.name,
-                      price: parseFloat(v.price) || 0,
-                      unit: v.unit,
-                      enabled: v.enabled,
-                      description: v.description || '',
-                      isCustom: v.isCustom || false,
-                      displayOrder: v.displayOrder || 0,
-                    }))
-                  : [];
-                
-                // Mapear certificados del backend al formato del frontend
-                const certificates = service.certificates && Array.isArray(service.certificates)
-                  ? service.certificates.map((cert: any) => ({
-                      id: cert.id,
-                      name: cert.name,
-                      contactInfo: cert.contactInfo || '',
-                      description: cert.description || '',
-                      type: cert.certificateType || 'other',
-                      fileName: cert.fileName,
-                      fileUrl: cert.fileUrl,
-                      status: cert.verificationStatus || 'pending',
-                      dateAdded: cert.createdAt,
-                    }))
-                  : [];
-                
-                acc[service.careCategory] = {
-                  id: service.id,
-                  completed: service.completed,
-                  tasks: service.tasks || [],
-                  availability: service.availability || [],
-                  rates: {
-                    hourly: parseFloat(service.hourlyRate) || 0,
-                    shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
-                    urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
-                  },
-                  description: service.description || '',
-                  variations: variations, // ← Incluir variaciones
-                  certificates: certificates, // ← Incluir certificados
-                };
-                return acc;
-              }, {});
-              console.log('🗺️ Servicios mapeados con variaciones y certificados:', servicesMap);
-            }
-          } catch (error) {
-            console.warn('⚠️ Error al cargar servicios (puede ser nuevo usuario):', error);
+          // Transformar array de ServiceConfigs a objeto por categoría
+          if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
+            servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
+              const variations = service.variations && Array.isArray(service.variations)
+                ? service.variations.map((v: any) => ({
+                    id: v.id,
+                    name: v.name,
+                    price: parseFloat(v.price) || 0,
+                    unit: v.unit,
+                    enabled: v.enabled,
+                    description: v.description || '',
+                    isCustom: v.isCustom || false,
+                    displayOrder: v.displayOrder || 0,
+                  }))
+                : [];
+              
+              const certificates = service.certificates && Array.isArray(service.certificates)
+                ? service.certificates.map((cert: any) => ({
+                    id: cert.id,
+                    name: cert.name,
+                    contactInfo: cert.contactInfo || '',
+                    description: cert.description || '',
+                    type: cert.certificateType || 'other',
+                    fileName: cert.fileName,
+                    fileUrl: cert.fileUrl,
+                    status: cert.verificationStatus || 'pending',
+                    dateAdded: cert.createdAt,
+                  }))
+                : [];
+              
+              acc[service.careCategory] = {
+                id: service.id,
+                completed: service.completed,
+                tasks: service.tasks || [],
+                availability: service.availability || [],
+                rates: {
+                  hourly: parseFloat(service.hourlyRate) || 0,
+                  shift: service.shiftRate ? parseFloat(service.shiftRate) : undefined,
+                  urgentSurcharge: service.urgentSurcharge ? parseFloat(service.urgentSurcharge) : undefined,
+                },
+                description: service.description || '',
+                variations: variations,
+                certificates: certificates,
+              };
+              return acc;
+            }, {});
+            console.log('🗺️ Servicios mapeados:', servicesMap);
           }
-          
-          // Mapear correctamente TODOS los campos del perfil
-          const mappedProfile = {
-            id: profile.id,
-            firstName: profile.user?.firstName || user.firstName || '',
-            lastName: profile.user?.lastName || user.lastName || '',
-            email: profile.user?.email || user.email,
-            phone: profile.phone || '',
-            photoUrl: profile.photoUrl || '', // ← MAPEAR photoUrl
-            location: profile.location || '',
-            coordinates: profile.latitude && profile.longitude 
-              ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
-              : undefined,
-            languages: profile.languages || [], // ← MAPEAR languages del backend
-            availability: profile.availability || [], // ← MAPEAR availability del backend
-            services: servicesMap, // ← SERVICIOS CARGADOS
-          };
-          
-          console.log('🎨 Perfil mapeado para setState:', mappedProfile);
-          console.log('🗣️ Idiomas en perfil mapeado:', mappedProfile.languages);
-          setProviderProfile(mappedProfile);
-        } else if (role === 'client') {
-          const profile = await clientProfileService.getByUserId(user.id);
-          // IMPORTANTE: clientProfileService devuelve el perfil directamente, 
-          // NO envuelto en { message, data } como providerProfileService
-          console.log('✅ Perfil de cliente cargado:', profile);
-          console.log('🗣️ Idiomas desde backend (cliente):', profile.languages);
-          console.log('📸 Foto desde backend (cliente):', profile.photoUrl);
-          console.log('🎯 Preferencias desde backend:', profile.preferences);
-          
-          // Mapear correctamente TODOS los campos del perfil
-          const mappedProfile = {
-            id: profile.id,
-            firstName: profile.user?.firstName || user.firstName || '',
-            lastName: profile.user?.lastName || user.lastName || '',
-            email: profile.user?.email || user.email,
-            phone: profile.phone || '',
-            photoUrl: profile.photoUrl || '', // ← MAPEAR photoUrl
-            location: profile.location || '',
-            coordinates: profile.latitude && profile.longitude 
-              ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
-              : undefined,
-            languages: profile.languages || [], // ← MAPEAR languages del backend
-            preferences: profile.preferences || [], // ← MAPEAR preferences del backend
-          };
-          
-          console.log('🎨 Perfil mapeado para setState (cliente):', mappedProfile);
-          console.log('🗣️ Idiomas en perfil mapeado (cliente):', mappedProfile.languages);
-          console.log('📸 Foto en perfil mapeado (cliente):', mappedProfile.photoUrl);
-          setClientProfile(mappedProfile);
+        } catch (error) {
+          console.warn('⚠️ Sin servicios configurados:', error);
         }
+        
+        loadedProviderProfile = {
+          id: profile.id,
+          firstName: profile.user?.firstName || user.firstName || '',
+          lastName: profile.user?.lastName || user.lastName || '',
+          email: profile.user?.email || user.email,
+          phone: profile.phone || '',
+          photoUrl: profile.photoUrl || '',
+          location: profile.location || '',
+          coordinates: profile.latitude && profile.longitude 
+            ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+            : undefined,
+          languages: profile.languages || [],
+          availability: profile.availability || [],
+          services: servicesMap,
+        };
+        
+        setProviderProfile(loadedProviderProfile);
+      } catch (error) {
+        console.log('ℹ️ No existe perfil profesional');
       }
-    } catch (error) {
-      console.log('ℹ️ No se encontró perfil existente (puede ser normal):', error);
+      
+      // Intentar cargar perfil familiar
+      try {
+        const profile = await clientProfileService.getByUserId(user.id);
+        console.log('✅ Perfil familiar encontrado:', profile);
+        
+        loadedClientProfile = {
+          id: profile.id,
+          firstName: profile.user?.firstName || user.firstName || '',
+          lastName: profile.user?.lastName || user.lastName || '',
+          email: profile.user?.email || user.email,
+          phone: profile.phone || '',
+          photoUrl: profile.photoUrl || '',
+          location: profile.location || '',
+          coordinates: profile.latitude && profile.longitude 
+            ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+            : undefined,
+          languages: profile.languages || [],
+          preferences: profile.preferences || [],
+        };
+        
+        setClientProfile(loadedClientProfile);
+      } catch (error) {
+        console.log('ℹ️ No existe perfil familiar');
+      }
+      
+      // Determinar activeRole basándose en los perfiles que existen
+      if (loadedProviderProfile && !loadedClientProfile) {
+        console.log('🔵 Solo existe perfil profesional, estableciendo activeRole=provider');
+        setActiveRole('provider');
+      } else if (loadedClientProfile && !loadedProviderProfile) {
+        console.log('🟢 Solo existe perfil familiar, estableciendo activeRole=client');
+        setActiveRole('client');
+      } else if (loadedProviderProfile && loadedClientProfile) {
+        // Si existen ambos, usar el rol proporcionado por el backend
+        console.log('🟡 Existen ambos perfiles, usando rol del backend:', role);
+        setActiveRole(role);
+      } else {
+        // Si no existe ningún perfil, usar el rol proporcionado por el backend
+        console.log('⚪ No existe ningún perfil, usando rol del backend:', role);
+        setActiveRole(role);
+      }
     }
     
     // Execute pending action
@@ -924,19 +938,31 @@ const App: React.FC = () => {
     setView(previousViewBeforeAuth);
   };
   
-  const handleCancelFamiliarRegistration = () => {
-    // Revert authentication state since registration was cancelled
+  const handleLogout = async () => {
+    try {
+      await authService.logout();
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
     setIsAuthenticated(false);
     setClientProfile(null);
-    // Return to role selection view
+    setProviderProfile(null);
+    setView("landing");
+  };
+  
+  const handleCancelFamiliarRegistration = () => {
+    // NO revertir el estado de autenticación porque el usuario ya está creado en BD
+    // Solo limpiar el perfil del cliente local
+    setClientProfile(null);
+    // Return to role selection view para que pueda elegir crear perfil de nuevo
     setView('roleSelection');
   };
   
   const handleCancelProfesionalRegistration = () => {
-    // Revert authentication state since registration was cancelled
-    setIsAuthenticated(false);
+    // NO revertir el estado de autenticación porque el usuario ya está creado en BD
+    // Solo limpiar el perfil del proveedor local
     setProviderProfile(null);
-    // Return to role selection view
+    // Return to role selection view para que pueda elegir crear perfil de nuevo
     setView('roleSelection');
   };
   
@@ -1149,7 +1175,25 @@ const App: React.FC = () => {
           }}
           onBack={handleNavigateHome}
         />;
-      } else if (activeRole === 'provider') {
+      } else if (!clientProfile && !providerProfile) {
+        // Usuario autenticado pero SIN ningún perfil creado
+        console.log('⚠️ Usuario autenticado sin perfil. Mostrando RoleSelection');
+        mainContent = <RoleSelection 
+          onSelectProvider={() => {
+            // Usuario ya autenticado, ir directamente a crear perfil profesional
+            setActiveRole('provider');
+            setView('profesionalRegistration');
+          }}
+          onSelectSeeker={() => {
+            // Usuario ya autenticado, ir directamente a crear perfil familiar
+            setActiveRole('client');
+            setView('familiarRegistration');
+          }}
+          onBack={handleNavigateHome}
+          isAuthenticated={isAuthenticated}
+          onLogout={handleLogout}
+        />;
+      } else if (activeRole === 'provider' && providerProfile) {
         console.log('🔵 Mostrando perfil PROFESIONAL. activeRole:', activeRole, 'providerProfile:', providerProfile);
         // Provider Profile
         mainContent = <ProfesionalProfilePage 
@@ -1236,7 +1280,7 @@ const App: React.FC = () => {
             }
           }
         />;
-      } else {
+      } else if (activeRole === 'client' && clientProfile) {
         console.log('🟡 Mostrando perfil FAMILIAR. activeRole:', activeRole, 'clientProfile:', clientProfile);
         // Client Profile
         mainContent = <FamiliarProfilePage 
@@ -1450,26 +1494,63 @@ const App: React.FC = () => {
             setView("landing");
           }}
         />;
+      } else {
+        // Usuario autenticado pero sin el perfil correspondiente al activeRole
+        console.log('⚠️ Usuario autenticado pero sin perfil para activeRole:', activeRole);
+        console.log('clientProfile:', clientProfile, 'providerProfile:', providerProfile);
+        mainContent = <RoleSelection 
+          onSelectProvider={() => {
+            // Usuario ya autenticado, ir directamente a crear perfil profesional
+            setActiveRole('provider');
+            setView('profesionalRegistration');
+          }}
+          onSelectSeeker={() => {
+            // Usuario ya autenticado, ir directamente a crear perfil familiar
+            setActiveRole('client');
+            setView('familiarRegistration');
+          }}
+          onBack={handleNavigateHome}
+          isAuthenticated={isAuthenticated}
+          onLogout={handleLogout}
+        />;
       }
     } else if (currentView === "roleSelection") {
       mainContent = <RoleSelection 
         onSelectProvider={() => {
-          setPreviousViewBeforeAuth(view);
-          setPendingAction(null);
-          setAuthAttempts(0);
-          setAuthMode('signup');
-          setPreselectedRole('provider');
-          setView("auth");
+          // Verificar si el usuario ya está autenticado
+          if (isAuthenticated) {
+            // Usuario ya autenticado, ir directamente a crear perfil profesional
+            setActiveRole('provider');
+            setView('profesionalRegistration');
+          } else {
+            // Usuario NO autenticado, ir a registro
+            setPreviousViewBeforeAuth(view);
+            setPendingAction(null);
+            setAuthAttempts(0);
+            setAuthMode('signup');
+            setPreselectedRole('provider');
+            setView("auth");
+          }
         }}
         onSelectSeeker={() => {
-          setPreviousViewBeforeAuth(view);
-          setPendingAction(null);
-          setAuthAttempts(0);
-          setAuthMode('signup');
-          setPreselectedRole('client');
-          setView("auth");
+          // Verificar si el usuario ya está autenticado
+          if (isAuthenticated) {
+            // Usuario ya autenticado, ir directamente a crear perfil familiar
+            setActiveRole('client');
+            setView('familiarRegistration');
+          } else {
+            // Usuario NO autenticado, ir a registro
+            setPreviousViewBeforeAuth(view);
+            setPendingAction(null);
+            setAuthAttempts(0);
+            setAuthMode('signup');
+            setPreselectedRole('client');
+            setView("auth");
+          }
         }}
         onBack={() => setView("myProfile")}
+        isAuthenticated={isAuthenticated}
+        onLogout={handleLogout}
       />;
     } else if (currentView === "familiarRegistration") {
       mainContent = <FamiliarRegistration 
