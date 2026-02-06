@@ -106,7 +106,22 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 --------------------------------------------------------------------------------------------------------
 
-* Si Estamos creando un usuario, sea del perfil que sea, y ahora que ya hemos creado el usuario, no terminamos de crear el perfil. Cuando volvemos a editar este perfil (si cerramos la sesión y volvemos a abrirla) no sabe nada del correo, nombre, apellidos que se le introdujo en su momento. Igual estos datos deberían estar en el usuario, no en el perfil (tablas).
+* A TRABAJAR
+Si Estamos creando un usuario, sea del perfil que sea, y ahora que ya hemos creado el usuario, no terminamos de crear el perfil (salimos sin grabar). 
+
+Aunque el usuario se ha creado y guardado en base de datos, el perfil no se llegó a crear (ni el familiar, ni el profesional) por cancelar su creación (la del perfil). Así que se nos renderiza el componente "components/RoleSelection.tsx" para elegir entre crear un perfil familiar ó profesional. 
+
+Pero si elegimos una de las dos opciones a crear (perfil profesional ó perfil familiar), nos pide que nos creemos el usuario (que lo registremos). Cuando en realidad ya lo tenemos creado. Es como si no recordara que está recién creado y por supuesto autenticado, aunque no hubiera terminado de crear el perfil.
+
+Lo que debería de hacer, es que si el usuario se creó pero no terminó de crear el perfil pues que cuando se pulse para crear el perfil recuerde que usuario es y que pase a crear el perfil que haya solicitado.
+
+Y si el usuario se creó hace unos días, pero no se creó el perfil. Si ahora nos autenticamos con el usuario que se creó pues como no tiene perfil que cuando se pulse en alguna de las opciones de crear el perfil que no pida registrarnos o autenticarnos (ya estamos autenticados), que directamente nos permita crear el perfil.
+
+
+
+<!-- Y si en vez de crear el usuario, nos autenticamos como el usuario que creamos pues nos vuelve a renderizar el componente "components/RoleSelection.tsx". Y más de lo mismo, vuelve a pedirnos de crear el perfil y 
+
+Cuando volvemos a editar este perfil (si cerramos la sesión y volvemos a abrirla) no sabe nada del correo, nombre, apellidos que se le introdujo en su momento. Igual estos datos deberían estar en el usuario, no en el perfil (tablas). -->
 
 * Resulta que si yo soy un cuidador (perfil profesional) y estoy añadiendo mis horarios de disponibilidad, en realidad debería de poner el margen de horas y que día de la semana puedo(lunes, martes, miércoles, jueves, viernes, sábado, domingo - Sería seleccionar todos los checkBox). No como lo está haciendo ahora mismo. Que añades franjas de horarios y que días del año tienes disponibilidad. Lo lógico es que fueran franja de horario y que días esa franja yo podría de la semana.
 
