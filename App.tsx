@@ -737,6 +737,12 @@ const App: React.FC = () => {
     if (user) {
       console.log('📥 Cargando perfiles para user:', user.id);
       
+      // Actualizar estados locales con los datos del usuario autenticado
+      setUserEmail(user.email);
+      setUserFirstName(user.firstName || '');
+      setUserLastName(user.lastName || '');
+      setUserPhone(user.phone || '');
+      
       let loadedProviderProfile = null;
       let loadedClientProfile = null;
       
@@ -1744,6 +1750,17 @@ const App: React.FC = () => {
     view !== "auth" &&
     !isLocationLoading;
 
+  // Obtener la photoUrl del perfil activo
+  const getUserPhotoUrl = (): string | null => {
+    if (!isAuthenticated) return null;
+    
+    const profile = activeRole === 'provider' ? providerProfile : clientProfile;
+    if (!profile) return null;
+    
+    // Si tiene photoUrl, retornarla; si no, usar el placeholder por defecto
+    return profile.photoUrl || "https://via.placeholder.com/150";
+  };
+
   // For map view, render without wrapper to allow full screen
   if (view === "map") {
     return (
@@ -1760,6 +1777,7 @@ const App: React.FC = () => {
           unreadCount={unreadCount}
           isAuthenticated={isAuthenticated}
           activeRole={activeRole}
+          userPhotoUrl={getUserPhotoUrl()}
         />
         <CookieConsent />
         <AlertModal 
@@ -1786,6 +1804,7 @@ const App: React.FC = () => {
           unreadCount={unreadCount}
           isAuthenticated={isAuthenticated}
           activeRole={activeRole}
+          userPhotoUrl={getUserPhotoUrl()}
         />
       )}
       <CookieConsent />

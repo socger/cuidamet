@@ -148,7 +148,10 @@ Cuando renderices la imagen del usuario autenticado ó el icono del usuario que 
 Y deben de renderizarse justo donde está ahora mismo el icono UserIcon.
 
 
+* Comprobar si cuando se crea un usuario y después pasa acrear el perfil, pasa correctamente los datos del usuario recien creado.
 
+
+* En los perfiles no se está pudiendo modificar el valor del usuario, aunque si que se está pudiendo cambiar nombre, apellidos, etc.
 
 
 yoline@yoline.com
