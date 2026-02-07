@@ -115,9 +115,7 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 
 * TRABAJANDOSE:
-El componente RoleSelection.tsx, si el usuario está autenticado, debe de presentar los datos esenciales del usuario. Aunque no tenga ningún perfil todavía creado.
-
-El componente "components/booking/BookingPage_Header.tsx" usa una imagen para redondeada para mostrar el cuidador con el que vamos a reservar o hemos reservado.
+El componente "components/booking/BookingPage_Header.tsx" usa una imagen redondeada para  mostrar el cuidador con el que vamos a reservar o hemos reservado.
 El código para renderizar esta imagen se encuentra entre sus líneas 34-41 y es este:
       <div className="flex items-center gap-3">
         {rightAction && <div className="flex-shrink-0">{rightAction}</div>}
@@ -130,7 +128,7 @@ El código para renderizar esta imagen se encuentra entre sus líneas 34-41 y es
 	  
 Bien, pues resulta que el componente "components/BottomNav.tsx" corresponde a la barra que aparece en toda la app abajo.
 Este componente tiene la opción "Tu" y está representada por el icono UserIcon. 
-Esto lo puedes comprobar entre las líneas 22-28 que son las siguientes:
+Esto lo puedes comprobar entre las líneas 22-28, de "components/BottomNav.tsx", que son las siguientes:
     const navItems = [
         { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing', action: onNavigateHome },
         { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
@@ -139,10 +137,15 @@ Esto lo puedes comprobar entre las líneas 22-28 que son las siguientes:
         { key: 'profile', icon: UserIcon, label: 'Tú', active: currentView === 'myProfile', action: onNavigateProfile },
     ];
 
-El caso es que queremos que si el usuario está autenticado en la app, pues que el componente "components/BottomNav.tsx" renderice la imagen del usuario que está guardada en su perfil, en vez del icono UserIcon.
+El caso es que queremos que si el usuario NO está autenticado pues que el componente "components/BottomNav.tsx" renderice el icono UserIcon.
+
+Y si está autenticado, el usuario, pues que el componente "components/BottomNav.tsx" renderice la imagen del usuario que está guardada en su perfil, en vez del icono UserIcon.
 Pero usando un código parecido al que te mostré al principio para el componente "components/booking/BookingPage_Header.tsx".
 
-Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono que usa el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" para un usuario que no tiene imagen todavía creada.
+Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono/imagen que usa el componente "components/profiles/resumenProfile/Resumen_PersonalInfo.tsx" para un usuario que no tiene imagen todavía creada.
+
+Cuando renderices la imagen del usuario autenticado ó el icono del usuario que está autenticado pero que no tiene perfil creado, debes de renderizarlos respetando las dimensiones actuales con las que se renderiza el icono UserIcon. 
+Y deben de renderizarse justo donde está ahora mismo el icono UserIcon.
 
 
 
