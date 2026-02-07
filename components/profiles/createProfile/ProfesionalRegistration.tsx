@@ -42,6 +42,7 @@ import TrashIcon from "../../icons/TrashIcon";
 import PlusCircleIcon from "../../icons/PlusCircleIcon";
 import DocumentTextIcon from "../../icons/DocumentTextIcon";
 import PaperClipIcon from "../../icons/PaperClipIcon";
+import defaultUserAvatar from "../../../resources/images/default-user-avatar.jpg";
 
 interface ProfesionalRegistrationProps {
   onComplete: (profileData: ProviderProfile, deletedCertificateIds: number[]) => void;
@@ -1271,7 +1272,7 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
           <Resumen_PersonalInfo
-            photoUrl={profileData.photoUrl || "https://via.placeholder.com/150"}
+            photoUrl={profileData.photoUrl || defaultUserAvatar}
             name={[profileData.firstName, profileData.lastName].filter(Boolean).join(' ').trim() || 'Usuario'}
             phone={profileData.phone}
             email={profileData.email}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Provider, CareCategory, ProviderStatus } from "../types";
+import defaultUserAvatar from "../resources/images/default-user-avatar.jpg";
 
 // Icons
 import ChevronLeftIcon from "./icons/ChevronLeftIcon";
@@ -148,7 +149,7 @@ const MapView: React.FC<MapViewProps> = ({
   // Default placeholder if no user photo is provided
   const displayPhotoUrl =
     currentUserPhotoUrl ||
-    "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200";
+    defaultUserAvatar;
 
   // Auto-refresh simulation
   useEffect(() => {

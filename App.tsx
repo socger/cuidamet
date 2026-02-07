@@ -31,6 +31,7 @@ import NotificationsPage from "./components/NotificationsPage";
 import SecuritySettingsPage from "./components/SecuritySettingsPage";
 import { authService, tokenStorage } from "./services/authService";
 import { clientProfileService, providerProfileService, serviceConfigService } from "./services/profileService";
+import defaultUserAvatar from "./resources/images/default-user-avatar.jpg";
 
 const getDistanceInKm = (
   lat1: number,
@@ -1758,7 +1759,7 @@ const App: React.FC = () => {
     if (!profile) return null;
     
     // Si tiene photoUrl, retornarla; si no, usar el placeholder por defecto
-    return profile.photoUrl || "https://via.placeholder.com/150";
+    return profile.photoUrl || defaultUserAvatar;
   };
 
   // For map view, render without wrapper to allow full screen

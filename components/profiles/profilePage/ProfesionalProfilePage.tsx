@@ -22,6 +22,7 @@ import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
 import ProfesionalRegistration from "../createProfile/ProfesionalRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
+import defaultUserAvatar from "../../../resources/images/default-user-avatar.jpg";
 
 interface ProfesionalProfilePageProps {
   onBack: () => void;
@@ -38,8 +39,7 @@ interface ProfesionalProfilePageProps {
 // Default fallback data
 const defaultDashboardData = {
   name: "Tu Nombre",
-  photoUrl:
-    "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop",
+  photoUrl: defaultUserAvatar,
   location: "Tu Ubicación",
   email: "",
   phone: "",
@@ -277,7 +277,7 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
 
           <Resumen_PersonalInfo
-            photoUrl={displayProfile.photoUrl || "https://via.placeholder.com/150"}
+            photoUrl={displayProfile.photoUrl || defaultUserAvatar}
             name={displayProfile.name}
             phone={displayProfile.phone}
             email={displayProfile.email}

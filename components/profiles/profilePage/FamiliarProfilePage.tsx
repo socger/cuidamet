@@ -15,6 +15,7 @@ import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import SupportSection from "./SupportSection";
 import FamiliarRegistration from "../createProfile/FamiliarRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
+import defaultUserAvatar from "../../../resources/images/default-user-avatar.jpg";
 
 interface FamiliarProfilePageProps {
   clientProfile: ClientProfile | null;
@@ -91,8 +92,7 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
   const displayProfile = clientProfile || {
     firstName: "Usuario",
     lastName: "Invitado",
-    photoUrl:
-      "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=400&auto=format&fit=crop", // Generic placeholder
+    photoUrl: defaultUserAvatar,
     email: "",
     phone: "",
     location: "",
@@ -147,7 +147,7 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
           <Resumen_PersonalInfo
             photoUrl={
-              displayProfile.photoUrl || "https://via.placeholder.com/150"
+              displayProfile.photoUrl || defaultUserAvatar
             }
             name={`${displayProfile.firstName || ''} ${displayProfile.lastName || ''}`.trim() || "Usuario Invitado"}
             phone={displayProfile.phone}

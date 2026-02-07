@@ -5,6 +5,7 @@ import InboxIcon from './icons/InboxIcon';
 import UserIcon from './icons/UserIcon';
 import ClipboardDocumentListIcon from './icons/ClipboardDocumentListIcon';
 import { UserRole } from '../types';
+import defaultUserAvatar from '../resources/images/default-user-avatar.jpg';
 
 interface BottomNavProps {
     currentView: 'landing' | 'providers' | 'offer' | 'inbox' | 'chat' | 'myProfile' | 'map' | 'bookings';
@@ -98,10 +99,10 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                             aria-label={item.label}
                         >
                             <div className="relative">
-                                {item.key === 'profile' && isAuthenticated && userPhotoUrl ? (
-                                    // Usuario autenticado con imagen
+                                {item.key === 'profile' && isAuthenticated ? (
+                                    // Usuario autenticado (con o sin foto de perfil)
                                     <img
-                                        src={userPhotoUrl}
+                                        src={userPhotoUrl || defaultUserAvatar}
                                         alt="Tu perfil"
                                         className={`h-6 w-6 mb-1 rounded-full object-cover transition-all ${
                                             item.active 
@@ -110,7 +111,7 @@ const BottomNav: React.FC<BottomNavProps> = ({ currentView, onNavigateHome, onNa
                                         }`}
                                     />
                                 ) : (
-                                    // Usuario no autenticado o sin imagen
+                                    // Usuario no autenticado
                                     <item.icon className={`h-6 w-6 mb-1 transition-colors ${item.active ? 'text-teal-500' : 'text-slate-500 group-hover:text-teal-500'}`} />
                                 )}
                                 {item.key === 'inbox' && isAuthenticated && unreadCount > 0 && (

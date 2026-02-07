@@ -13,6 +13,7 @@ import Resumen_Revisa from "../resumenProfile/Resumen_Revisa";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import { CareCategory, ClientProfile } from "../../../types";
 import { serviceCategories, languagesList } from "../../../services/serviceConstants";
+import defaultUserAvatar from "../../../resources/images/default-user-avatar.jpg";
 
 interface FamiliarRegistrationProps {
   onComplete: (profileData: ClientProfile) => void;
@@ -184,7 +185,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
         lastName: profileData.lastName,
         email: profileData.email,
         phone: profileData.phone,
-        photoUrl: profileData.photoUrl || "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200",
+        photoUrl: profileData.photoUrl || defaultUserAvatar,
         location: profileData.location,
         coordinates: profileData.latitude && profileData.longitude ? {
           latitude: profileData.latitude,
@@ -368,7 +369,7 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
                 <Resumen_PersonalInfo
                   photoUrl={
                     profileData.photoUrl ||
-                    "https://images.unsplash.com/photo-1511367461989-f85a21fda167?q=80&w=200"
+                    defaultUserAvatar
                   }
                   name={[profileData.firstName, profileData.lastName].filter(Boolean).join(' ').trim() || 'Usuario'}
                   phone={profileData.phone}

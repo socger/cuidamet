@@ -6,6 +6,7 @@ import SearchIcon from './icons/SearchIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import Resumen_PersonalInfo from './profiles/resumenProfile/Resumen_PersonalInfo';
 import { tokenStorage } from '../services/authService';
+import defaultUserAvatar from '../resources/images/default-user-avatar.jpg';
 
 interface RoleSelectionProps {
   onSelectProvider: () => void;
@@ -44,7 +45,7 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({
         {isAuthenticated && user && (
           <div className="max-w-2xl mx-auto mb-6 bg-white rounded-2xl shadow-md overflow-hidden">
             <Resumen_PersonalInfo
-              photoUrl="https://via.placeholder.com/150"
+              photoUrl={defaultUserAvatar}
               name={userName}
               phone={userPhone}
               email={user.email}
