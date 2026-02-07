@@ -111,9 +111,19 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 * Cuando un uusuario se autentica entra en su perfil guardado. Pero si le pulsa a cambiar de perfil automáticamente pasa a crear el perfil al que ha cambiado. Pero si cancelamos la creación del perfil se renderiza la pantalla de elegir perfil a crear. Cuando en realidad ya tiene un perfil creado. Lo que debería de hacer es que si se cancela la creación del perfil al que ha cambiado, pues que compruebe si tiene un perfil creado y si lo tiene que vuelva a él. Pero si no tiene ningún perfil pues que pase a la vista de seleccionar el perfil a crear (componente "RoleSelection.tsx")
 
-* Si el usuario se creó, pero no terminó de crear su perfil. La app considera que está autenticado. De hecho si no usamos la app durante días y volvemos, sigue creyendo que estás autenticado. Pero no hay ninguna opción visible que diga que usuario es el que se ha creado/autenticado aunque no tenga perfil creado. 
 
-En el componente " "components/RoleSelection.tsx" igual deberíamos de poner los datos esenciales del usuario que aparecen, arriba, tanto en el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" ó en "components/profiles/profilePage/FamiliarProfilePage.tsx"
+
+
+* TRABAJANDOSE:
+Si el usuario se creó, pero no terminó de crear su perfil, la app considera que está autenticado. 
+De hecho si no usamos la app durante días y volvemos, sigue creyendo que estás autenticado. 
+Pero no hay ninguna opción visible que diga que usuario es el que se ha creado/autenticado aunque no tenga perfil creado. 
+
+En el componente "components/RoleSelection.tsx" deberíamos de poner los datos esenciales del usuario que aparecen, arriba, tanto en el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" ó en "components/profiles/profilePage/FamiliarProfilePage.tsx". 
+Me refiero al componente "components/profiles/resumenProfile/Resumen_PersonalInfo.tsx".
+Pero sólo debe de renderizarse el compoente "components/profiles/resumenProfile/Resumen_PersonalInfo.tsx" en "components/RoleSelection.tsx" si el usuario de la app está registrado ó autenticado.
+
+
 
 * El componente RoleSelection.tsx, si el usuario está autenticado, debe de presentar los datos esenciales del usuario. Aunque no tenga ningún perfil todavía creado.
 
@@ -143,6 +153,10 @@ El caso es que queremos que si el usuario está autenticado en la app, pues que 
 Pero usando un código parecido al que te mostré al principio para el componente "components/booking/BookingPage_Header.tsx".
 
 Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono que usa el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" para un usuario que no tiene imagen todavía creada.
+
+
+
+
 
 yoline@yoline.com
 jero@jero.com

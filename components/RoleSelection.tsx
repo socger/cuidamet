@@ -5,6 +5,8 @@ import HandRaisedIcon from './icons/HandRaisedIcon';
 import SearchIcon from './icons/SearchIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
 import LogoutSection from './profiles/profilePage/LogoutSection';
+import Resumen_PersonalInfo from './profiles/resumenProfile/Resumen_PersonalInfo';
+import { tokenStorage } from '../services/authService';
 
 interface RoleSelectionProps {
   onSelectProvider: () => void;
@@ -21,11 +23,38 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({
   isAuthenticated = false,
   onLogout
 }) => {
+  // Obtener datos del usuario autenticado
+  const user = isAuthenticated ? tokenStorage.getUser() : null;
+  
+  // Construir el nombre completo del usuario
+  const userName = user 
+    ? [user.firstName, user.lastName].filter(Boolean).join(' ') || user.username || 'Usuario'
+    : 'Usuario';
+  
+  // Datos básicos del usuario (sin perfil creado aún)
+  const userPhone = user?.phone || user?.username || 'Pendiente de completar';
+  const userLocation = user?.location;
+  const userLanguages = user?.languages || [];
+  
   return (
     <div className="fixed inset-0 bg-slate-50 z-50 flex flex-col animate-fade-in">
       <PageHeader title="Selecciona tu perfil" onBack={onBack} />
       
       <main className="flex-1 overflow-y-auto px-6 pt-8 pb-28">
+        {/* Mostrar información del usuario solo si está autenticado */}
+        {isAuthenticated && user && (
+          <div className="max-w-2xl mx-auto mb-6 bg-white rounded-2xl shadow-md overflow-hidden">
+            <Resumen_PersonalInfo
+              photoUrl="https://via.placeholder.com/150"
+              name={userName}
+              phone={userPhone}
+              email={user.email}
+              location={userLocation}
+              languages={userLanguages}
+            />
+          </div>
+        )}
+        
         <div className="text-center mb-8">
              <h2 className="text-2xl font-bold text-slate-800">¿Qué deseas hacer hoy?</h2>
              <p className="text-slate-600 mt-2">Elige cómo quieres usar Cuidamet.</p>
