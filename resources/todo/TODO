@@ -120,13 +120,13 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 * En los perfiles no se está pudiendo modificar el valor del usuario, aunque si que se está pudiendo cambiar nombre, apellidos, etc.
 
+* Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 yoline@yoline.com
 jero@jero.com
 mari@mari.com
 pedro@pedro.com
 
-* Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
 
 
 * Quitar todos los console.log que pueda de la app (tanto back como front)
