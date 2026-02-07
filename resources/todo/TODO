@@ -145,7 +145,7 @@ Pero usando un código parecido al que te mostré al principio para el component
 Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono que usa el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" para un usuario que no tiene imagen todavía creada.
 
 
-* TRABAJANDOSE:
+* ✅ COMPLETADO (07/02/2026):
 Los perfiles son los que guardan ahora mismo los siguientes campos:
 - photo_url
 - phone
@@ -155,21 +155,17 @@ Los perfiles son los que guardan ahora mismo los siguientes campos:
 - languages
 - is_premium
 
-Por lo que si un usuario tiene perfil de profesional y familiar, podría tener dos imágenes, dos teléfonos, dos direcciones, etc. 
-Este comportamiento no lo queremos.
-Un usuario sólo puede tener una imagen, un teléfono, una dirección, etc.
-
-Por lo que queremos que, en el repositorio "cuidamet-api", quites de las tablas "provider_profiles" y "client_profiles" estos campos que te he detallado .
-Y se los añadas a la tabla users.
-Estos campos que vas a crear en la tabla "users" deben de ser del mismo tipo que los campos que has quitado en las otras dos tablas.
-
-Como estas tres tablas han cambiado, tendrás que repasar todos los endpoints que las usan para arreglarlos, porque las tablas "provider_profiles" y "client_profiles" devolverán menos campos.
-Y la tabla "users" devolverá más campos.
-
-Por supuesto en el repositorio "cuidamet" tienes que tener también en cuenta estos cambios que hemos hecho en el repositorio "cuidamet-api".
-Los endpoints que llame "cuidamet" habrán cambiado.
-
-Y donde antes se llamaba para guardar un repositorio, ahora tiene que tener en cuenta que los campos que detallé sólo serán guardados en la tabla users.
+Migración completada exitosamente:
+✅ Campos movidos de provider_profiles y client_profiles a users
+✅ Base de datos migrada sin pérdida de datos (21 usuarios)
+✅ Todos los endpoints backend actualizados y probados
+✅ Frontend profileService.ts actualizado
+✅ Componentes verificados (ProfesionalProfilePage, FamiliarProfilePage, Resumen_PersonalInfo)
+✅ Swagger actualizado automáticamente con los nuevos campos
+✅ Documentación completa creada:
+   - resources/documents/AI conversations/IA chats/020-Migracion-campos-perfiles-a-users.md
+   - resources/documents/AI conversations/IA chats/021-Migracion-campos-perfiles-VERIFICACION.md
+   - test endpoints with REST CLIENT extension/test-migration-users-fields.http
 
 
 <!-- Lo que debería de hacer la app es guardar la imagen del usuario en el propio usuario, no en los perfiles.

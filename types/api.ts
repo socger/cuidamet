@@ -5,18 +5,24 @@
 
 /**
  * DTO para crear perfil de cliente
+ * 
+ * NOTA: Los campos phone, photoUrl, location, latitude, longitude, languages e isPremium
+ * se guardan en la tabla 'users' del backend, no en 'client_profiles'.
+ * El servicio profileService.ts se encarga automáticamente de enviarlos al endpoint correcto.
  */
 export interface ClientProfileCreateDto {
   userId: number;
+  // Campos que se guardan en 'users'
   phone?: string;
   photoUrl?: string;
   location?: string;
   latitude?: number;
   longitude?: number;
   languages?: string[];
+  isPremium?: boolean;
+  // Campos específicos del perfil de cliente
   preferences?: string[];
   profileStatus?: string;
-  isPremium?: boolean;
 }
 
 /**
@@ -37,18 +43,24 @@ export interface ClientProfileResponse {
 
 /**
  * DTO para crear perfil de proveedor
+ * 
+ * NOTA: Los campos phone, photoUrl, location, latitude, longitude, languages e isPremium
+ * se guardan en la tabla 'users' del backend, no en 'provider_profiles'.
+ * El servicio profileService.ts se encarga automáticamente de enviarlos al endpoint correcto.
  */
 export interface ProviderProfileCreateDto {
   userId: number;
+  // Campos que se guardan en 'users'
   phone?: string;
   photoUrl?: string;
   location: string;
   latitude?: number;
   longitude?: number;
   languages?: string[];
+  isPremium?: boolean;
+  // Campos específicos del perfil de proveedor
   availability?: string[];
   profileStatus?: string;
-  isPremium?: boolean;
   providerStatus?: string;
   rating?: number;
   reviewsCount?: number;

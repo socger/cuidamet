@@ -13,9 +13,20 @@ const API_VERSION = import.meta.env.VITE_API_VERSION || 'v1';
 // Servicio para actualizar datos del usuario
 export const userService = {
   /**
-   * Actualizar datos del usuario (firstName, lastName, email)
+   * Actualizar datos del usuario (incluye campos compartidos de perfiles)
    */
-  update: async (userId: number, data: { firstName?: string; lastName?: string; email?: string }) => {
+  update: async (userId: number, data: { 
+    firstName?: string; 
+    lastName?: string; 
+    email?: string;
+    phone?: string;
+    photoUrl?: string;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+    languages?: string[];
+    isPremium?: boolean;
+  }) => {
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/users/${userId}`, {
       method: 'PATCH',
       headers: {
@@ -42,29 +53,42 @@ export const clientProfileService = {
   /**
    * Crear perfil de cliente
    */
-  create: async (data: ClientProfileCreateDto, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ClientProfile> => {
-    // Si se proporcionan datos del usuario, actualizarlos primero
-    if (userData && (userData.firstName || userData.lastName || userData.email)) {
-      try {
-        await userService.update(data.userId, userData);
-      } catch (error) {
-        console.error('Error al actualizar datos del usuario:', error);
-        // No bloqueamos la creación del perfil si falla la actualización del usuario
-      }
-    }
-
-    // Solo enviar los campos que espera el backend
-    const payload: any = {
-      userId: data.userId,
+  create: async (data: ClientProfileCreateDto, userData?: { 
+    firstName?: string; 
+    lastName?: string; 
+    email?: string;
+    phone?: string;
+    photoUrl?: string;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+    languages?: string[];
+    isPremium?: boolean;
+  }): Promise<ClientProfile> => {
+    // Actualizar datos del usuario (incluye campos compartidos que ahora están en users)
+    const userDataToUpdate = {
+      ...userData,
       phone: data.phone,
       photoUrl: data.photoUrl,
       location: data.location,
       latitude: data.latitude,
       longitude: data.longitude,
       languages: data.languages,
+      isPremium: data.isPremium,
+    };
+    
+    try {
+      await userService.update(data.userId, userDataToUpdate);
+    } catch (error) {
+      console.error('Error al actualizar datos del usuario:', error);
+      // No bloqueamos la creación del perfil si falla la actualización del usuario
+    }
+
+    // Solo enviar campos específicos del perfil de cliente
+    const payload: any = {
+      userId: data.userId,
       preferences: data.preferences,
       profileStatus: data.profileStatus,
-      isPremium: data.isPremium,
     };
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/client-profiles`, {
       method: 'POST',
@@ -101,23 +125,50 @@ export const clientProfileService = {
   /**
    * Actualizar perfil de cliente
    */
-  update: async (id: number, data: Partial<ClientProfileCreateDto>, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ClientProfile> => {
-    // Si se proporcionan datos del usuario, actualizarlos primero
-    if (userData && data.userId && (userData.firstName || userData.lastName || userData.email)) {
+  update: async (id: number, data: Partial<ClientProfileCreateDto>, userData?: { 
+    firstName?: string; 
+    lastName?: string; 
+    email?: string;
+    phone?: string;
+    photoUrl?: string;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+    languages?: string[];
+    isPremium?: boolean;
+  }): Promise<ClientProfile> => {
+    // Actualizar datos del usuario si se proporcionan
+    if (data.userId) {
+      const userDataToUpdate = {
+        ...userData,
+        phone: data.phone,
+        photoUrl: data.photoUrl,
+        location: data.location,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        languages: data.languages,
+        isPremium: data.isPremium,
+      };
+      
       try {
-        await userService.update(data.userId, userData);
+        await userService.update(data.userId, userDataToUpdate);
       } catch (error) {
         console.error('Error al actualizar datos del usuario:', error);
-        // No bloqueamos la actualización del perfil si falla la actualización del usuario
       }
     }
+
+    // Solo enviar campos específicos del perfil al endpoint de client-profiles
+    const profilePayload: any = {
+      preferences: data.preferences,
+      profileStatus: data.profileStatus,
+    };
 
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/client-profiles/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(profilePayload),
     });
 
     if (!response.ok) {
@@ -148,29 +199,42 @@ export const providerProfileService = {
   /**
    * Crear perfil de proveedor
    */
-  create: async (data: ProviderProfileCreateDto, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ProviderProfile> => {
-    // Si se proporcionan datos del usuario, actualizarlos primero
-    if (userData && (userData.firstName || userData.lastName || userData.email)) {
-      try {
-        await userService.update(data.userId, userData);
-      } catch (error) {
-        console.error('Error al actualizar datos del usuario:', error);
-        // No bloqueamos la creación del perfil si falla la actualización del usuario
-      }
-    }
-
-    // Solo enviar los campos que espera el backend
-    const payload: any = {
-      userId: data.userId,
+  create: async (data: ProviderProfileCreateDto, userData?: { 
+    firstName?: string; 
+    lastName?: string; 
+    email?: string;
+    phone?: string;
+    photoUrl?: string;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+    languages?: string[];
+    isPremium?: boolean;
+  }): Promise<ProviderProfile> => {
+    // Actualizar datos del usuario (incluye campos compartidos que ahora están en users)
+    const userDataToUpdate = {
+      ...userData,
       phone: data.phone,
       photoUrl: data.photoUrl,
       location: data.location,
       latitude: data.latitude,
       longitude: data.longitude,
       languages: data.languages,
+      isPremium: data.isPremium,
+    };
+    
+    try {
+      await userService.update(data.userId, userDataToUpdate);
+    } catch (error) {
+      console.error('Error al actualizar datos del usuario:', error);
+      // No bloqueamos la creación del perfil si falla la actualización del usuario
+    }
+
+    // Solo enviar campos específicos del perfil de proveedor
+    const payload: any = {
+      userId: data.userId,
       availability: data.availability,
       profileStatus: data.profileStatus,
-      isPremium: data.isPremium,
       providerStatus: data.providerStatus,
       rating: data.rating,
       reviewsCount: data.reviewsCount,
@@ -213,23 +277,56 @@ export const providerProfileService = {
   /**
    * Actualizar perfil de proveedor
    */
-  update: async (id: number, data: Partial<ProviderProfileCreateDto>, userData?: { firstName?: string; lastName?: string; email?: string }): Promise<ProviderProfile> => {
-    // Si se proporcionan datos del usuario, actualizarlos primero
-    if (userData && data.userId && (userData.firstName || userData.lastName || userData.email)) {
+  update: async (id: number, data: Partial<ProviderProfileCreateDto>, userData?: { 
+    firstName?: string; 
+    lastName?: string; 
+    email?: string;
+    phone?: string;
+    photoUrl?: string;
+    location?: string;
+    latitude?: number;
+    longitude?: number;
+    languages?: string[];
+    isPremium?: boolean;
+  }): Promise<ProviderProfile> => {
+    // Actualizar datos del usuario si se proporcionan
+    if (data.userId) {
+      const userDataToUpdate = {
+        ...userData,
+        phone: data.phone,
+        photoUrl: data.photoUrl,
+        location: data.location,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        languages: data.languages,
+        isPremium: data.isPremium,
+      };
+      
       try {
-        await userService.update(data.userId, userData);
+        await userService.update(data.userId, userDataToUpdate);
       } catch (error) {
         console.error('Error al actualizar datos del usuario:', error);
-        // No bloqueamos la actualización del perfil si falla la actualización del usuario
       }
     }
+
+    // Solo enviar campos específicos del perfil al endpoint de provider-profiles
+    const profilePayload: any = {
+      availability: data.availability,
+      profileStatus: data.profileStatus,
+      providerStatus: data.providerStatus,
+      rating: data.rating,
+      reviewsCount: data.reviewsCount,
+      completedBookings: data.completedBookings,
+      verifications: data.verifications,
+      badges: data.badges,
+    };
 
     const response = await fetchWithAuth(`${API_URL}/${API_VERSION}/provider-profiles/${id}`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(profilePayload),
     });
 
     if (!response.ok) {

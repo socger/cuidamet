@@ -203,13 +203,13 @@ const App: React.FC = () => {
                 firstName: profile.user?.firstName || user.firstName || '',
                 lastName: profile.user?.lastName || user.lastName || '',
                 email: profile.user?.email || user.email,
-                phone: profile.phone || '',
-                photoUrl: profile.photoUrl || '',
-                location: profile.location || '',
-                coordinates: profile.latitude && profile.longitude 
-                  ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+                phone: profile.user?.phone || '',
+                photoUrl: profile.user?.photoUrl || '',
+                location: profile.user?.location || '',
+                coordinates: profile.user?.latitude && profile.user?.longitude 
+                  ? { latitude: parseFloat(profile.user.latitude), longitude: parseFloat(profile.user.longitude) }
                   : undefined,
-                languages: profile.languages || [],
+                languages: profile.user?.languages || [],
                 availability: profile.availability || [],
                 services: servicesMap,
               };
@@ -229,13 +229,13 @@ const App: React.FC = () => {
                 firstName: profile.user?.firstName || user.firstName || '',
                 lastName: profile.user?.lastName || user.lastName || '',
                 email: profile.user?.email || user.email,
-                phone: profile.phone || '',
-                photoUrl: profile.photoUrl || '',
-                location: profile.location || '',
-                coordinates: profile.latitude && profile.longitude 
-                  ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+                phone: profile.user?.phone || '',
+                photoUrl: profile.user?.photoUrl || '',
+                location: profile.user?.location || '',
+                coordinates: profile.user?.latitude && profile.user?.longitude 
+                  ? { latitude: parseFloat(profile.user.latitude), longitude: parseFloat(profile.user.longitude) }
                   : undefined,
-                languages: profile.languages || [],
+                languages: profile.user?.languages || [],
                 preferences: profile.preferences || [],
               };
               
@@ -810,13 +810,13 @@ const App: React.FC = () => {
           firstName: profile.user?.firstName || user.firstName || '',
           lastName: profile.user?.lastName || user.lastName || '',
           email: profile.user?.email || user.email,
-          phone: profile.phone || '',
-          photoUrl: profile.photoUrl || '',
-          location: profile.location || '',
-          coordinates: profile.latitude && profile.longitude 
-            ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+          phone: profile.user?.phone || '',
+          photoUrl: profile.user?.photoUrl || '',
+          location: profile.user?.location || '',
+          coordinates: profile.user?.latitude && profile.user?.longitude 
+            ? { latitude: parseFloat(profile.user.latitude), longitude: parseFloat(profile.user.longitude) }
             : undefined,
-          languages: profile.languages || [],
+          languages: profile.user?.languages || [],
           availability: profile.availability || [],
           services: servicesMap,
         };
@@ -836,13 +836,13 @@ const App: React.FC = () => {
           firstName: profile.user?.firstName || user.firstName || '',
           lastName: profile.user?.lastName || user.lastName || '',
           email: profile.user?.email || user.email,
-          phone: profile.phone || '',
-          photoUrl: profile.photoUrl || '',
-          location: profile.location || '',
-          coordinates: profile.latitude && profile.longitude 
-            ? { latitude: parseFloat(profile.latitude), longitude: parseFloat(profile.longitude) }
+          phone: profile.user?.phone || '',
+          photoUrl: profile.user?.photoUrl || '',
+          location: profile.user?.location || '',
+          coordinates: profile.user?.latitude && profile.user?.longitude 
+            ? { latitude: parseFloat(profile.user.latitude), longitude: parseFloat(profile.user.longitude) }
             : undefined,
-          languages: profile.languages || [],
+          languages: profile.user?.languages || [],
           preferences: profile.preferences || [],
         };
         
@@ -1243,13 +1243,13 @@ const App: React.FC = () => {
                     firstName: result.profile.user?.firstName || user.firstName || '',
                     lastName: result.profile.user?.lastName || user.lastName || '',
                     email: result.profile.user?.email || user.email,
-                    phone: result.profile.phone || '',
-                    photoUrl: result.profile.photoUrl || '',
-                    location: result.profile.location || '',
-                    coordinates: result.profile.latitude && result.profile.longitude 
-                      ? { latitude: parseFloat(result.profile.latitude), longitude: parseFloat(result.profile.longitude) }
+                    phone: result.profile.user?.phone || '',
+                    photoUrl: result.profile.user?.photoUrl || '',
+                    location: result.profile.user?.location || '',
+                    coordinates: result.profile.user?.latitude && result.profile.user?.longitude 
+                      ? { latitude: parseFloat(result.profile.user.latitude), longitude: parseFloat(result.profile.user.longitude) }
                       : undefined,
-                    languages: result.profile.languages || [],
+                    languages: result.profile.user?.languages || [],
                     preferences: result.profile.preferences || [],
                   };
                   
@@ -1378,13 +1378,13 @@ const App: React.FC = () => {
                   firstName: result.profile.user?.firstName || user.firstName || '',
                   lastName: result.profile.user?.lastName || user.lastName || '',
                   email: result.profile.user?.email || user.email,
-                  phone: result.profile.phone || '',
-                  photoUrl: result.profile.photoUrl || '',
-                  location: result.profile.location || '',
-                  coordinates: result.profile.latitude && result.profile.longitude 
-                    ? { latitude: parseFloat(result.profile.latitude), longitude: parseFloat(result.profile.longitude) }
+                  phone: result.profile.user?.phone || '',
+                  photoUrl: result.profile.user?.photoUrl || '',
+                  location: result.profile.user?.location || '',
+                  coordinates: result.profile.user?.latitude && result.profile.user?.longitude 
+                    ? { latitude: parseFloat(result.profile.user.latitude), longitude: parseFloat(result.profile.user.longitude) }
                     : undefined,
-                  languages: result.profile.languages || [],
+                  languages: result.profile.user?.languages || [],
                   availability: result.profile.availability || [],
                   services: Object.keys(servicesMap).length > 0 ? servicesMap : {
                     [CareCategory.ELDERLY]: {
