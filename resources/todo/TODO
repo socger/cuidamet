@@ -118,9 +118,6 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 * Comprobar si cuando se crea un usuario y después pasa acrear el perfil, pasa correctamente los datos del usuario recien creado.
 
-* TRABAJANDOSE:
-Cuando entramos en un usuario que nada más que tiene un perfil y lo editamos, cambiando por ejemplo el nombre y lo guardamos. Si no cerramos la sesión y pedimos cambiar de tipo de perfil automáticamente nos presenta la creación de ese nuevo perfil, pero todavía conserva los datos de como estaba antes por ejemplo el Nombre. No recuerda que el usuario ahora se llama con otro nombre.
-
 * En los perfiles no se está pudiendo modificar el valor del usuario, aunque si que se está pudiendo cambiar nombre, apellidos, etc.
 
 
