@@ -115,17 +115,7 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 
 * TRABAJANDOSE:
-Si el usuario se creó, pero no terminó de crear su perfil, la app considera que está autenticado. 
-De hecho si no usamos la app durante días y volvemos, sigue creyendo que estás autenticado. 
-Pero no hay ninguna opción visible que diga que usuario es el que se ha creado/autenticado aunque no tenga perfil creado. 
-
-En el componente "components/RoleSelection.tsx" deberíamos de poner los datos esenciales del usuario que aparecen, arriba, tanto en el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" ó en "components/profiles/profilePage/FamiliarProfilePage.tsx". 
-Me refiero al componente "components/profiles/resumenProfile/Resumen_PersonalInfo.tsx".
-Pero sólo debe de renderizarse el compoente "components/profiles/resumenProfile/Resumen_PersonalInfo.tsx" en "components/RoleSelection.tsx" si el usuario de la app está registrado ó autenticado.
-
-
-
-* El componente RoleSelection.tsx, si el usuario está autenticado, debe de presentar los datos esenciales del usuario. Aunque no tenga ningún perfil todavía creado.
+El componente RoleSelection.tsx, si el usuario está autenticado, debe de presentar los datos esenciales del usuario. Aunque no tenga ningún perfil todavía creado.
 
 El componente "components/booking/BookingPage_Header.tsx" usa una imagen para redondeada para mostrar el cuidador con el que vamos a reservar o hemos reservado.
 El código para renderizar esta imagen se encuentra entre sus líneas 34-41 y es este:
