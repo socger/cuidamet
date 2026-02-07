@@ -118,6 +118,7 @@ const App: React.FC = () => {
   const [userFirstName, setUserFirstName] = useState<string>('');
   const [userLastName, setUserLastName] = useState<string>('');
   const [userPhone, setUserPhone] = useState<string>('');
+  const [userPhotoUrl, setUserPhotoUrl] = useState<string>('');
   
   // Booking state
   const [bookingProviderId, setBookingProviderId] = useState<number | null>(null);
@@ -144,6 +145,7 @@ const App: React.FC = () => {
             setUserEmail(user.email);
             setUserFirstName(user.firstName || '');
             setUserLastName(user.lastName || '');
+            setUserPhotoUrl(user.photoUrl || '');
             
             // Cargar AMBOS perfiles para determinar cuál existe
             console.log('🔍 Intentando cargar perfiles para user:', user.id);
@@ -743,6 +745,7 @@ const App: React.FC = () => {
       setUserFirstName(user.firstName || '');
       setUserLastName(user.lastName || '');
       setUserPhone(user.phone || '');
+      setUserPhotoUrl(user.photoUrl || '');
       
       let loadedProviderProfile = null;
       let loadedClientProfile = null;
@@ -904,6 +907,7 @@ const App: React.FC = () => {
         // Guardar firstName y lastName del usuario para pre-rellenar formularios
         setUserFirstName(user.firstName || '');
         setUserLastName(user.lastName || '');
+        setUserPhotoUrl(user.photoUrl || '');
       }
     } catch (error) {
       console.error('Error al obtener datos del usuario:', error);
@@ -954,6 +958,11 @@ const App: React.FC = () => {
     setIsAuthenticated(false);
     setClientProfile(null);
     setProviderProfile(null);
+    setUserPhotoUrl('');
+    setUserEmail('');
+    setUserFirstName('');
+    setUserLastName('');
+    setUserPhone('');
     setView("landing");
   };
   
@@ -1751,15 +1760,18 @@ const App: React.FC = () => {
     view !== "auth" &&
     !isLocationLoading;
 
-  // Obtener la photoUrl del perfil activo
+  // Obtener la photoUrl del perfil activo o del usuario
   const getUserPhotoUrl = (): string | null => {
     if (!isAuthenticated) return null;
     
+    // Si tiene perfil, usar la foto del perfil
     const profile = activeRole === 'provider' ? providerProfile : clientProfile;
-    if (!profile) return null;
+    if (profile) {
+      return profile.photoUrl || userPhotoUrl || defaultUserAvatar;
+    }
     
-    // Si tiene photoUrl, retornarla; si no, usar el placeholder por defecto
-    return profile.photoUrl || defaultUserAvatar;
+    // Si no tiene perfil, usar la foto del usuario
+    return userPhotoUrl || defaultUserAvatar;
   };
 
   // For map view, render without wrapper to allow full screen

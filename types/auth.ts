@@ -38,6 +38,10 @@ export interface AuthResponse {
     email: string;
     firstName?: string;
     lastName?: string;
+    phone?: string;
+    photoUrl?: string;
+    location?: string;
+    languages?: string[];
     roles: string[];
   };
 }

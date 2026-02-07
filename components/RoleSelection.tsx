@@ -45,7 +45,7 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({
         {isAuthenticated && user && (
           <div className="max-w-2xl mx-auto mb-6 bg-white rounded-2xl shadow-md overflow-hidden">
             <Resumen_PersonalInfo
-              photoUrl={defaultUserAvatar}
+              photoUrl={user.photoUrl || defaultUserAvatar}
               name={userName}
               phone={userPhone}
               email={user.email}
