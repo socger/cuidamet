@@ -144,36 +144,6 @@ Pero usando un código parecido al que te mostré al principio para el component
 
 Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono que usa el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" para un usuario que no tiene imagen todavía creada.
 
-
-* ✅ COMPLETADO (07/02/2026):
-Los perfiles son los que guardan ahora mismo los siguientes campos:
-- photo_url
-- phone
-- location
-- longitude
-- latitude
-- languages
-- is_premium
-
-Migración completada exitosamente:
-✅ Campos movidos de provider_profiles y client_profiles a users
-✅ Base de datos migrada sin pérdida de datos (21 usuarios)
-✅ Todos los endpoints backend actualizados y probados
-✅ Frontend profileService.ts actualizado
-✅ Componentes verificados (ProfesionalProfilePage, FamiliarProfilePage, Resumen_PersonalInfo)
-✅ Swagger actualizado automáticamente con los nuevos campos
-✅ Documentación completa creada:
-   - resources/documents/AI conversations/IA chats/020-Migracion-campos-perfiles-a-users.md
-   - resources/documents/AI conversations/IA chats/021-Migracion-campos-perfiles-VERIFICACION.md
-   - test endpoints with REST CLIENT extension/test-migration-users-fields.http
-
-
-<!-- Lo que debería de hacer la app es guardar la imagen del usuario en el propio usuario, no en los perfiles.
-Por lo que en el repositorio cuidamet-api tienes que quitar el field "photo-url" tanto de la tabla "provider_profiles", como de la tabla "client_profiles".
-Después debes de crear
-
-Hacer lo mismo con los campos  -->
-
 yoline@yoline.com
 jero@jero.com
 mari@mari.com
