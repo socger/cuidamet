@@ -12,7 +12,6 @@ import { getCategoryIcon, getCategoryLabel } from "../../../services/serviceCons
 import BriefcaseIcon from "../../icons/BriefcaseIcon";
 import PageHeader from "../../PageHeader";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
-import LogoutSection from "./LogoutSection";
 import SupportSection from "./SupportSection";
 import FamiliarRegistration from "../createProfile/FamiliarRegistration";
 import AccountSettingsSection from "./AccountSettingsSection";
@@ -155,6 +154,7 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
             email={displayProfile.email}
             location={displayProfile.location}
             languages={displayProfile.languages}
+            onLogout={onLogout}
           />
         </div>
 
@@ -219,11 +219,6 @@ const FamiliarProfilePage: React.FC<FamiliarProfilePageProps> = ({
         <SupportSection
           onNavigateSupport={onNavigateSupport}
         />
-
-        {/* Logout Section */}
-        <div className="mt-8">
-          <LogoutSection onLogout={onLogout} />
-        </div>
 
       </main>
 

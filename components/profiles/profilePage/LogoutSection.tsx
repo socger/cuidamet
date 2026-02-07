@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createPortal } from "react-dom";
 import ArrowRightOnRectangleIcon from "../../icons/ArrowRightOnRectangleIcon";
 import ConfirmModal from "../../actions/ConfirmModal";
 
@@ -23,25 +24,28 @@ const LogoutSection: React.FC<LogoutSectionProps> = ({ onLogout }) => {
               </div>
               <div>
                 <span className="font-medium block">Cerrar Sesión</span>
-                <span className="text-xs text-slate-400 font-normal">
+                {/* <span className="text-xs text-slate-400 font-normal">
                   Salir de tu cuenta
-                </span>
+                </span> */}
               </div>
             </div>
           </button>
         </div>
       </section>
 
-      <ConfirmModal
-        isOpen={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
-        onConfirm={onLogout}
-        title="¿Cerrar sesión?"
-        message="¿Estás seguro de que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tu cuenta."
-        confirmText="Cerrar sesión"
-        cancelText="Cancelar"
-        variant="danger"
-      />
+      {isConfirmOpen && createPortal(
+        <ConfirmModal
+          isOpen={isConfirmOpen}
+          onClose={() => setIsConfirmOpen(false)}
+          onConfirm={onLogout}
+          title="¿Cerrar sesión?"
+          message="¿Estás seguro de que quieres cerrar sesión? Tendrás que volver a iniciar sesión para acceder a tu cuenta."
+          confirmText="Cerrar sesión"
+          cancelText="Cancelar"
+          variant="danger"
+        />,
+        document.body
+      )}
     </>
   );
 };

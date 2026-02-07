@@ -4,7 +4,6 @@ import PageHeader from './PageHeader';
 import HandRaisedIcon from './icons/HandRaisedIcon';
 import SearchIcon from './icons/SearchIcon';
 import ChevronRightIcon from './icons/ChevronRightIcon';
-import LogoutSection from './profiles/profilePage/LogoutSection';
 import Resumen_PersonalInfo from './profiles/resumenProfile/Resumen_PersonalInfo';
 import { tokenStorage } from '../services/authService';
 
@@ -51,6 +50,7 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({
               email={user.email}
               location={userLocation}
               languages={userLanguages}
+              onLogout={onLogout}
             />
           </div>
         )}
@@ -104,13 +104,6 @@ const RoleSelection: React.FC<RoleSelectionProps> = ({
                  </div>
              </div>
         </button>
-        
-        {/* Logout Section - Solo si está autenticado */}
-        {isAuthenticated && onLogout && (
-          <div className="mt-8">
-            <LogoutSection onLogout={onLogout} />
-          </div>
-        )}
         </div>
       </main>
     </div>

@@ -2,6 +2,7 @@ import React from "react";
 import PhoneIcon from "../../icons/PhoneIcon";
 import MapPinIcon from "../../icons/MapPinIcon";
 import MailIcon from "../../icons/MailIcon";
+import LogoutSection from "../profilePage/LogoutSection";
 
 interface ResumenPersonalInfoProps {
   photoUrl: string;
@@ -10,6 +11,7 @@ interface ResumenPersonalInfoProps {
   email: string;
   location?: string;
   languages?: string[];
+  onLogout?: () => void;
 }
 
 const Resumen_PersonalInfo: React.FC<ResumenPersonalInfoProps> = ({
@@ -19,10 +21,17 @@ const Resumen_PersonalInfo: React.FC<ResumenPersonalInfoProps> = ({
   email,
   location,
   languages = [],
+  onLogout,
 }) => {
   return (
     <>
-      <div className="bg-teal-500 h-20 relative"></div>
+      <div className="bg-teal-500 h-20 relative flex items-center justify-end px-4">
+        {onLogout && (
+          <div className="scale-75 origin-right">
+            <LogoutSection onLogout={onLogout} />
+          </div>
+        )}
+      </div>
       <div className="px-4 pb-4 -mt-10 relative">
         <img
           src={photoUrl}

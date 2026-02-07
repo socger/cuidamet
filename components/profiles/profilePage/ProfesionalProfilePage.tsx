@@ -18,7 +18,6 @@ import CameraIcon from "../../icons/CameraIcon";
 import PhotoUploadModal from "../../photo/PhotoUploadModal";
 import Resumen_PersonalInfo from "../resumenProfile/Resumen_PersonalInfo";
 import Resumen_Services from "../resumenProfile/Resumen_Services";
-import LogoutSection from "./LogoutSection";
 import BriefcaseIcon from "@/components/icons/BriefcaseIcon";
 import SupportSection from "./SupportSection";
 import ProfesionalRegistration from "../createProfile/ProfesionalRegistration";
@@ -284,6 +283,7 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
             email={displayProfile.email}
             location={displayProfile.location}
             languages={displayProfile.languages}
+            onLogout={onLogout}
           />
 
         </div>
@@ -384,11 +384,6 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
         <SupportSection
           onNavigateSupport={onNavigateSupport}
         />
-
-        {/* BLOCK 7: Logout */}
-        <div className="mt-8">
-          <LogoutSection onLogout={onLogout} />
-        </div>
       </main>
 
       <PremiumSubscriptionModal
