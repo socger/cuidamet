@@ -116,7 +116,7 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 
 
-* Comprobar si cuando se crea un usuario y después pasa acrear el perfil, pasa correctamente los datos del usuario recien creado.
+* Comprobar si cuando se crea un usuario y después pasa a crear el perfil, pasa correctamente los datos del usuario recien creado.
 
 * En los perfiles no se está pudiendo modificar el valor del usuario, aunque si que se está pudiendo cambiar nombre, apellidos, etc.
 
