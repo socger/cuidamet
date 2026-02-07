@@ -106,12 +106,77 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 --------------------------------------------------------------------------------------------------------
 
+
+* Resulta que si yo soy un cuidador (perfil profesional) y estoy añadiendo mis horarios de disponibilidad, en realidad debería de poner el margen de horas y que día de la semana puedo(lunes, martes, miércoles, jueves, viernes, sábado, domingo - Sería seleccionar todos los checkBox). No como lo está haciendo ahora mismo. Que añades franjas de horarios y que días del año tienes disponibilidad. Lo lógico es que fueran franja de horario y que días esa franja yo podría de la semana.
+
+* Cuando un uusuario se autentica entra en su perfil guardado. Pero si le pulsa a cambiar de perfil automáticamente pasa a crear el perfil al que ha cambiado. Pero si cancelamos la creación del perfil se renderiza la pantalla de elegir perfil a crear. Cuando en realidad ya tiene un perfil creado. Lo que debería de hacer es que si se cancela la creación del perfil al que ha cambiado, pues que compruebe si tiene un perfil creado y si lo tiene que vuelva a él. Pero si no tiene ningún perfil pues que pase a la vista de seleccionar el perfil a crear (componente "RoleSelection.tsx")
+
 * Si el usuario se creó, pero no terminó de crear su perfil. La app considera que está autenticado. De hecho si no usamos la app durante días y volvemos, sigue creyendo que estás autenticado. Pero no hay ninguna opción visible que diga que usuario es el que se ha creado/autenticado aunque no tenga perfil creado. 
 
 En el componente " "components/RoleSelection.tsx" igual deberíamos de poner los datos esenciales del usuario que aparecen, arriba, tanto en el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" ó en "components/profiles/profilePage/FamiliarProfilePage.tsx"
 
+* El componente RoleSelection.tsx, si el usuario está autenticado, debe de presentar los datos esenciales del usuario. Aunque no tenga ningún perfil todavía creado.
 
-* Resulta que si yo soy un cuidador (perfil profesional) y estoy añadiendo mis horarios de disponibilidad, en realidad debería de poner el margen de horas y que día de la semana puedo(lunes, martes, miércoles, jueves, viernes, sábado, domingo - Sería seleccionar todos los checkBox). No como lo está haciendo ahora mismo. Que añades franjas de horarios y que días del año tienes disponibilidad. Lo lógico es que fueran franja de horario y que días esa franja yo podría de la semana.
+El componente "components/booking/BookingPage_Header.tsx" usa una imagen para redondeada para mostrar el cuidador con el que vamos a reservar o hemos reservado.
+El código para renderizar esta imagen se encuentra entre sus líneas 34-41 y es este:
+      <div className="flex items-center gap-3">
+        {rightAction && <div className="flex-shrink-0">{rightAction}</div>}
+        <img
+          src={provider.photoUrl}
+          alt={provider.name}
+          className="w-10 h-10 rounded-full object-cover"
+        />
+      </div>
+	  
+Bien, pues resulta que el componente "components/BottomNav.tsx" corresponde a la barra que aparece en toda la app abajo.
+Este componente tiene la opción "Tu" y está representada por el icono UserIcon. 
+Esto lo puedes comprobar entre las líneas 22-28 que son las siguientes:
+    const navItems = [
+        { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing', action: onNavigateHome },
+        { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
+        { key: 'bookings', icon: ClipboardDocumentListIcon, label: 'Reservas', active: currentView === 'bookings', action: onNavigateBookings },
+        { key: 'inbox', icon: InboxIcon, label: 'Buzón', active: currentView === 'inbox', action: onNavigateInbox },
+        { key: 'profile', icon: UserIcon, label: 'Tú', active: currentView === 'myProfile', action: onNavigateProfile },
+    ];
+
+El caso es que queremos que si el usuario está autenticado en la app, pues que el componente "components/BottomNav.tsx" renderice la imagen del usuario que está guardada en su perfil, en vez del icono UserIcon.
+Pero usando un código parecido al que te mostré al principio para el componente "components/booking/BookingPage_Header.tsx".
+
+Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono que usa el componente "components/profiles/profilePage/ProfesionalProfilePage.tsx" para un usuario que no tiene imagen todavía creada.
+
+
+* TRABAJANDOSE:
+Los perfiles son los que guardan ahora mismo los siguientes campos:
+- photo_url
+- phone
+- location
+- longitude
+- latitude
+- languages
+- is_premium
+
+Por lo que si un usuario tiene perfil de profesional y familiar, podría tener dos imágenes, dos teléfonos, dos direcciones, etc. 
+Este comportamiento no lo queremos.
+Un usuario sólo puede tener una imagen, un teléfono, una dirección, etc.
+
+Por lo que queremos que, en el repositorio "cuidamet-api", quites de las tablas "provider_profiles" y "client_profiles" estos campos que te he detallado .
+Y se los añadas a la tabla users.
+Estos campos que vas a crear en la tabla "users" deben de ser del mismo tipo que los campos que has quitado en las otras dos tablas.
+
+Como estas tres tablas han cambiado, tendrás que repasar todos los endpoints que las usan para arreglarlos, porque las tablas "provider_profiles" y "client_profiles" devolverán menos campos.
+Y la tabla "users" devolverá más campos.
+
+Por supuesto en el repositorio "cuidamet" tienes que tener también en cuenta estos cambios que hemos hecho en el repositorio "cuidamet-api".
+Los endpoints que llame "cuidamet" habrán cambiado.
+
+Y donde antes se llamaba para guardar un repositorio, ahora tiene que tener en cuenta que los campos que detallé sólo serán guardados en la tabla users.
+
+
+<!-- Lo que debería de hacer la app es guardar la imagen del usuario en el propio usuario, no en los perfiles.
+Por lo que en el repositorio cuidamet-api tienes que quitar el field "photo-url" tanto de la tabla "provider_profiles", como de la tabla "client_profiles".
+Después debes de crear
+
+Hacer lo mismo con los campos  -->
 
 yoline@yoline.com
 jero@jero.com
@@ -119,5 +184,6 @@ mari@mari.com
 pedro@pedro.com
 
 * Comprobar todo el registro y edición de nuevos perfiles y usuarios. Pero cuando esté seguro de que todo funciona bien.
+
 
 * Quitar todos los console.log que pueda de la app (tanto back como front)
