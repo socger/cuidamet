@@ -149,8 +149,6 @@ const App: React.FC = () => {
             setUserPhotoUrl(user.photoUrl || '');
             
             // Cargar AMBOS perfiles para determinar cuál existe
-            console.log('🔍 Intentando cargar perfiles para user:', user.id);
-            
             let loadedProviderProfile = null;
             let loadedClientProfile = null;
             
@@ -158,13 +156,10 @@ const App: React.FC = () => {
             try {
               const response = await providerProfileService.getByUserId(user.id);
               const profile = response.data;
-              console.log('✅ Perfil profesional encontrado:', profile);
               
               let servicesMap = {};
               try {
-                console.log('📦 Cargando servicios del proveedor:', profile.id);
                 const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
-                console.log('✅ Servicios cargados:', servicesResponse);
                 
                 if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
                   servicesMap = servicesResponse.data.reduce((acc: any, service: any) => {
@@ -196,7 +191,6 @@ const App: React.FC = () => {
                     };
                     return acc;
                   }, {});
-                  console.log('🗺️ Servicios mapeados:', servicesMap);
                 }
               } catch (error) {
                 console.warn('⚠️ Sin servicios configurados:', error);
@@ -220,13 +214,12 @@ const App: React.FC = () => {
               
               setProviderProfile(loadedProviderProfile);
             } catch (error) {
-              console.log('ℹ️ No existe perfil profesional');
+              // No existe perfil profesional
             }
             
             // Intentar cargar perfil familiar
             try {
               const profile = await clientProfileService.getByUserId(user.id);
-              console.log('✅ Perfil familiar encontrado:', profile);
               
               loadedClientProfile = {
                 id: profile.id,
@@ -245,21 +238,17 @@ const App: React.FC = () => {
               
               setClientProfile(loadedClientProfile);
             } catch (error) {
-              console.log('ℹ️ No existe perfil familiar');
+              // No existe perfil familiar
             }
             
             // Determinar activeRole basándose en los perfiles que existen
             if (loadedProviderProfile && !loadedClientProfile) {
-              console.log('🔵 Solo perfil profesional, activeRole=provider');
               setActiveRole('provider');
             } else if (loadedClientProfile && !loadedProviderProfile) {
-              console.log('🟢 Solo perfil familiar, activeRole=client');
               setActiveRole('client');
             } else if (loadedProviderProfile && loadedClientProfile) {
-              console.log('🟡 Ambos perfiles, usando rol del token:', role);
               setActiveRole(role === 'provider' ? 'provider' : 'client');
             } else {
-              console.log('⚪ Sin perfiles, usando rol del token:', role);
               setActiveRole(role === 'provider' ? 'provider' : 'client');
             }
           } else {
@@ -413,10 +402,6 @@ const App: React.FC = () => {
   };
 
   const handleProviderRegistrationComplete = async (data: ProviderProfile, deletedCertificateIds: number[]) => {
-    console.log('🔵 [APP.TSX] handleProviderRegistrationComplete iniciado');
-    console.log('🔵 [APP.TSX] deletedCertificateIds recibidos:', deletedCertificateIds);
-    console.log('🔵 [APP.TSX] typeof deletedCertificateIds:', typeof deletedCertificateIds);
-    console.log('🔵 [APP.TSX] Array.isArray(deletedCertificateIds):', Array.isArray(deletedCertificateIds));
     try {
       // Obtener el userId del usuario autenticado
       const user = tokenStorage.getUser();
@@ -501,24 +486,6 @@ const App: React.FC = () => {
   };
 
   const handleUpdateProviderProfile = async (updatedProfile: ProviderProfile, deletedCertificateIds: number[]) => {
-    console.log('🔵 [APP.TSX] handleUpdateProviderProfile iniciado');
-    console.log('🔵 [APP.TSX] updatedProfile recibido:', JSON.stringify(updatedProfile, null, 2));
-    console.log('🔵 [APP.TSX] deletedCertificateIds recibidos:', deletedCertificateIds);
-    console.log('🔵 [APP.TSX] typeof deletedCertificateIds:', typeof deletedCertificateIds);
-    console.log('🔵 [APP.TSX] Array.isArray(deletedCertificateIds):', Array.isArray(deletedCertificateIds));
-    console.log('🔵 [APP.TSX] updatedProfile.services:', updatedProfile.services);
-    
-    // Verificar si hay certificados en los servicios
-    if (updatedProfile.services) {
-      Object.entries(updatedProfile.services).forEach(([key, service]) => {
-        if (service.certificates && service.certificates.length > 0) {
-          console.log(`🔵 [APP.TSX] Servicio "${key}" tiene ${service.certificates.length} certificados:`, service.certificates);
-        } else {
-          console.log(`🔵 [APP.TSX] Servicio "${key}" NO tiene certificados`);
-        }
-      });
-    }
-    
     try {
       if (!updatedProfile.id) {
         throw new Error('No se puede actualizar el perfil sin ID');
@@ -529,9 +496,6 @@ const App: React.FC = () => {
       if (!user || !user.id) {
         throw new Error('No se pudo obtener el ID del usuario');
       }
-
-      console.log('💾 Actualizando perfil de proveedor:', updatedProfile);
-      console.log('🎯 Servicios a guardar:', updatedProfile.services);
 
       // Preparar datos del usuario para actualizar
       const userData = {
@@ -557,10 +521,7 @@ const App: React.FC = () => {
       
       // Guardar servicios si existen
       if (updatedProfile.services && Object.keys(updatedProfile.services).length > 0) {
-        console.log('📝 Guardando servicios del proveedor...');
-        console.log('🗑️ [APP.TSX] Pasando deletedCertificateIds a saveProviderServices:', deletedCertificateIds);
         await serviceConfigService.saveProviderServices(updatedProfile.id, updatedProfile.services, deletedCertificateIds);
-        console.log('✅ Servicios guardados correctamente');
       }
       
       // Actualizar estado local del perfil
@@ -810,15 +771,12 @@ const App: React.FC = () => {
   };
 
   const handleLoginSuccess = async (role: UserRole) => {
-    console.log('🎉 handleLoginSuccess llamado con role:', role);
     setIsAuthenticated(true);
     setAuthAttempts(0);
     
     // Cargar AMBOS perfiles independientemente del rol para determinar cuál existe
     const user = tokenStorage.getUser();
     if (user) {
-      console.log('📥 Cargando perfiles para user:', user.id);
-      
       // Actualizar estados locales con los datos del usuario autenticado
       setUserEmail(user.email);
       setUserFirstName(user.firstName || '');
@@ -833,14 +791,11 @@ const App: React.FC = () => {
       try {
         const response = await providerProfileService.getByUserId(user.id);
         const profile = response.data;
-        console.log('✅ Perfil profesional encontrado:', profile);
         
         // Cargar servicios del proveedor
         let servicesMap = {};
         try {
-          console.log('📦 Cargando servicios del proveedor:', profile.id);
           const servicesResponse = await serviceConfigService.getByProviderId(profile.id);
-          console.log('✅ Servicios cargados:', servicesResponse);
           
           // Transformar array de ServiceConfigs a objeto por categoría
           if (servicesResponse.data && Array.isArray(servicesResponse.data)) {
@@ -888,7 +843,6 @@ const App: React.FC = () => {
               };
               return acc;
             }, {});
-            console.log('🗺️ Servicios mapeados:', servicesMap);
           }
         } catch (error) {
           console.warn('⚠️ Sin servicios configurados:', error);
@@ -912,13 +866,12 @@ const App: React.FC = () => {
         
         setProviderProfile(loadedProviderProfile);
       } catch (error) {
-        console.log('ℹ️ No existe perfil profesional');
+        // No existe perfil profesional
       }
       
       // Intentar cargar perfil familiar
       try {
         const profile = await clientProfileService.getByUserId(user.id);
-        console.log('✅ Perfil familiar encontrado:', profile);
         
         loadedClientProfile = {
           id: profile.id,
@@ -937,23 +890,19 @@ const App: React.FC = () => {
         
         setClientProfile(loadedClientProfile);
       } catch (error) {
-        console.log('ℹ️ No existe perfil familiar');
+        // No existe perfil familiar
       }
       
       // Determinar activeRole basándose en los perfiles que existen
       if (loadedProviderProfile && !loadedClientProfile) {
-        console.log('🔵 Solo existe perfil profesional, estableciendo activeRole=provider');
         setActiveRole('provider');
       } else if (loadedClientProfile && !loadedProviderProfile) {
-        console.log('🟢 Solo existe perfil familiar, estableciendo activeRole=client');
         setActiveRole('client');
       } else if (loadedProviderProfile && loadedClientProfile) {
         // Si existen ambos, usar el rol proporcionado por el backend
-        console.log('🟡 Existen ambos perfiles, usando rol del backend:', role);
         setActiveRole(role);
       } else {
         // Si no existe ningún perfil, usar el rol proporcionado por el backend
-        console.log('⚪ No existe ningún perfil, usando rol del backend:', role);
         setActiveRole(role);
       }
     }
@@ -1106,8 +1055,6 @@ const App: React.FC = () => {
   
   const handleBookingProceed = (details: BookingDetails) => {
     // Here you would normally process the payment
-    console.log('Booking details:', details);
-    
     if (editingBookingId) {
       // Update existing booking
       bookingService.updateBooking(editingBookingId, details);
@@ -1278,7 +1225,6 @@ const App: React.FC = () => {
         />;
       } else if (!clientProfile && !providerProfile) {
         // Usuario autenticado pero SIN ningún perfil creado
-        console.log('⚠️ Usuario autenticado sin perfil. Mostrando RoleSelection');
         mainContent = <RoleSelection 
           onSelectProvider={() => {
             // Usuario ya autenticado, ir directamente a crear perfil profesional
@@ -1295,7 +1241,6 @@ const App: React.FC = () => {
           onLogout={handleLogout}
         />;
       } else if (activeRole === 'provider' && providerProfile) {
-        console.log('🔵 Mostrando perfil PROFESIONAL. activeRole:', activeRole, 'providerProfile:', providerProfile);
         // Provider Profile
         mainContent = <ProfesionalProfilePage 
           profile={providerProfile}
@@ -1325,19 +1270,14 @@ const App: React.FC = () => {
                   return;
                 }
 
-                console.log('🔄 Cambiando a perfil FAMILIAR...');
-                
                 // 1. Llamar al backend para cambiar el rol activo
                 const result = await authService.switchActiveRole(user.id, 'client');
-                console.log('✅ Respuesta del backend:', result);
 
                 // 2. Actualizar el rol activo en el estado
                 setActiveRole('client');
 
                 // 3. Si existe el perfil en la BD, cargarlo
                 if (result.profile) {
-                  console.log('✅ Perfil familiar encontrado en BD:', result.profile);
-                  
                   // Mapear el perfil del backend al formato de la UI
                   const mappedProfile: ClientProfile = {
                     id: result.profile.id,
@@ -1356,7 +1296,6 @@ const App: React.FC = () => {
                   
                   setClientProfile(mappedProfile);
                 } else {
-                  console.log('⚠️ No existe perfil familiar en BD, navegando a creación...');
                   // Si no existe el perfil, redirigir a la creación
                   setView('familiarRegistration');
                 }
@@ -1382,7 +1321,6 @@ const App: React.FC = () => {
           }
         />;
       } else if (activeRole === 'client' && clientProfile) {
-        console.log('🟡 Mostrando perfil FAMILIAR. activeRole:', activeRole, 'clientProfile:', clientProfile);
         // Client Profile
         mainContent = <FamiliarProfilePage 
           clientProfile={clientProfile}
@@ -1400,25 +1338,18 @@ const App: React.FC = () => {
                 return;
               }
 
-              console.log('🔄 Cambiando a perfil PROFESIONAL...');
-              
               // 1. Llamar al backend para cambiar el rol activo
               const result = await authService.switchActiveRole(user.id, 'provider');
-              console.log('✅ Respuesta del backend:', result);
 
               // 2. Actualizar el rol activo en el estado
               setActiveRole('provider');
 
               // 3. Si existe el perfil en la BD, cargarlo
               if (result.profile) {
-                console.log('✅ Perfil profesional encontrado en BD:', result.profile);
-                
                 // Los servicios ya vienen en result.profile.services del backend
                 let servicesMap = {};
                 
                 if (result.profile.services && result.profile.services.length > 0) {
-                  console.log('📦 Servicios incluidos en el perfil:', result.profile.services.length);
-                  
                   // Transformar array de ServiceConfigs a objeto por categoría
                   servicesMap = result.profile.services.reduce((acc: any, service: any) => {
                     // Mapear variaciones del backend al formato del frontend
@@ -1468,9 +1399,8 @@ const App: React.FC = () => {
                     return acc;
                   }, {});
                   
-                  console.log('📦 Servicios transformados con variaciones y certificados:', servicesMap);
                 } else {
-                  console.log('⚠️ No hay servicios guardados para este perfil');
+                  // No hay servicios guardados para este perfil
                 }
 
                 // Mapear el perfil del backend al formato de la UI
@@ -1525,7 +1455,6 @@ const App: React.FC = () => {
                 
                 setProviderProfile(mappedProfile);
               } else {
-                console.log('⚠️ No existe perfil profesional en BD, navegando a creación...');
                 // Si no existe el perfil, redirigir a la creación
                 setView('profesionalRegistration');
               }
@@ -1594,11 +1523,8 @@ const App: React.FC = () => {
             setProviderProfile(null);
             setView("landing");
           }}
-        />;
-      } else {
+        />;  } else {
         // Usuario autenticado pero sin el perfil correspondiente al activeRole
-        console.log('⚠️ Usuario autenticado pero sin perfil para activeRole:', activeRole);
-        console.log('clientProfile:', clientProfile, 'providerProfile:', providerProfile);
         mainContent = <RoleSelection 
           onSelectProvider={() => {
             // Usuario ya autenticado, ir directamente a crear perfil profesional

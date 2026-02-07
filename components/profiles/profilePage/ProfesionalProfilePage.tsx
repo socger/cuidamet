@@ -176,8 +176,6 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   profile,
   onUpdateProfile,
 }) => {
-  console.log('🎯 ProfesionalProfilePage renderizado con profile:', profile);
-  
   const [alertModal, setAlertModal] = useState<{
     isOpen: boolean;
     message: string;
@@ -217,15 +215,7 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
       }
     : defaultDashboardData;
 
-  console.log('🎯 displayProfile.languages:', displayProfile.languages);
-  console.log('🎯 profile original:', profile);
-  console.log('🎯 profile.languages:', profile?.languages);
-
   const handleProfileUpdate = (updatedProfile: ProviderProfile, deletedCertificateIds: number[]) => {
-    console.log('🟡 [PROFESIONAL_PROFILE_PAGE] handleProfileUpdate recibido:', {
-      updatedProfile,
-      deletedCertificateIds
-    });
     if (onUpdateProfile) {
       onUpdateProfile(updatedProfile, deletedCertificateIds);
     }
@@ -234,8 +224,6 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   };
 
   if (isEditingProfile) {
-    console.log('🔧 Editando perfil - initialData:', profile);
-    console.log('🔧 photoUrl específica:', profile?.photoUrl);
     return (
       <ProfesionalRegistration
         initialData={profile || undefined}
@@ -246,7 +234,6 @@ const ProfesionalProfilePage: React.FC<ProfesionalProfilePageProps> = ({
   }
 
   if (isEditingServices) {
-    console.log('🔧 Editando servicios - initialData:', profile);
     return (
       <ProfesionalRegistration
         initialData={profile || undefined}

@@ -75,9 +75,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   unreadCount = 0,
   isAuthenticated = true,
 }) => {
-  console.log('🎨 ProfesionalRegistration renderizado con initialData:', initialData);
-  console.log('🎨 photoUrl en initialData:', initialData?.photoUrl);
-  
   const [step, setStep] = useState(initialStep); // 1: Profile, 2: Services Dashboard, 3: Summary
   const [editingCategory, setEditingCategory] = useState<CareCategory | null>(
     null
@@ -103,9 +100,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
       | { latitude: number; longitude: number }
       | undefined,
   });
-
-  console.log('🎨 profileData inicial:', profileData);
-  console.log('🎨 photoUrl en profileData:', profileData.photoUrl);
 
   // Specific Data per Service - Initialize all categories with default variations
   const [servicesData, setServicesData] = useState<
@@ -335,7 +329,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
     
     // Si es de BD, añadir a la lista de eliminados
     if (isDbId) {
-      console.log(`🗑️ Marcando certificado ${certId} para eliminar de BD`);
       setDeletedCertificateIds(prev => [...prev, certIdNum]);
     }
     
@@ -536,19 +529,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
   };
 
   const confirmPublish = () => {
-    console.log('🟢 [PROFESIONAL_REGISTRATION] confirmPublish iniciado');
-    console.log('🟢 [PROFESIONAL_REGISTRATION] servicesData:', servicesData);
-    
-    // Verificar certificados en servicesData
-    Object.entries(servicesData).forEach(([key, service]) => {
-      const serviceConfig = service as ServiceConfig;
-      if (serviceConfig.certificates && serviceConfig.certificates.length > 0) {
-        console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" tiene ${serviceConfig.certificates.length} certificados:`, serviceConfig.certificates);
-      } else {
-        console.log(`🟢 [PROFESIONAL_REGISTRATION] Servicio "${key}" NO tiene certificados`);
-      }
-    });
-    
     const allAvailabilities = new Set<string>();
     Object.values(servicesData).forEach((s: any) =>
       s.availability?.forEach((a: string) => allAvailabilities.add(a))
@@ -567,9 +547,6 @@ const ProfesionalRegistration: React.FC<ProfesionalRegistrationProps> = ({
       services: servicesData,
     };
     
-    console.log('🟢 [PROFESIONAL_REGISTRATION] finalProfile creado:', JSON.stringify(finalProfile, null, 2));
-    console.log('🟢 [PROFESIONAL_REGISTRATION] deletedCertificateIds:', deletedCertificateIds);
-    console.log('🟢 [PROFESIONAL_REGISTRATION] Llamando a onComplete...');
     onComplete(finalProfile, deletedCertificateIds);
     // NOTA: NO resetear aquí - se hará en App.tsx después de guardar exitosamente
   };

@@ -26,8 +26,6 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
   onBack,
   initialData,
 }) => {
-  console.log('📝 FamiliarRegistration - initialData recibido:', initialData);
-  
   const [step, setStep] = useState(1);
   const [profileData, setProfileData] = useState({
     id: initialData?.id,
@@ -44,10 +42,6 @@ const FamiliarRegistration: React.FC<FamiliarRegistrationProps> = ({
     profileStatus: 'draft',
     isPremium: false,
   });
-  
-  console.log('📝 FamiliarRegistration - profileData inicial:', profileData);
-  console.log('📸 FamiliarRegistration - photoUrl:', profileData.photoUrl);
-  console.log('🗣️ FamiliarRegistration - languages:', profileData.languages);
   
   const [selectedCategories, setSelectedCategories] = useState<CareCategory[]>(
     initialData?.preferences || []

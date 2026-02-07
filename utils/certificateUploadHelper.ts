@@ -71,7 +71,6 @@ export async function uploadCertificate(
       };
 
       onSuccess(newCert, category);
-      console.log('✅ Certificado subido exitosamente:', newCert);
       return true;
     }
     

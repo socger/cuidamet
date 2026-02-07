@@ -430,48 +430,23 @@ export const serviceConfigService = {
    * @param deletedCertificateIds - IDs de certificados a eliminar de BD
    */
   saveProviderServices: async (providerId: number, services: Record<string, any>, deletedCertificateIds: number[] = []) => {
-    console.log('� [PROFILE_SERVICE] saveProviderServices iniciado');
-    console.log('🟡 [PROFILE_SERVICE] providerId:', providerId);
-    console.log('🟡 [PROFILE_SERVICE] services:', JSON.stringify(services, null, 2));
-    console.log('🗑️ [PROFILE_SERVICE] deletedCertificateIds:', deletedCertificateIds);
-    
-    // Verificar certificados en services
-    Object.entries(services).forEach(([key, service]) => {
-      if (service.certificates && service.certificates.length > 0) {
-        console.log(`🟡 [PROFILE_SERVICE] Servicio "${key}" tiene ${service.certificates.length} certificados:`, service.certificates);
-      } else {
-        console.log(`🟡 [PROFILE_SERVICE] Servicio "${key}" NO tiene certificados`);
-      }
-    });
-    
-    console.log('�💾 Guardando servicios para proveedor:', providerId, services);
-    
     const results = [];
     
     // PRIMERO: Eliminar certificados marcados para eliminar (ANTES del loop)
     if (deletedCertificateIds && deletedCertificateIds.length > 0) {
-      console.log(`🗑️ [PROFILE_SERVICE] Eliminando ${deletedCertificateIds.length} certificados marcados...`);
-      console.log(`🗑️ [PROFILE_SERVICE] certificateService disponible:`, typeof certificateService);
-      
       for (const certId of deletedCertificateIds) {
         try {
-          console.log(`🗑️ [PROFILE_SERVICE] Eliminando certificado ID ${certId}...`);
-          const deleteResult = await certificateService.delete(certId);
-          console.log(`✅ [PROFILE_SERVICE] Certificado ${certId} eliminado exitosamente:`, deleteResult);
+          await certificateService.delete(certId);
         } catch (error) {
           console.error(`❌ [PROFILE_SERVICE] Error al eliminar certificado ${certId}:`, error);
           // Continuar con los demás
         }
       }
-      console.log(`✅ [PROFILE_SERVICE] Proceso de eliminación completado`);
-    } else {
-      console.log(`ℹ️ [PROFILE_SERVICE] No hay certificados para eliminar`);
     }
     
     // Iterar sobre cada categoría de servicio
     for (const [categoryKey, serviceConfig] of Object.entries(services)) {
       if (!serviceConfig.completed) {
-        console.log(`⏭️ Saltando categoría ${categoryKey} porque no está completada`);
         continue; // Solo guardar servicios completados
       }
       
@@ -487,8 +462,6 @@ export const serviceConfigService = {
           description: serviceConfig.description || '',
           // NOTA: experienceYears, skills y certificates pertenecen a ProviderProfile, no a ServiceConfig
         };
-        
-        console.log(`📝 Guardando servicio ${categoryKey}:`, serviceData);
         
         // Si el servicio tiene ID, actualizarlo; si no, crearlo
         let response;
@@ -518,11 +491,9 @@ export const serviceConfigService = {
         }
         
         const result = await response.json();
-        console.log(`✅ Servicio ${categoryKey} guardado:`, result);
         
         // Guardar/actualizar las variaciones (tareas con precios individuales)
         if (serviceConfig.variations && serviceConfig.variations.length > 0) {
-          console.log(`📝 Procesando ${serviceConfig.variations.length} variaciones para ${categoryKey}...`);
           
           // Primero, obtener las variaciones existentes para eliminar las que ya no están
           try {
@@ -542,7 +513,6 @@ export const serviceConfigService = {
               // Eliminar variaciones que ya no existen en el frontend
               for (const existingVar of existingVariations) {
                 if (!frontendVariationIds.includes(existingVar.id)) {
-                  console.log(`🗑️ Eliminando variación antigua: "${existingVar.name}"`);
                   try {
                     await fetchWithAuth(
                       `${API_URL}/${API_VERSION}/service-variations/${existingVar.id}`,
@@ -563,7 +533,6 @@ export const serviceConfigService = {
             try {
               // Si la variación tiene ID pero está desactivada → ELIMINAR
               if (variation.id && !variation.enabled) {
-                console.log(`🗑️ Eliminando variación desactivada: "${variation.name}" (ID: ${variation.id})`);
                 const deleteResponse = await fetchWithAuth(
                   `${API_URL}/${API_VERSION}/service-variations/${variation.id}`,
                   { method: 'DELETE' }
@@ -571,15 +540,12 @@ export const serviceConfigService = {
                 
                 if (!deleteResponse.ok) {
                   console.warn(`⚠️ Error al eliminar variación "${variation.name}"`);
-                } else {
-                  console.log(`✅ Variación "${variation.name}" eliminada`);
                 }
                 continue; // Pasar a la siguiente variación
               }
               
               // Si la variación NO tiene ID y está desactivada → IGNORAR (no crear)
               if (!variation.id && !variation.enabled) {
-                console.log(`⏭️ Ignorando variación nueva desactivada: "${variation.name}"`);
                 continue;
               }
               
@@ -598,7 +564,6 @@ export const serviceConfigService = {
               let variationResponse;
               if (variation.id) {
                 // Actualizar variación existente
-                console.log(`🔄 Actualizando variación "${variation.name}" (ID: ${variation.id})`);
                 variationResponse = await fetchWithAuth(
                   `${API_URL}/${API_VERSION}/service-variations/${variation.id}`,
                   {
@@ -609,7 +574,6 @@ export const serviceConfigService = {
                 );
               } else {
                 // Crear nueva variación
-                console.log(`➕ Creando nueva variación "${variation.name}"`);
                 variationResponse = await fetchWithAuth(
                   `${API_URL}/${API_VERSION}/service-variations`,
                   {
@@ -624,8 +588,7 @@ export const serviceConfigService = {
                 const error = await variationResponse.json();
                 console.warn(`⚠️ Error al guardar variación "${variation.name}":`, error);
               } else {
-                const variationResult = await variationResponse.json();
-                console.log(`✅ Variación "${variation.name}" guardada:`, variationResult);
+                await variationResponse.json();
               }
             } catch (error) {
               console.warn(`⚠️ Error al procesar variación "${variation.name}":`, error);
@@ -636,8 +599,6 @@ export const serviceConfigService = {
         
         // Guardar/actualizar los certificados
         if (serviceConfig.certificates && serviceConfig.certificates.length > 0) {
-          console.log(`📄 Procesando ${serviceConfig.certificates.length} certificados para ${categoryKey}...`);
-          
           for (const cert of serviceConfig.certificates) {
             try {
               const certificateData = {
@@ -658,7 +619,6 @@ export const serviceConfigService = {
               const isDbId = !isNaN(certId) && certId < 1000000;
               
               if (isDbId) {
-                console.log(`🔄 Actualizando certificado "${cert.name}" (ID de BD: ${cert.id})`);
                 certResponse = await fetchWithAuth(
                   `${API_URL}/${API_VERSION}/certificates/${cert.id}`,
                   {
@@ -669,7 +629,6 @@ export const serviceConfigService = {
                 );
               } else {
                 // Crear nuevo certificado (incluye timestamps generados en frontend)
-                console.log(`➕ Creando nuevo certificado "${cert.name}" (ID temporal: ${cert.id})`);
                 certResponse = await fetchWithAuth(
                   `${API_URL}/${API_VERSION}/certificates`,
                   {
@@ -684,8 +643,7 @@ export const serviceConfigService = {
                 const error = await certResponse.json();
                 console.warn(`⚠️ Error al guardar certificado "${cert.name}":`, error);
               } else {
-                const certResult = await certResponse.json();
-                console.log(`✅ Certificado "${cert.name}" guardado:`, certResult);
+                await certResponse.json();
               }
             } catch (error) {
               console.warn(`⚠️ Error al procesar certificado "${cert.name}":`, error);
