@@ -145,6 +145,7 @@ const App: React.FC = () => {
             setUserEmail(user.email);
             setUserFirstName(user.firstName || '');
             setUserLastName(user.lastName || '');
+            setUserPhone(user.phone || '');
             setUserPhotoUrl(user.photoUrl || '');
             
             // Cargar AMBOS perfiles para determinar cuál existe
@@ -452,6 +453,32 @@ const App: React.FC = () => {
       setActiveRole('provider');
       setIsAuthenticated(true);
       
+      // ✅ FIX: Actualizar también las variables de estado del usuario
+      // para que estén disponibles al crear el otro tipo de perfil
+      setUserFirstName(data.firstName);
+      setUserLastName(data.lastName);
+      setUserEmail(data.email);
+      setUserPhone(data.phone);
+      setUserPhotoUrl(data.photoUrl || '');
+      
+      // Actualizar el usuario en localStorage para mantener consistencia
+      const currentUser = tokenStorage.getUser();
+      if (currentUser) {
+        const updatedUser = {
+          ...currentUser,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phone: data.phone,
+          photoUrl: data.photoUrl,
+          location: data.location,
+          latitude: data.coordinates?.latitude?.toString(),
+          longitude: data.coordinates?.longitude?.toString(),
+          languages: data.languages,
+        };
+        tokenStorage.setUser(updatedUser);
+      }
+      
       // Show success alert
       setAlertModal({ 
         isOpen: true, 
@@ -536,8 +563,34 @@ const App: React.FC = () => {
         console.log('✅ Servicios guardados correctamente');
       }
       
-      // Actualizar estado local
+      // Actualizar estado local del perfil
       setProviderProfile(updatedProfile);
+      
+      // ✅ FIX: Actualizar también las variables de estado del usuario
+      // para que estén disponibles al crear el otro tipo de perfil
+      setUserFirstName(updatedProfile.firstName);
+      setUserLastName(updatedProfile.lastName);
+      setUserEmail(updatedProfile.email);
+      setUserPhone(updatedProfile.phone);
+      setUserPhotoUrl(updatedProfile.photoUrl || '');
+      
+      // Actualizar el usuario en localStorage para mantener consistencia
+      const currentUser = tokenStorage.getUser();
+      if (currentUser) {
+        const updatedUser = {
+          ...currentUser,
+          firstName: updatedProfile.firstName,
+          lastName: updatedProfile.lastName,
+          email: updatedProfile.email,
+          phone: updatedProfile.phone,
+          photoUrl: updatedProfile.photoUrl,
+          location: updatedProfile.location,
+          latitude: updatedProfile.coordinates?.latitude?.toString(),
+          longitude: updatedProfile.coordinates?.longitude?.toString(),
+          languages: updatedProfile.languages,
+        };
+        tokenStorage.setUser(updatedUser);
+      }
       
       // Show success message
       setAlertModal({
@@ -589,8 +642,34 @@ const App: React.FC = () => {
       // Actualizar en la base de datos (también actualiza datos del usuario)
       await clientProfileService.update(updatedProfile.id, updateDto, userData);
       
-      // Actualizar estado local
+      // Actualizar estado local del perfil
       setClientProfile(updatedProfile);
+      
+      // ✅ FIX: Actualizar también las variables de estado del usuario
+      // para que estén disponibles al crear el otro tipo de perfil
+      setUserFirstName(updatedProfile.firstName);
+      setUserLastName(updatedProfile.lastName);
+      setUserEmail(updatedProfile.email);
+      setUserPhone(updatedProfile.phone);
+      setUserPhotoUrl(updatedProfile.photoUrl || '');
+      
+      // Actualizar el usuario en localStorage para mantener consistencia
+      const currentUser = tokenStorage.getUser();
+      if (currentUser) {
+        const updatedUser = {
+          ...currentUser,
+          firstName: updatedProfile.firstName,
+          lastName: updatedProfile.lastName,
+          email: updatedProfile.email,
+          phone: updatedProfile.phone,
+          photoUrl: updatedProfile.photoUrl,
+          location: updatedProfile.location,
+          latitude: updatedProfile.coordinates?.latitude?.toString(),
+          longitude: updatedProfile.coordinates?.longitude?.toString(),
+          languages: updatedProfile.languages,
+        };
+        tokenStorage.setUser(updatedUser);
+      }
       
       // Show success message
       setAlertModal({
@@ -900,13 +979,14 @@ const App: React.FC = () => {
     setAuthAttempts(0);
     setUserEmail(email);
     
-    // Obtener los datos del usuario registrado (firstName, lastName) del token
+    // Obtener los datos del usuario registrado (firstName, lastName, phone, etc.) del token
     try {
       const user = tokenStorage.getUser();
       if (user) {
-        // Guardar firstName y lastName del usuario para pre-rellenar formularios
+        // Guardar todos los datos del usuario para pre-rellenar formularios
         setUserFirstName(user.firstName || '');
         setUserLastName(user.lastName || '');
+        setUserPhone(user.phone || '');
         setUserPhotoUrl(user.photoUrl || '');
       }
     } catch (error) {
@@ -1082,21 +1162,26 @@ const App: React.FC = () => {
         />
       );
     } else if (currentView === "offer") {
+      // Obtener datos actualizados del usuario desde localStorage
+      const currentUser = tokenStorage.getUser();
+      
       mainContent = <ProfesionalRegistration 
         initialData={clientProfile ? {
           ...clientProfile,
-          // Convertir clientProfile a estructura compatible con ProviderProfile
-          firstName: clientProfile.firstName,
-          lastName: clientProfile.lastName,
-          email: userEmail || clientProfile.email,
-          phone: clientProfile.phone,
-          location: clientProfile.location,
-          languages: clientProfile.languages,
+          // Usar datos actualizados del usuario desde localStorage
+          firstName: userFirstName,
+          lastName: userLastName,
+          email: userEmail,
+          phone: userPhone,
+          location: currentUser?.location || clientProfile.location,
+          languages: currentUser?.languages || clientProfile.languages,
         } : {
           firstName: userFirstName,
           lastName: userLastName,
           email: userEmail,
           phone: userPhone,
+          location: currentUser?.location || '',
+          languages: currentUser?.languages || [],
         }}
         onComplete={handleProviderRegistrationComplete}
         onCancel={handleCancelProfesionalRegistration}
@@ -1569,15 +1654,18 @@ const App: React.FC = () => {
         onLogout={handleLogout}
       />;
     } else if (currentView === "familiarRegistration") {
+      // Obtener datos actualizados del usuario desde localStorage
+      const currentUser = tokenStorage.getUser();
+      
       mainContent = <FamiliarRegistration 
         initialData={{
           firstName: userFirstName,
           lastName: userLastName,
           email: userEmail,
           phone: userPhone,
-          location: clientProfile?.location || '',
-          languages: clientProfile?.languages || [],
-          photoUrl: clientProfile?.photoUrl || '',
+          location: currentUser?.location || clientProfile?.location || '',
+          languages: currentUser?.languages || clientProfile?.languages || [],
+          photoUrl: userPhotoUrl || clientProfile?.photoUrl || '',
           preferences: clientProfile?.preferences || [],
         }}
         onComplete={async (profileData) => {
@@ -1615,6 +1703,32 @@ const App: React.FC = () => {
             setClientProfile({ ...profileData, id: savedProfile.id });
             setActiveRole('client');
             
+            // ✅ FIX: Actualizar también las variables de estado del usuario
+            // para que estén disponibles al crear el otro tipo de perfil
+            setUserFirstName(profileData.firstName);
+            setUserLastName(profileData.lastName);
+            setUserEmail(profileData.email);
+            setUserPhone(profileData.phone);
+            setUserPhotoUrl(profileData.photoUrl || '');
+            
+            // Actualizar el usuario en localStorage para mantener consistencia
+            const currentUser = tokenStorage.getUser();
+            if (currentUser) {
+              const updatedUser = {
+                ...currentUser,
+                firstName: profileData.firstName,
+                lastName: profileData.lastName,
+                email: profileData.email,
+                phone: profileData.phone,
+                photoUrl: profileData.photoUrl,
+                location: profileData.location,
+                latitude: profileData.coordinates?.latitude?.toString(),
+                longitude: profileData.coordinates?.longitude?.toString(),
+                languages: profileData.languages,
+              };
+              tokenStorage.setUser(updatedUser);
+            }
+            
             // Show success alert
             setAlertModal({ 
               isOpen: true, 
@@ -1638,14 +1752,17 @@ const App: React.FC = () => {
         onBack={handleCancelFamiliarRegistration}
       />;
     } else if (currentView === "profesionalRegistration") {
+      // Obtener datos actualizados del usuario desde localStorage
+      const currentUser = tokenStorage.getUser();
+      
       mainContent = <ProfesionalRegistration 
         initialData={{
           firstName: userFirstName,
           lastName: userLastName,
           email: userEmail,
           phone: userPhone,
-          location: clientProfile?.location || '',
-          languages: clientProfile?.languages || [],
+          location: currentUser?.location || clientProfile?.location || '',
+          languages: currentUser?.languages || clientProfile?.languages || [],
         }}
         onComplete={handleProviderRegistrationComplete}
         onCancel={handleCancelProfesionalRegistration}

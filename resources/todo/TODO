@@ -109,48 +109,17 @@ Cuando abres la app recuerda todavía que no se cerro la sesión, aunque se haya
 
 * Resulta que si yo soy un cuidador (perfil profesional) y estoy añadiendo mis horarios de disponibilidad, en realidad debería de poner el margen de horas y que día de la semana puedo(lunes, martes, miércoles, jueves, viernes, sábado, domingo - Sería seleccionar todos los checkBox). No como lo está haciendo ahora mismo. Que añades franjas de horarios y que días del año tienes disponibilidad. Lo lógico es que fueran franja de horario y que días esa franja yo podría de la semana.
 
-* Cuando un uusuario se autentica entra en su perfil guardado. Pero si le pulsa a cambiar de perfil automáticamente pasa a crear el perfil al que ha cambiado. Pero si cancelamos la creación del perfil se renderiza la pantalla de elegir perfil a crear. Cuando en realidad ya tiene un perfil creado. Lo que debería de hacer es que si se cancela la creación del perfil al que ha cambiado, pues que compruebe si tiene un perfil creado y si lo tiene que vuelva a él. Pero si no tiene ningún perfil pues que pase a la vista de seleccionar el perfil a crear (componente "RoleSelection.tsx")
+* Cuando un usuario se autentica entra en su perfil guardado. Pero si le pulsa a cambiar de perfil automáticamente pasa a crear el perfil al que ha cambiado. Pero si cancelamos la creación del perfil se renderiza la pantalla de elegir perfil a crear. Cuando en realidad ya tiene un perfil creado. Lo que debería de hacer es que si se cancela la creación del perfil al que ha cambiado, pues que compruebe si tiene un perfil creado y si lo tiene que vuelva a él. Pero si no tiene ningún perfil pues que pase a la vista de seleccionar el perfil a crear (componente "RoleSelection.tsx")
 
 
 
 
-* TRABAJANDOSE:
-El componente "components/booking/BookingPage_Header.tsx" usa una imagen redondeada para  mostrar el cuidador con el que vamos a reservar o hemos reservado.
-El código para renderizar esta imagen se encuentra entre sus líneas 34-41 y es este:
-      <div className="flex items-center gap-3">
-        {rightAction && <div className="flex-shrink-0">{rightAction}</div>}
-        <img
-          src={provider.photoUrl}
-          alt={provider.name}
-          className="w-10 h-10 rounded-full object-cover"
-        />
-      </div>
-	  
-Bien, pues resulta que el componente "components/BottomNav.tsx" corresponde a la barra que aparece en toda la app abajo.
-Este componente tiene la opción "Tu" y está representada por el icono UserIcon. 
-Esto lo puedes comprobar entre las líneas 22-28, de "components/BottomNav.tsx", que son las siguientes:
-    const navItems = [
-        { key: 'home', icon: null, label: 'Inicio', active: currentView === 'landing', action: onNavigateHome },
-        { key: 'offer', icon: PlusCircleIcon, label: 'Ofrecer', active: currentView === 'offer', action: onNavigateOffer },
-        { key: 'bookings', icon: ClipboardDocumentListIcon, label: 'Reservas', active: currentView === 'bookings', action: onNavigateBookings },
-        { key: 'inbox', icon: InboxIcon, label: 'Buzón', active: currentView === 'inbox', action: onNavigateInbox },
-        { key: 'profile', icon: UserIcon, label: 'Tú', active: currentView === 'myProfile', action: onNavigateProfile },
-    ];
-
-El caso es que queremos que si el usuario NO está autenticado pues que el componente "components/BottomNav.tsx" renderice el icono UserIcon.
-
-Y si está autenticado, el usuario, pues que el componente "components/BottomNav.tsx" renderice la imagen del usuario que está guardada en su perfil, en vez del icono UserIcon.
-Pero usando un código parecido al que te mostré al principio para el componente "components/booking/BookingPage_Header.tsx".
-
-Y si el usuario está autenticado, pero todavía no tiene una imagen de usuario, pues que renderice el icono/imagen que usa el componente "components/profiles/resumenProfile/Resumen_PersonalInfo.tsx" para un usuario que no tiene imagen todavía creada.
-
-Cuando renderices la imagen del usuario autenticado ó el icono del usuario que está autenticado pero que no tiene perfil creado, debes de renderizarlos respetando las dimensiones actuales con las que se renderiza el icono UserIcon. 
-Y deben de renderizarse justo donde está ahora mismo el icono UserIcon.
 
 
 * Comprobar si cuando se crea un usuario y después pasa acrear el perfil, pasa correctamente los datos del usuario recien creado.
 
-* Cuando entramos en un usuario que nada más que tiene un perfil y lo editamos, cambiando por ejemplo el nombre y lo guardamos. Si no cerramos la sesión y pedimos cambiar de tipo de perfil automáticamente nos presenta la creación de ese nuevo perfil, pero todavía conserva los datos de como estaba antes por ejemplo el Nombre. No recuerda que el usuario ahora se llama con otro nombre.
+* TRABAJANDOSE:
+Cuando entramos en un usuario que nada más que tiene un perfil y lo editamos, cambiando por ejemplo el nombre y lo guardamos. Si no cerramos la sesión y pedimos cambiar de tipo de perfil automáticamente nos presenta la creación de ese nuevo perfil, pero todavía conserva los datos de como estaba antes por ejemplo el Nombre. No recuerda que el usuario ahora se llama con otro nombre.
 
 * En los perfiles no se está pudiendo modificar el valor del usuario, aunque si que se está pudiendo cambiar nombre, apellidos, etc.
 
